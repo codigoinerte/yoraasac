@@ -1,0 +1,10 @@
+$primary-bg-color :#17191E;
+$secodary-bg-color: #F4F6FA;
+$primary-size: 17px;
+
+.bg-primary{
+    background-color: $primary-bg-color !important;
+}
+.bg-secondary{
+    background-color:  $secodary-bg-color !important;
+}
