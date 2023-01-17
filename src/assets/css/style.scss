@@ -1,3 +1,15 @@
+body{   
+    background-color: $secodary-bg-color;
+}
+/*
+#root{    
+    flex: 1;
+}
+*/
+a{
+    text-decoration: none;
+}
+
 .header{
     border-bottom: 1px solid #2C2F37;
 
@@ -29,7 +41,7 @@
 
 .breadcrumb-container{
     color: $secodary-bg-color;
-    padding: 40px 0px 100px 0px;
+    padding: 40px 0px 140px 0px;
 
 
     li + li:before{
@@ -51,4 +63,61 @@
     li,a,i{
         color: $secodary-bg-color !important;
     }
+}
+
+.main{
+    height: 100%;
+    flex: 1;
+    position: relative;
+}
+
+.container-list{
+    flex: 1 0 auto;
+    margin-top: -100px;
+}
+
+.atajos-homes{
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;        
+    position: relative;
+    padding: 0;
+    margin-top: -100px;
+
+    li{        
+        min-height: 250px;
+        margin-bottom: 40px;        
+        position: relative;
+
+        a{
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
+            text-align: center;
+            height: 100%;
+
+            color: $primary-bg-color;
+
+            i{
+                font-size: 60px;
+            }
+
+            span{               
+                max-width: 180px; 
+                font-size: 20px;
+                font-weight: 500;                
+                display: block;
+                margin: 0px auto;
+            }
+        }
+    }
+}
+
+.footer{
+    min-height: 50px;
 }
