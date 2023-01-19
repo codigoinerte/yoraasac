@@ -1,6 +1,7 @@
 import React from 'react'
+import { breadcrumbInterface } from '../interfaces'
 
-export const Breadcrumb = () => {
+export const Breadcrumb = ({ titulo, mensaje, breadcrumb }:breadcrumbInterface) => {
   return (
     <>
 
@@ -14,9 +15,9 @@ export const Breadcrumb = () => {
                 </ol>
                 </nav>
 
-                <h1>P&aacute;gina principal</h1>
+                <h1>{ titulo }</h1>
 
-                <p>Bienvenido Yonatan</p>
+                { !!mensaje ? ( <p>{ mensaje }</p> ) : false }
 
             </div>
         </div>
