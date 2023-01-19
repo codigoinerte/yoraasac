@@ -6,3 +6,7 @@ export interface breadcrumbInterface {
     titulo: String,
     mensaje?: String
 }
+export interface Breadcrumb {
+    titulo: string;
+    enlace:Function;
+}

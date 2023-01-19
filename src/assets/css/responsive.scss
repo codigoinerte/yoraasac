@@ -41,6 +41,18 @@
 
         left: 0px;
     }
+
+
+    .acciones-buttons{
+        margin: 25px auto 0px auto;        
+        width: 100%;        
+        display: flex;
+        justify-content: end;
+        gap: 15px;
+        button{
+            width: 100%;
+        }
+    }
 }
 @media(max-width:767px){
     .footer p{
