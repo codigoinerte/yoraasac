@@ -23,264 +23,71 @@ export const ClientesDetalle = () => {
 
         <div className="inner-page">
             <div className="d-flex gap-2 mb-4">
-                <button type="button" className="btn btn-primary btn-lg">Nuevo</button>
+                <button type="button" className="btn btn-primary btn-lg">Guardar</button>
                 <button type="button" className="btn btn-danger btn-lg">Cancelar</button>
             </div>
 
             <hr className='border border-1 opacity-50'/>
 
-            <div className="buscador">
-                <form>
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <h5>Buscador</h5>
+            <div className="row">
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    
+                    <h4>Informaci&oacute;n de contacto</h4>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="dni" className="form-label">DNI</label>
+                        <div className="input-group">
+                            <input type="text" id="dni" className="form-control" placeholder="00000000" aria-label="DNI" />
+                            <button className="btn btn-primary" type="button"><i className="bi bi-search"></i> Buscar por DNI</button>
                         </div>
                     </div>
-                    <div className="row">
 
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                            <div className="mb-3">
-                                <label htmlFor="documento" className="form-label">Documento</label>
-                                <input type="text" className="form-control" id="documento" aria-describedby="Buscador" placeholder='DNI'/>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <div className="mb-3">
-                                <label htmlFor="nombres" className="form-label">Nombre y apellido</label>
-                                <input type="text" className="form-control" id="nombres" aria-describedby="Buscador" placeholder='Nombre y/o apellido'/>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                            <div className="mb-3">
-                                <label htmlFor="fecha_creacion" className="form-label">Fecha de creaci&oacute;n</label>
-                                <input type="date" placeholder="dd-mm-yyyy" className="form-control" id="fecha_creacion" aria-describedby="fechacreacion"/>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-end">
-                            <div className="mb-3 w-100">                                
-                                <button className="btn btn-primary text-center w-100" type="submit"><i className="bi bi-search"></i> Buscar</button>
-                            </div>
-                        </div>
-
+                    <div className="mb-3">
+                        <label htmlFor="nombre" className="form-label">Nombres</label>
+                        <input type="text" className="form-control" id="nombre" aria-describedby="nombre" />
                     </div>
-                </form>
-            </div>            
 
-            {
-                true ?
-                (
-                    <>
-                        <table className='table'>
-                            <thead>
-                                <tr>
-                                <th scope="col">Documento</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">fecha de creaci&oacute;n</th>
-                                <th scope="col">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" data-label="Documento">70035156</td>
-                                    <td data-label="Nombre">BRIGITTE MERIDA PONCE VALENTIN</td>
-                                    <td data-label="Fecha de creaci&oacute;n">15/06/2022</td>
-                                    <td data-label="Acciones">
-                                        <div className="acciones-buttons">
-                                            <button type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                            <button type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>   
+                    <div className="mb-3">
+                        <label htmlFor="apellidos" className="form-label">Apellidos</label>
+                        <input type="text" className="form-control" id="apellidos" aria-describedby="apellidos" />
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="celular" className="form-label">Celular</label>
+                        <input type="tel" className="form-control" id="celular" aria-describedby="celular" />
+                    </div>
 
-                        <div className="pagination flex justify-content-between mt-4">
-                            <a className="btn btn-outline-primary" href='#'><i className="bi bi-chevron-left"></i> Anterior</a>
-                            <a className="btn btn-outline-primary" href='#'>Siguiente <i className="bi bi-chevron-right"></i></a>
-                        </div>
-                    </>
-                )
-                :
-                (
-                    <>
-                        <div className="alert alert-warning d-flex justify-content-center gap-3 fs-2 mt-5" role="alert">
-                            <i className="bi bi-exclamation-triangle"></i>
-                            <div>
-                                <b>No se encontraron registros</b>
-                            </div>
-                        </div>
-                    </>
-                )
+                </div>
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
-            }
+                    <h4>Direcci&oacute;n</h4>
 
+                    <div className="mb-3">
+                        <label htmlFor="departamento" className="form-label">Departamento</label>
+                        <select name="departamento" id="departamento" className='form-control'>
+                            <option value="">-seleccione una opcion-</option>
+                        </select>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="provincia" className="form-label">Provincia</label>
+                        <select name="provincia" id="provincia" className='form-control'>
+                            <option value="">-seleccione una opcion-</option>
+                        </select>
+                    </div>                            
+                    <div className="mb-3">
+                        <label htmlFor="distrito" className="form-label">Distrito</label>
+                        <select name="distrito" id="distrito" className='form-control'>
+                            <option value="">-seleccione una opcion-</option>
+                        </select>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="direccion" className="form-label">Direcci&oacute;n</label>
+                        <input type="text" className="form-control" id="direccion" aria-describedby="direccion" />
+                    </div>
+
+                </div>
+            </div>
+          
         </div>
         
         </Container>

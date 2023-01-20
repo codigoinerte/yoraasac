@@ -21,13 +21,17 @@ export const Breadcrumb = ({ titulo, mensaje, breadcrumb }:breadcrumbInterface) 
                               <li key={id} className="breadcrumb-item"><i className="bi bi-house"></i></li>
                             :
 
-                              (breadcrumb.length < index)
+                              (breadcrumb.length-1 == index)
                               ?
-                                <li key={id} className={ `breadcrumb-item ${breadcrumb.length == index ? 'active' : ''}` } aria-current="page">
-                                  <a href="">{ enlace }</a>
+                                <li key={id} data-page={index} className={ `breadcrumb-item ${breadcrumb.length == index ? 'active' : ''}` } aria-current="page">
+                                    { titulo }
                                 </li>
                               :
-                                <li key={id} className={ `breadcrumb-item ${breadcrumb.length == index ? 'active' : ''}` } aria-current="page">{ titulo }</li>
+                                <li key={id} data-page={index} className={ `breadcrumb-item ${breadcrumb.length == index ? 'active' : ''}` } aria-current="page">
+                                  <a href={enlace}>{ titulo }</a>
+                                </li>
+                              
+                                
 
                           ))
                         }
