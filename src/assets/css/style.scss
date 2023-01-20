@@ -154,14 +154,19 @@ a{
     border-radius: 15px;
     margin-top: -100px;
     padding: 20px 15px;
-    margin-bottom: 35px;    
+    margin-bottom: 35px;  
+    min-height: 330px;  
 }
 
-.acciones-buttons{
-    display: flex;
-    justify-content: center;
-    gap: 15px;
+.table{
+    
+    .acciones-buttons{
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
 }
+
 
 .footer{
     min-height: 50px;
