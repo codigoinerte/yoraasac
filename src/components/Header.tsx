@@ -34,12 +34,13 @@ export const Header = () => {
 
                 <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Entidades
+                    Personas
                   </a>
                   <ul className="dropdown-menu">
                     <li><Link className="dropdown-item" to="/clientes"><i className="bi bi-file-text"></i> Cliente</Link></li>
                     <li><Link className="dropdown-item" to="/proveedores"><i className="bi bi-file-text"></i> Proveedores</Link></li>
                     <li><Link className="dropdown-item" to="/personal"><i className="bi bi-file-text"></i> Personal</Link></li>
+                    <li><Link className="dropdown-item" to="/heladeros"><i className="bi bi-file-text"></i> Heladeros</Link></li>
                   </ul>
                 </li>
                 
@@ -48,9 +49,9 @@ export const Header = () => {
                     Stock
                   </a>
                   <ul className="dropdown-menu">
-                    <li><Link className="dropdown-item" to="/helados"><i className="bi bi-file-text"></i> Helados</Link></li>
-                    <li><Link className="dropdown-item" to="/barquillos"><i className="bi bi-file-text"></i> Barquillos</Link></li>                    
-                    <li><Link className="dropdown-item" to="/baterias"><i className="bi bi-file-text"></i> Baterias</Link></li>
+                    <li><Link className="dropdown-item" to="/stock-helados"><i className="bi bi-file-text"></i> Helados</Link></li>
+                    <li><Link className="dropdown-item" to="/stock-barquillos"><i className="bi bi-file-text"></i> Barquillos</Link></li>                    
+                    <li><Link className="dropdown-item" to="/stock-baterias"><i className="bi bi-file-text"></i> Baterias</Link></li>
                   </ul>
                 </li>
 

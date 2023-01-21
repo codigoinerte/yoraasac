@@ -3,15 +3,17 @@ import { ContainerInner, FormPersonal } from '../../../components';
 import { Breadcrumb as bread } from '../../../interfaces';
 
 const breadcrumb:bread[] = [
-    { id:1, titulo: 'Proveedores', enlace: '/proveedores' },
-    { id:2, titulo: 'Proveedor detalle', enlace: '' }
+    { id:1, titulo: 'Heladeros', enlace: '/heladeros' },
+    { id:2, titulo: 'Heladeros detalle', enlace: '' }
 ];
 
 
-export const ProveedoresDetalle = () => {
+export const HeladerosDetalle = () => {
   return (
     <ContainerInner breadcrumb={breadcrumb}>
-        <FormPersonal tipo="proveedores" ruta="/proveedores" />
+        
+        <FormPersonal tipo="heladeros" ruta="/heladeros" />
+
     </ContainerInner>
   )
 }

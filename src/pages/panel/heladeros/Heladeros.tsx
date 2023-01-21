@@ -4,15 +4,15 @@ import { ContainerInner, ListPersonal } from '../../../components'
 import { Breadcrumb as bread } from '../../../interfaces';
 
 const breadcrumb:bread[] = [
-  { id:1, titulo: 'Proveedores', enlace: '' },
+  { id:1, titulo: 'Heladeros', enlace: '' },
 ];
 
 
-export const Proveedores = () => {
+export const Heladeros = () => {
   return (
 
     <ContainerInner breadcrumb={breadcrumb}>
-        <ListPersonal tipo="proveedores"/>
+        <ListPersonal tipo="heladeros"/>
     </ContainerInner>
   )
 }

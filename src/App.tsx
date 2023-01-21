@@ -8,11 +8,19 @@ import {  Home,
           Proveedores,
           ProveedoresDetalle,        
           Personal,
-          PersonalDetalle
+          PersonalDetalle,
+          Heladeros,
+          HeladerosDetalle,
+          StockHelados,
+          StockHeladosDetalle,
+          StockBarquillosDetalle,
+          StockBaterias,
+          StockBateriasDetalle
 
         } from './pages';
 
 import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { StockBarquillos } from './pages/panel/stockBarquillos/StockBarquillos';
 
 export const App = () => {
   return (
@@ -37,6 +45,27 @@ export const App = () => {
           <Route path="/personal/new" element={<PersonalDetalle />} />
           <Route path="/personal/edit/:id" element={<PersonalDetalle />} />
           
+          {/* Heladeros */}
+          <Route path="/heladeros" element={<Heladeros />} />
+          <Route path="/heladeros/new" element={<HeladerosDetalle />} />
+          <Route path="/heladeros/edit/:id" element={<HeladerosDetalle />} />
+          
+          {/* Stock helados */}
+          <Route path="/stock-helados" element={<StockHelados />} />
+          <Route path="/stock-helados/new" element={<StockHeladosDetalle />} />
+          <Route path="/stock-helados/edit/:id" element={<StockHeladosDetalle />} />
+          
+          {/* Stock barquillos */}
+          <Route path="/stock-barquillos" element={<StockBarquillos />} />
+          <Route path="/stock-barquillos/new" element={<StockBarquillosDetalle />} />
+          <Route path="/stock-barquillos/edit/:id" element={<StockBarquillosDetalle />} />
+          
+          {/* Stock baterias */}
+          <Route path="/stock-baterias" element={<StockBaterias />} />
+          <Route path="/stock-baterias/new" element={<StockBateriasDetalle />} />
+          <Route path="/stock-baterias/edit/:id" element={<StockBateriasDetalle />} />
+
+
           <Route path="*" element={<Home />} />
         
       </Routes>
