@@ -1,5 +1,5 @@
 import React from 'react'
-import { Footer, Container, Breadcrumb, Header } from '../components'
+import { Footer, Container, Breadcrumb, Header } from '../../components'
 
 export const Home = () => {
   return (

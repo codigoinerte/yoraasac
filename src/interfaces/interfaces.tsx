@@ -3,7 +3,7 @@ export interface ContainerInterface  {
 }
 export interface breadcrumbInterface {
     breadcrumb : breadcrumb[],
-    titulo: String,
+    titulo?: String,
     mensaje?: String
 }
 export interface Breadcrumb {
@@ -11,7 +11,10 @@ export interface Breadcrumb {
     titulo: string;
     enlace: string;
 }
-
+export interface ContainerInner{
+    children: React.ReactElement,
+    breadcrumb : breadcrumb[]
+}
 // types
 export type breadcrumb = {
     id:number;

@@ -1,6 +1,7 @@
 import React from 'react'
 import profile from '~assets/images/profile.jpg';
 import logo  from '~assets/images/logo.png';
+import { Link } from 'react-router-dom';
 
 export const Header = () => {
   return (
@@ -10,9 +11,9 @@ export const Header = () => {
 
         <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
           <div className="container-fluid">
-            <a className="navbar-brand" href="#">
+            <Link className="navbar-brand" to="/">
               <img src={logo} alt="Yoraasac" loading='lazy' width={70}/>
-            </a>
+            </Link>
             <button className="navbar-toggler principal" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -36,9 +37,9 @@ export const Header = () => {
                     Entidades
                   </a>
                   <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-file-text"></i> Cliente</a></li>
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-file-text"></i> Proveedores</a></li>                    
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-file-text"></i> Personal</a></li>
+                    <li><Link className="dropdown-item" to="/clientes"><i className="bi bi-file-text"></i> Cliente</Link></li>
+                    <li><Link className="dropdown-item" to="/proveedores"><i className="bi bi-file-text"></i> Proveedores</Link></li>
+                    <li><Link className="dropdown-item" to="/personal"><i className="bi bi-file-text"></i> Personal</Link></li>
                   </ul>
                 </li>
                 
@@ -47,9 +48,9 @@ export const Header = () => {
                     Stock
                   </a>
                   <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-file-text"></i> Helados</a></li>
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-file-text"></i> Barquillos</a></li>                    
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-file-text"></i> Baterias</a></li>
+                    <li><Link className="dropdown-item" to="/helados"><i className="bi bi-file-text"></i> Helados</Link></li>
+                    <li><Link className="dropdown-item" to="/barquillos"><i className="bi bi-file-text"></i> Barquillos</Link></li>                    
+                    <li><Link className="dropdown-item" to="/baterias"><i className="bi bi-file-text"></i> Baterias</Link></li>
                   </ul>
                 </li>
 
@@ -58,9 +59,9 @@ export const Header = () => {
                     Productos
                   </a>
                   <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-plus"></i> Nuevo producto</a></li>
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-file-text"></i> Productos</a></li>                    
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-file-text"></i> Marcas</a></li>
+                    <li><Link className="dropdown-item" to=""><i className="bi bi-plus"></i> Nuevo producto</Link></li>
+                    <li><Link className="dropdown-item" to=""><i className="bi bi-file-text"></i> Productos</Link></li>                    
+                    <li><Link className="dropdown-item" to=""><i className="bi bi-file-text"></i> Marcas</Link></li>
                   </ul>
                 </li>
                 

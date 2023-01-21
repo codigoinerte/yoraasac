@@ -1,7 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { breadcrumb, breadcrumbInterface } from '../interfaces'
 
 export const Breadcrumb = ({ titulo, mensaje, breadcrumb }:breadcrumbInterface) => {
+
+  const mainTitulo =  titulo ? titulo : breadcrumb[breadcrumb.length-1].titulo;
+
   return (
     <>
 
@@ -13,26 +17,23 @@ export const Breadcrumb = ({ titulo, mensaje, breadcrumb }:breadcrumbInterface) 
                   (
                     <nav aria-label="breadcrumb">
                       <ol className="breadcrumb">
+
+                      <li className="breadcrumb-item">
+                        <Link to="/"><i className="bi bi-house"></i></Link>
+                      </li>
+
                         {
                           breadcrumb.map(({ id, enlace, titulo }:breadcrumb, index)=>(
                             
-                            (index == 0)
-                            ?                            
-                              <li key={id} className="breadcrumb-item"><i className="bi bi-house"></i></li>
+                            (breadcrumb.length-1 == index)
+                            ?
+                              <li key={id} data-page={index} className={ `breadcrumb-item ${breadcrumb.length == index ? 'active' : ''}` } aria-current="page">
+                                  { titulo }
+                              </li>
                             :
-
-                              (breadcrumb.length-1 == index)
-                              ?
-                                <li key={id} data-page={index} className={ `breadcrumb-item ${breadcrumb.length == index ? 'active' : ''}` } aria-current="page">
-                                    { titulo }
-                                </li>
-                              :
-                                <li key={id} data-page={index} className={ `breadcrumb-item ${breadcrumb.length == index ? 'active' : ''}` } aria-current="page">
-                                  <a href={enlace}>{ titulo }</a>
-                                </li>
-                              
-                                
-
+                              <li key={id} data-page={index} className={ `breadcrumb-item ${breadcrumb.length == index ? 'active' : ''}` } aria-current="page">
+                                <Link to={enlace}>{ titulo }</Link>
+                              </li>
                           ))
                         }
                           
@@ -42,7 +43,7 @@ export const Breadcrumb = ({ titulo, mensaje, breadcrumb }:breadcrumbInterface) 
                   )
                 }
 
-                <h1>{ titulo }</h1>
+                <h1>{ mainTitulo }</h1>
 
                 { !!mensaje ? ( <p>{ mensaje }</p> ) : false }
 

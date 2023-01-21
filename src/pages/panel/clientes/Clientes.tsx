@@ -1,28 +1,20 @@
 import React from 'react'
-import { Breadcrumb, Container, Footer, Header } from '../components'
-import { Breadcrumb as bread } from '../interfaces';
+import { Link } from 'react-router-dom';
+import { ContainerInner } from '../../../components'
+import { breadcrumb as bread} from '../../../interfaces/interfaces';
 
 const breadcrumb:bread[] = [
-    { id:1, titulo: 'Home', enlace: '/' },
-    { id:2, titulo: 'Clientes', enlace: '' },
+    { id:1, titulo: 'Clientes', enlace: '' },
 ];
 
 export const Clientes = () => {
   return (
-    <>
-        {/* header */}
-        <Header />
-
-        {/* breadcrumb */}
-        <Breadcrumb titulo="Clientes" breadcrumb={breadcrumb} />
-
-        {/* main */}
-        <Container>
-
-        <div className="inner-page">
+            
+    <ContainerInner breadcrumb={breadcrumb}>
+        <>
             <div className="d-flex gap-2 mb-4">
-                <button type="button" className="btn btn-primary btn-lg">Nuevo</button>
-                <button type="button" className="btn btn-danger btn-lg">Cancelar</button>
+                <Link to="/clientes/new" className="btn btn-primary btn-lg">Nuevo</Link>
+                <Link to="/" className="btn btn-danger btn-lg">Cancelar</Link>
             </div>
 
             <hr className='border border-1 opacity-50'/>
@@ -39,7 +31,7 @@ export const Clientes = () => {
                         <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                             <div className="mb-3">
                                 <label htmlFor="documento" className="form-label">Documento</label>
-                                <input type="text" className="form-control" id="documento" aria-describedby="Buscador" placeholder='DNI'/>
+                                <input type="text" className="form-control" id="documento" aria-describedby="Buscador" placeholder='Documento'/>
                             </div>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -278,14 +270,8 @@ export const Clientes = () => {
                 )
 
             }
-
-        </div>
-        
-        </Container>
-                
-
-        {/* footer */}
-        <Footer/>
-    </>
+        </>
+    </ContainerInner>
+    
   )
 }
