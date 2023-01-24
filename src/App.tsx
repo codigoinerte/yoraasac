@@ -15,12 +15,14 @@ import {  Home,
           StockHeladosDetalle,
           StockBarquillosDetalle,
           StockBaterias,
-          StockBateriasDetalle
+          StockBateriasDetalle,
+          ProductosDetalle
 
         } from './pages';
 
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { StockBarquillos } from './pages/panel/stockBarquillos/StockBarquillos';
+import { Productos } from './pages/panel/productos/Productos';
 
 export const App = () => {
   return (
@@ -64,6 +66,11 @@ export const App = () => {
           <Route path="/stock-baterias" element={<StockBaterias />} />
           <Route path="/stock-baterias/new" element={<StockBateriasDetalle />} />
           <Route path="/stock-baterias/edit/:id" element={<StockBateriasDetalle />} />
+
+          {/* Productos */}
+          <Route path="/productos" element={<Productos />} />
+          <Route path="/productos/new" element={<ProductosDetalle />} />
+          <Route path="/productos/edit/:id" element={<ProductosDetalle />} />
 
 
           <Route path="*" element={<Home />} />

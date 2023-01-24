@@ -28,8 +28,7 @@ export interface TablalList{
     children: React.ReactElement,
     modulo?:string,
     cabecera: string[],
-    detalle:listaDetalle[],
-    ruta: string,
+    detalle:listaDetalle[],    
     eliminar: Function,
     next: Function,
     prev: Function

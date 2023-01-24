@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { TablalList } from '../interfaces'
 
-export const List = ({modulo, cabecera, detalle, eliminar, ruta, next, prev, children }:TablalList) => {
+export const List = ({modulo, cabecera, detalle, eliminar, next, prev, children }:TablalList) => {
   return (
     <>
         <div className="d-flex gap-2 mb-4">
@@ -37,7 +37,7 @@ export const List = ({modulo, cabecera, detalle, eliminar, ruta, next, prev, chi
                                 detalle.map(({ id, campos })=>{
                                     
                                     const keyrow = `fila${id}`;
-                                    const enlaceDetalle = `${ruta}${id}`;
+                                    const enlaceDetalle = `${`/${modulo}/edit`}${id}`;
                                 return (                                    
                                     
                                         <tr key={keyrow}>

@@ -57,8 +57,7 @@ export const StockBarquillos = () => {
     <ContainerInner breadcrumb={breadcrumb}>
       <List   modulo='stock-barquillos'              
               cabecera={cabecera} 
-              detalle={detalle}
-              ruta="/stock-barquillos/edit/"
+              detalle={detalle}             
               eliminar={eliminar}
               next={next}
               prev={prev}>

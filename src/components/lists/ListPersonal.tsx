@@ -56,8 +56,7 @@ export const ListPersonal = ({ tipo }:PersonalList) => {
         <List 
                 modulo={tipo} 
                 cabecera={cabecera} 
-                detalle={detalle}
-                ruta="/clientes/edit/"
+                detalle={detalle}               
                 eliminar={eliminar}
                 next={next}
                 prev={prev}>

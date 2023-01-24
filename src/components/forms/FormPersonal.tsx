@@ -50,19 +50,7 @@ export const FormPersonal = ({tipo, ruta }:PersonalForm) => {
             <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
                 <h4>Direcci&oacute;n</h4>
-
-                <div className="mb-3">
-                    <label htmlFor="departamento" className="form-label">Departamento</label>
-                    <select name="departamento" id="departamento" className='form-control'>
-                        <option value="">-seleccione una opcion-</option>
-                    </select>
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="provincia" className="form-label">Provincia</label>
-                    <select name="provincia" id="provincia" className='form-control'>
-                        <option value="">-seleccione una opcion-</option>
-                    </select>
-                </div>                            
+                                         
                 <div className="mb-3">
                     <label htmlFor="distrito" className="form-label">Distrito</label>
                     <select name="distrito" id="distrito" className='form-control'>

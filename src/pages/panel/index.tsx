@@ -5,4 +5,5 @@ export * from './heladeros';
 export * from './stockHelados';
 export * from './stockBarquillos';
 export * from './stockBaterias';
+export * from './productos';
 export * from './Home';

@@ -9,7 +9,7 @@ const breadcrumb:bread[] = [
 ];
 
 export const StockHelados = () => {
-  const cabecera = [
+const cabecera = [
     "Documento",
     "Nombre",
     "Fecha de creación"
@@ -56,8 +56,7 @@ return (
   <ContainerInner breadcrumb={breadcrumb}>
     <List   modulo='stock-helados'
             cabecera={cabecera} 
-            detalle={detalle}
-            ruta="/stock-helados/edit/"
+            detalle={detalle}            
             eliminar={eliminar}
             next={next}
             prev={prev}>

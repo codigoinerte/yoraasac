@@ -46,6 +46,17 @@ export const Header = () => {
                 
                 <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Productos
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li><Link className="dropdown-item" to="/productos/new"><i className="bi bi-plus"></i> Nuevo producto</Link></li>
+                    <li><Link className="dropdown-item" to="/productos"><i className="bi bi-file-text"></i> Productos</Link></li>                    
+                    <li><Link className="dropdown-item" to=""><i className="bi bi-file-text"></i> Marcas</Link></li>
+                  </ul>
+                </li>
+
+                <li className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Stock
                   </a>
                   <ul className="dropdown-menu">
@@ -53,18 +64,7 @@ export const Header = () => {
                     <li><Link className="dropdown-item" to="/stock-barquillos"><i className="bi bi-file-text"></i> Barquillos</Link></li>                    
                     <li><Link className="dropdown-item" to="/stock-baterias"><i className="bi bi-file-text"></i> Baterias</Link></li>
                   </ul>
-                </li>
-
-                <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Productos
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li><Link className="dropdown-item" to=""><i className="bi bi-plus"></i> Nuevo producto</Link></li>
-                    <li><Link className="dropdown-item" to=""><i className="bi bi-file-text"></i> Productos</Link></li>                    
-                    <li><Link className="dropdown-item" to=""><i className="bi bi-file-text"></i> Marcas</Link></li>
-                  </ul>
-                </li>
+                </li>              
                 
                 <li className="nav-item">
                   <a className="nav-link" href="#">Nota heladero</a>

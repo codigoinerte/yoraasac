@@ -58,7 +58,6 @@ return (
     <List   modulo='stock-baterias'
             cabecera={cabecera} 
             detalle={detalle}
-            ruta="/stock-baterias/edit/"
             eliminar={eliminar}
             next={next}
             prev={prev}>
