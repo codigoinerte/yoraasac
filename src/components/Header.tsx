@@ -9,7 +9,7 @@ export const Header = () => {
         <div className="header bg-primary">
         <div className="container">
 
-        <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <nav className="navbar navbar-expand-lg">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
               <img src={logo} alt="Yoraasac" loading='lazy' width={70}/>
@@ -18,19 +18,19 @@ export const Header = () => {
               <span className="navbar-toggler-icon"></span>
             </button>
             
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">              
 
-              <div className="display-responsive">
-                <div className="d-flex justify-content-end">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item dropdown"><Link className="dropdown-item" to="/personal"><i className="bi bi-file-text"></i> <span>Personas</span></Link></li>
+                <li className="nav-item dropdown"><Link className="dropdown-item" to="/productos"><i className="bi bi-file-text"></i> <span>Productos</span></Link></li>                    
+                <li className="nav-item dropdown"><Link className="dropdown-item" to="/stock-helados"><i className="bi bi-file-text"></i><span>Stock</span></Link></li>
+                <li className="nav-item dropdown"><Link className="dropdown-item" to="/nota-heladero"><i className="bi bi-file-text"></i> <span>Notas heladero</span></Link></li>
+                <li className="nav-item dropdown"><Link className="dropdown-item" to="/facturacion"><i className="bi bi-file-text"></i> <span>Facturas</span></Link></li>
+                <li className="nav-item dropdown"><Link className="dropdown-item" to="/reportes"><i className="bi bi-file-text"></i> <span>Reportes</span></Link></li>
+                <li className="nav-item dropdown"><Link className="dropdown-item" to="/configuracion"><i className="bi bi-file-text"></i> <span>Configuraci&oacute;n</span></Link></li>
+              </ul>
 
-                  <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i className="bi bi-x"></i>
-                  </button>
-
-                </div>
-              </div>
-
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">               
+              {/* <ul className="navbar-nav me-auto mb-2 mb-lg-0">               
 
                 <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -116,7 +116,7 @@ export const Header = () => {
                   </ul>
                 </li>
                 
-              </ul>  
+              </ul>   */}
 
               <div className="d-flex display-desktop">
                 <div className="dropdown">

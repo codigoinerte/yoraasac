@@ -11,17 +11,46 @@ a{
 }
 
 .header{
-    border-bottom: 1px solid #2C2F37;
+    border-bottom: 1px solid lighten($primary-bg-color, 65%) ;
 
     .navbar{
-        .navbar-nav > li{
-            padding: 16px 0px;
+       
+        .navbar-nav{
+            
+            width: 100%;
+            display: flex;
+            justify-content: center;   
+            align-items: center;         
+            gap: 25px;
+
+            li{
+                padding: 0px 0px;
+                text-align: center;
+                justify-content: center;
+
+                a{
+                    display: flex;
+                    flex-direction: column;   
+
+                    i{
+                        font-size: 35px;
+                    }
+                    span{
+                        font-size: 14px;
+                        
+
+                        white-space: pre-line !important;
+                    }
+                }            
+            }
         }        
+
         button.navbar-toggler.principal{
             padding: 3px 6px;
             background-color: $secodary-bg-color;
             border: none;
 
+            /*
             &::before{
                 content: "";
                 width: 100%;
@@ -34,7 +63,9 @@ a{
                 background-color: rgba(0,0,0,0.75);
                 z-index: 9999;                               
             }
+            */
         }
+        /*
         .display-desktop{
             display: block;
         }
@@ -47,6 +78,7 @@ a{
                 display: none;
             }
         }
+        */
     }
 
     .btn-profile {
@@ -67,7 +99,7 @@ a{
 }
 
 .breadcrumb-container{
-    color: $secodary-bg-color;
+    color: $primary-bg-color;
     padding: 40px 0px 125px 0px;
 
 
@@ -82,13 +114,13 @@ a{
         line-height: 1;
         vertical-align: -0.125em;
         -webkit-font-smoothing: antialiased;
-        color: $secodary-bg-color !important;
+        color: $primary-bg-color !important;
 
         padding: 0;
         float: none !important;
     }
     li,a,i{
-        color: $secodary-bg-color !important;
+        color: $primary-bg-color !important;
     }
 }
 
