@@ -202,9 +202,31 @@ a{
 
 .footer{
     min-height: 50px;
+    background-color: lighten($primary-bg-color, 5%)  !important; 
 
     p{
         margin: auto;
         font-size: 15px;
+        color: $text-primary;
+        a{
+            color: $text-primary;
+        }
+    }
+}
+.navbar-footer{
+
+    background-color: darken($head-bg-color, 5%) !important; 
+
+    .navbar{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        justify-content: flex-end;
+
+        .dropdown-menu{
+            right: 0;
+            left: auto;
+        }
     }
 }

@@ -35,6 +35,11 @@ export interface TablalList{
 }
 export interface paginationInterface extends SyntheticEvent {   
 }
+export interface MenuInterface {
+    nombre: string;
+    alias:  string;
+    icono:  string;
+}
 
 // types
 export type breadcrumb = {
