@@ -11,7 +11,7 @@ export const Header = () => {
 
         <nav className="navbar navbar-expand-lg">
           <div className="container-fluid">
-            <Link className="navbar-brand" to="/">
+            <Link className="navbar-brand d-none d-sm-none d-md-none d-lg-flex d-flex" to="/">
               <img src={logo} alt="Yoraasac" loading='lazy' width={70}/>
             </Link>
             <button className="navbar-toggler principal" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,7 +118,7 @@ export const Header = () => {
                 
               </ul>   */}
 
-              <div className="d-flex display-desktop">
+              <div className="d-none d-sm-none d-md-none d-lg-flex d-flex display-desktop">
                 <div className="dropdown">
                   <button className="btn btn-profile dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <img src={profile} alt="" />

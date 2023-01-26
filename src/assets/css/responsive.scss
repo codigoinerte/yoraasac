@@ -1,27 +1,66 @@
 
 @media(max-width:991px){
-    .header .navbar .navbar-nav{
-        flex-direction: row;
+    .header {
 
-        align-items: flex-start;
-        justify-content: flex-start;
-        overflow-x: scroll;
+        .navbar {
+
+            .collapse{
+
+                position: relative;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row;
+                overflow-x: scroll;
+
+                &:not(.show){
+                    display: flex;
+                    flex-basis: auto;
+                }
+
+                .navbar-nav{
+                    flex-direction: row;
+            
+                    align-items: flex-start;
+                    justify-content: space-between;                    
+                    margin: 0;
+                }
+            }
+
+            .container-fluid{
+
+                &:before,
+                &:after{
+                    content: "";
+                    display: block;  
+                    position: absolute;              
+                    width: 25px;
+                    top: 0;
+                    bottom: 0;
+                    left: -1px;
+                    z-index: 4;
+                                        
+                    background: $head-bg-color;
+                    background: linear-gradient(270deg, rgba(220,220,220,0) 0%, rgba(220,220,220,0.9) 47%, rgba(220,220,220,1) 100%);                    
+                }
+                &:after{
+                    right: -1px;
+                    left: auto;
+                    background: linear-gradient(90deg, rgba(220,220,220,0) 0%, rgba(220,220,220,0.9) 47%, rgba(220,220,220,1) 100%);                    
+                }
+            }
+        }  
+        
+    }
+    .container-fluid{        
+        padding: 0;
     }
     .navbar-toggler{
         display: none;
     }
-    .collapse{
-        flex-direction: row;
-    }
-    .collapse:not(.show){
-        display: flex;
-        flex-basis: auto;
 
-        max-width: calc(100% - 90px);
-    }
-
+    /*
     .navbar-nav{
-        padding-right: 80px;
+        
         position: relative;
 
         +div{
@@ -47,7 +86,7 @@
             }
         }
     }
-
+    */
     /*
     .navbar-collapse{
         position: fixed;
