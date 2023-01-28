@@ -6,8 +6,8 @@ export const List = ({modulo, cabecera, detalle, eliminar, next, prev, children 
   return (
     <>
         <div className="d-flex gap-2 mb-4">
-            <Link to={`/${modulo}/new`} className="btn btn-primary btn-lg">Nuevo</Link>
-            <Link to="/" className="btn btn-danger btn-lg">Cancelar</Link>
+            <Link to={`/personas/${modulo}/new`} className="btn btn-primary btn-lg">Nuevo</Link>
+            <Link to="/personas/" className="btn btn-danger btn-lg">Cancelar</Link>
         </div>
 
         <hr className='border border-1 opacity-50'/>

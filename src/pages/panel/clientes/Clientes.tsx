@@ -3,7 +3,8 @@ import { ContainerInner, ListPersonal } from '../../../components'
 import { breadcrumb as bread} from '../../../interfaces/interfaces';
 
 const breadcrumb:bread[] = [
-    { id:1, titulo: 'Clientes', enlace: '' },
+    { id:1, titulo: 'Personas', enlace: '/personas' },
+    { id:2, titulo: 'Clientes', enlace: '' },
 ];
 
 export const Clientes = () => {

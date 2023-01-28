@@ -13,7 +13,7 @@ export const FormPersonal = ({tipo, ruta }:PersonalForm) => {
     <>
         <div className="d-flex gap-2 mb-4">
             <button onClick={()=>console.log(1)} className="btn btn-primary btn-lg">Guardar</button>
-            <Link to={ruta} className="btn btn-danger btn-lg">Cancelar</Link>
+            <Link to={`/personas/${ruta}`} className="btn btn-danger btn-lg">Cancelar</Link>
         </div>
 
         <hr className='border border-1 opacity-50'/>

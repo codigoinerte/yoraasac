@@ -16,13 +16,15 @@ import {  Home,
           StockBarquillosDetalle,
           StockBaterias,
           StockBateriasDetalle,
-          ProductosDetalle
+          ProductosDetalle,
+          Personas
 
         } from './pages';
 
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { StockBarquillos } from './pages/panel/stockBarquillos/StockBarquillos';
 import { Productos } from './pages/panel/productos/Productos';
+import path from 'path';
 
 export const App = () => {
   return (
@@ -33,9 +35,19 @@ export const App = () => {
           <Route path="/" element={<Home />} />
 
           {/* clientes */}
-          <Route path="/clientes" element={<Clientes />} />
-          <Route path="/clientes/new" element={<ClientesDetalle />} />
-          <Route path="/clientes/edit/:id" element={<ClientesDetalle />} />
+          
+          <Route path="/personas/*" element={<Routes>
+
+            <Route path="/" element={<Personas />} />
+            <Route path="/clientes/*" element={<Routes>
+
+                <Route path="/" element={<Clientes />} />
+                <Route path="/new" element={<ClientesDetalle />} />
+                <Route path="/edit/:id" element={<ClientesDetalle />} />
+
+            </Routes>} />
+
+          </Routes>} />
 
           {/* proveedores */}
           <Route path="/proveedores" element={<Proveedores />} />

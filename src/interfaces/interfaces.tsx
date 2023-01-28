@@ -40,7 +40,9 @@ export interface MenuInterface {
     alias:  string;
     icono:  string;
 }
-
+export interface AccessInterface{
+    Menu: MenuInterface[]
+}
 // types
 export type breadcrumb = {
     id:number;

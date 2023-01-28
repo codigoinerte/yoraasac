@@ -1,11 +1,10 @@
 body{   
     background-color: $secodary-bg-color;
+    display: flex;
 }
-/*
-#root{    
+#root{
     flex: 1;
 }
-*/
 a{
     text-decoration: none;
 }
@@ -188,6 +187,10 @@ a{
     padding: 20px 15px;
     margin-bottom: 35px;  
     min-height: 330px;  
+
+    .atajos-homes{
+        margin-top: 0px;
+    }
 }
 
 .table{
