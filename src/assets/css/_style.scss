@@ -1,9 +1,13 @@
 body{   
     background-color: $secodary-bg-color;
+    min-height: 100vh;
     // display: flex;
 }
 #root{
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 a{
     text-decoration: none;
@@ -209,7 +213,7 @@ a{
 
     p{
         margin: auto;
-        font-size: 15px;
+        font-size: 13px;
         color: $text-primary;
         a{
             color: $text-primary;

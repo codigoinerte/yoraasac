@@ -44,6 +44,21 @@ export const MenuPersonas:MenuInterface[] = [
        "alias":"/personas/clientes",
        "icono":"bi bi-app"
     },
+    {
+       "nombre":"Proveedores",
+       "alias":"/personas/proveedores",
+       "icono":"bi bi-app"
+    },
+    {
+       "nombre":"Personal",
+       "alias":"/personas/personal",
+       "icono":"bi bi-app"
+    },
+    {
+       "nombre":"Heladeros",
+       "alias":"/personas/heladeros",
+       "icono":"bi bi-app"
+    }
     
  ];
 

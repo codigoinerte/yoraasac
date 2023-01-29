@@ -33,36 +33,47 @@ export const App = () => {
       <Routes>
         
           <Route path="/" element={<Home />} />
-
-          {/* clientes */}
           
           <Route path="/personas/*" element={<Routes>
 
+            {/* Categoria clientes */}
             <Route path="/" element={<Personas />} />
+
+            {/* clientes */}
             <Route path="/clientes/*" element={<Routes>
 
                 <Route path="/" element={<Clientes />} />
                 <Route path="/new" element={<ClientesDetalle />} />
                 <Route path="/edit/:id" element={<ClientesDetalle />} />
-
             </Routes>} />
+
+            {/* proveedores */}
+            <Route path="/proveedores/*" element={<Routes>
+
+              <Route path="/" element={<Proveedores />} />
+              <Route path="/new" element={<ProveedoresDetalle />} />
+              <Route path="/edit/:id" element={<ProveedoresDetalle />} />
+            </Routes>} />
+            
+            {/* personal */}
+            <Route path="/personal/*" element={<Routes>
+
+              <Route path="/" element={<Personal />}/>
+              <Route path="/new" element={<PersonalDetalle />} />
+              <Route path="/edit/:id" element={<PersonalDetalle />} />
+            </Routes>} />
+
+            {/* Heladeros */}
+            <Route path="/heladeros/*" element={<Routes>
+              
+              <Route path="/" element={<Heladeros />} />
+              <Route path="/new" element={<HeladerosDetalle />} />
+              <Route path="/edit/:id" element={<HeladerosDetalle />} />
+            </Routes>} />                        
 
           </Routes>} />
 
-          {/* proveedores */}
-          <Route path="/proveedores" element={<Proveedores />} />
-          <Route path="/proveedores/new" element={<ProveedoresDetalle />} />
-          <Route path="/proveedores/edit/:id" element={<ProveedoresDetalle />} />
           
-          {/* personal */}
-          <Route path="/personal" element={<Personal />} />
-          <Route path="/personal/new" element={<PersonalDetalle />} />
-          <Route path="/personal/edit/:id" element={<PersonalDetalle />} />
-          
-          {/* Heladeros */}
-          <Route path="/heladeros" element={<Heladeros />} />
-          <Route path="/heladeros/new" element={<HeladerosDetalle />} />
-          <Route path="/heladeros/edit/:id" element={<HeladerosDetalle />} />
           
           {/* Stock helados */}
           <Route path="/stock-helados" element={<StockHelados />} />
