@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { PersonalForm } from '../../interfaces'
+import { FormControls } from '../FormControls';
 /*
     1: cliente
     2: proveedor
@@ -8,13 +9,11 @@ import { PersonalForm } from '../../interfaces'
     4: heladero
 
 */
-export const FormPersonal = ({tipo, ruta }:PersonalForm) => {
+export const FormPersonal = ({category, page }:PersonalForm) => {
+    
   return (
     <>
-        <div className="d-flex gap-2 mb-4">
-            <button onClick={()=>console.log(1)} className="btn btn-primary btn-lg">Guardar</button>
-            <Link to={`/personas/${ruta}`} className="btn btn-danger btn-lg">Cancelar</Link>
-        </div>
+        <FormControls category={category} save={()=>console.log(1)} page={page}/>
 
         <hr className='border border-1 opacity-50'/>
 

@@ -12,7 +12,7 @@ const breadcrumb:bread[] = [
 export const ProveedoresDetalle = () => {
   return (
     <ContainerInner breadcrumb={breadcrumb}>
-        <FormPersonal tipo="proveedores" ruta="proveedores" />
+        <FormPersonal page="proveedores" category='personas' />
     </ContainerInner>
   )
 }

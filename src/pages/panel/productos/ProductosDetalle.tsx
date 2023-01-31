@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
-import { ContainerInner, FormPersonal } from '../../../components'
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ContainerInner, FormControls, FormPersonal } from '../../../components'
 import { Breadcrumb as bread } from '../../../interfaces';
 
 const breadcrumb:bread[] = [
@@ -10,13 +10,19 @@ const breadcrumb:bread[] = [
 
 
 export const ProductosDetalle = () => {
+
+  const { id = 0 } = useParams();
+
+  const navigate = useNavigate();
+
+  const onNavigateBack = () => {
+      navigate(-1);
+  }
+
   return (
     <ContainerInner breadcrumb={breadcrumb}>
         <>
-            <div className="d-flex gap-2 mb-4">
-                <button onClick={()=>console.log(1)} className="btn btn-primary btn-lg">Guardar</button>
-                <Link to='/productos' className="btn btn-danger btn-lg">Cancelar</Link>
-            </div>
+          <FormControls page="productos" save={()=>console.log(1)} />
 
             <hr className='border border-1 opacity-50'/>
 

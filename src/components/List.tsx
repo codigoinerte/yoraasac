@@ -1,14 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Enlace } from '../helpers';
 import { TablalList } from '../interfaces'
+import { FormControls } from './FormControls';
 
-export const List = ({modulo, cabecera, detalle, eliminar, next, prev, children }:TablalList) => {
+export const List = ({page, cabecera, detalle, eliminar, next, prev, children, category }:TablalList) => {
+
+    
+
   return (
     <>
-        <div className="d-flex gap-2 mb-4">
-            <Link to={`/personas/${modulo}/new`} className="btn btn-primary btn-lg">Nuevo</Link>
-            <Link to="/personas/" className="btn btn-danger btn-lg">Cancelar</Link>
-        </div>
+        <FormControls category={category} page={page} save={()=>console.log(1)} tipo='list' />
 
         <hr className='border border-1 opacity-50'/>
 
@@ -37,7 +39,7 @@ export const List = ({modulo, cabecera, detalle, eliminar, next, prev, children 
                                 detalle.map(({ id, campos })=>{
                                     
                                     const keyrow = `fila${id}`;
-                                    const enlaceDetalle = `${`/${modulo}/edit`}${id}`;
+                                    const enlaceDetalle = Enlace(category, page, id);
                                 return (                                    
                                     
                                         <tr key={keyrow}>

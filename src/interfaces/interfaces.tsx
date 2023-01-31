@@ -18,15 +18,17 @@ export interface ContainerInner{
     breadcrumb : breadcrumb[]
 }
 export interface PersonalForm{
-    tipo: modulos,
-    ruta: string
+    category?: string;
+    page: string;
 }
 export interface PersonalList{
-    tipo:modulos
+    category?:string;
+    page:string;
 }
 export interface TablalList{
     children: React.ReactElement,
-    modulo?:string,
+    category?:string,
+    page:string,
     cabecera: string[],
     detalle:listaDetalle[],    
     eliminar: Function,
@@ -43,6 +45,13 @@ export interface MenuInterface {
 export interface AccessInterface{
     Menu: MenuInterface[]
 }
+export interface ControlsInterface{
+    tipo?: 'new' | 'edit' | 'delete' | 'list'; 
+    save: Function ;
+    category?:string;
+    page:string;
+}
+
 // types
 export type breadcrumb = {
     id:number;

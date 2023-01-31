@@ -66,7 +66,7 @@ export const Productos = () => {
 
     return (
         <ContainerInner breadcrumb={breadcrumb}>
-            <List   modulo='productos'
+            <List   page='productos'
                     cabecera={cabecera} 
                     detalle={detalle}                    
                     eliminar={eliminar}

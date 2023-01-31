@@ -21,7 +21,7 @@ import {  Home,
 
         } from './pages';
 
-import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { Routes, Route, Outlet, Link, Navigate } from "react-router-dom";
 import { StockBarquillos } from './pages/panel/stockBarquillos/StockBarquillos';
 import { Productos } from './pages/panel/productos/Productos';
 import path from 'path';
@@ -45,6 +45,7 @@ export const App = () => {
                 <Route path="/" element={<Clientes />} />
                 <Route path="/new" element={<ClientesDetalle />} />
                 <Route path="/edit/:id" element={<ClientesDetalle />} />
+                <Route path="*" element={<Clientes />} />
             </Routes>} />
 
             {/* proveedores */}
@@ -53,6 +54,7 @@ export const App = () => {
               <Route path="/" element={<Proveedores />} />
               <Route path="/new" element={<ProveedoresDetalle />} />
               <Route path="/edit/:id" element={<ProveedoresDetalle />} />
+              <Route path="*" element={<Proveedores />} />
             </Routes>} />
             
             {/* personal */}
@@ -61,6 +63,7 @@ export const App = () => {
               <Route path="/" element={<Personal />}/>
               <Route path="/new" element={<PersonalDetalle />} />
               <Route path="/edit/:id" element={<PersonalDetalle />} />
+              <Route path="*" element={<Personal />} />
             </Routes>} />
 
             {/* Heladeros */}
@@ -69,11 +72,21 @@ export const App = () => {
               <Route path="/" element={<Heladeros />} />
               <Route path="/new" element={<HeladerosDetalle />} />
               <Route path="/edit/:id" element={<HeladerosDetalle />} />
-            </Routes>} />                        
+              <Route path="*" element={<Heladeros />} />
+            </Routes>} />  
+
+            <Route path="*" element={<Personas />} />                      
 
           </Routes>} />
 
-          
+          {/* Productos */}
+          <Route path="/productos/*" element={<Routes>
+
+            <Route path="/" element={<Productos />} />
+            <Route path="/new" element={<ProductosDetalle />} />
+            <Route path="/edit/:id" element={<ProductosDetalle />} />
+            <Route path="*" element={<Productos />} />
+          </Routes>} />
           
           {/* Stock helados */}
           <Route path="/stock-helados" element={<StockHelados />} />
@@ -90,10 +103,8 @@ export const App = () => {
           <Route path="/stock-baterias/new" element={<StockBateriasDetalle />} />
           <Route path="/stock-baterias/edit/:id" element={<StockBateriasDetalle />} />
 
-          {/* Productos */}
-          <Route path="/productos" element={<Productos />} />
-          <Route path="/productos/new" element={<ProductosDetalle />} />
-          <Route path="/productos/edit/:id" element={<ProductosDetalle />} />
+          
+
 
 
           <Route path="*" element={<Home />} />

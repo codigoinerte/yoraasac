@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import { listaDetalle, paginationInterface, PersonalList } from '../../interfaces'
 import { List } from '../List'
 
-export const ListPersonal = ({ tipo }:PersonalList) => {
+export const ListPersonal = ({ page, category }:PersonalList) => {
 
     const cabecera = [
         "Documento",
@@ -54,7 +54,8 @@ export const ListPersonal = ({ tipo }:PersonalList) => {
   return (
     <>
         <List 
-                modulo={tipo} 
+                page={page} 
+                category={category}
                 cabecera={cabecera} 
                 detalle={detalle}               
                 eliminar={eliminar}

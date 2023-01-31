@@ -8,3 +8,4 @@ export * from './forms';
 export * from './lists';
 export * from './List';
 export * from './AccessCategory';
+export * from './FormControls';

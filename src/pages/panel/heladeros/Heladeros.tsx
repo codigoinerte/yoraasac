@@ -13,7 +13,7 @@ export const Heladeros = () => {
   return (
 
     <ContainerInner breadcrumb={breadcrumb}>
-        <ListPersonal tipo="heladeros"/>
+        <ListPersonal page="heladeros" category='personas'/>
     </ContainerInner>
   )
 }
