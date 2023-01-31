@@ -8,3 +8,4 @@ export * from './stockBaterias';
 export * from './productos';
 export * from './Home';
 export * from './Personas';
+export * from './Stock';

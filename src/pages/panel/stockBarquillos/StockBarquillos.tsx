@@ -5,7 +5,8 @@ import { ContainerInner, List, } from '../../../components';
 import { Breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 
 const breadcrumb:bread[] = [
-  { id:1, titulo: 'Stock barquillos', enlace: '' },
+  { id:1, titulo: 'Stock', enlace: '/stock' },
+  { id:2, titulo: 'Stock barquillos', enlace: '' },
 ];
 
 export const StockBarquillos = () => {
@@ -55,7 +56,8 @@ export const StockBarquillos = () => {
 
   return (
     <ContainerInner breadcrumb={breadcrumb}>
-      <List   modulo='stock-barquillos'              
+      <List   page='barquillos'
+              category='stock'
               cabecera={cabecera} 
               detalle={detalle}             
               eliminar={eliminar}

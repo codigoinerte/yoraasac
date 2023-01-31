@@ -13,7 +13,7 @@ export const Menu:MenuInterface[] = [
     },
     {
        "nombre":"Stock",
-       "alias":"/stock-helados",
+       "alias":"/stock",
        "icono":"bi bi-ui-checks-grid"
     },
     {
@@ -60,6 +60,25 @@ export const MenuPersonas:MenuInterface[] = [
        "icono":"bi bi-app"
     }
     
+ ];
+
+ 
+export const MenuStock:MenuInterface[] = [
+    {
+       "nombre":"Helados",
+       "alias":"/stock/helados",
+       "icono":"bi bi-app"
+    },
+    {
+       "nombre":"Barquillos",
+       "alias":"/stock/barquillos",
+       "icono":"bi bi-app"
+    },
+    {
+       "nombre":"Baterias",
+       "alias":"/stock/baterias",
+       "icono":"bi bi-app"
+    },    
  ];
 
  

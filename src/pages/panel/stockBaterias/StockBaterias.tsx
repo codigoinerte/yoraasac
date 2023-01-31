@@ -5,7 +5,8 @@ import { ContainerInner, List } from '../../../components';
 import { breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 
 const breadcrumb:bread[] = [
-  { id:1, titulo: 'Stock Baterias', enlace: '' },
+  { id:1, titulo: 'Stock', enlace: '/stock' },
+  { id:2, titulo: 'Stock baterias', enlace: '' },
 ];
 
 export const StockBaterias = () => {
@@ -55,7 +56,8 @@ const { q = '' } = queryString.parse(location.search);
 
 return (
   <ContainerInner breadcrumb={breadcrumb}>
-    <List   modulo='stock-baterias'
+    <List   page='baterias'
+            category='stock'
             cabecera={cabecera} 
             detalle={detalle}
             eliminar={eliminar}

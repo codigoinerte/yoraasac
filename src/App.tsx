@@ -17,7 +17,8 @@ import {  Home,
           StockBaterias,
           StockBateriasDetalle,
           ProductosDetalle,
-          Personas
+          Personas,
+          Stock
 
         } from './pages';
 
@@ -89,19 +90,39 @@ export const App = () => {
           </Routes>} />
           
           {/* Stock helados */}
-          <Route path="/stock-helados" element={<StockHelados />} />
-          <Route path="/stock-helados/new" element={<StockHeladosDetalle />} />
-          <Route path="/stock-helados/edit/:id" element={<StockHeladosDetalle />} />
-          
-          {/* Stock barquillos */}
-          <Route path="/stock-barquillos" element={<StockBarquillos />} />
-          <Route path="/stock-barquillos/new" element={<StockBarquillosDetalle />} />
-          <Route path="/stock-barquillos/edit/:id" element={<StockBarquillosDetalle />} />
-          
-          {/* Stock baterias */}
-          <Route path="/stock-baterias" element={<StockBaterias />} />
-          <Route path="/stock-baterias/new" element={<StockBateriasDetalle />} />
-          <Route path="/stock-baterias/edit/:id" element={<StockBateriasDetalle />} />
+          <Route path="/stock/*" element={<Routes>
+
+            <Route path="/" element={<Stock />} />
+
+            {/* Stock helados */}
+            <Route path="/helados/*" element={<Routes>
+
+              <Route path="/" element={<StockHelados />} />
+              <Route path="/new" element={<StockHeladosDetalle />} />
+              <Route path="/edit/:id" element={<StockHeladosDetalle />} />
+              <Route path="*" element={<StockHelados />} />                            
+            </Routes>} />
+            
+            {/* Stock barquillos */}
+            <Route path="/barquillos/*" element={<Routes>
+
+              <Route path="/" element={<StockBarquillos />} />
+              <Route path="/new" element={<StockBarquillosDetalle />} />
+              <Route path="/edit/:id" element={<StockBarquillosDetalle />} />
+              <Route path="*" element={<StockBarquillos />} />   
+            </Routes>} />
+            
+            {/* Stock baterias */}
+            <Route path="/baterias" element={<Routes>
+
+              
+              <Route path="/" element={<StockBaterias />} />
+              <Route path="/new" element={<StockBateriasDetalle />} />
+              <Route path="/edit/:id" element={<StockBateriasDetalle />} />
+              <Route path="*" element={<StockBaterias />} />   
+            </Routes>} />
+
+          </Routes>} />
 
           
 
