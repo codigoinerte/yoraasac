@@ -215,6 +215,10 @@ a{
         margin: auto;
         font-size: 13px;
         color: $text-primary;
+
+        &:hover{
+            color: $text-primary;
+        }
         a{
             color: $text-primary;
         }

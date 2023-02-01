@@ -11,9 +11,9 @@ const breadcrumb:bread[] = [
 
 export const StockHelados = () => {
 const cabecera = [
-    "Documento",
-    "Nombre",
-    "Fecha de creación"
+    "codigo movimiento",
+    "Tipo movimiento",
+    "Fecha de movimiento"
 ];
 
 const eliminar = (id:number) => {
@@ -23,19 +23,19 @@ const eliminar = (id:number) => {
 const detalle:listaDetalle[] = [
   {
     id:1,
-    campos: ["70035156", "BRIGITTE MERIDA PONCE VALENTIN", "15/06/2022"]        
+    campos: ["000000001", "Ingreso", "15/06/2022"]        
   },
   {
     id:2,
-    campos: ["70035156", "BRIGITTE MERIDA PONCE VALENTIN", "15/06/2022"]        
+    campos: ["000000002", "Salida - Venta", "15/06/2022"]        
   },
   {
     id:3,
-    campos: ["70035156", "BRIGITTE MERIDA PONCE VALENTIN", "15/06/2022"]        
+    campos: ["000000003", "Salida - Devolucion", "15/06/2022"]        
   },
   {
     id:4,
-    campos: ["70035156", "BRIGITTE MERIDA PONCE VALENTIN", "15/06/2022"]        
+    campos: ["000000004", "Salida - Venta", "15/06/2022"]        
   }
 ];
 

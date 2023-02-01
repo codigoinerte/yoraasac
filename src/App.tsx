@@ -18,7 +18,8 @@ import {  Home,
           StockBateriasDetalle,
           ProductosDetalle,
           Personas,
-          Stock
+          Stock,
+          NotaHeladeroDetalle
 
         } from './pages';
 
@@ -26,6 +27,7 @@ import { Routes, Route, Outlet, Link, Navigate } from "react-router-dom";
 import { StockBarquillos } from './pages/panel/stockBarquillos/StockBarquillos';
 import { Productos } from './pages/panel/productos/Productos';
 import path from 'path';
+import { NotaHeladero } from './pages/panel/notaHeladero/NotaHeladero';
 
 export const App = () => {
   return (
@@ -113,7 +115,7 @@ export const App = () => {
             </Routes>} />
             
             {/* Stock baterias */}
-            <Route path="/baterias" element={<Routes>
+            <Route path="/baterias/*" element={<Routes>
 
               
               <Route path="/" element={<StockBaterias />} />
@@ -125,6 +127,15 @@ export const App = () => {
           </Routes>} />
 
           
+          {/* Notas heladero */}
+          <Route path="/nota-heladero/*" element={<Routes>
+
+            
+            <Route path="/" element={<NotaHeladero />} />
+            <Route path="/new" element={<NotaHeladeroDetalle />} />
+            <Route path="/edit/:id" element={<NotaHeladeroDetalle />} />
+            <Route path="*" element={<NotaHeladero />} />   
+          </Routes>} />
 
 
 

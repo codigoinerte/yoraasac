@@ -18,7 +18,7 @@ export const Menu:MenuInterface[] = [
     },
     {
        "nombre":"Notas heladero",
-       "alias":"/notas-heladero",
+       "alias":"/nota-heladero/new",
        "icono":"bi bi-file-earmark-plus"
     },
     {

@@ -1,4 +1,5 @@
 import { SyntheticEvent } from "react";
+import { ListDetail } from '../components/ListDetail';
 
 export interface ContainerInterface  {
     children:  React.ReactElement 
@@ -51,7 +52,11 @@ export interface ControlsInterface{
     category?:string;
     page:string;
 }
-
+export interface ListDetail{
+    cabecera: string[],
+    detalle:listaDetalle[],
+    eliminar: Function,
+}
 // types
 export type breadcrumb = {
     id:number;
@@ -60,6 +65,12 @@ export type breadcrumb = {
 }
 
 export type listaDetalle = {
+    id: number,
+    campos: string[]    
+}
+
+// ! CRERA EL TIPADO PARA EL DETALLE DE LA NOTA DE HELADERO
+export type listaDetalleNotaHeladero = {
     id: number,
     campos: string[]    
 }

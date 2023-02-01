@@ -7,5 +7,6 @@ export * from './Footer';
 export * from './forms';
 export * from './lists';
 export * from './List';
+export * from './ListDetail';
 export * from './AccessCategory';
 export * from './FormControls';
