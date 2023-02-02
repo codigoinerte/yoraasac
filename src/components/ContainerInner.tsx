@@ -5,14 +5,14 @@ import { Container } from './Container'
 import { Footer } from './Footer'
 import { Header } from './Header'
 
-export const ContainerInner = ({ children, breadcrumb }: ContainerInterface) => {
+export const ContainerInner = ({ children, breadcrumb, titulo }: ContainerInterface) => {
   return (
     <>
         {/* header */}
         <Header />
 
         {/* breadcrumb */}
-        <Breadcrumb breadcrumb={breadcrumb} />
+        <Breadcrumb breadcrumb={breadcrumb} titulo={titulo}/>
 
         {/* main */}
         <Container>

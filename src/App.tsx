@@ -19,7 +19,10 @@ import {  Home,
           ProductosDetalle,
           Personas,
           Stock,
-          NotaHeladeroDetalle
+          NotaHeladeroDetalle,
+          Facturacion,
+          FacturacionDetalle,
+          Reportes
 
         } from './pages';
 
@@ -129,12 +132,31 @@ export const App = () => {
           
           {/* Notas heladero */}
           <Route path="/nota-heladero/*" element={<Routes>
-
             
             <Route path="/" element={<NotaHeladero />} />
             <Route path="/new" element={<NotaHeladeroDetalle />} />
             <Route path="/edit/:id" element={<NotaHeladeroDetalle />} />
             <Route path="*" element={<NotaHeladero />} />   
+          </Routes>} />
+
+          
+          {/* Facturación */}
+          <Route path="/facturacion/*" element={<Routes>
+            
+            <Route path="/" element={<Facturacion />} />
+            <Route path="/new" element={<FacturacionDetalle />} />
+            <Route path="/edit/:id" element={<FacturacionDetalle />} />
+            <Route path="*" element={<Facturacion />} />   
+          </Routes>} />
+         
+          {/* Reportes */}
+          <Route path="/reportes/*" element={<Routes>
+            
+            <Route path="/" element={<Reportes />} />
+            
+              
+            
+            <Route path="*" element={<Reportes />} />   
           </Routes>} />
 
 

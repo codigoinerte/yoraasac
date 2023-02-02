@@ -43,7 +43,7 @@ export const NotaHeladeroDetalle = () => {
     ];
 
     return (
-        <ContainerInner breadcrumb={breadcrumb}>
+        <ContainerInner breadcrumb={breadcrumb} titulo="Nota heladero - Cierre">
             <>
             
             {/* <FormStock page='helados' category='stock' /> */}
@@ -54,8 +54,8 @@ export const NotaHeladeroDetalle = () => {
             <h4>Informaci&oacute;n</h4>
 
             <div className="row">
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    
+                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
                     <div className="mb-3">
                         <label htmlFor="tipo_movimiento" className="form-label">Heladero</label>
                         <select name="tipo_movimiento" id="tipo_movimiento" className='form-control'>
@@ -64,8 +64,21 @@ export const NotaHeladeroDetalle = () => {
                             <option value="2">Heladero 2</option>
                         </select>
                     </div>
+                    
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    
+                    <div className="mb-3">
+                        <label htmlFor="estado" className="form-label">Estado</label>
+                        <select name="estado" id="estado" className='form-control'>                            
+                            <option value="2">Cierre</option>
+                            <option value="1">Reapertura</option>
+                            <option value="3">Reservar</option>
+                        </select>
+                    </div>
                                         
-
                 </div>
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 

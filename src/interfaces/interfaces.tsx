@@ -16,7 +16,8 @@ export interface Breadcrumb {
 }
 export interface ContainerInner{
     children: React.ReactElement,
-    breadcrumb : breadcrumb[]
+    breadcrumb : breadcrumb[],
+    titulo?:string,
 }
 export interface PersonalForm{
     category?: string;

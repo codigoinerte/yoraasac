@@ -7,6 +7,8 @@ export * from './stockBarquillos';
 export * from './stockBaterias';
 export * from './productos';
 export * from './notaHeladero';
+export * from './facturacion';
 export * from './Home';
 export * from './Personas';
 export * from './Stock';
+export * from './Reportes';
