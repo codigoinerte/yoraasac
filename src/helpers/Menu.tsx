@@ -33,7 +33,7 @@ export const Menu:MenuInterface[] = [
     },
     {
        "nombre":"Configuración",
-       "alias":"/configuración",
+       "alias":"/configuracion",
        "icono":"bi bi-gear"
     }
  ];
@@ -119,18 +119,42 @@ export const MenuStock:MenuInterface[] = [
    },    
    {
       "nombre":"Notas heladeros",
-      "alias":"/reportes/baterias",
+      "alias":"/reportes/nota-heladeros",
       "icono":"bi bi-app"
    },    
    {
       "nombre":"Facturas",
-      "alias":"/reportes/baterias",
+      "alias":"/reportes/facturas",
       "icono":"bi bi-app"
    },
    {
       "nombre":"Boletas",
-      "alias":"/reportes/baterias",
+      "alias":"/reportes/boletas",
       "icono":"bi bi-app"
    },
+   
+];
+ 
+export const MenuConfiguracion:MenuInterface[] = [
+   {
+      "nombre":"Moneda",
+      "alias":"/configuracion/moneda",
+      "icono":"bi bi-app"
+   },
+   {
+      "nombre":"Marcas",
+      "alias":"/configuracion/marca",
+      "icono":"bi bi-app"
+   },
+   {
+      "nombre":"Configuración principal",
+      "alias":"/configuracion/principal",
+      "icono":"bi bi-app"
+   },
+   {
+      "nombre":"Locales y series",
+      "alias":"/configuracion/locales-series",
+      "icono":"bi bi-app"
+   }
    
 ];

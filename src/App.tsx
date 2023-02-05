@@ -22,7 +22,18 @@ import {  Home,
           NotaHeladeroDetalle,
           Facturacion,
           FacturacionDetalle,
-          Reportes
+          Reportes,
+          ReporteCliente,
+          ReporteProveedores,
+          ReportePersonal,
+          ReporteHeladeros,
+          ReporteHelados,
+          ReporteBarquillos,
+          ReporteBaterias,
+          ReporteNotaHeladero,
+          ReporteFacturas,
+          Configuracion,
+          Moneda
 
         } from './pages';
 
@@ -31,6 +42,7 @@ import { StockBarquillos } from './pages/panel/stockBarquillos/StockBarquillos';
 import { Productos } from './pages/panel/productos/Productos';
 import path from 'path';
 import { NotaHeladero } from './pages/panel/notaHeladero/NotaHeladero';
+import { ReporteBoletas } from './pages/panel/reportes/ReporteBoletas';
 
 export const App = () => {
   return (
@@ -153,8 +165,26 @@ export const App = () => {
           <Route path="/reportes/*" element={<Routes>
             
             <Route path="/" element={<Reportes />} />
-            
+            <Route path='/clientes' element={<ReporteCliente />} />
+            <Route path='/proveedores' element={<ReporteProveedores />} />
+            <Route path='/personal' element={<ReportePersonal />} />
+            <Route path='/heladeros' element={<ReporteHeladeros />} />
+            <Route path='/helados' element={<ReporteHelados />} />
+            <Route path='/barquillos' element={<ReporteBarquillos />} />
+            <Route path='/baterias' element={<ReporteBaterias />} />
+            <Route path='/nota-heladeros' element={<ReporteNotaHeladero />} />
+            <Route path='/facturas' element={<ReporteFacturas />} />
+            <Route path='/boletas' element={<ReporteBoletas />} />
               
+            
+            <Route path="*" element={<Reportes />} />   
+          </Routes>} />
+          
+          {/* Configuracion */}
+          <Route path="/configuracion/*" element={<Routes>
+            
+            <Route path="/" element={<Configuracion />} />
+            <Route path="/moneda" element={<Moneda />} />
             
             <Route path="*" element={<Reportes />} />   
           </Routes>} />

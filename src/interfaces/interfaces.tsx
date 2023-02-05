@@ -37,6 +37,23 @@ export interface TablalList{
     next: Function,
     prev: Function
 }
+export interface ReportList{
+    children: React.ReactElement,
+    cabecera: string[],
+    detalle:listaDetalle[],    
+    descargar: Function,
+    next: Function,
+    prev: Function
+}
+
+export interface SaveList{
+    children: React.ReactElement,
+    cabecera: string[],
+    detalle:listaDetalle[],    
+    editar: Function,
+    eliminar: Function
+}
+
 export interface paginationInterface extends SyntheticEvent {   
 }
 export interface MenuInterface {

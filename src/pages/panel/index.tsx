@@ -12,3 +12,6 @@ export * from './Home';
 export * from './Personas';
 export * from './Stock';
 export * from './Reportes';
+export * from './reportes';
+export * from './Configuracion';
+export * from './configuracion';
