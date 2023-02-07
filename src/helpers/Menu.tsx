@@ -138,12 +138,12 @@ export const MenuStock:MenuInterface[] = [
 export const MenuConfiguracion:MenuInterface[] = [
    {
       "nombre":"Moneda",
-      "alias":"/configuracion/moneda",
+      "alias":"/configuracion/monedas",
       "icono":"bi bi-app"
    },
    {
       "nombre":"Marcas",
-      "alias":"/configuracion/marca",
+      "alias":"/configuracion/marcas",
       "icono":"bi bi-app"
    },
    {

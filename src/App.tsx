@@ -33,7 +33,10 @@ import {  Home,
           ReporteNotaHeladero,
           ReporteFacturas,
           Configuracion,
-          Moneda
+          Moneda,
+          Marca,
+          MarcaDetalle,
+          ConfiguracionPrincipal
 
         } from './pages';
 
@@ -184,7 +187,18 @@ export const App = () => {
           <Route path="/configuracion/*" element={<Routes>
             
             <Route path="/" element={<Configuracion />} />
-            <Route path="/moneda" element={<Moneda />} />
+            <Route path="/monedas" element={<Moneda />} />
+
+            <Route path="/marcas/*" element={<Routes>
+
+              <Route path='/' element={<Marca />} />
+              <Route path='/new' element={<MarcaDetalle />} />
+              <Route path='/edit/:id' element={<MarcaDetalle />} />
+              <Route path='*' element={<Marca />} />
+
+            </Routes>} />
+
+            <Route path="/principal" element={<ConfiguracionPrincipal />} />
             
             <Route path="*" element={<Reportes />} />   
           </Routes>} />
