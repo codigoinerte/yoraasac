@@ -155,6 +155,11 @@ export const MenuConfiguracion:MenuInterface[] = [
       "nombre":"Locales y series",
       "alias":"/configuracion/locales-series",
       "icono":"bi bi-app"
+   },
+   {
+      "nombre":"Accesos directos",
+      "alias":"/configuracion/destacados",
+      "icono":"bi bi-app"
    }
    
 ];

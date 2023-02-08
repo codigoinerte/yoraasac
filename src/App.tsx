@@ -36,7 +36,9 @@ import {  Home,
           Moneda,
           Marca,
           MarcaDetalle,
-          ConfiguracionPrincipal
+          ConfiguracionPrincipal,
+          LocalesSeries,
+          MiCuenta
 
         } from './pages';
 
@@ -46,6 +48,8 @@ import { Productos } from './pages/panel/productos/Productos';
 import path from 'path';
 import { NotaHeladero } from './pages/panel/notaHeladero/NotaHeladero';
 import { ReporteBoletas } from './pages/panel/reportes/ReporteBoletas';
+import { Notificaciones } from './pages/panel/micuenta/Notificaciones';
+import { Destacados } from './pages/panel/configuracion/Destacados';
 
 export const App = () => {
   return (
@@ -199,11 +203,15 @@ export const App = () => {
             </Routes>} />
 
             <Route path="/principal" element={<ConfiguracionPrincipal />} />
-            
+            <Route path="/locales-series" element={<LocalesSeries />} />
+            <Route path="/destacados" element={<Destacados />} />
+
             <Route path="*" element={<Reportes />} />   
           </Routes>} />
 
-
+          <Route path="/mi-cuenta" element={<MiCuenta />} />
+          <Route path="/notificaciones" element={<Notificaciones />} />
+          
 
           <Route path="*" element={<Home />} />
         

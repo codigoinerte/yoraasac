@@ -1,5 +1,5 @@
 import React from 'react'
-import { ContainerInner } from '../../../components'
+import { ContainerInner, FormControls } from '../../../components'
 import { breadcrumb as bread } from '../../../interfaces';
 
 const breadcrumb:bread[] = [
@@ -11,178 +11,149 @@ export const ConfiguracionPrincipal = () => {
     return (
         <ContainerInner breadcrumb={breadcrumb}>
             <>
-            <button 
-                    className="btn btn-primary mb-2 w-100" 
-                    type="button" 
-                    data-bs-toggle="collapse" 
-                    data-bs-target="#confg-principal" 
-                    aria-expanded="false" 
-                    aria-controls="confg-principal">
-                Configuraci&oacute;n principal
-            </button>
-            <div className="collapse mb-3 show" id="confg-principal">
-                <div>
+
+            <FormControls page="configuracion" save={()=>console.log(1)} tipo='edit' />
+
+            <hr className='border border-1 opacity-50'/>
+
+            <div className="card">
+                <div className="card-header">
+                    Datos del emisor
+                </div>
+                <div className="card-body">
                     
-                <div className="card">
-                    <div className="card-header">
-                        Datos del emisor
-                    </div>
-                    <div className="card-body">
-                        
-                        <div className="row">
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                
-                                <div className="mb-3">
-                                    <label htmlFor="ruc" className="form-label">Ruc</label>
-                                    <input type="text" className="form-control" id="ruc" aria-describedby="ruc" placeholder='Ruc'/>
-                                </div>
-
-                            </div>
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                
-                                <div className="mb-3">
-                                    <label htmlFor="razon-social" className="form-label">Razon social</label>
-                                    <input type="text" className="form-control" id="razon-social" aria-describedby="razon-social" placeholder='Razon social'/>
-                                </div>
-
-                            </div>
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                
-                                <div className="mb-3">
-                                    <label htmlFor="razon-comercial" className="form-label">Razon comercial</label>
-                                    <input type="text" className="form-control" id="razon-comercial" aria-describedby="razon-comercial" placeholder='Razon comercial'/>
-                                </div>
-
-                            </div>
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                
-                                <div className="mb-3">
-                                    <label htmlFor="pagina-web" className="form-label">P&aacute;gina web</label>
-                                    <input type="text" className="form-control" id="pagina-web" aria-describedby="pagina-web" placeholder='Pagina web'/>
-                                </div>
-
-                            </div>
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                
-                                <div className="mb-3">
-                                    <label htmlFor="email" className="form-label">Email de la empresa</label>
-                                    <input type="email" className="form-control" id="email" aria-describedby="email" placeholder='Email'/>
-                                </div>
-
-                            </div>
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                
-                                <div className="mb-3">
-                                    <label htmlFor="celular" className="form-label">Celular empresa</label>
-                                    <input type="tel" className="form-control" id="celular" aria-describedby="celular" placeholder='Email'/>
-                                </div>
-
-                            </div>
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                
-                                <div className="mb-3">
-                                    <label htmlFor="celular" className="form-label">Celular empresa</label>
-                                    <input type="tel" className="form-control" id="celular" aria-describedby="celular" placeholder='Email'/>
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div className="card mt-3">
-                    <div className="card-header">
-                        Contactos de la empresa
-                    </div>
-                    <div className="card-body"> 
-
-                        <div className="row">
-
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">                                
-                                <div className="mb-3">
-                                    <label htmlFor="nombre_contacto" className="form-label">Nombre</label>
-                                    <input type="text" className="form-control" id="nombre_contacto" aria-describedby="nombre_contacto" placeholder='Email'/>
-                                </div>                            
-                            </div>
-
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                <div className="mb-3">
-                                    <label htmlFor="email_contacto" className="form-label">Email</label>
-                                    <input type="email" className="form-control" id="email_contacto" aria-describedby="email_contacto" placeholder='Email'/>
-                                </div>
-                            </div>
-
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                <div className="mb-3">
-                                    <label htmlFor="celular_contacto" className="form-label">Celular</label>
-                                    <input type="tel" className="form-control" id="celular_contacto" aria-describedby="celular_contacto" placeholder='Email'/>
-                                </div>
-                            </div>
+                    <div className="row">
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
                             
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                <div className="mb-3">
-                                    <label htmlFor="celular_contacto" className="form-label">Principal</label>
-                                    <select name="principal" id="principal" className='form-control'>
-                                        <option value="0">No</option>
-                                        <option value="1">Si</option>
-                                    </select>
-                                </div>
+                            <div className="mb-3">
+                                <label htmlFor="ruc" className="form-label">Ruc</label>
+                                <input type="text" className="form-control" id="ruc" aria-describedby="ruc" placeholder='Ruc'/>
                             </div>
 
-                            <div className="col-xs-12 col-sm-12 col-md-6 col-lg-12">
-                                <button type='button' className='btn btn-outline-secondary w-100'>Guardar contacto</button>
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            
+                            <div className="mb-3">
+                                <label htmlFor="nombre" className="form-label">Razon social</label>
+                                <input type="text" className="form-control" id="razon-social" aria-describedby="razon-social" placeholder='Razon social'/>
+                            </div>
+
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            
+                            <div className="mb-3">
+                                <label htmlFor="razon-comercial" className="form-label">Razon comercial</label>
+                                <input type="text" className="form-control" id="razon-comercial" aria-describedby="razon-comercial" placeholder='Razon comercial'/>
+                            </div>
+
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            
+                            <div className="mb-3">
+                                <label htmlFor="pagina-web" className="form-label">P&aacute;gina web</label>
+                                <input type="text" className="form-control" id="pagina-web" aria-describedby="pagina-web" placeholder='Pagina web'/>
+                            </div>
+
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            
+                            <div className="mb-3">
+                                <label htmlFor="email" className="form-label">Email de la empresa</label>
+                                <input type="email" className="form-control" id="email" aria-describedby="email" placeholder='Email'/>
+                            </div>
+
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            
+                            <div className="mb-3">
+                                <label htmlFor="celular" className="form-label">Celular empresa</label>
+                                <input type="tel" className="form-control" id="celular" aria-describedby="celular" placeholder='Email'/>
+                            </div>
+
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            
+                            <div className="mb-3">
+                                <label htmlFor="celular" className="form-label">Celular empresa</label>
+                                <input type="tel" className="form-control" id="celular" aria-describedby="celular" placeholder='Email'/>
                             </div>
 
                         </div>
 
+
                     </div>
+
+
                 </div>
-                
-                <div className="card mt-3">
-                    <div className="card-header">
-                        Configuraci&oacute;n de facturas, boletas, notas, etc.
-                    </div>
-                    <div className="card-body"> 
+            </div>
 
-                        <div className="row">
+            <div className="card mt-3">
+                <div className="card-header">
+                    Contactos de la empresa
+                </div>
+                <div className="card-body"> 
 
-                            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div className="mb-3">
-                                    <label htmlFor="precio_venta" className="form-label">IGV</label>
-                                    <select name="precio_venta" id="precio_venta" className='form-control'>
-                                        <option value="18">18% IGV</option>
-                                        <option value="10">10% (ley 31556)</option>
-                                        <option value="4">4% IVA</option>
-                                    </select>
-                                </div>
-                            </div>                           
+                    <div className="row">
 
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">                                
+                            <div className="mb-3">
+                                <label htmlFor="nombre_contacto" className="form-label">Nombre</label>
+                                <input type="text" className="form-control" id="nombre_contacto" aria-describedby="nombre_contacto" placeholder='Email'/>
+                            </div>                            
                         </div>
 
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            <div className="mb-3">
+                                <label htmlFor="email_contacto" className="form-label">Email</label>
+                                <input type="email" className="form-control" id="email_contacto" aria-describedby="email_contacto" placeholder='Email'/>
+                            </div>
+                        </div>
+
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            <div className="mb-3">
+                                <label htmlFor="celular_contacto" className="form-label">Celular</label>
+                                <input type="tel" className="form-control" id="celular_contacto" aria-describedby="celular_contacto" placeholder='Email'/>
+                            </div>
+                        </div>
+                        
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            <div className="mb-3">
+                                <label htmlFor="celular_contacto" className="form-label">Principal</label>
+                                <select name="principal" id="principal" className='form-control'>
+                                    <option value="0">No</option>
+                                    <option value="1">Si</option>
+                                </select>
+                            </div>
+                        </div>
+                      
                     </div>
-                </div>
-
 
                 </div>
             </div>
-            <button 
-                    className="btn btn-primary mb-2 w-100" 
-                    type="button" 
-                    data-bs-toggle="collapse" 
-                    data-bs-target="#locales-series" 
-                    aria-expanded="false" 
-                    aria-controls="locales-series">
-                Locales y series
-            </button>
-            <div className="collapse mb-3" id="locales-series">
-                <div className="card card-body">
-                    2222
+            
+            <div className="card mt-3">
+                <div className="card-header">
+                    Configuraci&oacute;n de facturas, boletas, notas, etc.
                 </div>
-            </div>
+                <div className="card-body"> 
+
+                    <div className="row">
+
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div className="mb-3">
+                                <label htmlFor="precio_venta" className="form-label">IGV</label>
+                                <select name="precio_venta" id="precio_venta" className='form-control'>
+                                    <option value="18">18% IGV</option>
+                                    <option value="10">10% (ley 31556)</option>
+                                    <option value="4">4% IVA</option>
+                                </select>
+                            </div>
+                        </div>                           
+
+                    </div>
+
+                </div>
+            </div>                      
             </>
         </ContainerInner>
     )

@@ -40,10 +40,10 @@ export const Header = () => {
                     <img src={profile} alt="Yorasaac" />
                   </button>
                   <ul className="dropdown-menu dropdown-menu-lg-end">
-                    <li><a className="dropdown-item" href="#">Mi cuenta</a></li>
-                    <li><a className="dropdown-item" href="#">Cambiar contraseña</a></li>
-                    <li><a className="dropdown-item" href="#"><span className="badge text-bg-secondary">4</span> Notificaciones</a></li>
-                    <li><a className="dropdown-item" href="#"><i className="bi bi-box-arrow-left"></i> salir</a></li>                    
+                    <li><Link className="dropdown-item" to="/mi-cuenta">Mi cuenta</Link></li>
+                    <li><Link className="dropdown-item" to="/mi-cuenta">Cambiar contraseña</Link></li>
+                    <li><Link className="dropdown-item" to="/notificaciones"><span className="badge text-bg-secondary">4</span> Notificaciones</Link></li>
+                    <li><button className="dropdown-item" onClick={()=>console.log(1)}><i className="bi bi-box-arrow-left"></i> salir</button></li>
                   </ul>
                 </div>
               </div>
