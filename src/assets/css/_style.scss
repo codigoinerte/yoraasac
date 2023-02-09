@@ -206,6 +206,53 @@ a{
     }
 }
 
+.category-destacados,
+.category-destacados ul,
+.category-destacados .form-check{
+    padding: 0;
+}
+.form-check .form-check-input{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.category-destacados ul{
+    margin-top: 10px;
+}
+.category-destacados li {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+    margin-left: 5px;
+}
+.category-destacados .form-check input{
+
+    position: relative;
+    list-style: none;
+    margin-left: 15px;
+    &:after{
+        content: "\F3D7";
+        display: block;
+        font-family: bootstrap-icons !important;
+        font-style: normal;
+        font-weight: normal !important;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        vertical-align: -0.125em;
+        -webkit-font-smoothing: antialiased;
+
+        position: absolute;
+        left: -22px;
+        top: -2px;
+    }    
+}
+
+.category-destacados .form-check input:checked{
+    &:after{
+        content: "\F3D0";
+        color: green;
+    }
+}
 
 .footer{
     min-height: 50px;

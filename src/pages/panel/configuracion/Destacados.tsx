@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { ContainerInner, FormControls } from '../../../components'
-import { breadcrumb as bread } from '../../../interfaces';
+import { breadcrumb as bread, CategoryListInterface } from '../../../interfaces';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
+import { CategoryList } from '../../../helpers/CategoryList';
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Configuración', enlace: '/configuracion' },
     { id:2, titulo: 'Accesos directos', enlace: '' }
 ];
 
-const nodes = [{
+const nodes:CategoryListInterface [] = [{
     name : 'Category',
     id:1,
     alias : '/',
@@ -28,8 +29,29 @@ const nodes = [{
         name : 'child 4',
         id:4,
         alias : '/',
-        children:[]
-    }],
+        children:[
+            {
+                name : 'child 9',
+                id:9,
+                alias : '/',
+                children:[]
+            },
+            {
+                name : 'child 10',
+                id:10,
+                alias : '/',
+                children:[]
+            },
+            {
+                name : 'child 11',
+                id:11,
+                alias : '/',
+                children:[
+                    
+                ]
+            }
+        ]
+    }]
 },
 {
     name : 'Category 5',
@@ -74,43 +96,9 @@ export const Destacados = () => {
                     </div>
                     <div className="card-body">
                         
-                        <ul>
+                        <ul className='category-destacados'>
                         {
-                            nodes.map(({id, name, alias, children})=>(
-                               
-                                    <li key={id}>
-                                        <div className="form-check">
-                                            <input className="form-check-input" type="checkbox" value="" />
-                                            <label className="form-check-label" htmlFor="flexCheckIndeterminate">
-                                                {name}
-
-                                                {
-                                                    children.length > 0 &&
-                                                    (
-                                                        <ul>
-                                                            {
-                                                                children.map(({id, name, alias, children})=>(
-                                                                                                                        
-                                                                    <li key={id}>
-                                                                        <div className="form-check">
-                                                                            <input className="form-check-input" type="checkbox" value="" />
-                                                                            <label className="form-check-label" htmlFor="flexCheckIndeterminate">
-                                                                                {name}
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                ))
-                                                            }
-                                                        </ul>
-                                                    )
-                                                    
-                                                }
-
-                                            </label>
-                                        </div>
-                                    </li>
-                                
-                            ))
+                            nodes.map(CategoryList)
                         }
                         </ul>
 

@@ -75,6 +75,14 @@ export interface ListDetail{
     detalle:listaDetalle[],
     eliminar: Function,
 }
+
+export interface CategoryListInterface{
+    name : string,
+    id:number,
+    alias : string,
+    children?: CategoryListInterface[]
+}
+
 // types
 export type breadcrumb = {
     id:number;
