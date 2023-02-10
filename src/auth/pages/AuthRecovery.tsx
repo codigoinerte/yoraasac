@@ -3,10 +3,16 @@ import { Link } from 'react-router-dom'
 import { Container } from '../components'
 
 export const AuthRecovery = () => {
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+  }
+
   return (
     <Container title='Recuperar contrase&ntilde;a'>
           <>
-            <form>
+            <form method='POST' onSubmit={handleSubmit}>
 
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">Correo</label>

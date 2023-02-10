@@ -3,10 +3,16 @@ import { Link } from 'react-router-dom'
 import { Container } from '../components'
 
 export const Auth = () => {
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+  }
+  
   return (
       <Container title='Iniciar sesi&oacute;n'>
           <>
-            <form>
+            <form method='POST' onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">Correo</label>
                 <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />                    
