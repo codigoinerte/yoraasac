@@ -1,6 +1,6 @@
 import React from 'react'
-import profile from '~assets/images/profile.jpg';
-import logo  from '~assets/images/logo.png';
+import profile from '../assets/images/profile.jpg';
+import logo  from '../assets/images/logo.png';
 import { Link } from 'react-router-dom';
 import { Menu } from '../helpers';
 
