@@ -13,7 +13,7 @@ export const AppRouter = () => {
     <Routes>
 
         {
-          false
+          true
           ?(<Route path="/*" element={<PanelRoute />}/>)
           :(<Route path="/auth/*" element={<AuthRouter />} />)
 

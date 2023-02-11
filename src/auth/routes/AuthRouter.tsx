@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Auth, AuthRecovery } from '../pages';
-import '../assets/css/style.scss';
+
 
 export const AuthRouter = () => {
   return (

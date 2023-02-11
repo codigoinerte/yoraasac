@@ -8,9 +8,11 @@ export const Container = ({title, children}: ContainerInterface) => {
         <div className="card">
             <div className="card-body">
                 <h5 className="card-title text-center">{ title??'' }</h5>
-                {
-                    children
-                }
+                <div>
+                    {
+                        children
+                    }
+                </div>
             </div>
         </div>          
 
