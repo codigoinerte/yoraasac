@@ -25,27 +25,27 @@ export const Productos = () => {
     
     const detalle:listaDetalle[] = [
       {
-        id:1,
+        id:"1",
         campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
       },
       {
-        id:2,
+        id:"2",
         campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
       },
       {
-        id:3,
+        id:"3",
         campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
       },
       {
-        id:4,
+        id:"4",
         campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
       },
       {
-        id:5,
+        id:"5",
         campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
       },
       {
-        id:6,
+        id:"6",
         campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
       },
     ];

@@ -212,7 +212,7 @@ export const PanelRoute = () => {
           <Route path="/notificaciones" element={<Notificaciones />} />
           
 
-          <Route path="*" element={<Home />} />
+          <Route path="/*" element={<Navigate to="/" />} />
         
       </Routes>
 

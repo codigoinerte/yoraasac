@@ -12,3 +12,4 @@ export * from './ListSave';
 export * from './ListReportes';
 export * from './AccessCategory';
 export * from './FormControls';
+export * from './Loader';

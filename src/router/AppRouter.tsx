@@ -1,21 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AuthRouter } from '../auth';
 import { Auth } from '../interfaces';
 import { PanelRoute } from '../panel';
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { useAuthStore } from '../hooks';
 
 export const AppRouter = () => {
 
-    const statusLogin:Auth = "no-auth";
-    // statusLogin == "auth"
+  const { status, checkAuthToken } = useAuthStore();
+    
+  useEffect(() => {
+  
+    checkAuthToken();
+
+  }, []);
+
+  if ( status === 'checking' ) {
+      return (
+          <h3>Cargando...</h3>
+      )
+  }
+
   return (
     <Routes>
 
         {
-          true
-          ?(<Route path="/*" element={<PanelRoute />}/>)
-          :(<Route path="/auth/*" element={<AuthRouter />} />)
+          ( status === 'not-authenticated')  
+          ?(<Route path="/auth/*" element={<AuthRouter />} />)
+          :(<Route path="/*" element={<PanelRoute />}/>)
 
         }
 

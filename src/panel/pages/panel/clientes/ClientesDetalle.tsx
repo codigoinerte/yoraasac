@@ -13,7 +13,7 @@ export const ClientesDetalle = () => {
   return (
     
     <ContainerInner breadcrumb={breadcrumb}>
-        <FormPersonal category='personas' page="clientes"/>
+        <FormPersonal category='personas' page="clientes" tipo={4}/>
     </ContainerInner>
 
   )

@@ -3,8 +3,12 @@ import profile from '../assets/images/profile.jpg';
 import logo  from '../assets/images/logo.png';
 import { Link } from 'react-router-dom';
 import { Menu } from '../helpers';
+import { useAuthStore } from '../../hooks';
 
 export const Header = () => {
+
+  const { startLogout } = useAuthStore();
+
   return (
     <>
         <div className="header bg-primary">
@@ -43,7 +47,7 @@ export const Header = () => {
                     <li><Link className="dropdown-item" to="/mi-cuenta">Mi cuenta</Link></li>
                     <li><Link className="dropdown-item" to="/mi-cuenta">Cambiar contraseña</Link></li>
                     <li><Link className="dropdown-item" to="/notificaciones"><span className="badge text-bg-secondary">4</span> Notificaciones</Link></li>
-                    <li><button className="dropdown-item" onClick={()=>console.log(1)}><i className="bi bi-box-arrow-left"></i> salir</button></li>
+                    <li><button className="dropdown-item" onClick={()=>startLogout() }><i className="bi bi-box-arrow-left"></i> salir</button></li>
                   </ul>
                 </div>
               </div>

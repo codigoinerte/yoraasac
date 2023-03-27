@@ -20,13 +20,13 @@ export const FormControls = ({ save, page, category, tipo = 'new' }:ControlsInte
             <div className="d-flex gap-2 mb-4">
                 {
                     tipo !== 'list' &&
-                    <button onClick={()=> save() } className="btn btn-primary btn-lg">Guardar</button>
+                    <button type="submit" className="btn btn-primary btn-lg">Guardar</button>
                 }
                 {
                     id > 0 || tipo == 'list' &&
                     <Link to={`${cat}/${page}/new`} className="btn btn-primary btn-lg">Nuevo</Link>
                 }
-                <button onClick={onNavigateBack} className="btn btn-danger btn-lg">Atr&aacute;s</button>
+                <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg">Atr&aacute;s</button>
             </div>
         </>
     )

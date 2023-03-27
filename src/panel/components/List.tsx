@@ -44,7 +44,7 @@ export const List = ({page, cabecera, detalle, eliminar, next, prev, children, c
                                     
                                         <tr key={keyrow}>
                                             {
-                                                campos.map(( texto, index )=> {
+                                                campos?.map(( texto, index )=> {
                                                     
                                                     const cabeceraChildren = cabecera[index];
                                                     const childrenRowKey = `children_${cabeceraChildren}_${id}`

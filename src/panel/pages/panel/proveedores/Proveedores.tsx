@@ -13,7 +13,7 @@ export const Proveedores = () => {
   return (
 
     <ContainerInner breadcrumb={breadcrumb}>
-        <ListPersonal page="proveedores" category='personas'/>
+        <ListPersonal page="proveedores" category='personas' tipo={5}/>
     </ContainerInner>
   )
 }
