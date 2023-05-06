@@ -254,6 +254,12 @@ a{
     }
 }
 
+.rs-picker.rs-picker-select:not(.no-width){
+    width: 100% !important;
+}
+.rs-picker.rs-picker-select:not(.no-width) > div{
+    border: 0px !important;
+}
 .footer{
     min-height: 50px;
     background-color: lighten($primary-bg-color, 5%)  !important; 
