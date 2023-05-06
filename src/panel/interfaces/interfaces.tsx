@@ -89,6 +89,13 @@ export interface BuscarPersonas extends FormBuscarPersonasValues {
     buscar:boolean
 }
 
+export interface BuscarProductos extends FormBuscarProductosValues {    
+    buscar:boolean
+}
+export interface BuscarStockHelado extends FormBuscarStockHeladoValues {    
+    buscar:boolean
+}
+
 export interface baseArray{
     id:number,
     nombre:string
@@ -98,6 +105,10 @@ export interface baseArray{
 export interface FormPersonasValuesSave extends FormPersonasValues {
     documento_tipo : number,
     usuario_tipo : number | undefined
+}
+
+export interface FormProductosValuesSave extends FormProductosValues {
+
 }
 
 // types
@@ -126,7 +137,94 @@ export type FormPersonasValues = {
     password?:string | null;
 };
 
+/**************************************** */
+export type FormBuscarProductosValues = {
+    codigo: string | null;
+    producto: string | null;  
+    fechaCreacion: Date | null;  
+};
 
+export type FormProductosValues = {
+    codigo:       string | null;
+    nombre:       string | null;
+    orden:        number | null;
+    stock_alerta: number | null;
+    precio_venta: number | null;
+    descuento:    number | null;
+    destacado:    number | null;
+    estados_id:   number | null;
+    unspsc_id:    number | null;
+    marcas_id:    number | null;
+    unidad_id:    number | null;
+    moneda_id:    number | null;
+    igv_id:       number | null;
+    precio_final: number | null;
+}
+/***************************************** */
+export type FormBuscarStockHeladoValues = {
+    codigo: string | null;
+    movimiento: string | null;  
+    fechaCreacion: Date | null;  
+};
+
+export interface FormStockHeladoValues {
+    id:                number | null;
+    codigo_movimiento: string | null;
+    movimientos_id:    number | null;
+    tipo_documento_id: number | null;
+    numero_documento:  string | null;
+    fecha_movimiento:  string | null;
+    created_at:        string | null;
+    updated_at:        string | null;
+    detalle:           DetalleStockHelado[] | null;
+}
+
+export interface DetalleStockHelado {
+    id?:               number;
+    codigo?:           string;
+    producto?:         string;
+    stock_helados_id?: number;
+    cantidad?:         number;
+    created_at?:       string;
+    updated_at?:       string;
+}
+/***************************************** */
+export type FormBuscarStockBateriaValues = {
+    codigo: string | null;
+    movimiento: string | null;  
+    fechaCreacion: Date | null;  
+};
+
+export interface FormStockBateriaValues {
+    id:                number | null;
+    codigo_movimiento: string | null;
+    movimientos_id:    number | null;
+    tipo_documento_id: number | null;
+    cantidad:          number | null;
+    numero_documento:  string | null;
+    fecha_movimiento:  string | null;
+    created_at:        string | null;
+    updated_at:        string | null;
+}
+/***************************************** */
+export type FormBuscarStockBarquilloValues = {
+    codigo: string | null;
+    movimiento: string | null;  
+    fechaCreacion: Date | null;  
+};
+
+export interface FormStockBarquilloValues {
+    id:                number;
+    codigo_movimiento: string;
+    movimientos_id:    number;
+    tipo_documento_id: number;
+    cantidad:          number;
+    numero_documento:  string;
+    fecha_movimiento:  string;
+    created_at:        string;
+    updated_at:        string;
+}
+/***************************************** */
 export interface listaDetalle  {
     id: string,
     campos?: string[] | undefined   
@@ -188,3 +286,146 @@ export interface Distrito {
     created_at:   null;
     updated_at:   null;
 }
+
+// UNSPSC
+
+export interface UnspscList {
+    data: UnspscItem[];
+}
+
+export interface UnspscItem {
+    id:          number;
+    codigo:      string;
+    descripcion: string;
+    created_at:  null;
+    updated_at:  null;
+}
+
+// Estados
+
+export interface EstadosList {
+    data: EstadoItem[];
+}
+
+export interface EstadoItem {
+    id:         number;
+    estado:     string;
+    created_at: null;
+    updated_at: null;
+}
+
+// Marcas
+
+export interface MarcasList {
+    data: MarcaItem[];
+}
+
+export interface MarcaItem {
+    id:         number;
+    nombre:     string;
+    created_at: null;
+    updated_at: null;
+}
+
+// Unidades
+
+export interface UniadesList {
+    data: UnidadItem[];
+}
+
+export interface UnidadItem {
+    id:            number;
+    simbolo:       string;
+    unidad_medida: string;
+    created_at:    null;
+    updated_at:    null;
+}
+
+// Moneda
+
+export interface MonedaList {
+    data: MonedaItem[];
+}
+
+export interface MonedaItem {
+    id:            number;
+    moneda:        string;
+    simbolo:       string;
+    codigo:        string;
+    digitos:       number;
+    sep_decimales: string;
+    sep_miles:     string;
+    principal:     number;
+    created_at:    null;
+    updated_at:    null;
+}
+
+// IGV
+
+export interface IgvList {
+    data: IgvItem[];
+}
+
+export interface IgvItem {
+    id:         number;
+    nombre:     string;
+    valor:      number;
+    created_at: null;
+    updated_at: null;
+}
+
+// Movimiento
+
+export interface MovimientoList {
+    data: MovimientoItem[];
+}
+
+export interface MovimientoItem {
+    id:         number;
+    movimiento: string;
+    created_at: null;
+    updated_at: null;
+}
+
+// Tipo de documento
+
+export interface TipoDocumentoList {
+    data: TipoDocumentoItem[];
+}
+
+export interface TipoDocumentoItem {
+    id:         number;
+    documento:  string;
+    created_at: null;
+    updated_at: null;
+}
+
+// Buscar producto
+
+export interface BuscarProductosList {
+    data: BuscarProducto[];
+}
+
+export interface BuscarProducto {
+    id:           number;
+    codigo:       string;
+    nombre:       string;
+    orden:        number;
+    stock_alerta: number;
+    precio_venta: string;
+    descuento:    string;
+    destacado:    number;
+    estados_id:   number;
+    unspsc_id:    number;
+    marcas_id:    number;
+    unidad_id:    number;
+    moneda_id:    number;
+    igv_id:       number;
+    estado:       string;
+    moneda:       string;
+    created_at:   string;
+    updated_at:   string;
+}
+
+
+/************************* */
