@@ -4,7 +4,7 @@ import { FormPersonasValues } from '../../panel/interfaces';
 
 const initialState: intialStatePersonas =  {
     status: true,
-    personas: [],
+    productos: [],
     nextPage: null,
     prevPage: null,
     active: null,
@@ -21,13 +21,13 @@ export const personasSlice = createSlice({
         },
         onPersonasAdd : (state, { payload }) =>
         {
-            state.personas.push(payload);
+            state.productos.push(payload);
             state.active = null;
         },
         onPersonasEdit : (state, { payload }:{ payload:Persona}) => 
         {
             
-            state.personas = state.personas.map((persona)=>{
+            state.productos = state.productos.map((persona)=>{
 
                 if(persona.id == payload.id){
                     return payload;
@@ -42,13 +42,13 @@ export const personasSlice = createSlice({
             {
                 state.status = true;
     
-                state.personas = state.personas.filter((persona)=> persona.id != payload );
+                state.productos = state.productos.filter((persona)=> persona.id != payload );
             }
         },
         onPersonasList: (state, { payload }:{ payload: Personas }) => 
         {
             state.status = false;
-            state.personas = payload.data;
+            state.productos = payload.data;
             state.nextPage = payload.next_page;
             state.prevPage = payload.previous_page;
 
@@ -56,7 +56,7 @@ export const personasSlice = createSlice({
         onPersonasLogout: (state) => 
         {
             state.status = false;
-            state.personas = [];
+            state.productos = [];
             state.active = null;
         },
         onPersonasAddMessage : (state, { payload })=>
