@@ -94,7 +94,7 @@ export interface Persona {
 
 export interface intialStatePersonas {
     status: boolean;
-    personas:Persona[];    
+    productos:Persona[];    
     nextPage: string | null;
     prevPage: string | null;
     active: Persona | null;
