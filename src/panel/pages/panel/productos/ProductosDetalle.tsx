@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ContainerInner, FormControls, FormPersonal } from '../../../components'
-import { Breadcrumb as bread } from '../../../interfaces';
+import { FormProductosValues, Breadcrumb as bread } from '../../../interfaces';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '../../../../interfaces';
+import { useHelpers, usePersonasStore, useProductosStore } from '../../../../hooks';
+
+import { SelectPicker } from 'rsuite';
+import { UnspscList, EstadosList } from '../../../interfaces/interfaces';
+import { validateNoNegative } from '../../../../helpers';
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Productos', enlace: '/productos' },
@@ -11,6 +19,9 @@ const breadcrumb:bread[] = [
 
 export const ProductosDetalle = () => {
 
+  
+  /*
+  
   const { id = 0 } = useParams();
 
   const navigate = useNavigate();
@@ -19,10 +30,165 @@ export const ProductosDetalle = () => {
       navigate(-1);
   }
 
+        listUnpsc,
+        listEstados,
+        listMarcas,
+        listUnidades,
+        listMonedas,
+        listIgv,
+
+        loadUnspsc,
+        loadEstados,
+        loadMarcas,
+        laodUnidades,
+        loadMoneda,
+        loadIgv,
+  */
+        const { listUnpsc,
+                listEstados,
+                listMarcas,
+                listUnidades,
+                listMonedas,
+                listIgv,
+
+                loadUnspsc,
+                loadEstados,
+                loadMarcas,
+                laodUnidades,
+                loadMoneda,
+                loadIgv, } = useHelpers();
+
+
+  const { register, handleSubmit, reset, formState, setValue, getValues, control } = useForm<FormProductosValues>();
+
+  const { errors } = formState;
+      
+  const { id = 0 } = useParams();   
+
+  const { active } = useSelector((state:IRootState)=>state.personas);
+
+  const { saveProducto, updateProducto, getProducto } = useProductosStore();
+
+  const dispatch = useDispatch();
+
+  const handleChangeTipo = (value:any)=>{
+    //console.log(value);
+    setValue('unspsc_id', value);
+  }
+
+  const calcularPrecioFinal = ()=>{
+    let p = getValues('precio_venta')??0;
+    let d = getValues('descuento')??0;
+    
+    let precio_final = p - (p*(d/100));
+    
+    
+    precio_final = precio_final < 0 ?  0 : precio_final;
+    setValue('precio_final', precio_final);
+
+  }
+
+  const updateData = (buscar:string)=>{
+    
+    if(typeof buscar == "undefined") return false;
+
+    loadUnspsc(buscar);
+  }
+
+  useEffect(() => {
+    
+    loadEstados();
+    loadMarcas();
+    laodUnidades();
+    loadMoneda();
+    loadIgv();
+
+    if(id == 0){
+
+      setValue('estados_id', 1);
+      setValue('igv_id', 1);
+      setValue('moneda_id', 1);
+      setValue('unidad_id', 1);
+
+    }else{
+      getProducto(parseInt(id))
+      .then((prod)=>{
+
+        setValue('codigo', prod?.codigo);
+        setValue('nombre', prod?.nombre);
+        setValue('marcas_id', prod?.marcas_id);
+        setValue('unspsc_id',prod?.unspsc_id);
+        setValue('estados_id', prod?.estados_id);
+        setValue('stock_alerta', prod?.stock_alerta);
+        setValue('unidad_id', prod?.unidad_id)
+        setValue('igv_id', prod?.igv_id);
+        setValue('moneda_id',prod?.moneda_id);
+        setValue('precio_venta', prod?.precio_venta);
+        setValue('descuento', prod?.descuento);
+        setValue('destacado', prod?.destacado);
+
+        let unspsc_id = prod?.unspsc_id??'';
+
+        if(unspsc_id != ''){
+          loadUnspsc(unspsc_id, 'codigo');
+        }
+
+
+        calcularPrecioFinal();
+
+      });
+
+
+    }
+
+  }, []);
+  
+  const onSubmit: SubmitHandler<FormProductosValues> = ({ codigo, nombre, marcas_id, unspsc_id, estados_id, stock_alerta, unidad_id, igv_id, moneda_id, precio_venta, descuento, destacado }) => {                
+            
+    if(id == 0){
+      // nuevo
+      saveProducto({
+        codigo,
+        nombre,
+        orden:1,
+        stock_alerta,
+        precio_venta,
+        descuento,
+        destacado,
+        estados_id,
+        unspsc_id,
+        marcas_id,
+        unidad_id,
+        moneda_id,
+        igv_id,
+        precio_final:0,
+      });
+    }else{
+      updateProducto({
+        codigo,
+        nombre,
+        orden:1,
+        stock_alerta,
+        precio_venta,
+        descuento,
+        destacado,
+        estados_id,
+        unspsc_id,
+        marcas_id,
+        unidad_id,
+        moneda_id,
+        igv_id,
+        precio_final:0,
+      });
+    }
+    
+  };
+
   return (
     <ContainerInner breadcrumb={breadcrumb}>
         <>
-          <FormControls page="productos" save={()=>console.log(1)} />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormControls page="productos" save={()=>handleSubmit(onSubmit)} />
 
             <hr className='border border-1 opacity-50'/>
 
@@ -33,33 +199,80 @@ export const ProductosDetalle = () => {
                 
                 <div className="mb-3">
                     <label htmlFor="codigo" className="form-label">Codigo de producto</label>
-                    <input type="text" className="form-control" id="codigo" aria-describedby="codigo" />
+                    <input  type="text" 
+                            id="codigo" 
+                            aria-describedby="codigo"
+                            className={errors.codigo ? "form-control is-invalid" : "form-control"}
+                            {...register('codigo', {required: true})} />
                 </div>
 
                 <div className="mb-3">
                     <label htmlFor="nombreproducto" className="form-label">Nombre de producto</label>
-                    <input type="text" className="form-control" id="nombreproducto" aria-describedby="nombreproducto" />
+                    <input  type="text" 
+                            id="nombreproducto" 
+                            aria-describedby="nombreproducto"
+                            className={errors.nombre ? "form-control is-invalid" : "form-control"}
+                            {...register('nombre', {required:true})} />
                 </div>
 
                 <div className="mb-3">
                     <label htmlFor="marca" className="form-label">Marca</label>
-                    <select name="marca" id="marca" className='form-control'>
-                      <option value="">- Seleccione una opcion -</option>
+                    <select id="marca" 
+                            className='form-control'
+                            {...register('marcas_id')}>
+                            {
+                              listMarcas.map(({ nombre, id }, index)=>(
+                                <option value={id} key={id.toString()}>{nombre}</option>
+                              ))
+                            }
                     </select>
                 </div>
                 
                 <div className="mb-3">
                     <label htmlFor="tipoproducto" className="form-label">Tipo de producto (UNSPSC SUNAT)</label>
-                    <select name="tipoproducto" id="tipoproducto" className='form-control'>
-                      <option value="">- Seleccione una opcion -</option>
-                    </select>
+                    
+                    <div className="d-block">
+                      
+
+                      <Controller
+                          name="unspsc_id"
+                          control={control}
+                          rules={{required:true}}
+                          render={({ field }) => 
+                          
+                            <SelectPicker
+                                {...field} 
+                              data={listUnpsc.map((item)=>({
+                                label: item.descripcion,
+                                value: item.id
+                              }))}
+                              style={{ width: 224 }}
+                              //onOpen={updateData}
+                              onSearch={updateData}
+                              //renderMenu={updateData}                          
+                              //onChange={handleChangeTipo} 
+                              placeholder='Buscar UNSPSC de Sunat'                             
+                              className={errors.unspsc_id ? "form-control is-invalid p-0" : "form-control p-0"}
+
+                            />
+                      }/>
+
+                 
+
+
+                    </div>
                 </div>
 
                 <div className="mb-3">
                     <label htmlFor="estado" className="form-label">Estado</label>
-                    <select name="estado" id="estado" className='form-control'>
-                      <option value="1">Disponible</option>
-                      <option value="2">Descontinuado</option>
+                    <select id="estado" 
+                            className={errors.estados_id ? "form-control is-invalid" : "form-control"}
+                            {...register('estados_id',{required:true})}>
+                            {
+                              listEstados.map(({ estado, id }, index)=>(
+                                <option value={id} key={id.toString()}>{estado}</option>
+                              ))
+                            }
                     </select>
                 </div>
                   
@@ -70,39 +283,122 @@ export const ProductosDetalle = () => {
                
                 <div className="mb-3">
                     <label htmlFor="tipoigv" className="form-label">Tipo de IGV</label>
-                    <select name="tipoigv" id="tipoigv" className='form-control'>
-                      <option value="">- Seleccione una opcion -</option>
+                    <select id="tipoigv"                             
+                            className={errors.igv_id ? "form-control is-invalid" : "form-control"}
+                            {...register('igv_id',{required:true})}>
+                            {
+                              listIgv.map(({ nombre, id }, index)=>(
+                                <option value={id} key={id.toString()}>{nombre}</option>
+                              ))
+                            }
                     </select>
                 </div>
                 
                 <div className="mb-3">
-                    <label htmlFor="moneda" className="form-label">Tipo de IGV</label>
-                    <select name="moneda" id="moneda" className='form-control'>
-                      <option value="">Soles</option>
+                    <label htmlFor="moneda" className="form-label">Moneda</label>
+                    <select id="moneda"                             
+                            className={errors.moneda_id ? "form-control is-invalid" : "form-control"}
+                            {...register('moneda_id',{required:true})}>
+                            {
+                              listMonedas.map(({ moneda, id }, index)=>(
+                                <option value={id} key={id.toString()}>{moneda}</option>
+                              ))
+                            }
                     </select>
                 </div>
                 
                 <div className="mb-3">
                     <label htmlFor="precioventa" className="form-label">Precio de venta</label>
-                    <input type="text" className="form-control" id="precioventa" aria-describedby="precioventa" />
+                    <input  type="text" 
+                            id="precioventa" 
+                            aria-describedby="precioventa" 
+                            defaultValue={0}
+                            className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
+                            onKeyUp={(e)=> setValue('precio_venta', validateNoNegative(e))}
+                            {...register('precio_venta',{
+                              onChange: calcularPrecioFinal,
+                              required:true
+                            })}/>
                 </div>
                 
                 <div className="mb-3">
                     <label htmlFor="descuento" className="form-label">Descuento</label>
                     <div className="input-group mb-3">
-                      <input type="number" className="form-control" aria-describedby="precio-descuento" min={0} step={1} max={100}/>
+                      <input  type="number" 
+                              className="form-control" 
+                              aria-describedby="precio-descuento" 
+                              min={0} 
+                              step={1} 
+                              max={100}
+                              onKeyUp={(e)=>{ setValue('descuento', validateNoNegative(e)); } }
+                              defaultValue={0}
+                              {...register('descuento', {
+                                onChange: calcularPrecioFinal
+                              })}/>
                       <span className="input-group-text" id="precio-descuento">%</span>
                     </div>
                 </div>
                 
                 <div className="mb-3">
                     <label htmlFor="preciofinal" className="form-label">Precio final</label>
-                    <input type="text" className="form-control" id="preciofinal" aria-describedby="preciofinal" />
+                    <input  type="text" 
+                            className="form-control" 
+                            id="preciofinal" 
+                            aria-describedby="preciofinal"
+                            //disabled={true}
+                            defaultValue={0}
+                            {...register('precio_final')} />
                 </div>
 
 
               </div>
+
+              <div>
+                <h4>Otras propiedades</h4>
+
+                <div className="row">
+
+                  <div className="mb-3 col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                      <label htmlFor="preciofinal" className="form-label">Stock alerta</label>
+                      <input  type="number" 
+                              className="form-control" 
+                              id="preciofinal" 
+                              aria-describedby="preciofinal"
+                              step={1}
+                              defaultValue={0}
+                              {...register('stock_alerta')} />
+                  </div>
+
+                  <div className="mb-3 col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                      <label htmlFor="destacado" className="form-label">Destacado</label>
+                      <select id="destacado" 
+                              defaultValue={0}
+                              className={errors.destacado ? "form-control is-invalid" : "form-control"}
+                              {...register('destacado', {required:true})}>
+                        <option value="0">No destacado</option>
+                        <option value="1">Destacado</option>
+                      </select>
+                  </div>
+                  
+                  <div className="mb-3 col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                      <label htmlFor="unidad" className="form-label">Unidad</label>
+                      <select id="unidad" 
+                              defaultValue={1}
+                              className={errors.unidad_id ? "form-control is-invalid" : "form-control"}
+                              {...register('unidad_id',{required:true})}>
+                              {
+                                listUnidades.map(({ simbolo, id }, index)=>(
+                                  <option value={id} key={id.toString()}>{simbolo}</option>
+                                ))
+                              }
+                      </select>
+                  </div>
+
+                </div>
+
+              </div>
             </div>
+          </form>
         </>
     </ContainerInner>
   )
