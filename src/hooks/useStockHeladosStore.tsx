@@ -1,0 +1,155 @@
+import axios from 'axios';
+import React, { useReducer } from 'react'
+import { toast } from 'react-hot-toast';
+import { useSelector, useDispatch } from 'react-redux';
+import { backendApi } from '../api';
+import { toastMessage } from '../helpers';
+import { IRootState } from '../interfaces';
+import { FormBuscarStockHeladoValues, FormStockHeladoValues } from '../panel/interfaces';
+import { onStatus, onStockHeladoList, onSetStockHeladoActive, onStockHeladoDelete, onStockHeladoAddMessage, onStockHeladoClearMessage } from '../store'
+import { useHelpers } from './useHelpers';
+
+
+export const useStockHeladosStore = () => {
+  
+    const rutaEndpoint = '/stock-helado';
+
+    const { StockHelado, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.stockHelados);
+
+    const { status, errorMessage } = useSelector((state:IRootState)=>state.general)
+
+    const dispatch = useDispatch();
+
+    const loadStockHelado = async (pagina = "1", buscar:FormBuscarStockHeladoValues) =>{
+
+        dispatch(onStatus(true));
+        
+        try {
+            
+            const {codigo, movimiento, fechaCreacion } = buscar;            
+            const { data } = await backendApi.get(rutaEndpoint, {
+                params:{
+                    page: pagina,
+                    codigo,
+                    movimiento,
+                    fecha: fechaCreacion
+                }
+            });
+            
+            dispatch(onStatus(false));
+            dispatch(onStockHeladoList(data));            
+
+        } catch (error) {
+            
+            if (axios.isAxiosError(error)) {
+
+                const { message } = error.response?.data;               
+
+                dispatch( onStockHeladoAddMessage(message) );
+                setTimeout(() => {
+                    dispatch( onStockHeladoClearMessage() );
+                }, 10);
+
+                dispatch(onStatus(false));
+
+                return error.message;                
+
+            } else {
+                console.log('unexpected error: ', error);
+                return 'An unexpected error occurred';
+            }
+        }
+    }
+
+    const saveStockHelado = async ( postdata:FormStockHeladoValues) => {
+        dispatch(onStatus(true));
+        
+        try {
+
+            const { data:info } = await backendApi.post(rutaEndpoint, postdata);
+            const result = info.data;
+            
+            toastMessage(info);
+            
+            dispatch(onSetStockHeladoActive({
+                ...result               
+            }));
+
+            
+            dispatch(onStatus(false));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+    const updateStockHelado = async (postdata:FormStockHeladoValues) => {
+        dispatch(onStatus(true));
+        
+        try {
+
+            const { data:info } = await backendApi.put(`${rutaEndpoint}/${active!.id}`, postdata);
+            const result = info.data;
+            
+            toastMessage(info);
+            
+            dispatch(onSetStockHeladoActive({
+                ...result                
+            }));
+            dispatch(onStatus(false));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getStockHelado = async(id:number) => {
+        
+        dispatch(onStatus(true));
+
+        try {            
+
+            const { data:info } = await backendApi.get(`${rutaEndpoint}/${id}`);
+            
+            dispatch(onSetStockHeladoActive(info.data));
+
+            dispatch(onStatus(false));
+
+            return info.data;
+
+        } catch (error) {
+            return null;
+         }
+    }
+
+    const deleteStockHelado = async (id:number):Promise<Boolean> =>{
+        
+        try {            
+
+            const { data:info } = await backendApi.delete(`${rutaEndpoint}/${id}`);
+                        
+            dispatch(onStockHeladoDelete(info.data.id));
+
+            dispatch(onStatus(false));
+            return true;            
+        } catch (error) {
+            // console.log(error);
+            return false;
+        }
+    }    
+
+    return {
+        status, 
+        StockHelado, 
+        active, 
+        errorMessage,
+        nextPage,
+        prevPage,
+
+        loadStockHelado,
+        saveStockHelado,
+        updateStockHelado,
+        getStockHelado,
+        deleteStockHelado,
+    }
+}
