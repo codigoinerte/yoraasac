@@ -23,7 +23,7 @@ export const FormControls = ({ save, page, category, tipo = 'new' }:ControlsInte
                     <button type="submit" className="btn btn-primary btn-lg">Guardar</button>
                 }
                 {
-                    id > 0 || tipo == 'list' &&
+                    (parseInt(id.toString()) > 0 || tipo == 'list') &&
                     <Link to={`${cat}/${page}/new`} className="btn btn-primary btn-lg">Nuevo</Link>
                 }
                 <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg">Atr&aacute;s</button>
