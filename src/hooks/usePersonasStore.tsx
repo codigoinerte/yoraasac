@@ -13,7 +13,7 @@ export const usePersonasStore = () => {
   
     const { loadDireccion } = useDireccion();
 
-    const { personas, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.personas);
+    const { productos: personas, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.personas);
 
     const { status, errorMessage } = useSelector((state:IRootState)=>state.general)
 
