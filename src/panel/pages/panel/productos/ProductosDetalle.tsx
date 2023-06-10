@@ -242,18 +242,17 @@ export const ProductosDetalle = () => {
                           
                             <SelectPicker
                                 {...field} 
-                              data={listUnpsc.map((item)=>({
-                                label: item.descripcion,
-                                value: item.id
-                              }))}
-                              style={{ width: 224 }}
-                              //onOpen={updateData}
-                              onSearch={updateData}
-                              //renderMenu={updateData}                          
-                              //onChange={handleChangeTipo} 
-                              placeholder='Buscar UNSPSC de Sunat'                             
-                              className={errors.unspsc_id ? "form-control is-invalid p-0" : "form-control p-0"}
-
+                                data={listUnpsc.map((item)=>({
+                                  label: item.descripcion,
+                                  value: item.id
+                                }))}
+                                style={{ width: 224 }}
+                                //onOpen={updateData}
+                                onSearch={updateData}
+                                //renderMenu={updateData}                          
+                                //onChange={handleChangeTipo} 
+                                placeholder='Buscar UNSPSC de Sunat'                             
+                                className={errors.unspsc_id ? "form-control is-invalid p-0" : "form-control p-0"}
                             />
                       }/>
 
