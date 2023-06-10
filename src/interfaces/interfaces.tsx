@@ -2,6 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { authSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, stockHeladosSlice } from "../store";
 import { generalSlice } from "../store/personas/generalSlice";
 import { productosSlice } from "../store/productos/productosSlice";
+import { notaHeladeroSlice } from "../store/notaHeladeros/notaHeladerosSlice";
 
 /* interfaces */
 export interface loginInterface  {
@@ -32,6 +33,6 @@ const rootReducer = combineReducers({
     stockHelados: stockHeladosSlice.reducer,
     stockBaterias: stockBateriasSlice.reducer,
     stockBarquillos: stockBarquillosSlice.reducer,
- }) 
+    notaHeladero: notaHeladeroSlice.reducer}) 
 
 export type IRootState = ReturnType<typeof rootReducer>;
