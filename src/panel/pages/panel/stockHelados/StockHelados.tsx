@@ -23,10 +23,6 @@ const cabecera = [
     "Fecha de movimiento"
 ];
 
-// const eliminar = (id:number) => {
-//     console.log(id);
-// }
-/**************** */
 const { warningDelete } = useAlert();
 
 const [pageActive, setPageActive] = useState<string | null>("1");
@@ -153,13 +149,7 @@ const resetQuery = () => {
     
     loadStockHelado("1", buscar);
 }
-/*
-const navigate = useNavigate();
 
-const location = useLocation();
-
-const { q = '' } = queryString.parse(location.search);
-*/
 return (
   <ContainerInner breadcrumb={breadcrumb}>
     <List   page='helados'
