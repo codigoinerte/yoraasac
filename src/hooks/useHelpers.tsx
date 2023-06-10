@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { backendApi } from '../api';
-import { BuscarProducto, BuscarProductosList, EstadoItem, EstadosList, IgvItem, IgvList, MarcaItem, MarcasList, MonedaItem, MonedaList, MovimientoItem, MovimientoList, TipoDocumentoItem, TipoDocumentoList, UniadesList, UnidadItem, UnspscItem, UnspscList } from '../panel/interfaces';
+import { BuscarProducto, BuscarProductosList, BuscarUsuario, BuscarUsuarioList, EstadoItem, EstadosList, IgvItem, IgvList, MarcaItem, MarcasList, MonedaItem, MonedaList, MovimientoItem, MovimientoList, NotaHeladeroEstado, ProductosPublicados, ProductosPublicadosList, TipoDocumentoItem, TipoDocumentoList, UniadesList, UnidadItem, UnspscItem, UnspscList } from '../panel/interfaces';
+import { NotaHeladeroEstados, NotaHeladeroGuardada, NotaHeladeroGuardadas } from '../panel/interfaces/interfaces';
+import { NotaHeladero, NotaHeladeros } from '../interfaces';
 
 export const useHelpers = () => {
 
@@ -13,7 +15,12 @@ export const useHelpers = () => {
     const [listMovimiento, setListMovimiento] = useState<MovimientoItem[]>([]);
     const [listTipoDocumento, setListTipoDocumento] = useState<TipoDocumentoItem[]>([]);
     const [listBuscarProducto, setListBuscarProducto] = useState<BuscarProducto[]>([]);
-    
+    const [listUsuario, setListUsuario] = useState<BuscarUsuario[]>([]);
+    const [listEstadoHeladero, setListEstadoHeladero] = useState<NotaHeladeroEstado[]>([]);
+    const [listProductosPublicados, setListProductosPublicados] = useState<ProductosPublicados[]>([]);
+    const [listNotaGuardada, setListNotaGuardada] = useState<NotaHeladeroGuardada>();
+
+
     const loadUnspsc = async (buscar='', type="")=>{
 
         if(buscar.length < 3) return false;
@@ -138,6 +145,72 @@ export const useHelpers = () => {
             console.log(error);
         }
     }
+    const loadBuscarUsuario = async(buscar:any = '', type="") =>{
+        if(buscar.length < 3) return false;
+
+        try {
+            
+            const { data } = await backendApi.get<BuscarUsuarioList>(`/buscar-usuario`,{
+                params:{
+                    buscar,
+                    type
+                }
+            });
+            
+            setListUsuario(data.data);
+            
+    
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const listNotaHeladeroEstado = async()=>{
+                
+        try {
+                                    
+            const { data } = await backendApi.get<NotaHeladeroEstados>('/notas-estado');
+            
+            setListEstadoHeladero(data.data);            
+        
+        } catch (error) {
+            
+            console.log(error);
+        }
+    }
+    const loadProductosDisponibles = async () => {
+                
+        try {
+                                    
+            const { data } = await backendApi.get<ProductosPublicadosList>('/nota-heladero-productos');
+            
+            setListProductosPublicados(data.data);            
+            
+            return data.data;
+
+        } catch (error) {
+            
+            console.log(error);
+        }
+    }
+    const loadBuscarNotaHeladeroGuardada = async (idusuario:number)=>{
+
+        if(idusuario == 0) return false;
+        
+        try {
+            
+            const { data } = await backendApi.get<NotaHeladeroGuardadas>(`/nota-heladero-buscar`,{
+                params:{
+                    idusuario: parseInt(idusuario.toString())
+                }
+            });
+            
+            return data.data;
+            
+    
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return {
 
@@ -150,8 +223,13 @@ export const useHelpers = () => {
         listMovimiento,
         listTipoDocumento,
         listBuscarProducto,
+        listUsuario,
+        listEstadoHeladero,
+        listProductosPublicados,
+        listNotaGuardada,
 
-
+        listNotaHeladeroEstado,
+        loadProductosDisponibles,
         
         loadUnspsc,
         loadEstados,
@@ -162,5 +240,7 @@ export const useHelpers = () => {
         loadMovimientos,
         loadTipoDocumento,
         loadBuscarProducto,
+        loadBuscarUsuario,
+        loadBuscarNotaHeladeroGuardada
     }
 }
