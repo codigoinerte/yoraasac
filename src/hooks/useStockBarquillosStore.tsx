@@ -12,7 +12,7 @@ import { useHelpers } from './useHelpers';
 
 export const useStockBarquillosStore = () => {
   
-    const rutaEndpoint = '/stock-bateria';
+    const rutaEndpoint = '/stock-barquillos';
 
     const { StockBarquillo, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.stockBarquillos);
 
