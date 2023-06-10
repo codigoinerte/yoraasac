@@ -5,4 +5,5 @@ export * from './productos/productosSlice';
 export * from './stockHelados/stockHeladosSlice';
 export * from './stockBaterias/stockBateriasSlice';
 export * from './stockBarquillos/stockBarquillosSlice';
+export * from './notaHeladeros/notaHeladerosSlice';
 export * from './store';
