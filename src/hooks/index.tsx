@@ -7,3 +7,4 @@ export * from './useHelpers';
 export * from './useStockHeladosStore';
 export * from './useStockBateriasStore';
 export * from './useStockBarquillosStore';
+export * from './useNotaHeladeroStore';
