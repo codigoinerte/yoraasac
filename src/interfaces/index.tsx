@@ -5,3 +5,4 @@ export * from './StockHelados';
 export * from './StockBaterias';
 export * from './StockBarquillos';
 export * from './notaHeladeros';
+export * from './facturacion';
