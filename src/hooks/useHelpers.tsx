@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { backendApi } from '../api';
 import { BuscarProducto, BuscarProductosList, BuscarUsuario, BuscarUsuarioList, EstadoItem, EstadosList, IgvItem, IgvList, MarcaItem, MarcasList, MonedaItem, MonedaList, MovimientoItem, MovimientoList, NotaHeladeroEstado, ProductosPublicados, ProductosPublicadosList, TipoDocumentoItem, TipoDocumentoList, UniadesList, UnidadItem, UnspscItem, UnspscList } from '../panel/interfaces';
-import { NotaHeladeroEstados, NotaHeladeroGuardada, NotaHeladeroGuardadas } from '../panel/interfaces/interfaces';
+import { FacturaEstado, FacturaEstados, NotaHeladeroEstados, NotaHeladeroGuardada, NotaHeladeroGuardadas, SeriesDocumentos } from '../panel/interfaces/interfaces';
 import { NotaHeladero, NotaHeladeros } from '../interfaces';
 
 export const useHelpers = () => {
 
     const [listUnpsc, setListUnpsc] = useState<UnspscItem[]>([]);
     const [listEstados, setListEstados] = useState<EstadoItem[]>([]);
+    const [listEstadosFactura, setListEstadosFactura] = useState<FacturaEstado[]>([]);
     const [listMarcas, setListMarcas] = useState<MarcaItem[]>([]);
     const [listUnidades, setListUnidades] = useState<UnidadItem[]>([]);
     const [listMonedas, setListMonedas] = useState<MonedaItem[]>([]);
@@ -48,6 +49,19 @@ export const useHelpers = () => {
             const { data } = await backendApi.get<EstadosList>(`/estado`);
 
             setListEstados(data.data);
+            
+
+        } catch (error) {
+            
+        }
+    }
+    const loadFacturaEstados =async ()=>{
+
+        try {
+            
+            const { data } = await backendApi.get<FacturaEstados>(`/estado-factura`);
+
+            setListEstadosFactura(data.data);
             
 
         } catch (error) {
@@ -211,7 +225,31 @@ export const useHelpers = () => {
             console.log(error);
         }
     }
+    const loadDocumentoSerie = async(tipo:number)=>{
 
+        if(tipo == 0){
+            
+            return {
+                serie:'',
+                correlativo:0
+            }
+        };
+        
+        try {
+            
+            const { data } = await backendApi.get<SeriesDocumentos>(`/doc-series`,{
+                params:{
+                    tipo,
+                    sucursal: 1
+                }
+            });
+            
+            return data;
+    
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return {
 
         listUnpsc,
@@ -227,7 +265,10 @@ export const useHelpers = () => {
         listEstadoHeladero,
         listProductosPublicados,
         listNotaGuardada,
+        listEstadosFactura,
 
+
+        loadDocumentoSerie,
         listNotaHeladeroEstado,
         loadProductosDisponibles,
         
@@ -241,6 +282,7 @@ export const useHelpers = () => {
         loadTipoDocumento,
         loadBuscarProducto,
         loadBuscarUsuario,
-        loadBuscarNotaHeladeroGuardada
+        loadBuscarNotaHeladeroGuardada,
+        loadFacturaEstados
     }
 }
