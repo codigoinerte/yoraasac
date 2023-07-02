@@ -3,6 +3,7 @@ import { authSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, sto
 import { generalSlice } from "../store/personas/generalSlice";
 import { productosSlice } from "../store/productos/productosSlice";
 import { notaHeladeroSlice } from "../store/notaHeladeros/notaHeladerosSlice";
+import { facturacionSlice } from "../store/facturacion/facturacionSlice";
 
 /* interfaces */
 export interface loginInterface  {
@@ -33,6 +34,8 @@ const rootReducer = combineReducers({
     stockHelados: stockHeladosSlice.reducer,
     stockBaterias: stockBateriasSlice.reducer,
     stockBarquillos: stockBarquillosSlice.reducer,
-    notaHeladero: notaHeladeroSlice.reducer}) 
+    notaHeladero: notaHeladeroSlice.reducer,
+    facturacion: facturacionSlice.reducer
+}) 
 
 export type IRootState = ReturnType<typeof rootReducer>;
