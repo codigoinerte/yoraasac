@@ -8,3 +8,4 @@ export * from './useStockHeladosStore';
 export * from './useStockBateriasStore';
 export * from './useStockBarquillosStore';
 export * from './useNotaHeladeroStore';
+export * from './useFacturasStore';
