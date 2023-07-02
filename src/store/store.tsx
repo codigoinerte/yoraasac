@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, stockHeladosSlice, notaHeladeroSlice } from './';
 import { generalSlice } from './personas/generalSlice';
 import { productosSlice } from './productos/productosSlice';
+import { facturacionSlice } from './facturacion/facturacionSlice';
 // uiSlice, calendarSlice, 
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
         stockBaterias: stockBateriasSlice.reducer,
         stockBarquillos: stockBarquillosSlice.reducer,
         notaHeladero: notaHeladeroSlice.reducer,
+        facturacion: facturacionSlice.reducer
         // calendar: calendarSlice.reducer,
         // ui:       uiSlice.reducer
     },
