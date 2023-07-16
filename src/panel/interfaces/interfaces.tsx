@@ -121,7 +121,12 @@ export interface baseArray{
 
 export interface FormPersonasValuesSave extends FormPersonasValues {
     documento_tipo : number,
-    usuario_tipo : number | undefined
+    usuario_tipo : number | undefined,
+    foto_frontal?: string,
+    foto_posterior?: string,
+
+    img_frontal?: FileList,
+    img_posterior?: FileList,
 }
 
 export interface FormProductosValuesSave extends FormProductosValues {
@@ -152,7 +157,15 @@ export type FormPersonasValues = {
     direccion:string | null;
     email?:string | null;
     password?:string | null;
+
+    img_frontal?:   FileList;
+    img_posterior?: FileList;
+
+    foto_frontal?:  string;
+    foto_posterior?:string;
 };
+// foto_frontal?:FileList;
+// foto_posterior?:FileList;
 
 /**************************************** */
 export type FormBuscarProductosValues = {
@@ -665,4 +678,11 @@ export interface FormFacturacionDetalleValues {
 export interface SeriesDocumentos {
     serie:       string;
     correlativo: string;
+}
+
+
+export interface deleImagenPersona  {
+    id?:number,
+    foto_frontal ?: string,
+    foto_posterior ?: string,
 }

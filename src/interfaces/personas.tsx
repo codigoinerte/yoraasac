@@ -82,13 +82,19 @@ export interface Persona {
     idprovincia:    number;
     iddistrito:     number;
     email:          string;
-    password:       string;
+    password?:       string;
     celular:        string;
     direccion:      string;
     usuario_tipo:   string;
     updated_at:     string;
     created_at:     string;
     id:             number;
+
+    img_frontal?:   FileList;
+    img_posterior?: FileList;
+
+    foto_frontal?:  string;
+    foto_posterior?:string;
 }
 
 

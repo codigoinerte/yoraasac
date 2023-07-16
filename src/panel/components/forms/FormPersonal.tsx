@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { FormPersonasValues, PersonalForm } from '../../interfaces'
+import { FormPersonasValues, PersonalForm, deleImagenPersona } from '../../interfaces'
 import { FormControls } from '../FormControls';
 
 import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { validateNumber } from '../../../helpers';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../../interfaces';
 import { onSetPersonasActive } from '../../../store';
+import { deleteImagen } from '../../../helpers/deleteImagen';
 /*
     1: cliente
     2: proveedor
@@ -19,20 +20,28 @@ import { onSetPersonasActive } from '../../../store';
 */
 export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
 
-    const { register, handleSubmit, reset, formState, setValue } = useForm<FormPersonasValues>();
-
-    const { errors } = formState;
         
     const { id = 0 } = useParams();   
 
     const { active } = useSelector((state:IRootState)=>state.personas);
 
+    const { register, handleSubmit, reset, formState, setValue, resetField } = useForm<FormPersonasValues>({
+        defaultValues: {
+           foto_frontal: active?.foto_frontal,
+           foto_posterior: active?.foto_posterior
+        },
+    });
+
+    const { errors } = formState;
+    
     const { loadDireccion, loadProvincias, loadDistritos,departamentos, provincias, distritos } = useDireccion();
 
-    const { savePersona, updatePersona, getPersona } = usePersonasStore();
+    const { savePersona, updatePersona, getPersona, deleteImagenPersona } = usePersonasStore();
 
     const dispatch = useDispatch();
 
+    const URL_IMAGENES = import.meta.env.VITE_URL_IMAGES;
+    
     useEffect(() => {
             
         
@@ -50,6 +59,8 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 setValue('apellidos', user?.apellidos);
                 setValue('celular', user?.celular);
                 setValue('direccion', user?.direccion);
+                setValue('foto_frontal', active?.foto_frontal);
+                setValue('foto_posterior', active?.foto_posterior);
 
                 loadDireccion()
                 .then((dep)=>{
@@ -91,27 +102,32 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
         
     }, []);
 
-    // useEffect(() => {
+    useEffect(() => {
         
-    //     if(!!active?.iddepartamento)
-    //         loadProvincias(active?.iddepartamento);
+        setValue('foto_frontal', active?.foto_frontal);
+        setValue('foto_posterior', active?.foto_posterior);
 
-    // }, [active?.iddepartamento]);
-
-    // useEffect(() => {
-        
-    //     if(!!active?.idprovincia)
-    //         loadDistritos(active?.idprovincia);
-
-    // }, [active?.idprovincia]);
+    }, [active])
     
-    
-   
+   const deleteImagen = async (imagen:deleImagenPersona) =>{
 
-    const onSubmit: SubmitHandler<FormPersonasValues> = ({ documento, nombres, apellidos, celular, departamento, provincia, distrito, direccion, email, password }) => {                
+        await deleteImagenPersona({
+            ...imagen,
+            id: parseInt(id.toString()),
+        });
+
+        if(imagen.foto_frontal){
+            setValue('foto_frontal', '');
+        }
+        if(imagen.foto_posterior){
+            setValue('foto_posterior', '');
+        }
+   }
+
+    const onSubmit: SubmitHandler<FormPersonasValues> = async ({ documento, nombres, apellidos, celular, departamento, provincia, distrito, direccion, email, password, foto_frontal, foto_posterior, img_frontal, img_posterior }) => {                
         
         if(!!active?.id){
-            updatePersona({ 
+            await updatePersona({ 
                 documento,
                 nombres,
                 apellidos,
@@ -123,12 +139,18 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 email,
                 password,
                 documento_tipo: (tipo == 5) ? 4 : 2,
-                usuario_tipo: typeof tipo !== undefined ? tipo : 0 
+                usuario_tipo: typeof tipo !== undefined ? tipo : 0 ,
+
+                foto_frontal,
+                foto_posterior,
+
+                img_frontal,
+                img_posterior,
             });
 
         }else{
 
-            savePersona({ 
+            await savePersona({ 
                 documento,
                 nombres,
                 apellidos,
@@ -140,9 +162,18 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 email,
                 password,
                 documento_tipo: (tipo == 5) ? 4 : 2,
-                usuario_tipo: typeof tipo !== undefined ? tipo : 0 
+                usuario_tipo: typeof tipo !== undefined ? tipo : 0 ,
+
+                foto_frontal,
+                foto_posterior,
+
+                img_frontal,
+                img_posterior,
             });
         }
+
+        setValue('img_frontal', undefined);
+        setValue('img_posterior', undefined);
         
     };
 
@@ -255,6 +286,65 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                     </div>
                     
                 </div>  
+                {
+                    tipo != 5 &&
+                    (
+                        <>
+                            <div className="row">
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <div className="card">
+                                        <div className="card-body">       
+                                        <h5 className='mb-2 text-black'>Foto frontal</h5>                           
+                                        <input type="file" className="form-control" {...register('img_frontal')}/>
+                                        <input type="hidden" {...register('foto_frontal', {
+                                            value: active?.foto_frontal
+                                        })}/>
+                                        </div>
+                                        {
+                                            (active?.foto_frontal) &&(
+                                                <div className="position-relative">
+                                                    <button 
+                                                        type='button' 
+                                                        className='btn btn-danger position-absolute top-0 end-0'
+                                                        onClick={()=>{ deleteImagen({ foto_frontal: active.foto_frontal }) }}>
+                                                        <i className="bi bi-trash"></i>
+                                                    </button>
+                                                    <img src={`${URL_IMAGENES}${active.foto_frontal}`} className="card-img-bottom" alt="..."/>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <div className="card">
+                                        
+                                        <div className="card-body">
+                                        <h5 className='mb-2 text-black'>Foto Posterior</h5>
+                                        <input type="file" className="form-control" {...register('img_posterior')}/>
+                                        <input type="hidden" {...register('foto_posterior', {
+                                            value: active?.foto_posterior
+                                        })}/>
+
+                                        </div>                                        
+                                        {
+                                            (active?.foto_posterior) &&(
+                                                <div className="position-relative">
+                                                    <button 
+                                                        type='button' 
+                                                        className='btn btn-danger position-absolute top-0 end-0'
+                                                        onClick={()=>{ deleteImagen({ foto_posterior: active.foto_posterior }) }}>
+                                                        <i className="bi bi-trash"></i>
+                                                    </button>
+                                                    <img src={`${URL_IMAGENES}${active.foto_posterior}`} className="card-img-bottom" alt="..."/>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )
+                }
 
                 {
                     tipo == 6 &&

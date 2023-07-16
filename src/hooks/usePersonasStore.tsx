@@ -1,11 +1,11 @@
 import axios from 'axios';
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 import { toast } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
-import { toastMessage } from '../helpers';
+import { toastMessage, uploadImage } from '../helpers';
 import { IRootState } from '../interfaces';
-import { BuscarPersonas, FormPersonasValues, FormPersonasValuesSave } from '../panel/interfaces';
+import { BuscarPersonas, FormPersonasValues, FormPersonasValuesSave, deleImagenPersona } from '../panel/interfaces';
 import { onPersonasAddMessage, onPersonasClearMessage, onSetPersonasActive, onPersonasAdd, onPersonasList, onStatus, onPersonasDelete } from '../store'
 import { useDireccion } from './useDireccion';
 
@@ -78,19 +78,58 @@ export const usePersonasStore = () => {
     
     const updatePersona = async (postdata:FormPersonasValuesSave) => {
         dispatch(onStatus(true));
+        
+        let array: (FileList | undefined)[] = [];
+        
 
+        let url_frontal = postdata.foto_frontal ?? '';
+        let url_posterior = postdata.foto_posterior ?? '';
+        
+        if(postdata.img_frontal && postdata.img_frontal.length > 0) array.push(postdata.img_frontal);
+        if(postdata.img_posterior && postdata.img_posterior.length > 0) array.push(postdata.img_posterior);
+        
         try {
 
-            const { data:info } = await backendApi.put(`/persona/${active!.id}`, postdata);
+            const respuesta = await uploadImage(array); 
+            
+            const respuesta_frontal = respuesta[0]??'';
+            const respuesta_posterior = respuesta[1]??'';
+            console.log(respuesta_frontal, respuesta_posterior);
+            if(respuesta.length > 0)
+            {
+                if(postdata.img_frontal?.length && !postdata.img_posterior?.length){
+                    url_frontal = respuesta_frontal;
+                }else if(!postdata.img_frontal?.length && postdata.img_posterior?.length){
+                    url_posterior = respuesta_frontal;
+                }else{
+                    url_frontal = respuesta_frontal;
+                    url_posterior = respuesta_posterior;
+                }
+            }
+
+            let params = {
+                ...postdata
+            };
+
+            if(url_frontal != '') params.foto_frontal = url_frontal;
+            if(url_posterior != '') params.foto_posterior = url_posterior;
+
+            const { data:info } = await backendApi.put(`/persona/${active!.id}`, params);
+
             const result = info.data;
             
             toastMessage(info);
             
             dispatch(onSetPersonasActive({
                 ...result,
+                foto_frontal: result.foto_frontal,
+                foto_posterior: result.foto_posterior,
                 password: postdata.password
             }));
+
             dispatch(onStatus(false));
+
+            return result;
 
         } catch (error) {
             console.log(error);
@@ -132,6 +171,28 @@ export const usePersonasStore = () => {
         }
     }
 
+    const deleteImagenPersona = async (params:deleImagenPersona) => {
+
+        try {
+            const { data:info } = await backendApi.post(`/eliminar-foto-persona/${params.id}`,{
+                ...params,
+
+            });
+
+            const result = info.data;
+
+            toastMessage(info);
+            
+            dispatch(onSetPersonasActive(result));
+
+            dispatch(onStatus(false));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+
     return {
         status, 
         personas, 
@@ -144,6 +205,7 @@ export const usePersonasStore = () => {
         savePersona,
         updatePersona,
         getPersona,
-        deletePersona
+        deletePersona,
+        deleteImagenPersona
     }
 }
