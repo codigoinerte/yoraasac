@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ContainerInner, FormControls } from '../../../components';
 import { BuscarProducto, FormFacturacionValues, FormNotaHeladeroValues, SeriesDocumentos, breadcrumb as bread, listaDetalle } from '../../../interfaces';
-import { useFacturastore, useHelpers } from '../../../../hooks';
+import { useFacturastore, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { SelectPicker } from 'rsuite';
 import { Toaster, toast } from 'react-hot-toast';
 import { DateNow } from '../../../helpers';
+import { Producto } from '../../../../interfaces/Productos';
+import { NotaHeladero } from '../../../../interfaces';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Facturación', enlace: '/facturacion' },
@@ -21,6 +23,8 @@ export const FacturacionDetalle = () => {
     const refId = useRef<any>('0')
 
     const {  saveFacturacion, updateFacturacion, getFacturacion, active  } = useFacturastore();
+
+    const {  active:nota_heladero_info, getNotaHeladero  } = useNotaHeladeroStore();
 
     const { listEstadosFactura ,listBuscarProducto, listUsuario, loadBuscarUsuario, loadBuscarProducto, loadFacturaEstados, loadDocumentoSerie } = useHelpers();
 
@@ -40,12 +44,11 @@ export const FacturacionDetalle = () => {
     const { errors } = formState;
 
     const { id = 0 } = useParams(); 
-    
-    // useEffect(() => {
-    //     console.log(id);
-        
-    // }, [id])
 
+    const queryParameters = new URLSearchParams(window.location.search)
+    const from = queryParameters.get("gf")??'';
+    const from_id = queryParameters.get("id")??0;
+    
     const loadDocumento = (tipo = 1) => {
 
         loadDocumentoSerie(tipo)
@@ -65,54 +68,77 @@ export const FacturacionDetalle = () => {
 
         loadFacturaEstados();
             
-        if(refId.current == 0)
-        {
-            const dateNow = DateNow();
-            
-            loadDocumento();
-            setValue('fecha_emision', dateNow);
-            setValue('fecha_pago', dateNow);
-            setValue('id_estado', 1);
-        }
-        else
-        {            
-            getFacturacion(refId.current)
-            .then((factura)=>{
+        if(from == '' && parseInt(from_id.toString()) == 0)
+        {    //console.log('cargando guardado');
+            if(refId.current == 0)
+            {
+                const dateNow = DateNow();
+                
+                loadDocumento();
+                setValue('fecha_emision', dateNow);
+                setValue('fecha_pago', dateNow);
+                setValue('id_estado', 1);
+            }
+            else
+            {            
+                getFacturacion(refId.current)
+                .then((factura)=>{
 
-                setValue('fecha_emision', active?.fecha_emision ?? '');
-                setValue('fecha_pago', active?.fecha_pago ?? '');
-                setValue('tipo', active?.tipo ?? 0);
-                setValue('serie', active?.serie ?? '');
-                setValue('correlativo', active?.correlativo ?? 0);
-                setValue('user_id', active?.user_id ?? 0);
-                setValue('tipo_transaccion', active?.tipo_transaccion ?? 0);
-                setValue('id_estado', active?.id_estado ?? 0);
-                setValue('estado', active?.id_estado ?? 0);
+                    setValue('fecha_emision', active?.fecha_emision ?? '');
+                    setValue('fecha_pago', active?.fecha_pago ?? '');
+                    setValue('tipo', active?.tipo ?? 0);
+                    setValue('serie', active?.serie ?? '');
+                    setValue('correlativo', active?.correlativo ?? 0);
+                    setValue('user_id', active?.user_id ?? 0);
+                    setValue('tipo_transaccion', active?.tipo_transaccion ?? 0);
+                    setValue('id_estado', active?.id_estado ?? 0);
+                    setValue('estado', active?.id_estado ?? 0);
 
-                let detalle = [];
+                    let detalle = [];
 
-                if(factura!.detalle != undefined)
-                {
-                    detalle = factura!.detalle.map((item)=>({
-                        ...item,
-                        total: parseFloat((  ((item.cantidad??1) * (item.precio??0) * ( 1 - ((item.descuento??0) / 100))).toFixed(2) ).toString())
-                    }))
-                 
-                    setValue('productos', detalle);
-                }
-
-                let usuario_id = active?.user_id??0;
-
-                if(usuario_id != 0){
+                    if(factura!.detalle != undefined)
+                    {
+                        detalle = factura!.detalle.map((item)=>({
+                            ...item,
+                            total: parseFloat((  ((item.cantidad??1) * (item.precio??0) * ( 1 - ((item.descuento??0) / 100))).toFixed(2) ).toString())
+                        }))
                     
-                    loadBuscarUsuario(usuario_id, "codigo");
-                    setValue('user_id', active!.user_id);
-                }
+                        setValue('productos', detalle);
+                    }
 
-            });
+                    let usuario_id = active?.user_id??0;
+
+                    if(usuario_id != 0){
+                        
+                        loadBuscarUsuario(usuario_id, "codigo");
+                        setValue('user_id', active!.user_id);
+                    }
+
+                });
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+
+        if(from =='nota' && from_id!=0 && nota_heladero_info !=null){
+            //console.log(`cargando importado desde ${from} y id ${from_id}`);
+            if(nota_heladero_info.id == parseInt(from_id.toString())){
+                
+                printNotaHeladero(nota_heladero_info);
+            }
+        }else if(from == 'nota' && from_id!=0 && nota_heladero_info == null){
+            //console.log(`cargando importado desde ${from} y id ${from_id} y sin previa carga`);
+            const current_id_nota = parseInt(from_id.toString());
+            getNotaHeladero(current_id_nota)
+            .then((nota_heladero_info)=>{
+
+                printNotaHeladero(nota_heladero_info);
+
+            });            
         }
       
-    }, []);
+    }, [from_id])
 
     const onSubmit: SubmitHandler<FormFacturacionValues> = (data) => {
         
@@ -206,6 +232,46 @@ export const FacturacionDetalle = () => {
         let tipoDoc = parseInt((e.target.value).toString());
 
         loadDocumento(tipoDoc);
+    }
+    
+    type Nota = NotaHeladero | undefined;
+
+    const printNotaHeladero = (nota_heladero_info:Nota)=>{
+
+        const dateNow = DateNow();
+        
+        loadDocumento();
+        setValue('fecha_emision', dateNow);
+        setValue('fecha_pago', dateNow);
+        setValue('id_estado', 1);
+
+        setValue('user_id', nota_heladero_info?.user_id ?? 0);
+
+        let usuario_id = nota_heladero_info?.user_id??0;
+
+        if(usuario_id != 0){
+            
+            loadBuscarUsuario(usuario_id, "codigo");
+            setValue('user_id', nota_heladero_info!.user_id);
+        }
+
+        let detalle = [];
+        
+        if(nota_heladero_info?.detalle != undefined)
+        {
+            detalle = nota_heladero_info!.detalle.map((item)=>({
+                id:item.id??0,
+                codigo:item.codigo??'',
+                Producto:item.producto,
+                cantidad: item.vendido??0,
+                descuento: 0,
+                precio: parseFloat((item.importe??'').toString())??0,
+                total: parseFloat(  ((item.vendido??1) * (parseFloat(item.importe??'0'))).toString()) ?? 0,
+
+            }))
+        
+            setValue('productos', detalle);
+        }
     }
 
     return (

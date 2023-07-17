@@ -123,7 +123,7 @@ export const useNotaHeladeroStore = () => {
             return info.data;
 
         } catch (error) {
-            //return null;
+            console.log(error);
          }
     }
 

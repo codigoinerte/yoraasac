@@ -26,6 +26,14 @@ export const FormControls = ({ save, page, category, tipo = 'new' }:ControlsInte
                     (parseInt(id.toString()) > 0 || tipo == 'list') &&
                     <Link to={`${cat}/${page}/new`} className="btn btn-primary btn-lg">Nuevo</Link>
                 }
+                {
+                    (page == 'nota-heladero' && parseInt(id.toString()) > 0)&&
+                    (
+                        <button type='button' onClick={()=> {
+                            if(typeof save != "undefined") save();
+                        } } className="btn btn-success btn-lg">Generar Factura</button>        
+                    )
+                }
                 <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg">Atr&aacute;s</button>
             </div>
         </>

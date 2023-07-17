@@ -3,7 +3,7 @@ import { ContainerInner, FormControls } from '../../../components'
 import { FormNotaHeladeroValues, ProductosPublicados, breadcrumb as bread, listaDetalle} from '../../../interfaces';
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { DatePicker, SelectPicker } from 'rsuite';
 import { useDispatch } from 'react-redux';
 import { onSetNotaHeladeroActive, onStatus } from '../../../../store';
@@ -18,6 +18,7 @@ const breadcrumb:bread[] = [
 export const NotaHeladeroDetalle = () => {
 
     //const [principalId, setPrincipalId] = useState<any>("0");
+    let navigate = useNavigate();
 
     const refId = useRef<any>('0')
 
@@ -230,12 +231,18 @@ export const NotaHeladeroDetalle = () => {
 
     }
 
+    const redirectToFactura = async () => {
+
+        navigate(`/facturacion/new?gf=nota&id=${refId.current}`);
+
+    }
+
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo}`}>
             <>            
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
-                    <FormControls save={()=>console.log(1)} page="nota-heladero"/>
+                    <FormControls save={()=> redirectToFactura() } page="nota-heladero"/>
 
                     <hr className='border border-1 opacity-50'/>
 
