@@ -154,7 +154,7 @@ export const ReporteNotaHeladero = () => {
                             <div className="mb-3 w-100 gap-2 d-flex flex-column flex-md-row">
                                 <button className="btn btn-primary text-center w-100" type="submit"><i className="bi bi-search"></i> Generar reportes</button>
                                 {
-                                    (detalle) &&
+                                    (detalle.length > 0) &&
                                     (
                                         <>
                                         <CSVLink filename={`reporte-nota-healdero-${moment().format()}.csv`} className="text-decoration-none btn btn-success text-center w-100" type="button" data={imprimible}><i className="bi bi-cloud-arrow-down"></i> Descargar</CSVLink>
