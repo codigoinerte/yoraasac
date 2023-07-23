@@ -8,7 +8,7 @@ export const Home = () => {
         <Header />
 
         {/* breadcrumb */}
-        <Breadcrumb titulo="Pagina principal" breadcrumb={[]} mensaje="Bienvenido Yonatan" />
+        <Breadcrumb titulo="Pagina principal" breadcrumb={[]} mensaje="Bienvenido" />
 
         {/* main */}
         <Container>
