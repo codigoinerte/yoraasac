@@ -31,6 +31,8 @@ export interface NotaHeladero{
     heladero_documento?:     string;
     heladero_nombre?:        string;
     nombre?:                 string;
+    estado_nombre?:          string;
+    moneda?:                 string;
     detalle:                 FormNotaHeladeroDetalleValues[];
 }
 
