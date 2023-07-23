@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ContainerInner, ListReportes } from '../../../components';
 import { ReporteItemNota, ReporteNotaForm, breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 import { useForm } from 'react-hook-form';
-import { useNotaHeladeroStore } from '../../../../hooks';
+import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { CSVLink, CSVDownload } from "react-csv";
 import moment from 'moment';
 
@@ -47,6 +47,8 @@ export const ReporteNotaHeladero = () => {
   
     const { q = '' } = queryString.parse(location.search);
 
+    const { listEstadoHeladero, listNotaHeladeroEstado} = useHelpers();
+
     const { reporteHeladero, reporte } = useNotaHeladeroStore();
 
     useEffect(() => {
@@ -76,7 +78,14 @@ export const ReporteNotaHeladero = () => {
             fecha_cierre: (item.fecha_cierre??'').toString(),
         })))
         
-    }, [reporte])
+    }, [reporte]);
+    
+    useEffect(() => {
+        
+        listNotaHeladeroEstado();
+
+    }, []);
+    
     
 
     const { register, handleSubmit, reset, formState:{ errors } } = useForm<ReporteNotaForm>();
@@ -115,13 +124,26 @@ export const ReporteNotaHeladero = () => {
                                 <input type="text" className="form-control" id="nombres" aria-describedby="Buscador" placeholder='Nombre y/o apellido' {...register("nombre")}/>
                             </div>
                         </div>                        
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <div className="mb-3">
+                                <label htmlFor="fecha_creacion" className="form-label">Estado</label>                                
+                                <select id="estado" className='form-control'  {...register('estado')}>
+                                    <option value="">Seleccione una opci&oacute;n</option>
+                                    {
+                                        listEstadoHeladero.map(({ id, nombre })=>(
+                                            <option key={id} value={id}>{nombre}</option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                             <div className="mb-3">
                                 <label htmlFor="fecha_creacion" className="form-label">Fecha de inicio</label>
                                 <input type="date" placeholder="dd-mm-yyyy" className="form-control" id="fecha_creacion" aria-describedby="fechacreacion" {...register("fecha_inicio")}/>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                             <div className="mb-3">
                                 <label htmlFor="fecha_fin" className="form-label">Fecha fin</label>
                                 <input type="date" placeholder="dd-mm-yyyy" className="form-control" id="fecha_fin" aria-describedby="fechafin" {...register("fecha_fin")}/>
