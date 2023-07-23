@@ -88,16 +88,10 @@ export const MenuStock:MenuInterface[] = [
       "icono":"bi bi-app"
    },    
    {
-      "nombre":"Facturas",
+      "nombre":"Facturas y Boletas",
       "alias":"/reportes/facturas",
       "icono":"bi bi-app"
    },
-   {
-      "nombre":"Boletas",
-      "alias":"/reportes/boletas",
-      "icono":"bi bi-app"
-   },
-   
 ];
  
 export const MenuConfiguracion:MenuInterface[] = [
