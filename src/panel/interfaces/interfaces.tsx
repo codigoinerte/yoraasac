@@ -71,6 +71,7 @@ export interface ControlsInterface{
     tipo?: 'new' | 'edit' | 'delete' | 'list'; 
     save?: Function ;
     category?:string;
+    imprimir?:Function;
     page:string;
 }
 export interface ListDetail{
