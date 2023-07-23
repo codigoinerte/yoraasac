@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState, Facturas } from '../interfaces';
-import { FormBuscarFacturasValues, FormBuscarNotaHeladeroValues, FormFacturacionValues, FormNotaHeladeroValues, NotaHeladeroEstado, ProductosPublicados } from '../panel/interfaces';
+import { FormBuscarFacturasValues, FormBuscarNotaHeladeroValues, FormFacturacionValues, FormNotaHeladeroValues, NotaHeladeroEstado, ProductosPublicados, ReporteFacturacion, ReporteItemFactura, ReporteNotaForm } from '../panel/interfaces';
 import { onFacturacionAddMessage, onFacturacionClearMessage, onFacturacionDelete, onFacturacionList, onSetFacturacionActive, onStatus, } from '../store'
 import { useHelpers } from './useHelpers';
 //import { NotaHeladero } from '../panel/pages/panel/notaHeladero/NotaHeladero';
@@ -14,7 +14,7 @@ import { useHelpers } from './useHelpers';
 
 export const useFacturastore = () => {
 
-
+    const [reporte, setReporte] = useState<ReporteItemFactura[]>([]);
   
     const rutaEndpoint = '/factura';
 
@@ -144,6 +144,19 @@ export const useFacturastore = () => {
         }
     } 
     
+    const reproteFacturacion = async(params:ReporteNotaForm) =>{
+        dispatch(onStatus(true));
+
+        try {            
+
+            const { data:info } = await backendApi.get<ReporteFacturacion>(`/reporte-factura`, {params});
+            
+           setReporte(info.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
   
     return {
         status, 
@@ -152,8 +165,10 @@ export const useFacturastore = () => {
         errorMessage,
         nextPage,
         prevPage,
-        
+        reporte,
 
+
+        reproteFacturacion,
         loadFacturacion,
         saveFacturacion,
         updateFacturacion,

@@ -5,7 +5,7 @@ import { Enlace } from '../helpers';
 import { ReportList } from '../interfaces'
 import { FormControls } from './FormControls';
 
-export const ListReportes = ({cabecera, detalle, descargar, next, prev, children }:ReportList) => {
+export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children }:ReportList) => {
 
     const navigate = useNavigate();
 
