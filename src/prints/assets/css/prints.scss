@@ -1,0 +1,131 @@
+@media all {
+  .page-break {
+    display: none;
+  }
+}
+.print{
+  display: none;
+}
+@media print {
+    @page {
+      size: 50mm;
+      margin: 1mm 1mm 1mm 1mm;
+      
+    }
+    html, body {
+      height: 100vh !important;            
+      -webkit-print-color-adjust: exact;      
+    }
+    .print{
+      display: block;
+    }
+    hr,
+    .header,
+    .breadcrumb-container,
+    .container form > div:nth-child(1),
+    .footer,
+    .navbar-footer,
+    .rs-picker-toggle-clean.rs-btn-close,
+    .desktop{
+      display: none !important;
+      padding: 0px !important;
+    }
+    .container{
+      width: 100%;
+      max-width: none;
+    }
+    .container,
+    .inner-page
+    {
+      padding: 0px;
+      margin: 0px;
+    }
+    .container{
+      padding: 5px;
+    }
+    .form-control{
+      border: 0px !important;
+      padding: 0px !important;
+      background-color: transparent !important;
+      font-size: 0.74rem;
+    }
+    .rs-picker-toggle{
+      padding: 0px !important;
+    }
+    h4{
+      font-size: 0.75rem !important;
+    }
+    .table tr{
+      background-color: transparent !important;
+      border: 0px;
+    }
+    input[type="datetime-local"]::-webkit-inner-spin-button,
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+    }
+  
+
+    @page wide {
+      size: auto;
+    }
+    p {
+      widows: 3;
+    }
+    *{
+      font-size: 0.74rem;
+      background-color: transparent;
+      border: 0;
+      text-align: left;
+      color: #000 !important;
+    }
+    input{
+      padding: 0px;
+      border: 0px;
+    }
+    table,
+    table tr td{
+      border: 0 !important;
+      background-color: transparent !important;
+    }
+
+    .ticket *{
+      font-size: 0.5rem;
+    }
+    .ticket {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+    }
+    .ticket .contenedor {
+      flex: 1;
+    }
+
+    .ticket table > :not(caption) > * > *,
+    .ticket table tr,
+    .ticket table td
+    .ticket table{
+      padding: 0px ;
+      background-color: #fff ;
+      border: 0px ;
+      box-shadow: none ;
+    }
+
+    .ticket .cabecera {
+      margin-bottom: 1rem;
+    }
+    .ticket .cabecera td{
+      text-align: left !important;
+    }
+
+    .ticket .cuerpo tr{
+      border-bottom: 1px dotted #ebebeb;
+      margin-bottom: 0.5rem;
+    }
+    .ticket table th:nth-child(1),
+    .ticket table th:nth-child(2),
+    .ticket table th:nth-child(4),
+    .ticket table th:nth-child(5){
+      width: 30px !important;
+    }
+}
