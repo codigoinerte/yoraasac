@@ -52,16 +52,15 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                     </table>
 
                     <table className='cuerpo'>
-                        <thead>
-                            <tr>
-                                <th className='sizeTitle'>Dev.</th>
-                                <th className='sizeTitle'>Ped.</th>
-                                <th className='sizeTitle'>Prod.</th>
-                                <th className='sizeTitle'>Ven.</th>
-                                <th className='sizeTitle'>Imp.</th>
-                            </tr>
-                        </thead>
+                        
                         <tbody>
+                            <tr>
+                                <td className='sizeTitle'><strong>Dev.</strong></td>
+                                <td className='sizeTitle'><strong>Ped.</strong></td>
+                                <td className='sizeTitle'><strong>Prod.</strong></td>
+                                <td className='sizeTitle'><strong>Ven.</strong></td>
+                                <td className='sizeTitle'><strong>Imp.</strong></td>
+                            </tr>
                             {
                                 active?.detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
 
