@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState, NotaHeladero } from '../interfaces';
-import { FormBuscarNotaHeladeroValues, FormNotaHeladeroValues, NotaHeladeroEstado, ProductosPublicados } from '../panel/interfaces';
+import { FormBuscarNotaHeladeroValues, FormNotaHeladeroValues, NotaHeladeroEstado, ProductosPublicados, ReporteItemNota, ReporteNotaForm, ReporteNotaHeladero } from '../panel/interfaces';
 import { onStatus, onNotaHeladeroAddMessage, onNotaHeladeroClearMessage, onNotaHeladeroDelete, onNotaHeladeroList, onSetNotaHeladeroActive } from '../store'
 import { useHelpers } from './useHelpers';
 //import { NotaHeladero } from '../panel/pages/panel/notaHeladero/NotaHeladero';
@@ -14,7 +14,7 @@ import { useHelpers } from './useHelpers';
 
 export const useNotaHeladeroStore = () => {
 
-
+    const [reporte, setReporte] = useState<ReporteItemNota[]>([]);
   
     const rutaEndpoint = '/nota-heladero';
 
@@ -143,6 +143,20 @@ export const useNotaHeladeroStore = () => {
         }
     } 
     
+    const reporteHeladero = async (params: ReporteNotaForm) =>{
+        
+        dispatch(onStatus(true));
+
+        try {            
+
+            const { data:info } = await backendApi.get<ReporteNotaHeladero>(`/reporte-nota`, {params});
+            
+           setReporte(info.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
   
     return {
         status, 
@@ -151,13 +165,14 @@ export const useNotaHeladeroStore = () => {
         errorMessage,
         nextPage,
         prevPage,
-        
+        reporte,
 
         loadNotaHeladero,
         saveNotaHeladero,
         updateNotaHeladero,
         getNotaHeladero,
         deleteNotaHeladero,
+        reporteHeladero,
        
     }
 }

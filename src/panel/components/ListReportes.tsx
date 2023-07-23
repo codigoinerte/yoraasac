@@ -36,8 +36,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next, prev, children
                                         cabecera.map((titulo)=>(
                                             <th key={titulo} scope="col">{ titulo }</th>
                                         ))
-                                    }
-                                        <th scope="col">Acciones</th>
+                                    }                                        
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,7 +49,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next, prev, children
                                         
                                             <tr key={keyrow}>
                                                 {
-                                                    campos.map(( texto, index )=> {
+                                                    campos?.map(( texto, index )=> {
                                                         
                                                         const cabeceraChildren = cabecera[index];
                                                         const childrenRowKey = `children_${cabeceraChildren}_${id}`
@@ -61,26 +60,13 @@ export const ListReportes = ({cabecera, detalle, descargar, next, prev, children
                                                         </td>  
                                                     )})
                                                 }
-
-                                                <td data-label="Acciones">
-                                                    <div className="acciones-buttons">
-                                                        <button onClick={()=> descargar(id)} type="button" className="btn btn-outline-primary">
-                                                            <i className="bi bi-cloud-arrow-down"></i> Descargar
-                                                        </button>
-                                                    </div>
-                                                </td>
                                             </tr>
                                         
                                     )})
                                 }
                                 
                             </tbody>
-                        </table>   
-
-                        <div className="pagination flex justify-content-between mt-4">
-                            <button className="btn btn-outline-primary" onClick={(e)=>prev(e)}><i className="bi bi-chevron-left"></i> Anterior</button>
-                            <button className="btn btn-outline-primary" onClick={(e)=>next(e)}>Siguiente <i className="bi bi-chevron-right"></i></button>
-                        </div>
+                        </table>                           
                     </>
                 )
                 :
