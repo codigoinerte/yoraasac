@@ -20,10 +20,10 @@ export const ReporteNotaHeladero = () => {
         "DOCUMENTO",
         "NOMBRE",
         "ESTADO",
-        "FECHA DE CREACIÓN",
-        "FECHA DE APERTURA",
-        "FECHA DE GUARDADO",
-        "FECHA DE CIERRE",
+        "CREACIÓN",
+        "APERTURA",
+        "GUARDADO",
+        "CIERRE",
     ];
 
     const eliminar = (id:number) => {
@@ -135,7 +135,7 @@ export const ReporteNotaHeladero = () => {
                                     (detalle) &&
                                     (
                                         <>
-                                        <CSVLink filename={`reporte-nota-healdero-${moment().format()}.csv`} className="text-decoration-none btn btn-success text-center w-100" type="button" data={imprimible}><i className="bi bi-cloud-arrow-down"></i> Descargar</CSVLink>;
+                                        <CSVLink filename={`reporte-nota-healdero-${moment().format()}.csv`} className="text-decoration-none btn btn-success text-center w-100" type="button" data={imprimible}><i className="bi bi-cloud-arrow-down"></i> Descargar</CSVLink>
                                         <button className="btn btn-danger text-center w-100" type="button" onClick={resetear}><i className="bi bi-trash"></i> resetear</button>
                                         </>
                                     )
