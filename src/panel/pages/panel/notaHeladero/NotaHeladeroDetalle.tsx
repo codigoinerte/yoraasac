@@ -8,6 +8,9 @@ import { DatePicker, SelectPicker } from 'rsuite';
 import { useDispatch } from 'react-redux';
 import { onSetNotaHeladeroActive, onStatus } from '../../../../store';
 import moment from 'moment';
+import { useReactToPrint } from 'react-to-print';
+import NotasComponent from '../../../../prints/Notas';
+
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Nota heladero', enlace: '/nota-heladero' },
@@ -156,11 +159,26 @@ export const NotaHeladeroDetalle = () => {
     }
 
     const cabecera = [
-        "Devolucion",
-        "Pedido",
-        "Producto",
-        "Vendido",
-        "Importe"
+        {
+            desk: "Devolucion",
+            print: "Dev."
+        },
+        {
+            desk: "Pedido",
+            print: "Ped."
+        },
+        {
+            desk: "Producto",
+            print: "Prod."
+        },
+        {
+            desk: "Vendido",
+            print: "Vend"
+        },
+        {
+            desk: "Importe",
+            print: "Imp."
+        },
     ];
 
     const dispatch = useDispatch();
@@ -237,12 +255,26 @@ export const NotaHeladeroDetalle = () => {
 
     }
 
+
+    const componentRef = useRef(null);
+
+    const imprimir =  useReactToPrint({
+        content: () => componentRef.current,
+    });
+
+    // const imprimir = ()=>{
+    //     window.print();
+    // }
+
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo}`}>
-            <>            
+            <>     
+                
+                <NotasComponent ref={componentRef} />
+                     
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
-                    <FormControls save={()=> redirectToFactura() } page="nota-heladero"/>
+                    <FormControls save={()=> redirectToFactura() } page="nota-heladero" imprimir={()=> imprimir() }/>
 
                     <hr className='border border-1 opacity-50'/>
 
@@ -339,7 +371,10 @@ export const NotaHeladeroDetalle = () => {
                                             <tr>
                                                 {
                                                     cabecera.map((titulo)=>(
-                                                        <th key={titulo} scope="col">{ titulo }</th>
+                                                        <th key={titulo.desk} scope="col">
+                                                            <span className="desktop">{ titulo.desk }</span>
+                                                            <span className="print">{ titulo.print }</span>
+                                                        </th>
                                                     ))
                                                 }                                                    
                                             </tr>
