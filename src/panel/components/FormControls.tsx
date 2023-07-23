@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ControlsInterface } from '../interfaces'
 
-export const FormControls = ({ save, page, category, tipo = 'new' }:ControlsInterface) => {
+export const FormControls = ({ save, page, category, tipo = 'new', imprimir }:ControlsInterface) => {
 
     const { id = 0 } = useParams();
 
@@ -29,9 +29,15 @@ export const FormControls = ({ save, page, category, tipo = 'new' }:ControlsInte
                 {
                     (page == 'nota-heladero' && parseInt(id.toString()) > 0)&&
                     (
-                        <button type='button' onClick={()=> {
-                            if(typeof save != "undefined") save();
-                        } } className="btn btn-success btn-lg">Generar Factura</button>        
+                        <>
+                            <button type='button' onClick={()=> {
+                                if(typeof save != "undefined"){ save(); }
+                            } } className="btn btn-success btn-lg">Generar Factura</button>        
+                            
+                            <button type='button' onClick={()=> {
+                                if(typeof imprimir != "undefined"){ imprimir();}
+                            } } className="btn btn-success btn-lg">Imprimir</button>        
+                        </>
                     )
                 }
                 <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg">Atr&aacute;s</button>
