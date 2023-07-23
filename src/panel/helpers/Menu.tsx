@@ -83,41 +83,6 @@ export const MenuStock:MenuInterface[] = [
 
  export const MenuReportes:MenuInterface[] = [
    {
-      "nombre":"Clientes",
-      "alias":"/reportes/clientes",
-      "icono":"bi bi-app"
-   },
-   {
-      "nombre":"Proveedores",
-      "alias":"/reportes/proveedores",
-      "icono":"bi bi-app"
-   },
-   {
-      "nombre":"Personal",
-      "alias":"/reportes/personal",
-      "icono":"bi bi-app"
-   },
-   {
-      "nombre":"Heladeros",
-      "alias":"/reportes/heladeros",
-      "icono":"bi bi-app"
-   },
-   {
-      "nombre":"Helados",
-      "alias":"/reportes/helados",
-      "icono":"bi bi-app"
-   },
-   {
-      "nombre":"Barquillos",
-      "alias":"/reportes/barquillos",
-      "icono":"bi bi-app"
-   },
-   {
-      "nombre":"Baterias",
-      "alias":"/reportes/baterias",
-      "icono":"bi bi-app"
-   },    
-   {
       "nombre":"Notas heladeros",
       "alias":"/reportes/nota-heladeros",
       "icono":"bi bi-app"
