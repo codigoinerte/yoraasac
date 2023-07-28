@@ -10,3 +10,4 @@ export * from './useStockBarquillosStore';
 export * from './useNotaHeladeroStore';
 export * from './useFacturasStore';
 export * from './useMoneda';
+export * from './useMarca';

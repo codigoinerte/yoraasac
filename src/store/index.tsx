@@ -8,4 +8,5 @@ export * from './stockBarquillos/stockBarquillosSlice';
 export * from './notaHeladeros/notaHeladerosSlice';
 export * from './facturacion/facturacionSlice';
 export * from './moneda/monedaSlice';
+export * from './marca/marcaSlice';
 export * from './store';

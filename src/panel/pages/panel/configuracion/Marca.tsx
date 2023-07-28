@@ -1,8 +1,11 @@
 import queryString from 'query-string';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ContainerInner, List, ListSave } from '../../../components'
-import { breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
+import { breadcrumb as bread, formMarca, listaDetalle, paginationInterface } from '../../../interfaces';
+import { useForm } from 'react-hook-form';
+import { useAlert, useMarca } from '../../../../hooks';
+import Swal from 'sweetalert2';
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Configuración', enlace: '/configuracion' },
@@ -13,87 +16,113 @@ const breadcrumb:bread[] = [
 export const Marca = () => {
 
     const cabecera = [
-        "Marca",      
-        "Fecha de creación"
+        "#",
+        "Marca",    
+        "Fecha de creación",          
     ];
 
-    const eliminar = (id:number) => {
-        console.log(id);
-    }
+    const { register, handleSubmit, setValue, reset, formState:{ errors } } = useForm<formMarca>();
 
-    const detalle:listaDetalle[] = [
-      {
-        id:1,
-        campos: ["Donofrio", "15/06/2022"]        
-      },
-      {
-        id:2,
-        campos: ["Donofrio", "15/06/2022"]        
-      },
-      {
-        id:3,
-        campos: ["Donofrio", "15/06/2022"]        
-      },
-      {
-        id:4,
-        campos: ["Donofrio", "15/06/2022"]        
-      }
-    ];
+    const { marcas, marca, detalle, loadMarca, saveMarca, updateMarca, getMarca, deleteMarca, } = useMarca();
 
-    const next = (e:paginationInterface) => {
-        console.log(e);
-    }
+    const [updateList, setUpdateList] = useState(false);
+
+    useEffect(() => {
+      
+        loadMarca();
+
+    }, []);
+
+    const { warningDelete } = useAlert();
     
-    const prev = (e:paginationInterface) => {
-        console.log(e);
+
+    const eliminar = async (id:number) => {
+
+        warningDelete(async function(){
+            
+            const result = await deleteMarca(id);
+    
+            await loadMarca();
+      
+            if(result){
+                Swal.fire(
+                    'Eliminado!',
+                    'Tu registro fue eliminado con exito.',
+                    'success'
+                )
+            }else{
+                Swal.fire(
+                    'Error',
+                    'Hubo un error al momento de ejecutar el proceso vuelva a intentarlo mas tarde',
+                    'question'
+                  )
+            }
+      
+        
+          });
+          
+    }
+ 
+    const editar = async (id:number) => {
+        
+        if(id==0 && id==null)  return false;
+
+        try {
+            
+            const marca = await getMarca(id);
+    
+            setValue("nombre", marca.nombre);
+
+        } catch (error) {
+            console.warn(error);
+        }
     }
 
-    const navigate = useNavigate();
+    const onSubmit = async (data:formMarca)=>{
+        
+        if(marca){
+            await updateMarca(data);
+        }else{
+            await saveMarca(data);
+        }
 
-    const location = useLocation();
-  
-    const { q = '' } = queryString.parse(location.search);
-    
+        await loadMarca();
+      
+        reset();
+    }
     
 
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo="Marcas"> 
-
-            <List 
-                    page='marcas'
-                    category='configuracion'
-                    cabecera={cabecera} 
-                    detalle={detalle}               
-                    eliminar={eliminar}
-                    next={next}
-                    prev={prev}>
-                <>
-                <form>
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <h5>Buscador</h5>
-                        </div>
-                    </div>
+            <ListSave                
+                cabecera={cabecera}                 
+                detalle={detalle}               
+                eliminar={eliminar}                
+                editar={editar}                
+            >
+            <>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">
 
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-10">
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div className="mb-3">
-                                <label htmlFor="marcas" className="form-label">Marca</label>
-                                <input type="text" className="form-control" id="marcas" aria-describedby="Buscador" placeholder='Marcas'/>
-                            </div>
-                        </div>                        
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-end">
-                            <div className="mb-3 w-100">                                
-                                <button className="btn btn-primary text-center w-100" type="submit"><i className="bi bi-search"></i> Buscar</button>
+                                <label htmlFor="codigo" className="form-label">Nombre</label>
+                                <input type="text" className="form-control" id="nombre" aria-describedby="nombre" placeholder='nombre' {...register("nombre", { required:true})}/>
                             </div>
                         </div>
+
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div className="mb-3">
+                                <button className="btn btn-primary text-center w-100" type="submit">Guardar Marca</button>
+                            </div>
+                        </div>
+                        
+                       
 
                     </div>
                 </form>
-                </>
-            </List>
-    
-  
+            </>
+            </ListSave>
         </ContainerInner>
     )
 }

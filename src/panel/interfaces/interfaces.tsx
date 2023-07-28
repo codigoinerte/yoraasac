@@ -804,3 +804,28 @@ export interface Moneda {
     created_at:    null | string;
     updated_at:    null | string;
 }
+
+/* MARCAS CRUD*/
+
+export interface formMarca {
+    nombre:     string;
+}
+
+export interface intialStateMarca {
+    status: boolean;
+    marcas:Marca[];
+    marca: Marca | null;
+    errorMessage: string | null | undefined;
+}
+
+export interface Marcas {
+    data: Marca[];
+}
+
+export interface Marca {
+    id:         number;
+    nombre:     string;
+    created_at: null | string;
+    updated_at: null | string;
+}
+
