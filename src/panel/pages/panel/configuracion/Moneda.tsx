@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { ContainerInner, ListSave } from '../../../components'
 import { breadcrumb as bread, formMoneda, listaDetalle } from '../../../interfaces';
-import { useMoneda } from '../../../../hooks';
+import { useAlert, useMoneda } from '../../../../hooks';
 import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Configuración', enlace: '/configuracion' },
@@ -34,10 +35,31 @@ export const Moneda = () => {
     }, []);
     
 
-    const eliminar = async (id:number) => {
-        await deleteMoneda(id);
+    const { warningDelete } = useAlert();
 
-        await loadMoneda();
+    const eliminar = async (id:number) => {
+       
+        warningDelete(async function(){
+            
+            const result =  await deleteMoneda(id);
+    
+            await loadMoneda();
+      
+            if(result){
+                Swal.fire(
+                    'Eliminado!',
+                    'Tu registro fue eliminado con exito.',
+                    'success'
+                )
+            }else{
+                Swal.fire(
+                    'Error',
+                    'Hubo un error al momento de ejecutar el proceso vuelva a intentarlo mas tarde',
+                    'question'
+                  )
+            }      
+        
+          });
     }
  
     const editar = async (id:number) => {
