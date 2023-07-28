@@ -18,7 +18,7 @@ export const useNotaHeladeroStore = () => {
   
     const rutaEndpoint = '/nota-heladero';
 
-    const { notaHeladero, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.notaHeladero);
+    const { Monedas: notaHeladero, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.notaHeladero);
 
     const { status, errorMessage } = useSelector((state:IRootState)=>state.general)
 

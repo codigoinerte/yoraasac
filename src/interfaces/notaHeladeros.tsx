@@ -51,7 +51,7 @@ export interface FormNotaHeladeroDetalleValues {
 
 export interface intialStateNotaHeladero {
     status: boolean;
-    notaHeladero:NotaHeladero[];
+    Monedas:NotaHeladero[];
     nextPage: string | null;
     prevPage: string | null;
     active: NotaHeladero | null;

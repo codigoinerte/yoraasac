@@ -48,7 +48,7 @@ export const ListSave = ({cabecera, detalle, editar, eliminar, children }:SaveLi
                                         
                                             <tr key={keyrow}>
                                                 {
-                                                    campos.map(( texto, index )=> {
+                                                    campos?.map(( texto, index )=> {
                                                         
                                                         const cabeceraChildren = cabecera[index];
                                                         const childrenRowKey = `children_${cabeceraChildren}_${id}`
@@ -62,8 +62,8 @@ export const ListSave = ({cabecera, detalle, editar, eliminar, children }:SaveLi
 
                                                 <td data-label="Acciones">
                                                     <div className="acciones-buttons">                                                        
-                                                        <button onClick={()=> editar() } type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
-                                                        <button onClick={()=> eliminar() } type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                                                        <button onClick={()=> editar(id) } type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></button>
+                                                        <button onClick={()=> eliminar(id) } type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
                                                     </div>
                                                 </td>
                                             </tr>

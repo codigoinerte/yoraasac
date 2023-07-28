@@ -1,5 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { authSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, stockHeladosSlice } from "../store";
+import { authSlice, monedaSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, stockHeladosSlice } from "../store";
 import { generalSlice } from "../store/personas/generalSlice";
 import { productosSlice } from "../store/productos/productosSlice";
 import { notaHeladeroSlice } from "../store/notaHeladeros/notaHeladerosSlice";
@@ -35,7 +35,8 @@ const rootReducer = combineReducers({
     stockBaterias: stockBateriasSlice.reducer,
     stockBarquillos: stockBarquillosSlice.reducer,
     notaHeladero: notaHeladeroSlice.reducer,
-    facturacion: facturacionSlice.reducer
+    facturacion: facturacionSlice.reducer,
+    moneda: monedaSlice.reducer,
 }) 
 
 export type IRootState = ReturnType<typeof rootReducer>;

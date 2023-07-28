@@ -771,3 +771,36 @@ export interface ReporteItemFactura {
     moneda:            string;
     total:             string;
 }
+
+/* MONEDA */
+
+export interface formMoneda {
+    codigo:     string;
+    moneda:     string;
+    simbolo:    string;
+    principal:  number;
+}
+
+export interface intialStateMoneda {
+    status: boolean;
+    monedas:Moneda[];
+    moneda: Moneda | null;
+    errorMessage: string | null | undefined;
+}
+
+export interface Monedas {
+    data: Moneda[];
+}
+
+export interface Moneda {
+    id:            number;
+    moneda:        string;
+    simbolo:       string;
+    codigo:        string;
+    digitos:       number;
+    sep_decimales: string;
+    sep_miles:     string;
+    principal:     number;
+    created_at:    null | string;
+    updated_at:    null | string;
+}

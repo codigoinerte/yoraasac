@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ContainerInner, ListSave } from '../../../components'
-import { breadcrumb as bread, listaDetalle } from '../../../interfaces';
+import { breadcrumb as bread, formMoneda, listaDetalle } from '../../../interfaces';
+import { useMoneda } from '../../../../hooks';
+import { useForm } from 'react-hook-form';
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Configuración', enlace: '/configuracion' },
@@ -12,28 +14,62 @@ export const Moneda = () => {
 
 
     const cabecera = [
-        "Código",
-        "Moneda",        
+        "#",
+        "Moneda",    
+        "Codigo",    
         "Simbolo",
         "Principal"                
     ];
 
-    const eliminar = (id:number) => {
-        console.log(id);
+    const { register, handleSubmit, setValue, reset, formState:{ errors } } = useForm<formMoneda>();
+
+    const { monedas, moneda, detalle, loadMoneda, saveMoneda, updateMoneda, getMoneda, deleteMoneda, } = useMoneda();
+
+    const [updateList, setUpdateList] = useState(false);
+
+    useEffect(() => {
+      
+        loadMoneda();
+
+    }, []);
+    
+
+    const eliminar = async (id:number) => {
+        await deleteMoneda(id);
+
+        await loadMoneda();
     }
  
-    const editar = (id:number) => {
-        console.log(id);
+    const editar = async (id:number) => {
+        
+        if(id==0 && id==null)  return false;
+
+        try {
+            
+            const moneda = await getMoneda(id);
+    
+            setValue("codigo", moneda.codigo);
+            setValue("moneda", moneda.moneda);
+            setValue("simbolo", moneda.simbolo);
+            setValue("principal", moneda.principal);
+
+        } catch (error) {
+            console.warn(error);
+        }
     }
 
-    const detalle:listaDetalle[] = [
-      {
-        id:1,
-        campos: ["0001", "Soles", "S/", "Si"]        
-      }
-      
-    ];
+    const onSubmit = async (data:formMoneda)=>{
+        
+        if(moneda){
+            await updateMoneda(data);
+        }else{
+            await saveMoneda(data);
+        }
 
+        await loadMoneda();
+      
+        reset();
+    }
 
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo="Monedas"> 
@@ -44,36 +80,36 @@ export const Moneda = () => {
                 editar={editar}                
             >
             <>
-                <form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">
 
                         <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
                             <div className="mb-3">
                                 <label htmlFor="codigo" className="form-label">Codigo</label>
-                                <input type="text" className="form-control" id="codigo" aria-describedby="codigo" placeholder='PEN'/>
+                                <input type="text" className="form-control" id="codigo" aria-describedby="codigo" placeholder='PEN' {...register("codigo", { required:true})}/>
                             </div>
                         </div>
 
                         <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
                             <div className="mb-3">
                                 <label htmlFor="moneda" className="form-label">Moneda</label>
-                                <input type="text" className="form-control" id="moneda" aria-describedby="moneda" placeholder='Soles'/>
+                                <input type="text" className="form-control" id="moneda" aria-describedby="moneda" placeholder='Soles' {...register("moneda", { required:true})}/>
                             </div>
                         </div>
 
                         <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
                             <div className="mb-3">
                                 <label htmlFor="simbolo" className="form-label">Simbolo</label>
-                                <input type="text" className="form-control" id="simbolo" aria-describedby="simbolo" placeholder='S/'/>
+                                <input type="text" className="form-control" id="simbolo" aria-describedby="simbolo" placeholder='S/' {...register("simbolo", { required:true})}/>
                             </div>
                         </div>
                         
                         <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
                             <div className="mb-3">
                                 <label htmlFor="simbolo" className="form-label">Principal</label>
-                                <select name="principal" id="principal" className='form-control'>
-                                    <option value="1">Si</option>
+                                <select id="principal" className='form-control' {...register("principal")}>
                                     <option value="0">No</option>
+                                    <option value="1">Si</option>
                                 </select>
                             </div>
                         </div>
