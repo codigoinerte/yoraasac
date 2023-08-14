@@ -4,6 +4,8 @@ import { generalSlice } from './personas/generalSlice';
 import { productosSlice } from './productos/productosSlice';
 import { facturacionSlice } from './facturacion/facturacionSlice';
 import { monedaSlice } from './moneda/monedaSlice';
+import { configurationSlice } from './configuration/configurationSlice';
+
 // uiSlice, calendarSlice, 
 
 export const store = configureStore({
@@ -19,6 +21,7 @@ export const store = configureStore({
         facturacion: facturacionSlice.reducer,
         moneda: monedaSlice.reducer,
         marca: marcaSlice.reducer,
+        configuration: configurationSlice.reducer,
         // calendar: calendarSlice.reducer,
         // ui:       uiSlice.reducer
     },

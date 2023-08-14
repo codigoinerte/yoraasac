@@ -1,15 +1,11 @@
 import axios from 'axios';
-import React, { useReducer, useState } from 'react'
-import { toast } from 'react-hot-toast';
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState, NotaHeladero } from '../interfaces';
-import { FormBuscarNotaHeladeroValues, FormNotaHeladeroValues, NotaHeladeroEstado, ProductosPublicados, ReporteItemNota, ReporteNotaForm, ReporteNotaHeladero } from '../panel/interfaces';
+import { FormBuscarNotaHeladeroValues, FormNotaHeladeroValues, ReporteItemNota, ReporteNotaForm, ReporteNotaHeladero } from '../panel/interfaces';
 import { onStatus, onNotaHeladeroAddMessage, onNotaHeladeroClearMessage, onNotaHeladeroDelete, onNotaHeladeroList, onSetNotaHeladeroActive } from '../store'
-import { useHelpers } from './useHelpers';
-//import { NotaHeladero } from '../panel/pages/panel/notaHeladero/NotaHeladero';
-//import { onNotaHeladeroAddMessage, onNotaHeladeroClearMessage, onNotaHeladeroDelete, onNotaHeladeroList, onSetNotaHeladeroActive } from '../store/notaHeladeros/notaHeladerosSlice';
 
 
 export const useNotaHeladeroStore = () => {
@@ -47,7 +43,8 @@ export const useNotaHeladeroStore = () => {
             
             if (axios.isAxiosError(error)) {
 
-                const { message } = error.response?.data;               
+                const { response } = error??{};
+                const { message = '' } = response?.data ?? {};
 
                 dispatch( onNotaHeladeroAddMessage(message) );
                 setTimeout(() => {
@@ -56,7 +53,7 @@ export const useNotaHeladeroStore = () => {
 
                 dispatch(onStatus(false));
 
-                return error.message;                
+                return message;                
 
             } else {
                 console.log('unexpected error: ', error);

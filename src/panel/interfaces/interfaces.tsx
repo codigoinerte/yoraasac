@@ -829,3 +829,56 @@ export interface Marca {
     updated_at: null | string;
 }
 
+/* CONFIGURACION CRUD */
+
+export interface formConfiguracion {
+    ruc             : string;
+    razon_social    : string;
+    razon_comercial : string;
+    pagina_web      : string;
+    email_empresa   : string;
+    celular         : string;
+    igv             : number;
+    contactos       : ContactoConfig[];
+}
+
+export interface intialStateConfiguration {
+    status: boolean;
+    configuration:Configuration | null;
+    contacts: ContactoConfig[];
+    errorMessage: string | null | undefined;
+}
+
+export interface Configurations {
+    data: Configuration;
+}
+
+export interface Configuration {
+    ruc:             string;
+    razon_social:    string;
+    razon_comercial: string;
+    pagina_web:      string;
+    email_empresa:   string;
+    celular:         string;
+    igv:             number;
+    contactos:       ContactoConfig[];
+    igvs:            IgvConfig[];
+}
+
+export interface ContactoConfig {
+    id?:          number;
+    key?:         number;
+    nombre:       string;
+    email:        string;
+    celular:      string;
+    principal:    number;
+    sistemas_id?: number;
+}
+
+export interface IgvConfig {
+    id:         number;
+    nombre:     string;
+    valor:      number;
+    created_at: null;
+    updated_at: null;
+}
