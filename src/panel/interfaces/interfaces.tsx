@@ -882,3 +882,68 @@ export interface IgvConfig {
     created_at: null;
     updated_at: null;
 }
+
+/* LOCALES Y SERIES */
+
+export interface intialStateLocalesSeries {
+    status: boolean;
+    sucursal:Sucursal | null,
+    sucursales:Sucursal[];
+    series: Serie[];
+    errorMessage: string | null | undefined;
+}
+
+export interface SucursalesSeries {
+    sucursales: Sucursal[];
+    series:     Serie[];
+}
+
+export interface Serie {
+    idtipo:      number;
+    documento:   string;
+    id:          number | null;
+    serie:       null | string;
+    correlativo: null | string;
+}
+
+export interface Sucursal {
+    id:           number;
+    codigo:       string;
+    codigo_sunat: string;
+    nombre:       string;
+    ubigeo:       string;
+    departamento: number;
+    provincia:    number;
+    distrito:     number;
+    direccion:    string;
+    pagina_web?:  string;
+    created_at:   string;
+    updated_at:   string;
+}
+
+export interface FormSeries {
+    codigo:       string;
+    nombre:       string;
+    codigo_sunat: string;
+    ubigeo:       string;
+    departamento: number;
+    provincia:    number;
+    distrito:     number;
+    direccion:    string;
+    pagina_web:   string;
+    series:       Series[];
+    sucursales?:   formSucursales[] | null | undefined;
+}
+
+interface formSucursales extends Sucursal{
+    identify:      number;
+    pagina_web?:    string;
+}
+
+export interface Series {
+    idtipo:      number;
+    documento:   string;
+    id:          number | null;
+    serie:       null | string;
+    correlativo: null | string;
+}
