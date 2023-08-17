@@ -5,6 +5,7 @@ import { productosSlice } from './productos/productosSlice';
 import { facturacionSlice } from './facturacion/facturacionSlice';
 import { monedaSlice } from './moneda/monedaSlice';
 import { configurationSlice } from './configuration/configurationSlice';
+import { localesSeriesSlice } from './configuration/localesSeriesSlice';
 
 // uiSlice, calendarSlice, 
 
@@ -22,6 +23,7 @@ export const store = configureStore({
         moneda: monedaSlice.reducer,
         marca: marcaSlice.reducer,
         configuration: configurationSlice.reducer,
+        series: localesSeriesSlice.reducer,
         // calendar: calendarSlice.reducer,
         // ui:       uiSlice.reducer
     },
