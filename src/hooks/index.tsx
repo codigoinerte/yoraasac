@@ -12,3 +12,4 @@ export * from './useFacturasStore';
 export * from './useMoneda';
 export * from './useMarca';
 export * from './useConfigurationStore';
+export * from './useSeriesStore';
