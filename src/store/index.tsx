@@ -10,4 +10,5 @@ export * from './facturacion/facturacionSlice';
 export * from './moneda/monedaSlice';
 export * from './marca/marcaSlice';
 export * from './configuration/configurationSlice';
+export * from './configuration/localesSeriesSlice';
 export * from './store';
