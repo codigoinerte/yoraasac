@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState } from '../interfaces';
-import { FormSeries, SucursalesSeries, } from '../panel/interfaces';
+import { FormSeries, SucursalesSeries, SucursalesUpdatedResponse, } from '../panel/interfaces';
 import { onStatus, onMonedaAddMessage, onMonedaClearMessage, onSeriesAdd, onsucursalesAdd, onsucursalesDelete } from '../store'
+import { Sucursal, SucursalesSeriesResponse } from '../panel/interfaces/interfaces';
 
 export const useSeriesStore = () => {
 
@@ -16,7 +17,7 @@ export const useSeriesStore = () => {
 
     const dispatch = useDispatch();
 
-    const loadSeries = async () =>{
+    const loadSeries = async ():Promise<SucursalesSeriesResponse> =>{
 
         dispatch(onStatus(true));
         
@@ -31,6 +32,10 @@ export const useSeriesStore = () => {
             
             dispatch(onsucursalesAdd(data.sucursales));
             
+            return {
+                sucursales: data.sucursales ?? [],
+                series: data.series ?? []
+            };
 
         } catch (error) {
             
@@ -46,35 +51,55 @@ export const useSeriesStore = () => {
 
                 dispatch(onStatus(false));
 
-                return message;                
+                return {
+                    sucursales: [],
+                    series: []
+                };
 
             } else {
-                console.log('unexpected error: ', error);
-                return 'An unexpected error occurred';
+                console.log('unexpected error: ', error);               
+                return {
+                    sucursales: [],
+                    series: []
+                };
             }
         }
+        
     }
 
-    const saveSeries = async ( params:FormSeries) => {
+    const saveSeries = async ( params:FormSeries):Promise<SucursalesSeriesResponse> => {
+
         dispatch(onStatus(true));    
         
         try {
-            const { data } = await backendApi.post<SucursalesSeries>(`${rutaEndpoint}/1`, { ...params });
+            const { data } = await backendApi.put<SucursalesUpdatedResponse>(`${rutaEndpoint}/1`, { ...params });
             
-            dispatch(onSeriesAdd(data.series));
-
-            dispatch(onsucursalesAdd(data.sucursales));
+            const { sucursales = [], series = [] } = data.data;
+            
+            dispatch(onSeriesAdd(series));
+            dispatch(onsucursalesAdd(sucursales));
             
             toastMessage({
                 data:null,
-                message: 'El local y la serie se actualizaron con exito',
+                message: data.message ?? 'El local y la serie se actualizaron con exito',
                 success: true
             });
             
             dispatch(onStatus(false));
 
+            
+
+            return {
+                series:series,
+                sucursales:sucursales
+            }
+
         } catch (error) {
             console.log(error);
+            return {
+                series:series,
+                sucursales:sucursales
+            }
         }
     }
     

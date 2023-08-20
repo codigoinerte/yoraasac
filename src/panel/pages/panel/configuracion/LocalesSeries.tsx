@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDireccion, useSeriesStore } from "../../../../hooks";
 import { ContainerInner, FormControls } from "../../../components";
-import { FormSeries, breadcrumb as bread } from "../../../interfaces";
+import { FormSeries, SucursalesSeriesResponse, breadcrumb as bread } from "../../../interfaces";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
 const breadcrumb:bread[] = [
@@ -11,6 +11,22 @@ const breadcrumb:bread[] = [
 
 export const LocalesSeries = () => {
 
+    const responseFillLayers = (response: SucursalesSeriesResponse) => {
+
+        loadDireccion();
+
+        setValue('series', []);
+        setValue('sucursales', []);
+
+        const newSucursals = (response.sucursales!=undefined) ? response.sucursales.map((sucursal)=>({
+            ...sucursal,
+            identify : sucursal.id,
+        })) : [];
+        
+        setValue('series', response.series??[]);
+        setValue('sucursales', newSucursals);
+    }
+
     const { series, sucursales, sucursal ,loadSeries, saveSeries, deleteSeries  } = useSeriesStore();
 
     const { loadDireccion, loadProvincias, loadDistritos, departamentos, provincias, distritos } = useDireccion();
@@ -18,50 +34,33 @@ export const LocalesSeries = () => {
 
     useEffect(() => {
       
-        loadSeries()
-        .then((response)=>{
-
-            loadDireccion();
-
-            setValue('series', []);
-            setValue('sucursales', []);
-    
-            const newSucursals = sucursales.map((sucursal)=>({
-                ...sucursal,
-                identify : sucursal.id,
-            }));
-            
-            setValue('series', series);
-            setValue('sucursales', newSucursals);
-
-
-        });
+        loadSeries().then(responseFillLayers);
         
     }, []);
 
-    const { register, handleSubmit, reset, formState, setValue, getValues, control } = useForm<FormSeries>({
+    const { register, handleSubmit, setValue, control } = useForm<FormSeries>({
         defaultValues:{
             series: [],
             sucursales: []
         }
     });
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields, remove } = useFieldArray({
         control,
         name: "sucursales"
     });
     
 
     const onSubmit: SubmitHandler<FormSeries> = async (data) => {
-
-        //console.log(data);
-
+        saveSeries(data).then(responseFillLayers);
+        clearFields();
     }
 
     const deleteSucursal = (id:number, idx:number) =>{
         if(id == 0 || idx == 0) return false;
 
         remove(idx);
+        deleteSeries(id);
     };
 
     const editSucursal = async (id:number) => {
@@ -73,13 +72,14 @@ export const LocalesSeries = () => {
         
         if(result[0]){
 
-            const { codigo = '', nombre = '', codigo_sunat = '', ubigeo = '', departamento = 0, provincia = 0, distrito = 0, direccion = '', pagina_web='' } = result[0];
+            const {  id = 0, codigo = '', nombre = '', codigo_sunat = '', ubigeo = '', departamento = 0, provincia = 0, distrito = 0, direccion = '', pagina_web='' } = result[0];
 
-            setValue('codigo', codigo);            
-            setValue('nombre', nombre);            
-            setValue('codigo_sunat', codigo_sunat);            
-            setValue('ubigeo', ubigeo);            
-            setValue('departamento', departamento);   
+            setValue('codigo', codigo);
+            setValue('nombre', nombre);
+            setValue('codigo_sunat', codigo_sunat);
+            setValue('ubigeo', ubigeo);
+            setValue('departamento', departamento);
+            setValue('id', id);
 
             console.log({departamento, provincia, distrito});
             
@@ -117,6 +117,7 @@ export const LocalesSeries = () => {
         setValue('distrito', 0);
         setValue('direccion', "");
         setValue('pagina_web', "")
+        setValue('id', 0)
     }
 
     return(
@@ -138,6 +139,7 @@ export const LocalesSeries = () => {
                                 <div className="mb-3">
                                     <label htmlFor="codigo" className="form-label">Codigo</label>
                                     <input type="text" className="form-control" placeholder='Codigo' {...register("codigo")}/>
+                                    <input type="hidden" {...register("id") } />
                                 </div>
 
                             </div>
@@ -224,7 +226,7 @@ export const LocalesSeries = () => {
                             </div>
 
                             <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                <button className="btn btn-info" onClick={()=> clearFields() }><i className="bi bi-arrow-clockwise"></i> Limpiar campos</button>
+                                <button className="btn btn-info" type="button" onClick={()=> clearFields() }><i className="bi bi-arrow-clockwise"></i> Limpiar campos</button>
                             </div>
 
                         </div>

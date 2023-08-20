@@ -897,6 +897,10 @@ export interface SucursalesSeries {
     sucursales: Sucursal[];
     series:     Serie[];
 }
+export interface SucursalesSeriesResponse {
+    sucursales?: Sucursal[];
+    series?:     Serie[];
+}
 
 export interface Serie {
     idtipo:      number;
@@ -932,7 +936,8 @@ export interface FormSeries {
     direccion:    string;
     pagina_web:   string;
     series:       Series[];
-    sucursales?:   formSucursales[] | null | undefined;
+    sucursales?:  formSucursales[] | null | undefined;
+    id?:          number;
 }
 
 interface formSucursales extends Sucursal{
@@ -946,4 +951,11 @@ export interface Series {
     id:          number | null;
     serie:       null | string;
     correlativo: null | string;
+}
+
+//! SUCURSALES UPDATED RESPONSE
+export interface SucursalesUpdatedResponse {
+    success: boolean;
+    message: string;
+    data:    SucursalesSeries;
 }
