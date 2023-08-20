@@ -65,14 +65,11 @@ export const LocalesSeries = () => {
 
     const editSucursal = async (id:number) => {
         
-        const result = sucursales.map((sucursal)=>{
-            if( sucursal.id == id ) return sucursal;
-        });
-
+        const result = sucursales.find((sucursal)=> sucursal.id == id);
         
-        if(result[0]){
+        if(result){
 
-            const {  id = 0, codigo = '', nombre = '', codigo_sunat = '', ubigeo = '', departamento = 0, provincia = 0, distrito = 0, direccion = '', pagina_web='' } = result[0];
+            const {  id = 0, codigo = '', nombre = '', codigo_sunat = '', ubigeo = '', departamento = 0, provincia = 0, distrito = 0, direccion = '', pagina_web='' } = result;
 
             setValue('codigo', codigo);
             setValue('nombre', nombre);
@@ -80,8 +77,6 @@ export const LocalesSeries = () => {
             setValue('ubigeo', ubigeo);
             setValue('departamento', departamento);
             setValue('id', id);
-
-            console.log({departamento, provincia, distrito});
             
             const responseProvincia = await loadProvincias(departamento);
 
@@ -89,13 +84,16 @@ export const LocalesSeries = () => {
             
                 setValue('provincia', provincia); 
 
-                const responseDistrito = await loadDistritos(provincia);
+                loadDistritos(provincia)
+                .then((response) => {
 
-                if(responseDistrito){
-
-                    setValue('distrito', distrito);            
-                    
-                }
+                    if(response){
+                        setTimeout(() => {
+                            setValue('distrito', distrito);            
+                        }, 10);
+                    }
+                });
+                
 
             }
             
