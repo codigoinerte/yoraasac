@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, stockHeladosSlice, notaHeladeroSlice, marcaSlice } from './';
+import { authSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, stockHeladosSlice, notaHeladeroSlice, marcaSlice, destacadoSlice } from './';
 import { generalSlice } from './personas/generalSlice';
 import { productosSlice } from './productos/productosSlice';
 import { facturacionSlice } from './facturacion/facturacionSlice';
@@ -24,6 +24,7 @@ export const store = configureStore({
         marca: marcaSlice.reducer,
         configuration: configurationSlice.reducer,
         series: localesSeriesSlice.reducer,
+        destacados: destacadoSlice.reducer,
         // calendar: calendarSlice.reducer,
         // ui:       uiSlice.reducer
     },

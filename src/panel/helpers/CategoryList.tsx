@@ -1,21 +1,21 @@
-import React from 'react'
-import { CategoryListInterface } from '../interfaces'
+import {  Menu } from '../interfaces'
+export const CategoryList = (menu: Menu, loadMenuSelecteds:Function) => {
 
-export const CategoryList = ({id, name, children}: CategoryListInterface) => {
-
+    const { id, nombre = '', children } = menu; //checked
   return (
         <li key={id}>
             <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" />
+                <input className="form-check-input" type="checkbox" onChange={(ele)=>loadMenuSelecteds(ele)} value={menu.id}/>
+
                 <label className="form-check-label" htmlFor="flexCheckIndeterminate">
-                    {name}
+                    {nombre}
                     
                     {
                         !!children && children.length > 0 &&
                         (
                             <ul>
                                 {
-                                    children.map(CategoryList)
+                                    children.map((item) => CategoryList(item, loadMenuSelecteds))
                                 }
                             </ul>
                         )

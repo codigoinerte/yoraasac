@@ -1,5 +1,5 @@
 import React from 'react'
-import profile from '../assets/images/profile.jpg';
+import profile from '../assets/images/profile.png';
 import logo  from '../assets/images/logo.png';
 import { Link } from 'react-router-dom';
 import { Menu } from '../helpers';
@@ -16,9 +16,9 @@ export const Header = () => {
 
         <nav className="navbar navbar-expand-lg">
           <div className="container-fluid">
-            <Link className="navbar-brand d-none d-sm-none d-md-none d-lg-flex d-flex" to="/">
+            {/* <Link className="navbar-brand d-none d-sm-none d-md-none d-lg-flex d-flex" to="/">
               <img src={logo} alt="Yoraasac" loading='lazy' width={70}/>
-            </Link>
+            </Link> */}
             <button className="navbar-toggler principal" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -46,7 +46,7 @@ export const Header = () => {
                   <ul className="dropdown-menu dropdown-menu-lg-end">
                     <li><Link className="dropdown-item" to="/mi-cuenta">Mi cuenta</Link></li>
                     <li><Link className="dropdown-item" to="/mi-cuenta">Cambiar contraseña</Link></li>
-                    <li><Link className="dropdown-item" to="/notificaciones"><span className="badge text-bg-secondary">4</span> Notificaciones</Link></li>
+                    {/* <li><Link className="dropdown-item" to="/notificaciones"><span className="badge text-bg-secondary">4</span> Notificaciones</Link></li> */}
                     <li><button className="dropdown-item" onClick={()=>startLogout() }><i className="bi bi-box-arrow-left"></i> salir</button></li>
                   </ul>
                 </div>

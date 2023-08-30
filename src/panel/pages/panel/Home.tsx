@@ -1,7 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Footer, Container, Breadcrumb, Header } from '../../components'
+import { useDestacados } from '../../../hooks';
+import { Menu } from '../../interfaces';
 
 export const Home = () => {
+
+    const [nodes, setNodes] = useState<Menu[]>([]);
+
+    const { loadDestacados } = useDestacados();
+
+    useEffect(() => {
+      
+        loadDestacados()
+        .then((response)=>{
+            const menuSaved = response.destacado ?? [];
+
+            setNodes(menuSaved);
+        })
+        
+    }, [])
+    
+
   return (
     <>         
         {/* header */}
@@ -14,84 +33,20 @@ export const Home = () => {
         <Container>
 
         <ul className='atajos-homes row'>
-        
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
 
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
+        {
+            nodes.map(({ alias, id, icono, nombre })=>(
 
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
+                <li key={id} className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
+                    <a href={alias}>
+                        <i className={icono??"bi bi-files"}></i>
+                        <span>{nombre}</span>
+                    </a>
+                </li>
 
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
+            ))
+        }        
 
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
-
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
-        <li className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-            <a href='#'>
-            <i className="bi bi-files"></i>
-            <span>Heladero nota</span>
-            </a>
-        </li>
 
         </ul>     
         
