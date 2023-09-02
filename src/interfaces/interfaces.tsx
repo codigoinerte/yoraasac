@@ -16,9 +16,16 @@ export interface payloadInteface {
 }
 
 export interface authSliceInterface {
-    status : 'checking' |'authenticated' | 'not-authenticated',
-    user : object
+    status      : 'checking' |'authenticated' | 'not-authenticated',
+    user        : AuhtUserObject
     errorMessage: string | undefined
+}
+
+interface AuhtUserObject {
+    name        ?:string
+    surname     ?:string
+    true        ?:boolean
+    uid         ?:number
 }
 
 /* types */
