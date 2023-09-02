@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { backendApi } from '../api';
 import { IRootState, loginInterface } from '../interfaces';
@@ -16,7 +16,7 @@ export const useAuthStore = () => {
         
         try {
             const { data } = await backendApi.post('/login',{ email, password });
-         
+            
             localStorage.setItem('token', data.token );
             localStorage.setItem('token-init-date', new Date().getTime().toString() );
             dispatch( onLogin({ name: data.name, uid: data.uid }) );          
