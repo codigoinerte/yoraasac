@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Footer, Container, Breadcrumb, Header } from '../../components'
-import { useDestacados } from '../../../hooks';
+import { useAuthStore, useDestacados } from '../../../hooks';
 import { Menu } from '../../interfaces';
 
 export const Home = () => {
@@ -8,6 +8,8 @@ export const Home = () => {
     const [nodes, setNodes] = useState<Menu[]>([]);
 
     const { loadDestacados } = useDestacados();
+
+    const { user } = useAuthStore();
 
     useEffect(() => {
       
@@ -27,7 +29,7 @@ export const Home = () => {
         <Header />
 
         {/* breadcrumb */}
-        <Breadcrumb titulo="Pagina principal" breadcrumb={[]} mensaje="Bienvenido" />
+        <Breadcrumb titulo="Pagina principal" breadcrumb={[]} mensaje={`Bienvenido ${user!.name??''}`} />
 
         {/* main */}
         <Container>
