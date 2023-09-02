@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AuthRouter } from '../auth';
-import { Auth } from '../interfaces';
 import { PanelRoute } from '../panel';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useAuthStore } from '../hooks';
