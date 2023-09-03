@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Container } from '../components'
 import '../assets/css/style.scss';
-import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuthStore } from '../../hooks';
 
 type FormValues = {

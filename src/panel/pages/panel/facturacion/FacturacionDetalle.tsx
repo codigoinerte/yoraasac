@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ContainerInner, FormControls } from '../../../components';
-import { BuscarProducto, FormFacturacionValues, FormNotaHeladeroValues, SeriesDocumentos, breadcrumb as bread, listaDetalle } from '../../../interfaces';
+import { BuscarProducto, FormFacturacionValues, breadcrumb as bread } from '../../../interfaces';
 import { useFacturastore, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { SelectPicker } from 'rsuite';
 import { Toaster, toast } from 'react-hot-toast';
 import { DateNow } from '../../../helpers';
-import { Producto } from '../../../../interfaces/Productos';
 import { NotaHeladero } from '../../../../interfaces';
 
 const breadcrumb:bread[] = [    
@@ -30,13 +29,13 @@ export const FacturacionDetalle = () => {
 
     
 
-    const { register, handleSubmit, reset, formState, setValue, getValues, control } = useForm<FormFacturacionValues>({
+    const { register, handleSubmit, formState, setValue, getValues, control } = useForm<FormFacturacionValues>({
         defaultValues:{       
             productos: []
         }
     });
 
-    const { fields, append, prepend, remove, swap, move, insert, replace} = useFieldArray({
+    const { fields, append, remove,} = useFieldArray({
         control,
         name: "productos"
     });
@@ -265,8 +264,8 @@ export const FacturacionDetalle = () => {
                 Producto:item.producto,
                 cantidad: item.vendido??0,
                 descuento: 0,
-                precio: parseFloat((item.importe??'').toString())??0,
-                total: parseFloat(  ((item.vendido??1) * (parseFloat(item.importe??'0'))).toString()) ?? 0,
+                precio: parseFloat( (item.importe??0).toString() ),
+                total: parseFloat(  ((item.vendido??1) * (parseFloat(item.importe??'0'))).toString()),
 
             }))
         

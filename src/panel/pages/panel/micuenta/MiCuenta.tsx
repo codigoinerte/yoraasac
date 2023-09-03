@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ContainerInner, FormControls } from '../../../components'
 import { breadcrumb as bread } from '../../../interfaces';
+import { useAuthStore, useDireccion } from '../../../../hooks';
+import { AuhtUserObject } from '../../../../interfaces';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Mi cuenta', enlace: '' }
@@ -8,126 +11,208 @@ const breadcrumb:bread[] = [
 
 
 export const MiCuenta = () => {
-  return (
-    <ContainerInner breadcrumb={breadcrumb}>
-    <>
 
-    <FormControls page="micuenta" save={()=>console.log(1)} tipo='edit' />
+    const [show, setShow] = useState(true);
+    
+    const [icon, setIcon] = useState("bi bi-eye");
 
-    <hr className='border border-1 opacity-50'/>
+    const { user, updateAccount } = useAuthStore();
 
-    <div className="card">
-        <div className="card-header">
-            Mis datos de contacto
-        </div>
-        <div className="card-body">
-            
-            <div className="row">
+    const { loadDireccion, loadProvincias, loadDistritos, departamentos, provincias, distritos } = useDireccion();
+
+    const { register, handleSubmit, setValue} = useForm<AuhtUserObject>({
+            defaultValues:{ ...user }
+    });
+
+    useEffect(() => {
+        
+        const { departamento: iddepa = 0, provincia:idprov = 0, distrito:iddis = 0} = user;
+
+        loadDireccion()
+        .then(()=>{
+
+            setValue("departamento", iddepa);
+
+            loadProvincias(iddepa)
+            .then((responseProvincia)=>{
+    
+                if(responseProvincia && idprov!=0){
                 
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">                                
-                    <div className="mb-3">
-                        <label htmlFor="nombre_contacto" className="form-label">Nombre</label>
-                        <input type="text" className="form-control" id="nombre_contacto" aria-describedby="nombre_contacto" placeholder='Email'/>
-                    </div>                            
-                </div>
+                    setValue('provincia', idprov);
+        
+                    loadDistritos(idprov)
+                    .then((response) => {
+        
+                        if(response){
+                            setTimeout(() => {
+                                setValue('distrito', iddis);
+                            }, 10);
+                        }
+                    });
+                    
+        
+                }
+    
+            });
 
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                    <div className="mb-3">
-                        <label htmlFor="email_contacto" className="form-label">Email</label>
-                        <input type="email" className="form-control" id="email_contacto" aria-describedby="email_contacto" placeholder='Email'/>
-                    </div>
-                </div>
+        });        
 
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                    <div className="mb-3">
-                        <label htmlFor="celular_contacto" className="form-label">Celular</label>
-                        <input type="tel" className="form-control" id="celular_contacto" aria-describedby="celular_contacto" placeholder='Email'/>
-                    </div>
-                </div>
+        
 
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+
+    }, []);    
+
+
+    const showHidePassword = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+        const inputPassword = document.getElementById("password") as HTMLInputElement | null;
+        if(show){
+            setIcon("bi bi-eye-slash");
+            setShow(false);
+            if(inputPassword!=null) inputPassword.type = "text";
+        }else{        
+            setIcon("bi bi-eye");
+            setShow(true);
+            if(inputPassword!=null) inputPassword.type = "password";
+        }    
+    }
+
+    const onSubmit: SubmitHandler<AuhtUserObject> = (params:AuhtUserObject)=>{
+        updateAccount(params);
+    }
+    return (
+        <ContainerInner breadcrumb={breadcrumb}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+            <>
+                    <FormControls page="micuenta" save={()=>console.log(1)} tipo='edit' />
+
+                    <hr className='border border-1 opacity-50'/>
+
+                    <div className="card">
+                        <div className="card-header">
+                            Mis datos de contacto
+                        </div>
+                        <div className="card-body">
+                            
+                            <div className="row">
                                 
-                    <div className="mb-3">
-                        <label htmlFor="departamento" className="form-label">Departamento</label>
-                        <select name="departamento" id="departamento" className='form-control'>
-                            <option value="">-Seleccione una opci&oacute;n-</option>
-                        </select>
-                    </div>
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">                                
+                                    <div className="mb-3">
+                                        <label htmlFor="nombre_contacto" className="form-label">Nombre</label>
+                                        <input type="text" className="form-control" placeholder='Nombre' {...register('name')}/>
+                                    </div>                            
+                                </div>
 
-                </div>
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                    <div className="mb-3">
+                                        <label htmlFor="celular_contacto" className="form-label">Celular</label>
+                                        <input type="tel" className="form-control" placeholder='Celular' {...register("celular")}/>
+                                    </div>
+                                </div>
 
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                    
-                    <div className="mb-3">
-                        <label htmlFor="provincia" className="form-label">Provincia</label>
-                        <select name="provincia" id="provincia" className='form-control'>
-                            <option value="">-Seleccione una opci&oacute;n-</option>
-                        </select>
-                    </div>
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                                
+                                    <div className="mb-3">
+                                        <input type="hidden" name="" />
+                                        <label htmlFor="departamento" className="form-label">Departamento</label>
+                                        <select id="departamento" className='form-control' {...register("departamento", { onChange: (e)=> loadProvincias(e.target.value), value: user.departamento })}>
+                                            {
+                                                [{ id: 0, nombre: 'Seleccione una opción' }, ...departamentos]
+                                                .map(( { id, nombre } ) => (
+                                                    <option value={id} 
+                                                            // selected={id == user.departamento ? true : false}
+                                                            key={id}>{nombre}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
 
-                </div>
+                                </div>
 
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                    
-                    <div className="mb-3">
-                        <label htmlFor="distrito" className="form-label">Distrito</label>
-                        <select name="distrito" id="distrito" className='form-control'>
-                            <option value="">-Seleccione una opci&oacute;n-</option>
-                        </select>
-                    </div>
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                    
+                                    <div className="mb-3">
+                                        <label htmlFor="provincia" className="form-label">Provincia</label>
+                                        <select className='form-control' {...register("provincia", { onChange: (e)=> loadDistritos(e.target.value) })}>
+                                            {                                           
+                                                
+                                                [{ id: 0, nombre: 'Seleccione una opción' }, ...provincias]
+                                                .map(( { id, nombre } ) => (
+                                                    <option value={id} 
+                                                            key={id} >{nombre}</option>
+                                                ))                                                                                        
+                                            }
+                                        </select>
+                                    </div>
 
-                </div>
+                                </div>
 
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                        
-                    <div className="mb-3">
-                        <label htmlFor="direccion" className="form-label">Direcci&oacute;n</label>
-                        <input type="text" className="form-control" id="direccion" aria-describedby="direccion" placeholder='Dirección'/>
-                    </div>
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                    
+                                    <div className="mb-3">
+                                        <label htmlFor="distrito" className="form-label">Distrito</label>
+                                        <select className='form-control' {...register("distrito")}>
+                                            {
+                                                [{ id: 0, nombre: 'Seleccione una opción' }, ...distritos]                                            
+                                                .map(( { id, nombre } ) => (
+                                                    <option value={id} 
+                                                            key={id} >{nombre}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
 
-                </div>
+                                </div>
 
-            </div>
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                        
+                                    <div className="mb-3">
+                                        <label htmlFor="direccion" className="form-label">Direcci&oacute;n</label>
+                                        <input type="text" className="form-control" placeholder='Dirección' {...register("direccion")}/>
+                                    </div>
+
+                                </div>
+
+                            </div>
 
 
-        </div>
-    </div>
-
-    <div className="card mt-3">
-        <div className="card-header">
-            Mis datos de login
-        </div>
-        <div className="card-body"> 
-
-            <div className="row">
-
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                    <div className="mb-3">
-                        <label htmlFor="usuario" className="form-label">Usuario</label>
-                        <input type="text" className="form-control" id="usuario" aria-describedby="usuario" placeholder='Usuario'/>
-                    </div>
-
-                </div>
-
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                    <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Contrase&ntilde;a</label>
-                        <div className="input-group mb-3">
-                            <input type="password" className="form-control" placeholder="contraseña" />
-                            <button className="btn btn-primary" type="button" id="button-addon2"><i className="bi bi-eye"></i></button>
                         </div>
                     </div>
 
-                </div>                                        
-              
-            </div>
+                    <div className="card mt-3">
+                        <div className="card-header">
+                            Mis datos de login
+                        </div>
+                        <div className="card-body"> 
 
-        </div>
-    </div>
-                   
-    </>
-</ContainerInner>
-  )
+                            <div className="row">
+
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        
+                                <div className="mb-3">
+                                    <label htmlFor="email_contacto" className="form-label">Email</label>
+                                    <input type="email" className="form-control" placeholder='Email' {...register("email")} autoComplete='new-email'/>
+                                </div>
+
+                                </div>
+
+                                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        
+                                    <div className="mb-3">
+                                        <label htmlFor="password" className="form-label">Contrase&ntilde;a</label>
+                                        <div className="input-group mb-3">
+                                            <input type="password" className="form-control" id="password" placeholder="contraseña" {...register("password")} autoComplete='new-password'/>
+                                            <button className="btn btn-primary" type="button"  onClick={showHidePassword}><i className={icon}></i></button>
+                                        </div>
+                                    </div>
+
+                                </div>                                        
+                            
+                            </div>
+
+                        </div>
+                    </div>
+            </>
+            </form>
+        </ContainerInner>
+    )
 }

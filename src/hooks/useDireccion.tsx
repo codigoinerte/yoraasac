@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { backendApi } from '../api';
 import { baseArray, Departamentos, Distritos, Provincias } from '../panel/interfaces';
 

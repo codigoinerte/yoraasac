@@ -27,7 +27,7 @@ export const LocalesSeries = () => {
         setValue('sucursales', newSucursals);
     }
 
-    const { series, sucursales, sucursal ,loadSeries, saveSeries, deleteSeries  } = useSeriesStore();
+    const { series, sucursales, loadSeries, saveSeries, deleteSeries  } = useSeriesStore();
 
     const { loadDireccion, loadProvincias, loadDistritos, departamentos, provincias, distritos } = useDireccion();
 

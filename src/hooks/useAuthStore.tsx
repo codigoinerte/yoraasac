@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { backendApi } from '../api';
-import { IRootState, loginInterface } from '../interfaces';
-import { clearErrorMessage, onChecking, onLogin, onLogout } from '../store';
+import { AuhtUserObject, IRootState, UpdateAccount, loginInterface } from '../interfaces';
+import { clearErrorMessage, onChecking, onLogin, onLogout, onSetUserInfo } from '../store';
+import { toastMessage } from '../helpers';
 // onLogoutCalendar
 
 export const useAuthStore = () => {
@@ -19,7 +20,11 @@ export const useAuthStore = () => {
             
             localStorage.setItem('token', data.token );
             localStorage.setItem('token-init-date', new Date().getTime().toString() );
-            dispatch( onLogin({ name: data.name, uid: data.uid }) );          
+            dispatch( onLogin({ 
+                ...data,
+                name: data.name, 
+                uid: data.uid
+            }) );          
                     
         } catch (error) {
 
@@ -68,7 +73,11 @@ export const useAuthStore = () => {
                         
             // localStorage.setItem('token', data.token );
             localStorage.setItem('token-init-date', new Date().getTime().toString() );
-            dispatch( onLogin({ name: data.name, uid: data.uid }) );
+            dispatch( onLogin({ 
+                ...data,
+                name: data.name, 
+                uid: data.uid 
+            }) );
 
         } catch (error) {
             
@@ -93,6 +102,53 @@ export const useAuthStore = () => {
         localStorage.clear();
         dispatch( onLogout() );
     }
+
+    const updateAccount = async (params:AuhtUserObject):Promise<AuhtUserObject> =>{
+        
+        try {
+            
+            const { data } = await backendApi.put<UpdateAccount>('account-update',{ ...params });
+                    
+            toastMessage(data);
+            dispatch( onSetUserInfo(params) );          
+
+            return { ...data.data }
+                    
+        } catch (error) {
+
+            if (axios.isAxiosError(error)) {
+                
+                const { response = null } = error;
+                let message;
+                if(response == null){
+
+                    message = error.message;
+
+                }else{
+
+                    message = response.data.message;
+                }
+                
+                toastMessage({
+                    data: [],
+                    message,
+                    success: false
+                });
+
+                setTimeout(() => {
+                    dispatch( clearErrorMessage() );
+                }, 10);
+
+                return {};
+
+            } else {
+                console.log('unexpected error: ', error);
+                return {};
+            }
+
+            
+        }
+    }
     
     return {
         //* Propiedades
@@ -104,6 +160,7 @@ export const useAuthStore = () => {
         checkAuthToken,
         startLogin,
         startLogout,
+        updateAccount
         // startRegister,
     }
 
