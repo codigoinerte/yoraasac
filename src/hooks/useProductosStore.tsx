@@ -1,13 +1,10 @@
 import axios from 'axios';
-import React, { useReducer } from 'react'
-import { toast } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState } from '../interfaces';
-import { BuscarProductos, FormPersonasValuesSave, FormProductosValuesSave } from '../panel/interfaces';
-import { onPersonasAddMessage, onPersonasClearMessage, onSetPersonasActive, onPersonasAdd, onPersonasList, onStatus, onPersonasDelete, onProductosList, onSetProductosActive, onProductosDelete } from '../store'
-import { useHelpers } from './useHelpers';
+import { BuscarProductos, FormProductosValuesSave } from '../panel/interfaces';
+import { onPersonasAddMessage, onPersonasClearMessage, onStatus, onProductosList, onSetProductosActive, onProductosDelete } from '../store'
 
 
 export const useProductosStore = () => {
@@ -43,7 +40,8 @@ export const useProductosStore = () => {
             
             if (axios.isAxiosError(error)) {
 
-                const { message } = error.response?.data;               
+                const { response } = error??{};
+                const { message = '' } = response?.data ?? {};
 
                 dispatch( onPersonasAddMessage(message) );
                 setTimeout(() => {
@@ -52,7 +50,7 @@ export const useProductosStore = () => {
 
                 dispatch(onStatus(false));
 
-                return error.message;                
+                return message;                
 
             } else {
                 console.log('unexpected error: ', error);
@@ -68,7 +66,6 @@ export const useProductosStore = () => {
 
             const { data:info } = await backendApi.post(`/producto`, postdata);
             const result = info.data;
-            console.log(result);
             toastMessage(info);
             
             dispatch(onSetProductosActive({
