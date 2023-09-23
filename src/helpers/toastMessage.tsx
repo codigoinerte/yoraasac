@@ -1,23 +1,30 @@
-import React from 'react'
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 
+type customObj = {
+    title?: any,
+    icon?: any,
+    confirmButtonText ?: any
+}
 interface props{
     data:any,
     message: string,
-    success: Boolean
+    success: Boolean,
+    custom?: customObj,
 }
 
-export const toastMessage = ({data, message, success}:props) => {
+
+export const toastMessage = ({data, message, success, custom}:props) => {
     
     if(success){
 
-        // toast.success(message);
+        const { title, icon, confirmButtonText } = custom ?? {};
+        
         Swal.fire({
-            title: 'Exito!',
+            title: title ?? 'Exito!',
             text: message,
-            icon: 'success',
-            confirmButtonText: 'ok'
+            icon: icon ?? 'success',
+            confirmButtonText: confirmButtonText ?? 'ok'
           })
 
     }else{
