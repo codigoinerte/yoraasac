@@ -8,6 +8,7 @@ import { SelectPicker } from 'rsuite';
 import { Toaster, toast } from 'react-hot-toast';
 import { DateNow } from '../../../helpers';
 import { NotaHeladero } from '../../../../interfaces';
+import { toastMessage } from '../../../../helpers';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Facturación', enlace: '/facturacion' },
@@ -140,6 +141,19 @@ export const FacturacionDetalle = () => {
     }, [from_id])
 
     const onSubmit: SubmitHandler<FormFacturacionValues> = (data) => {
+        if(fields.length == 0){
+            toastMessage({
+                data:[],
+                message: 'Porfavor ingrese almenos un producto',
+                success: true,
+                custom:{
+                    title : 'Alerta !',
+                    icon : '',
+                    confirmButtonText: 'ok',
+                }
+            });
+            return false;
+        }
         
         if(refId.current == 0){            
             saveFacturacion({
