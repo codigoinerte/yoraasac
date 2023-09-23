@@ -1,11 +1,9 @@
-import queryString from 'query-string';
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react'
 import { ContainerInner, ListReportes } from '../../../components';
-import { ReporteNotaForm, breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
+import { ReporteNotaForm, breadcrumb as bread, listaDetalle } from '../../../interfaces';
 import { useFacturastore } from '../../../../hooks';
 import { useForm } from 'react-hook-form';
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 import moment from 'moment';
 
 const breadcrumb:bread[] = [
@@ -33,13 +31,6 @@ export const ReporteFacturas = () => {
     const [detalle, setDetalle] = useState<listaDetalle[]>([]);
 
     const [imprimible, setImprimible] = useState<any[]>([]);
-
-
-    const navigate = useNavigate();
-
-    const location = useLocation();
-  
-    const { q = '' } = queryString.parse(location.search);
 
     const { reporte, reproteFacturacion } = useFacturastore();
 
@@ -78,7 +69,7 @@ export const ReporteFacturas = () => {
 
     }, []);
 
-    const { register, handleSubmit, reset, formState:{ errors } } = useForm<ReporteNotaForm>();
+    const { register, handleSubmit, reset } = useForm<ReporteNotaForm>();
 
     const onSubmit = async (params:ReporteNotaForm)=>{
         
