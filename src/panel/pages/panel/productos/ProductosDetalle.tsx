@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ContainerInner, FormControls, FormPersonal } from '../../../components'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom';
+import { ContainerInner, FormControls } from '../../../components'
 import { FormProductosValues, Breadcrumb as bread } from '../../../interfaces';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../../../interfaces';
-import { useHelpers, usePersonasStore, useProductosStore } from '../../../../hooks';
+import { useHelpers, useProductosStore } from '../../../../hooks';
 
 import { SelectPicker } from 'rsuite';
-import { UnspscList, EstadosList } from '../../../interfaces/interfaces';
 import { validateNoNegative } from '../../../../helpers';
 
 const breadcrumb:bread[] = [
@@ -19,31 +16,7 @@ const breadcrumb:bread[] = [
 
 export const ProductosDetalle = () => {
 
-  
-  /*
-  
-  const { id = 0 } = useParams();
 
-  const navigate = useNavigate();
-
-  const onNavigateBack = () => {
-      navigate(-1);
-  }
-
-        listUnpsc,
-        listEstados,
-        listMarcas,
-        listUnidades,
-        listMonedas,
-        listIgv,
-
-        loadUnspsc,
-        loadEstados,
-        loadMarcas,
-        laodUnidades,
-        loadMoneda,
-        loadIgv,
-  */
         const { listUnpsc,
                 listEstados,
                 listMarcas,
@@ -59,23 +32,16 @@ export const ProductosDetalle = () => {
                 loadIgv, } = useHelpers();
 
 
-  const { register, handleSubmit, reset, formState, setValue, getValues, control } = useForm<FormProductosValues>();
+  const { register, handleSubmit, formState, setValue, getValues, control } = useForm<FormProductosValues>();
 
   const { errors } = formState;
+  
+
       
   const { id = 0 } = useParams();   
 
-  const { active } = useSelector((state:IRootState)=>state.personas);
-
   const { saveProducto, updateProducto, getProducto } = useProductosStore();
-
-  const dispatch = useDispatch();
-
-  const handleChangeTipo = (value:any)=>{
-    //console.log(value);
-    setValue('unspsc_id', value);
-  }
-
+  
   const calcularPrecioFinal = ()=>{
     let p = getValues('precio_venta')??0;
     let d = getValues('descuento')??0;
@@ -240,6 +206,7 @@ export const ProductosDetalle = () => {
                           rules={{required:true}}
                           render={({ field }) => 
                           
+                          <div ref={field.ref}>
                             <SelectPicker
                                 {...field} 
                                 data={listUnpsc.map((item)=>({
@@ -252,8 +219,9 @@ export const ProductosDetalle = () => {
                                 //renderMenu={updateData}                          
                                 //onChange={handleChangeTipo} 
                                 placeholder='Buscar UNSPSC de Sunat'                             
-                                className={errors.unspsc_id ? "form-control is-invalid p-0" : "form-control p-0"}
+                                className={getValues("unspsc_id")?.toString() == "" || errors.unspsc_id ? "form-control is-invalid p-0" : "form-control p-0"}
                             />
+                          </div>
                       }/>
 
                  
