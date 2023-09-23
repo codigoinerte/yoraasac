@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { FormPersonasValues, PersonalForm, deleImagenPersona } from '../../interfaces'
 import { FormControls } from '../FormControls';
 
-import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDireccion, usePersonasStore } from '../../../hooks';
-import { toast, Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { validateNumber } from '../../../helpers';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../../interfaces';
 import { onSetPersonasActive } from '../../../store';
-import { deleteImagen } from '../../../helpers/deleteImagen';
+
 /*
     1: cliente
     2: proveedor
@@ -25,7 +25,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
 
     const { active } = useSelector((state:IRootState)=>state.personas);
 
-    const { register, handleSubmit, reset, formState, setValue, resetField } = useForm<FormPersonasValues>({
+    const { register, handleSubmit, formState, setValue } = useForm<FormPersonasValues>({
         defaultValues: {
            foto_frontal: active?.foto_frontal,
            foto_posterior: active?.foto_posterior
@@ -139,7 +139,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 email,
                 password,
                 documento_tipo: (tipo == 5) ? 4 : 2,
-                usuario_tipo: typeof tipo !== undefined ? tipo : 0 ,
+                usuario_tipo: typeof tipo != "undefined" ? tipo : 0 ,
 
                 foto_frontal,
                 foto_posterior,
@@ -162,7 +162,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 email,
                 password,
                 documento_tipo: (tipo == 5) ? 4 : 2,
-                usuario_tipo: typeof tipo !== undefined ? tipo : 0 ,
+                usuario_tipo: typeof tipo != "undefined" ? tipo : 0 ,
 
                 foto_frontal,
                 foto_posterior,
