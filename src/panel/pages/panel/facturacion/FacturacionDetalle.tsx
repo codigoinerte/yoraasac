@@ -290,14 +290,16 @@ export const FacturacionDetalle = () => {
                         <div className="mb-3">
                             <label htmlFor="fecha_emision" className="form-label">Fecha de emisión</label>
                             <input type="date" 
-                                    className="form-control" 
-                                    {...register('fecha_emision', { required:true })} />
+                                    className={ errors.fecha_emision ? "form-control is-invalid" : "form-control"}
+                                    {...register('fecha_emision', { required:true })} 
+                                    />
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="fecha_movimiento" className="form-label">Tipo</label>
                             <div className="d-flex gap-3">                                
-                                <select className='form-control'
+                                <select 
+                                        className={ errors.tipo ? "form-control is-invalid" : "form-control"}
                                         {...register('tipo', { 
                                             required:true,
                                             onChange: (e)=>{
@@ -317,7 +319,7 @@ export const FacturacionDetalle = () => {
                         <div className="mb-3">
                             <label htmlFor="fecha_pago" className="form-label">Fecha de pago</label>
                             <input type="date" 
-                                    className="form-control" 
+                                    className={ errors.fecha_pago ? "form-control is-invalid" : "form-control"}
                                     {...register('fecha_pago', { required:true })} />
                         </div>
 
@@ -327,13 +329,13 @@ export const FacturacionDetalle = () => {
                             <div className="d-flex gap-3">                                
                                 <input type="text" 
                                         aria-label="serie" 
-                                        className="form-control" 
                                         placeholder='Serie'
+                                        className={ errors.serie ? "form-control is-invalid" : "form-control"}
                                         {...register('serie', { required:true })} readOnly/>-
                                 <input type="text" 
                                         aria-label="núm. doc." 
-                                        className="form-control flex-1" 
                                         placeholder='nùm doc.' 
+                                        className={ errors.correlativo ? "form-control flex-1 is-invalid" : "form-control flex-1"}
                                         {...register('correlativo', { required:true })} readOnly/>
                             </div>
                         </div>
@@ -353,21 +355,23 @@ export const FacturacionDetalle = () => {
                             control={control}
                             rules={{required:true}}                            
                             render={({ field }) => 
-
-                            <SelectPicker   
-                                    {...field}                      
-                                    data={
-                                        listUsuario.map((usuario)=>({
-                                            label: `${usuario.documento??''} - ${usuario.name??''}`,
-                                            value: usuario.id??''
-                                        }))
-                                    }
-                                    style={{ width: 224 }}                        
-                                    onSearch={updateDataUser}
-                                    onChange={buscarUsuarioReserva}
-                                    placeholder='Buscar Producto'
-                                    className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
-                                />
+                            
+                            <div ref={field.ref}>
+                                <SelectPicker   
+                                        {...field}                      
+                                        data={
+                                            listUsuario.map((usuario)=>({
+                                                label: `${usuario.documento??''} - ${usuario.name??''}`,
+                                                value: usuario.id??''
+                                            }))
+                                        }
+                                        style={{ width: 224 }}                        
+                                        onSearch={updateDataUser}
+                                        onChange={buscarUsuarioReserva}
+                                        placeholder='Buscar Producto'
+                                        className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
+                                    />
+                            </div>
                             
                             
                     }/>
@@ -383,8 +387,9 @@ export const FacturacionDetalle = () => {
 
                         <div className="mb-3">
                             <label htmlFor="tipo_transaccion" className="form-label">Tipo de transacción</label>
-                            <select className='form-control'
-                                        {...register('tipo_transaccion', { required:true })}>
+                            <select 
+                                    className={ errors.tipo_transaccion ? "form-control is-invalid" : "form-control"}
+                                    {...register('tipo_transaccion', { required:true })}>
                                 <option value="1">Contado</option>
                                 <option value="2">Credito</option>
                             </select>                                                
@@ -396,7 +401,7 @@ export const FacturacionDetalle = () => {
 
                         <div className="mb-3">
                             <label htmlFor="estado" className="form-label">Estado</label>
-                            <select className='form-control'
+                            <select className={ errors.id_estado ? "form-control is-invalid" : "form-control"}
                                     {...register('id_estado', { required:true })}>
                                         {
                                             listEstadosFactura.map(({ id, estado })=>(
