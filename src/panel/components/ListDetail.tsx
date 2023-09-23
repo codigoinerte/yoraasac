@@ -25,13 +25,12 @@ export const ListDetail = ({cabecera, detalle, eliminar}:ListDetailInteface) => 
                             {
                                 detalle.map(({ id, campos })=>{
                                     
-                                    const keyrow = `fila${id}`;
-                                    const enlaceDetalle = '';
+                                    const keyrow = `fila${id}`;                                    
                                 return (                                    
                                     
                                         <tr key={keyrow}>
                                             {
-                                                campos.map(( texto, index )=> {
+                                                (campos??[]).map(( texto, index )=> {
                                                     
                                                     const cabeceraChildren = cabecera[index];
                                                     const childrenRowKey = `children_${cabeceraChildren}_${id}`
