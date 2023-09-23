@@ -1,10 +1,7 @@
-import queryString from 'query-string';
-import React, { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ContainerInner, List, ListPersonal } from '../../../components'
+import { useEffect, useRef, useState } from 'react'
+import { ContainerInner, List } from '../../../components'
 import { BuscarProductos, FormBuscarProductosValues, Breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 import { useAlert, useProductosStore } from '../../../../hooks';
-import { Producto } from '../../../../interfaces/Productos';
 import Swal from 'sweetalert2';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -13,54 +10,6 @@ const breadcrumb:bread[] = [
 ];  
 
 export const Productos = () => {
-
-    /*
-
-    const eliminar = (id:number) => {
-        console.log(id);
-    }
-    
-    const detalle:listaDetalle[] = [
-      {
-        id:"1",
-        campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
-      },
-      {
-        id:"2",
-        campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
-      },
-      {
-        id:"3",
-        campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
-      },
-      {
-        id:"4",
-        campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
-      },
-      {
-        id:"5",
-        campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
-      },
-      {
-        id:"6",
-        campos: ["100001", "Helado 1", "Soles", "2.00", "Publicado", "15/06/2022"]        
-      },
-    ];
-    
-    const next = (e:paginationInterface) => {
-        console.log(e);
-    }
-    
-    const prev = (e:paginationInterface) => {
-        console.log(e);
-    }
-    
-    const navigate = useNavigate();
-    
-    const location = useLocation();
-    
-    const { q = '' } = queryString.parse(location.search);
-    */
 
     const { warningDelete } = useAlert();
 
@@ -85,7 +34,7 @@ export const Productos = () => {
         "Fecha de creación"
     ];
     
-    const { status, productos, nextPage, prevPage, loadProductos, deleteProducto } = useProductosStore();
+    const { productos, nextPage, prevPage, loadProductos, deleteProducto } = useProductosStore();
 
     useEffect(() => {
         
@@ -172,7 +121,7 @@ export const Productos = () => {
         });
     }
 
-    const { register, handleSubmit, reset, formState:{ errors } } = useForm<FormBuscarProductosValues>();
+    const { register, handleSubmit, reset} = useForm<FormBuscarProductosValues>();
 
     const onSubmit: SubmitHandler<FormBuscarProductosValues> = ({ codigo, producto, fechaCreacion }) => {
       
@@ -185,7 +134,7 @@ export const Productos = () => {
         }
         else
         {
-            false
+            // false
             // agregar toast booostrap in version react, buscar alternativa solo codigo
 
         }
