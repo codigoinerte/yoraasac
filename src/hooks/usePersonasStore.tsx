@@ -1,18 +1,13 @@
 import axios from 'axios';
-import React, { useReducer, useState } from 'react'
-import { toast } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage, uploadImage } from '../helpers';
 import { IRootState } from '../interfaces';
-import { BuscarPersonas, FormPersonasValues, FormPersonasValuesSave, deleImagenPersona } from '../panel/interfaces';
-import { onPersonasAddMessage, onPersonasClearMessage, onSetPersonasActive, onPersonasAdd, onPersonasList, onStatus, onPersonasDelete } from '../store'
-import { useDireccion } from './useDireccion';
-
+import { BuscarPersonas, FormPersonasValuesSave, deleImagenPersona } from '../panel/interfaces';
+import { onPersonasAddMessage, onPersonasClearMessage, onSetPersonasActive, onPersonasList, onStatus, onPersonasDelete } from '../store'
 export const usePersonasStore = () => {
   
-    const { loadDireccion } = useDireccion();
-
+    
     const { productos: personas, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.personas);
 
     const { status, errorMessage } = useSelector((state:IRootState)=>state.general)
@@ -35,7 +30,8 @@ export const usePersonasStore = () => {
 
             if (axios.isAxiosError(error)) {
 
-                const { message } = error.response?.data;               
+                const { response } = error??{};
+                const { message = '' } = response?.data ?? {};
 
                 dispatch( onPersonasAddMessage(message) );
                 setTimeout(() => {
@@ -44,7 +40,7 @@ export const usePersonasStore = () => {
 
                 dispatch(onStatus(false));
 
-                return error.message;                
+                return message;
 
             } else {
                 console.log('unexpected error: ', error);
@@ -94,7 +90,7 @@ export const usePersonasStore = () => {
             
             const respuesta_frontal = respuesta[0]??'';
             const respuesta_posterior = respuesta[1]??'';
-            console.log(respuesta_frontal, respuesta_posterior);
+            
             if(respuesta.length > 0)
             {
                 if(postdata.img_frontal?.length && !postdata.img_posterior?.length){
