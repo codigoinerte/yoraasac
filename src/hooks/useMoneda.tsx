@@ -46,7 +46,8 @@ export const useMoneda = () => {
             
             if (axios.isAxiosError(error)) {
 
-                const { message } = error.response?.data;               
+                const { response } = error??{};
+                const { message = '' } = response?.data ?? {};
 
                 dispatch( onMonedaAddMessage(message) );
                 setTimeout(() => {
@@ -55,7 +56,7 @@ export const useMoneda = () => {
 
                 dispatch(onStatus(false));
 
-                return error.message;                
+                return message;                
 
             } else {
                 console.log('unexpected error: ', error);
@@ -70,8 +71,6 @@ export const useMoneda = () => {
         try {
             const { data:info } = await backendApi.post(rutaEndpoint, { ...params });
             
-            const result = info.data;            
-
             toastMessage(info);
             
             dispatch(onSetMonedaActive(null));
@@ -90,7 +89,6 @@ export const useMoneda = () => {
         try {
 
             const { data:info } = await backendApi.put(`${rutaEndpoint}/${moneda!.id}`, { ...params});
-            const result = info.data;
             
             toastMessage(info);
             

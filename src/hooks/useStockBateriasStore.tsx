@@ -1,14 +1,10 @@
 import axios from 'axios';
-import React, { useReducer } from 'react'
-import { toast } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState } from '../interfaces';
 import { FormBuscarStockBateriaValues, FormStockBateriaValues } from '../panel/interfaces';
 import { onStatus, onStockBateriaList, onSetStockBateriaActive, onStockBateriaDelete, onStockBateriaAddMessage, onStockBateriaClearMessage } from '../store'
-import { useHelpers } from './useHelpers';
-
 
 export const useStockBateriasStore = () => {
   
@@ -43,7 +39,8 @@ export const useStockBateriasStore = () => {
             
             if (axios.isAxiosError(error)) {
 
-                const { message } = error.response?.data;               
+                const { response } = error??{};
+                const { message = '' } = response?.data ?? {};
 
                 dispatch( onStockBateriaAddMessage(message) );
                 setTimeout(() => {
@@ -52,7 +49,7 @@ export const useStockBateriasStore = () => {
 
                 dispatch(onStatus(false));
 
-                return error.message;                
+                return message;                
 
             } else {
                 console.log('unexpected error: ', error);

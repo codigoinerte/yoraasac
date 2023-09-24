@@ -5,7 +5,7 @@ import { toastMessage } from '../helpers';
 import { IRootState } from '../interfaces';
 import { FormSeries, SucursalesSeries, SucursalesUpdatedResponse, } from '../panel/interfaces';
 import { onStatus, onMonedaAddMessage, onMonedaClearMessage, onSeriesAdd, onsucursalesAdd, onsucursalesDelete } from '../store'
-import { Sucursal, SucursalesSeriesResponse } from '../panel/interfaces/interfaces';
+import { SucursalesSeriesResponse } from '../panel/interfaces/interfaces';
 
 export const useSeriesStore = () => {
 

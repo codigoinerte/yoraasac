@@ -1,13 +1,10 @@
 import axios from 'axios';
-import React, { useReducer } from 'react'
-import { toast } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState } from '../interfaces';
 import { FormBuscarStockHeladoValues, FormStockHeladoValues } from '../panel/interfaces';
 import { onStatus, onStockHeladoList, onSetStockHeladoActive, onStockHeladoDelete, onStockHeladoAddMessage, onStockHeladoClearMessage } from '../store'
-import { useHelpers } from './useHelpers';
 
 
 export const useStockHeladosStore = () => {
@@ -43,7 +40,8 @@ export const useStockHeladosStore = () => {
             
             if (axios.isAxiosError(error)) {
 
-                const { message } = error.response?.data;               
+                const { response } = error??{};
+                const { message = '' } = response?.data ?? {};
 
                 dispatch( onStockHeladoAddMessage(message) );
                 setTimeout(() => {
@@ -52,7 +50,7 @@ export const useStockHeladosStore = () => {
 
                 dispatch(onStatus(false));
 
-                return error.message;                
+                return message;                
 
             } else {
                 console.log('unexpected error: ', error);

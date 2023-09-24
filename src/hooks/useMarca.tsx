@@ -45,7 +45,8 @@ export const useMarca = () => {
             
             if (axios.isAxiosError(error)) {
 
-                const { message } = error.response?.data;               
+                const { response } = error??{};
+                const { message = '' } = response?.data ?? {};               
 
                 dispatch( onMarcaAddMessage(message) );
                 setTimeout(() => {
@@ -54,7 +55,7 @@ export const useMarca = () => {
 
                 dispatch(onStatus(false));
 
-                return error.message;                
+                return message;                
 
             } else {
                 console.log('unexpected error: ', error);
@@ -68,8 +69,6 @@ export const useMarca = () => {
         
         try {
             const { data:info } = await backendApi.post(rutaEndpoint, { ...params });
-            
-            const result = info.data;            
 
             toastMessage(info);
             
@@ -89,7 +88,6 @@ export const useMarca = () => {
         try {
 
             const { data:info } = await backendApi.put(`${rutaEndpoint}/${marca!.id}`, { ...params});
-            const result = info.data;
             
             toastMessage(info);
             
