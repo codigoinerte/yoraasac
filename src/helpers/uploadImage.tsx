@@ -1,5 +1,5 @@
-import React from 'react'
 import { backendApi } from '../api';
+import { toast } from 'react-hot-toast';
 
 export const uploadImage = async (image:(FileList|undefined)[]) => {
 
@@ -16,13 +16,32 @@ export const uploadImage = async (image:(FileList|undefined)[]) => {
         }
       }
     });
-
-    const { data:img } = await backendApi.post(`/guardar-foto`, formImageFrontal ,  {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+    try {
+      const { data:img } = await backendApi.post(`/guardar-foto`, formImageFrontal ,  {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+      });
+  
+      let imagenes_messages: string[] = [];
+      if(img.success === false){
+        for(let imgArray in img.data){
+          let message = img.data[imgArray][0] ?? '';
+          imagenes_messages.push(message);
         }
-    });
 
-    image_retorno = img?.ruta??[];
-    return image_retorno;
+        if(imagenes_messages.length > 0){
+          let messageAlert = imagenes_messages.join(",");
+          toast.error(messageAlert);
+        }
+
+        return [];
+      }
+
+      image_retorno = img.ruta??[];
+      return image_retorno;
+      
+    } catch (error) {      
+      return [];
+    }
 }
