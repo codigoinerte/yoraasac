@@ -1,6 +1,3 @@
-import queryString from 'query-string';
-import React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
 import { ContainerInner, ListReportes } from '../../../components';
 import { breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 
@@ -22,21 +19,7 @@ export const ReporteHelados = () => {
         console.log(id);
     }
 
-    const detalle:listaDetalle[] = [
-      {
-        id:1,
-        campos: ["15/06/2023", "Reporte de clientes"]        
-      },
-      {
-        id:2,
-        campos: ["15/06/2023", "Reporte de clientes"]        
-      },
-      {
-        id:3,
-        campos: ["15/06/2023", "Reporte de clientes"]        
-      },
-      
-    ];
+    const detalle:listaDetalle[] = [];
 
     const next = (e:paginationInterface) => {
         console.log(e);
@@ -45,12 +28,6 @@ export const ReporteHelados = () => {
     const prev = (e:paginationInterface) => {
         console.log(e);
     }
-
-    const navigate = useNavigate();
-
-    const location = useLocation();
-  
-    const { q = '' } = queryString.parse(location.search);
 
 
     return (
