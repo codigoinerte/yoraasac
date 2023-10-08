@@ -4,7 +4,7 @@ import { FormPersonasValues, PersonalForm, deleImagenPersona } from '../../inter
 import { FormControls } from '../FormControls';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useDireccion, usePersonasStore } from '../../../hooks';
+import { useAuthStore, useDireccion, usePersonasStore } from '../../../hooks';
 import { Toaster } from 'react-hot-toast';
 import { validateNumber } from '../../../helpers';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +23,10 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
         
     const { id = 0 } = useParams();   
 
+    const { user } = useAuthStore();
+
+    const { type = 3 } = user ?? {};
+    
     const { active } = useSelector((state:IRootState)=>state.personas);
 
     const { register, handleSubmit, formState, setValue } = useForm<FormPersonasValues>({
@@ -61,6 +65,11 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 setValue('direccion', user?.direccion);
                 setValue('foto_frontal', active?.foto_frontal);
                 setValue('foto_posterior', active?.foto_posterior);
+                setValue('email', active?.email);
+                if((type == 1 || type == 2) && tipo == 6){
+                    let usuario_activo = active?.usuario_tipo ? parseInt(active?.usuario_tipo) : 0;
+                    setValue('usuario_tipo', usuario_activo);
+                }
 
                 loadDireccion()
                 .then((dep)=>{
@@ -124,7 +133,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
         }
    }
 
-    const onSubmit: SubmitHandler<FormPersonasValues> = async ({ documento, nombres, apellidos, celular, departamento, provincia, distrito, direccion, email, password, foto_frontal, foto_posterior, img_frontal, img_posterior }) => {                
+    const onSubmit: SubmitHandler<FormPersonasValues> = async ({ documento, nombres, apellidos, celular, departamento, provincia, distrito, direccion, email, password, foto_frontal, foto_posterior, img_frontal, img_posterior, usuario_tipo =  tipo}) => {
         
         if(!!active?.id){
             await updatePersona({ 
@@ -139,7 +148,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 email,
                 password,
                 documento_tipo: (tipo == 5) ? 4 : 2,
-                usuario_tipo: typeof tipo != "undefined" ? tipo : 0 ,
+                usuario_tipo, //: typeof tipo != "undefined" ? tipo : 0 ,
 
                 foto_frontal,
                 foto_posterior,
@@ -162,7 +171,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 email,
                 password,
                 documento_tipo: (tipo == 5) ? 4 : 2,
-                usuario_tipo: typeof tipo != "undefined" ? tipo : 0 ,
+                usuario_tipo, //: typeof tipo != "undefined" ? tipo : 0 ,
 
                 foto_frontal,
                 foto_posterior,
@@ -204,24 +213,44 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                                         {...register('documento', {  required: "Debe de completar el DNI", maxLength: (tipo == 5) ? 11 : 8, minLength: (tipo == 5) ? 11 : 8 })} />
                             </div>
                         </div>
+                        {
+                            tipo == 5 ? (
+                                <>
+                                    <div className="mb-3">
+                                            <label htmlFor="nombre" className="form-label">Proveedor</label>
+                                            <input  type="text" 
+                                                    className={errors.nombres ? "form-control is-invalid" : "form-control"}
+                                                    id="nombre" 
+                                                    aria-describedby="nombre" 
+                                                    autoComplete='new-name'
+                                                    {...register('nombres', {  required: "Debe de completar el nombre del proveedor" })} />
+                                    </div>
+                                </>
+                            )
+                            :
+                            (
+                                <>
+                                    <div className="mb-3">
+                                        <label htmlFor="nombre" className="form-label">Nombres</label>
+                                        <input  type="text" 
+                                                className={errors.nombres ? "form-control is-invalid" : "form-control"}
+                                                id="nombre" 
+                                                aria-describedby="nombre" 
+                                                autoComplete='new-name'
+                                                {...register('nombres', {  required: "Debe de completar el nombre" })} />
+                                    </div>
 
-                        <div className="mb-3">
-                            <label htmlFor="nombre" className="form-label">Nombres</label>
-                            <input  type="text" 
-                                    className={errors.nombres ? "form-control is-invalid" : "form-control"}
-                                    id="nombre" 
-                                    aria-describedby="nombre" 
-                                    {...register('nombres', {  required: "Debe de completar el nombre" })} />
-                        </div>
-
-                        <div className="mb-3">
-                            <label htmlFor="apellidos" className="form-label">Apellidos</label>
-                            <input  type="text" 
-                                    className={errors.apellidos ? "form-control is-invalid" : "form-control"}
-                                    id="apellidos" 
-                                    aria-describedby="apellidos"
-                                    {...register('apellidos', {  required: "Debe de completar el apellido" })}  />
-                        </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="apellidos" className="form-label">Apellidos</label>
+                                        <input  type="text" 
+                                                className={errors.apellidos ? "form-control is-invalid" : "form-control"}
+                                                id="apellidos" 
+                                                aria-describedby="apellidos"
+                                                {...register('apellidos', {  required: "Debe de completar el apellido" })}  />
+                                    </div>                                
+                                </>
+                            )
+                        }
                         
                         <div className="mb-3">
                             <label htmlFor="celular" className="form-label">Celular</label>
@@ -345,13 +374,33 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                         </>
                     )
                 }
-
+                {
+                    ((type == 1 || type == 2) && tipo == 6) &&(
+                        <>
+                            <div className="row mt-3">
+                                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div className="card">
+                                        <div className="card-body">
+                                            <h5 className='mb-2 text-black'>Tipo de usuario</h5>
+                                            <select className='form-control' {...register('usuario_tipo')}>
+                                                <option value="">-Seleccionar-</option>
+                                                <option value="6">Personal</option>
+                                                <option value="1">Administrador</option>
+                                                <option value="2">Editor</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )
+                }
                 {
                     tipo == 6 &&
                     (
                         <div className="row">
                             <div className="col-xs-12 col-sm-12 col-md-12">
-                                <h4>Datos de acceso</h4>
+                                <h4 className='text-black fs-6 mt-2 mb-2'>Datos de acceso</h4>
                             </div>
                             <div className="col-xs 12 col-sm-12 col-md-6">
                                 <div className="mb-3">
@@ -360,6 +409,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                                                 className="form-control" 
                                                 id="email" 
                                                 aria-describedby="email" 
+                                                autoComplete='new-email'
                                                 {...register('email', {  required: true })} />
                                 </div>      
                             </div>
@@ -370,7 +420,8 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                                                     className="form-control" 
                                                     id="password" 
                                                     aria-describedby="password" 
-                                                    {...register('nombres', {  required: true })} />
+                                                    autoComplete='new-password'
+                                                    {...register('password', {  required: ((active?.id) ? false : true) })} />
                                 </div>
                             </div>
                         </div>

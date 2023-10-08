@@ -33,7 +33,8 @@ export interface AuhtUserObject {
     direccion       ?:string,
     user            ?:string,
     password        ?:string,
-    true            ?:boolean
+    true            ?:boolean,
+    type            ?:number,
     uid             ?:number
 }
 

@@ -164,6 +164,7 @@ export type FormPersonasValues = {
 
     foto_frontal?:  string;
     foto_posterior?:string;
+    usuario_tipo?:  number;
 };
 // foto_frontal?:FileList;
 // foto_posterior?:FileList;
