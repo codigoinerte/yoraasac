@@ -55,9 +55,10 @@ export const NotaHeladeroDetalle = () => {
 
     const calcImporte = (index:number)=> {
 
-        let vendido = getValues(`productos.${index}.vendido`)??0;
-        let precio_operacion = getValues(`productos.${index}.precio_operacion`)??0;
-        
+        let vendido = (!getValues(`productos.${index}.vendido`)) ? 0 : parseFloat(getValues(`productos.${index}.vendido`)!.toString());
+        let precio_operacion = (!getValues(`productos.${index}.precio_operacion`)) ? 0 : parseFloat(getValues(`productos.${index}.precio_operacion`)!.toString());
+        console.log(vendido);
+        console.log(precio_operacion);
         let precio_final = precio_operacion * parseInt(vendido.toString());
         
         setValue(`productos.${index}.importe`, precio_final.toString());
@@ -406,14 +407,10 @@ export const NotaHeladeroDetalle = () => {
                                                 return (
                                                 <tr key={item.id}>                                                    
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.devolucion`,{
-                                                            onChange: () => calcImporte(index)
-                                                        })} />
+                                                        <input type="text" className='form-control' {...register(`productos.${index}.devolucion`)} />
                                                     </td>                                                     
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.pedido`,{
-                                                            onChange: () => calcImporte(index)
-                                                        })} />
+                                                        <input type="text" className='form-control' {...register(`productos.${index}.pedido`)} />
                                                     </td>                                                     
                                                     <td>
                                                         { item.producto }
