@@ -1,8 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import queryString from 'query-string';
-
-import { useLocation, useNavigate } from 'react-router-dom';
 import { ContainerInner, List } from '../../../components'
 import { BuscarNotasHeladeros, FormBuscarNotaHeladeroValues, breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 import { useAlert, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
@@ -43,7 +40,7 @@ export const NotaHeladero = () => {
 
     const { listEstadoHeladero, listNotaHeladeroEstado} = useHelpers();
 
-    const { status, notaHeladero, nextPage, prevPage, loadNotaHeladero, deleteNotaHeladero } = useNotaHeladeroStore();
+    const { notaHeladero, nextPage, prevPage, loadNotaHeladero, deleteNotaHeladero } = useNotaHeladeroStore();
 
     useEffect(() => {
       
@@ -133,7 +130,7 @@ export const NotaHeladero = () => {
         }
     }
 
-    const { register, handleSubmit, reset, formState:{ errors } } = useForm<FormBuscarNotaHeladeroValues>();
+    const { register, handleSubmit, reset } = useForm<FormBuscarNotaHeladeroValues>();
 
     const onSubmit: SubmitHandler<FormBuscarNotaHeladeroValues> = ({ documento, nombre, estado }) => {
 
@@ -145,7 +142,7 @@ export const NotaHeladero = () => {
         }
         else
         {
-            false
+            return false;
             // agregar toast booostrap in version react, buscar alternativa solo codigo
     
         }
