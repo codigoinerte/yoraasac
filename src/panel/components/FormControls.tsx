@@ -17,14 +17,14 @@ export const FormControls = ({ save, page, category, tipo = 'new', imprimir }:Co
 
     return (
         <>
-            <div className="d-flex gap-2 mb-4">
+            <div className="d-flex gap-2 mb-4 flex-wrap">
                 {
                     tipo !== 'list' &&
-                    <button type="submit" className="btn btn-primary btn-lg">Guardar</button>
+                    <button type="submit" className="btn btn-primary btn-lg flex-fill">Guardar</button>
                 }
                 {
                     (parseInt(id.toString()) > 0 || tipo == 'list') &&
-                    <Link to={`${cat}/${page}/new`} className="btn btn-primary btn-lg">Nuevo</Link>
+                    <Link to={`${cat}/${page}/new`} className="btn btn-primary btn-lg flex-fill">Nuevo</Link>
                 }
                 {
                     (page == 'nota-heladero' && parseInt(id.toString()) > 0)&&
@@ -32,15 +32,15 @@ export const FormControls = ({ save, page, category, tipo = 'new', imprimir }:Co
                         <>
                             <button type='button' onClick={()=> {
                                 if(typeof save != "undefined"){ save(); }
-                            } } className="btn btn-success btn-lg">Generar Factura</button>        
+                            } } className="btn btn-success btn-lg flex-fill">Generar Factura</button>        
                             
                             <button type='button' onClick={()=> {
                                 if(typeof imprimir != "undefined"){ imprimir();}
-                            } } className="btn btn-success btn-lg">Imprimir</button>        
+                            } } className="btn btn-success btn-lg flex-fill">Imprimir</button>        
                         </>
                     )
                 }
-                <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg">Atr&aacute;s</button>
+                <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg flex-fill">Atr&aacute;s</button>
             </div>
         </>
     )

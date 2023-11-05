@@ -197,7 +197,7 @@ export const NotaHeladero = () => {
                                 <input type="text" className="form-control" id="nombres" aria-describedby="Buscador" placeholder='Nombre y/o apellido'  {...register('nombre')}/>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3">
                             <div className="mb-3">
                                 <label htmlFor="fecha_creacion" className="form-label">Estado</label>                                
                                 <select id="estado" className='form-control'  {...register('estado')}>
@@ -210,10 +210,10 @@ export const NotaHeladero = () => {
                                 </select>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-end">
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-2 d-flex align-items-end">
                             <div className="mb-3 w-100">                                
-                                <button className="btn btn-primary text-center w-100" type="submit"><i className="bi bi-search"></i> Buscar</button>
-                                <button onClick={resetQuery} className="btn btn-secondary text-center w-100 mt-1"><i className="bi bi-x-lg"></i> Resetear</button>
+                                <button className="btn btn-primary text-center w-100 flex-fill" type="submit"><i className="bi bi-search"></i> Buscar</button>
+                                <button onClick={resetQuery} className="btn btn-secondary text-center w-100 mt-1 flex-fill"><i className="bi bi-x-lg"></i> Resetear</button>
                             </div>
                         </div>
 

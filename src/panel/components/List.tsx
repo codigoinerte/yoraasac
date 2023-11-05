@@ -51,15 +51,15 @@ export const List = ({page, cabecera, detalle, eliminar, next, prev, children, c
                                                     
                                                     return (
                                                     <td key={childrenRowKey} scope="row" data-label={cabeceraChildren}>
-                                                        {texto}
+                                                        {(texto=='')?'\u00A0':texto}
                                                     </td>  
                                                 )})
                                             }
 
                                             <td data-label="Acciones">
                                                 <div className="acciones-buttons">
-                                                    <Link to={enlaceDetalle} type="button" className="btn btn-outline-primary"><i className="bi bi-pencil"></i></Link>
-                                                    <button onClick={()=> eliminar(id)} type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                                                    <Link to={enlaceDetalle} type="button" className="btn btn-outline-primary flex-fill"><i className="bi bi-pencil"></i></Link>
+                                                    <button onClick={()=> eliminar(id)} type="button" className="btn btn-outline-danger flex-fill"><i className="bi bi-trash3"></i></button>
                                                 </div>
                                             </td>
                                         </tr>
