@@ -135,6 +135,22 @@ export const useStockHeladosStore = () => {
             return false;
         }
     }    
+  
+    const deleteStockHeladoDetalle = async (id:number):Promise<Boolean> =>{
+        
+        try {            
+
+            const { data:info } = await backendApi.delete(`/stock-helado-detalle/${id}`);
+                        
+            dispatch(onStockHeladoDelete(info.data.id));
+
+            dispatch(onStatus(false));
+            return true;            
+        } catch (error) {
+            // console.log(error);
+            return false;
+        }
+    }    
 
     return {
         status, 
@@ -149,5 +165,6 @@ export const useStockHeladosStore = () => {
         updateStockHelado,
         getStockHelado,
         deleteStockHelado,
+        deleteStockHeladoDetalle,
     }
 }

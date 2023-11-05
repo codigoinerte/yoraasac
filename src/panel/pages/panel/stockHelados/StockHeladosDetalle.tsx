@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { ContainerInner, FormControls, FormStock, ListDetail } from '../../../components'
-import { BuscarProducto, DetalleStockHelado, FormStockHeladoValues, Breadcrumb as bread, listaDetalle } from '../../../interfaces';
+import { ContainerInner, FormControls } from '../../../components'
+import { BuscarProducto, FormStockHeladoValues, Breadcrumb as bread } from '../../../interfaces';
 import { useHelpers, useStockHeladosStore } from '../../../../hooks';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../../interfaces';
 import { SelectPicker } from 'rsuite';
 import toast , { Toaster } from 'react-hot-toast';
 
@@ -26,20 +24,6 @@ export const StockHeladosDetalle = () => {
         "cantidad"
     ];  
   
-    const eliminar = (id:number) => {
-        console.log(id);
-    }
-    const detalle:DetalleStockHelado[] = [{ 
-        id: 1,
-        codigo: '123456',
-        cantidad: 9,
-        created_at: '',
-        updated_at: '',
-        stock_helados_id: 0
-
-     }];
-    
-
     const { listMovimiento,
             listTipoDocumento,
             listBuscarProducto,
@@ -48,7 +32,7 @@ export const StockHeladosDetalle = () => {
             loadTipoDocumento,
             loadBuscarProducto,} = useHelpers();
 
-    const { register, handleSubmit, reset, formState, setValue, getValues, control } = useForm<FormStockHeladoValues>({
+    const { register, handleSubmit, setValue, control } = useForm<FormStockHeladoValues>({
         defaultValues:{
             codigo_movimiento:'',
             fecha_movimiento:'',            
@@ -56,11 +40,9 @@ export const StockHeladosDetalle = () => {
         }
     });
 
-    const { errors } = formState;
+    
 
     const { id = 0 } = useParams();   
-
-    const { active } = useSelector((state:IRootState)=>state.stockHelados);
 
     const { saveStockHelado, updateStockHelado, getStockHelado } = useStockHeladosStore();
 
@@ -72,7 +54,7 @@ export const StockHeladosDetalle = () => {
 
         if(id == 0)
         {
-
+            /* */
         }
         else
         {
@@ -91,10 +73,10 @@ export const StockHeladosDetalle = () => {
       
     }, []);
 
-    const { fields, append, prepend, remove, swap, move, insert, replace} = useFieldArray({
-                                                                                control,
-                                                                                name: "detalle"
-                                                                            });
+    const { fields, append, remove } = useFieldArray({
+                                                        control,
+                                                        name: "detalle"
+                                                    });
 
     const onSubmit: SubmitHandler<FormStockHeladoValues> = (data) => {
         
@@ -249,15 +231,15 @@ export const StockHeladosDetalle = () => {
                                             return (
                                             <tr key={item.id}>
 
-                                                <td>{item.codigo}</td> 
-                                                <td>{item.producto}</td>
-                                                <td>
+                                                <td data-label="Codigo">{item.codigo}</td> 
+                                                <td data-label="Producto">{item.producto}</td>
+                                                <td data-label="Cantidad" className='d-flex'>
                                                         <input className='form-control'
                                                             {...register(`detalle.${index}.cantidad`, { required: true })}
                                                         />
                                                     </td>
-                                                <td>
-                                                        <button type="button" onClick={() => remove(index)}>
+                                                <td data-label="Acciones">
+                                                        <button type="button" className='btn btn-danger' onClick={() =>  remove(index)}>
                                                             Delete
                                                         </button>
                                                     </td> 
