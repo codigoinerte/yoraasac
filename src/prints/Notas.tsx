@@ -21,11 +21,11 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
         if(active?.fecha_cierre && active.estado == 1){
         
             const dateNow = active.fecha_cierre??new Date();
-            const dateCurrent = moment(dateNow).format("YYYY-MM-DD HH:mm A").toString();
+            const dateCurrent = moment(dateNow).format("YYYY-MM-DD | HH:mm A").toString();
             setFechaOperacion(dateCurrent);
     
         }else{
-            let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm A").toString();                        
+            let dateNow = moment(new Date()).format("YYYY-MM-DD | HH:mm A").toString();                        
             setFechaOperacion(dateNow);
         }
 

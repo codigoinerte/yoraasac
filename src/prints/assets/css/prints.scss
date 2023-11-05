@@ -8,13 +8,15 @@
 }
 @media print {
     @page {
-      size: 50mm;
-      margin: 1mm 1mm 1mm 1mm;
+      /*size: 50mm;*/
+      margin: 1mm 1mm 1mm 0mm;
+      height: auto;
       
     }
     html, body {
-      height: 100vh !important;            
-      -webkit-print-color-adjust: exact;      
+      margin: 0px;
+      /*height: 100vh !important;*/
+      /*-webkit-print-color-adjust: exact;      */
     }
     .print{
       display: block;
@@ -41,19 +43,19 @@
       margin: 0px;
     }
     .container{
-      padding: 5px;
+      /*padding: 5px;**********/
     }
     .form-control{
       border: 0px !important;
       padding: 0px !important;
       background-color: transparent !important;
-      font-size: 0.74rem;
+      font-size: 1rem;
     }
     .rs-picker-toggle{
       padding: 0px !important;
     }
     h4{
-      font-size: 0.75rem !important;
+      font-size: 1rem !important;
     }
     .table tr{
       background-color: transparent !important;
@@ -73,7 +75,7 @@
       widows: 3;
     }
     *{
-      font-size: 0.74rem;
+      font-size: 1rem;
       background-color: transparent;
       border: 0;
       text-align: left;
@@ -90,10 +92,10 @@
     }
 
     .ticket *{
-      font-size: 0.5rem;
+      font-size: 0.75rem;
     }
     .ticket {
-      height: 100%;
+      /*height: 100%;*/
       display: flex;
       flex-direction: row;
     }
@@ -119,7 +121,7 @@
     }
 
     .ticket .cuerpo tr{
-      border-bottom: 1px dotted #ebebeb;
+      border-bottom: 2px dotted #ebebeb;
       margin-bottom: 0.5rem;
     }
     .ticket table td:nth-child(1),
