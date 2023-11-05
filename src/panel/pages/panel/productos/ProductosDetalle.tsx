@@ -53,6 +53,18 @@ export const ProductosDetalle = () => {
     setValue('precio_final', precio_final);
 
   }
+  
+  const calcularPrecioFinalHeladero = ()=>{
+    let p = getValues('heladero_precio_venta')??0;
+    let d = getValues('heladero_descuento')??0;
+    
+    let precio_final = p - (p*(d/100));
+    
+    
+    precio_final = precio_final < 0 ?  0 : precio_final;
+    setValue('heladero_precio_final', precio_final);
+
+  }
 
   const updateData = (buscar:string)=>{
     
@@ -101,7 +113,7 @@ export const ProductosDetalle = () => {
 
 
         calcularPrecioFinal();
-
+        calcularPrecioFinalHeladero();
       });
 
 
@@ -109,7 +121,21 @@ export const ProductosDetalle = () => {
 
   }, []);
   
-  const onSubmit: SubmitHandler<FormProductosValues> = ({ codigo, nombre, marcas_id, unspsc_id, estados_id, stock_alerta, unidad_id, igv_id, moneda_id, precio_venta, descuento, destacado }) => {                
+  const onSubmit: SubmitHandler<FormProductosValues> = ({ 
+    codigo, 
+    nombre,
+    marcas_id,
+    unspsc_id,
+    estados_id,
+    stock_alerta,
+    unidad_id,
+    igv_id,
+    moneda_id,
+    precio_venta,
+    descuento,
+    destacado,
+    heladero_precio_venta,
+    heladero_descuento }) => {
             
     if(id == 0){
       // nuevo
@@ -128,6 +154,10 @@ export const ProductosDetalle = () => {
         moneda_id,
         igv_id,
         precio_final:0,
+        heladero_precio_venta,
+        heladero_descuento,
+        heladero_precio_final : 0
+        
       });
     }else{
       updateProducto({
@@ -145,6 +175,10 @@ export const ProductosDetalle = () => {
         moneda_id,
         igv_id,
         precio_final:0,
+        heladero_precio_venta,
+        heladero_descuento,
+        heladero_precio_final : 0
+        
       });
     }
     
@@ -242,12 +276,47 @@ export const ProductosDetalle = () => {
                             }
                     </select>
                 </div>
-                  
-              </div>
-              <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
-                <h4>Precio de venta (publico)</h4>
-               
+                                              
+
+                
+
+                <div className="mb-3">
+                      <label htmlFor="preciofinal" className="form-label">Stock alerta</label>
+                      <input  type="number" 
+                              className="form-control" 
+                              id="preciofinal" 
+                              aria-describedby="preciofinal"
+                              step={1}
+                              defaultValue={0}
+                              {...register('stock_alerta')} />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="destacado" className="form-label">Destacado</label>
+                    <select id="destacado" 
+                            defaultValue={0}
+                            className={errors.destacado ? "form-control is-invalid" : "form-control"}
+                            {...register('destacado', {required:true})}>
+                      <option value="0">No destacado</option>
+                      <option value="1">Destacado</option>
+                    </select>
+                </div>
+                
+                <div className="mb-3">
+                    <label htmlFor="unidad" className="form-label">Unidad</label>
+                    <select id="unidad" 
+                            defaultValue={1}
+                            className={errors.unidad_id ? "form-control is-invalid" : "form-control"}
+                            {...register('unidad_id',{required:true})}>
+                            {
+                              listUnidades.map(({ simbolo, id }, index)=>(
+                                <option value={id} key={id.toString()}>{simbolo}</option>
+                              ))
+                            }
+                    </select>
+                </div>
+
                 <div className="mb-3">
                     <label htmlFor="tipoigv" className="form-label">Tipo de IGV</label>
                     <select id="tipoigv"                             
@@ -260,6 +329,11 @@ export const ProductosDetalle = () => {
                             }
                     </select>
                 </div>
+
+                  
+              </div>
+              <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
                 
                 <div className="mb-3">
                     <label htmlFor="moneda" className="form-label">Moneda</label>
@@ -274,96 +348,101 @@ export const ProductosDetalle = () => {
                     </select>
                 </div>
                 
-                <div className="mb-3">
-                    <label htmlFor="precioventa" className="form-label">Precio de venta</label>
-                    <input  type="text" 
-                            id="precioventa" 
-                            aria-describedby="precioventa" 
-                            defaultValue={0}
-                            className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
-                            onKeyUp={(e)=> setValue('precio_venta', validateNoNegative(e))}
-                            {...register('precio_venta',{
-                              onChange: calcularPrecioFinal,
-                              required:true
-                            })}/>
-                </div>
-                
-                <div className="mb-3">
-                    <label htmlFor="descuento" className="form-label">Descuento</label>
-                    <div className="input-group mb-3">
-                      <input  type="number" 
-                              className="form-control" 
-                              aria-describedby="precio-descuento" 
-                              min={0} 
-                              step={1} 
-                              max={100}
-                              onKeyUp={(e)=>{ setValue('descuento', validateNoNegative(e)); } }
+                <div className="card p-3 mb-3">
+                  <h5>Precio de venta a usuarios</h5>
+                  <div className="mb-3">
+                      <label htmlFor="precioventa" className="form-label">Precio de venta</label>
+                      <input  type="text" 
+                              id="precioventa" 
+                              aria-describedby="precioventa" 
                               defaultValue={0}
-                              {...register('descuento', {
-                                onChange: calcularPrecioFinal
+                              className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
+                              onKeyUp={(e)=> setValue('precio_venta', validateNoNegative(e))}
+                              {...register('precio_venta',{
+                                onChange: calcularPrecioFinal,
+                                required:true
                               })}/>
-                      <span className="input-group-text" id="precio-descuento">%</span>
-                    </div>
-                </div>
-                
-                <div className="mb-3">
-                    <label htmlFor="preciofinal" className="form-label">Precio final</label>
-                    <input  type="text" 
-                            className="form-control" 
-                            id="preciofinal" 
-                            aria-describedby="preciofinal"
-                            //disabled={true}
-                            defaultValue={0}
-                            {...register('precio_final')} />
-                </div>
-
-
-              </div>
-
-              <div>
-                <h4>Otras propiedades</h4>
-
-                <div className="row">
-
-                  <div className="mb-3 col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                      <label htmlFor="preciofinal" className="form-label">Stock alerta</label>
-                      <input  type="number" 
+                  </div>
+                  
+                  <div className="mb-3">
+                      <label htmlFor="descuento" className="form-label">Descuento</label>
+                      <div className="input-group mb-3">
+                        <input  type="number" 
+                                className="form-control" 
+                                aria-describedby="precio-descuento" 
+                                min={0} 
+                                step={1} 
+                                max={100}
+                                onKeyUp={(e)=>{ setValue('descuento', validateNoNegative(e)); } }
+                                defaultValue={0}
+                                {...register('descuento', {
+                                  onChange: calcularPrecioFinal
+                                })}/>
+                        <span className="input-group-text" id="precio-descuento">%</span>
+                      </div>
+                  </div>
+                  
+                  <div className="mb-3">
+                      <label htmlFor="preciofinal" className="form-label">Precio final</label>
+                      <input  type="text" 
                               className="form-control" 
                               id="preciofinal" 
                               aria-describedby="preciofinal"
-                              step={1}
+                              //disabled={true}
                               defaultValue={0}
-                              {...register('stock_alerta')} />
+                              {...register('precio_final')} />
                   </div>
+                </div>
 
-                  <div className="mb-3 col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                      <label htmlFor="destacado" className="form-label">Destacado</label>
-                      <select id="destacado" 
+                <div className="card p-3">
+                  <h5>Precio de venta a heladeros</h5>
+                  <div className="mb-3">
+                      <label htmlFor="precioventa" className="form-label">Precio de venta</label>
+                      <input  type="text" 
+                              id="precioventa" 
+                              aria-describedby="precioventa" 
                               defaultValue={0}
-                              className={errors.destacado ? "form-control is-invalid" : "form-control"}
-                              {...register('destacado', {required:true})}>
-                        <option value="0">No destacado</option>
-                        <option value="1">Destacado</option>
-                      </select>
+                              className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
+                              onKeyUp={(e)=> setValue('heladero_precio_venta', validateNoNegative(e))}
+                              {...register('heladero_precio_venta',{
+                                onChange: calcularPrecioFinalHeladero,
+                                required:true
+                              })}/>
                   </div>
                   
-                  <div className="mb-3 col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                      <label htmlFor="unidad" className="form-label">Unidad</label>
-                      <select id="unidad" 
-                              defaultValue={1}
-                              className={errors.unidad_id ? "form-control is-invalid" : "form-control"}
-                              {...register('unidad_id',{required:true})}>
-                              {
-                                listUnidades.map(({ simbolo, id }, index)=>(
-                                  <option value={id} key={id.toString()}>{simbolo}</option>
-                                ))
-                              }
-                      </select>
+                  <div className="mb-3">
+                      <label htmlFor="descuento" className="form-label">Descuento</label>
+                      <div className="input-group mb-3">
+                        <input  type="number" 
+                                className="form-control" 
+                                aria-describedby="precio-descuento" 
+                                min={0} 
+                                step={1} 
+                                max={100}
+                                onKeyUp={(e)=>{ setValue('heladero_descuento', validateNoNegative(e)); } }
+                                defaultValue={0}
+                                {...register('heladero_descuento', {
+                                  onChange: calcularPrecioFinalHeladero
+                                })}/>
+                        <span className="input-group-text" id="precio-descuento">%</span>
+                      </div>
                   </div>
-
+                  
+                  <div className="mb-3">
+                      <label htmlFor="preciofinal" className="form-label">Precio final</label>
+                      <input  type="text" 
+                              className="form-control" 
+                              id="preciofinal" 
+                              aria-describedby="preciofinal"
+                              //disabled={true}
+                              defaultValue={0}
+                              {...register('heladero_precio_final')} />
+                  </div>
                 </div>
 
               </div>
+
+
             </div>
           </form>
         </>

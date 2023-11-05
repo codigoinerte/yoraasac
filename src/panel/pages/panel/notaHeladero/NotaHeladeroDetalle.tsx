@@ -53,6 +53,24 @@ export const NotaHeladeroDetalle = () => {
         
     // }, [id])
 
+    const calcImporte = (index:number)=> {
+
+        let vendido = getValues(`productos.${index}.vendido`)??0;
+        let precio_operacion = getValues(`productos.${index}.precio_operacion`)??0;
+        
+        let precio_final = precio_operacion * parseInt(vendido.toString());
+        
+        setValue(`productos.${index}.importe`, precio_final.toString());
+    }
+    const calculo_precio_final = (precio_venta:string, descuento:string) => {
+        let p = precio_venta==""?0: parseFloat(precio_venta);
+        let d = descuento==""?0: parseFloat(descuento);
+        
+        let precio_final = p - (p*(d/100));
+        
+        
+       return (precio_final < 0 ?  0 : precio_final);
+    }
     
     useEffect(() => {
         
@@ -68,8 +86,9 @@ export const NotaHeladeroDetalle = () => {
             if(productos!= undefined){
 
                 setValue("productos", [
-                    ...productos.map(({ nombre, codigo }:ProductosPublicados)=>({
+                    ...productos.map(({ nombre, codigo, heladero_descuento, heladero_precio_venta }:ProductosPublicados)=>({
                         producto: nombre,
+                        precio_operacion: calculo_precio_final(heladero_precio_venta, heladero_descuento),
                         codigo
                     }))
                 ]);
@@ -244,6 +263,7 @@ export const NotaHeladeroDetalle = () => {
                 setValue(`productos.${index}.devolucion`, 0);                
                 setValue(`productos.${index}.vendido`, 0);
                 setValue(`productos.${index}.importe`, '');
+                setValue(`productos.${index}.precio_operacion`, 0);
             });
         }
 
@@ -386,19 +406,26 @@ export const NotaHeladeroDetalle = () => {
                                                 return (
                                                 <tr key={item.id}>                                                    
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.devolucion`)} />
+                                                        <input type="text" className='form-control' {...register(`productos.${index}.devolucion`,{
+                                                            onChange: () => calcImporte(index)
+                                                        })} />
                                                     </td>                                                     
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.pedido`)} />
+                                                        <input type="text" className='form-control' {...register(`productos.${index}.pedido`,{
+                                                            onChange: () => calcImporte(index)
+                                                        })} />
                                                     </td>                                                     
                                                     <td>
                                                         { item.producto }
                                                         <input type="hidden" className='form-control' {...register(`productos.${index}.codigo`)} />
                                                     </td>
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.vendido`)}/>
+                                                        <input type="text" className='form-control' {...register(`productos.${index}.vendido`,{
+                                                            onChange: () => calcImporte(index)
+                                                        })}/>
                                                     </td> 
-                                                    <td>
+                                                    <td>                                                        
+                                                        <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
                                                         <input type="text" className='form-control'  {...register(`productos.${index}.importe`)}/>
                                                     </td> 
 

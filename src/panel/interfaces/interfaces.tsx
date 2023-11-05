@@ -191,6 +191,10 @@ export type FormProductosValues = {
     moneda_id:    number | null;
     igv_id:       number | null;
     precio_final: number | null;
+
+    heladero_precio_venta: number | null;
+    heladero_descuento:    number | null;
+    heladero_precio_final: number | null;
 }
 /***************************************** */
 export type FormBuscarStockHeladoValues = {
@@ -300,6 +304,7 @@ export interface FormNotaHeladeroDetalleValues {
     updated_at?:        string;
     codigo?:            string;
     producto?:          string;
+    precio_operacion?:  number;
 }
 
 
@@ -589,6 +594,9 @@ export interface ProductosPublicados {
     igv_id:       number;
     created_at:   string;
     updated_at:   string;
+
+    heladero_precio_venta: string;
+    heladero_descuento:    string;
 }
 
 
