@@ -57,10 +57,7 @@ export const NotaHeladeroDetalle = () => {
 
         let vendido = (!getValues(`productos.${index}.vendido`)) ? 0 : parseFloat(getValues(`productos.${index}.vendido`)!.toString());
         let precio_operacion = (!getValues(`productos.${index}.precio_operacion`)) ? 0 : parseFloat(getValues(`productos.${index}.precio_operacion`)!.toString());
-        console.log(vendido);
-        console.log(precio_operacion);
-        let precio_final = precio_operacion * parseInt(vendido.toString());
-        
+        let precio_final = precio_operacion * parseInt(vendido.toString());        
         setValue(`productos.${index}.importe`, precio_final.toString());
     }
     const calculo_precio_final = (precio_venta:string, descuento:string) => {
