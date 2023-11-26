@@ -31,7 +31,7 @@ export const ProductosDetalle = () => {
                 loadMoneda,
                 loadIgv, } = useHelpers();
 
-
+  let searchUNPSC = true;
   const { register, handleSubmit, formState, setValue, getValues, control } = useForm<FormProductosValues>();
 
   const { errors } = formState;
@@ -104,11 +104,14 @@ export const ProductosDetalle = () => {
         setValue('precio_venta', prod?.precio_venta);
         setValue('descuento', prod?.descuento);
         setValue('destacado', prod?.destacado);
+        setValue('heladero_descuento', prod?.heladero_descuento);
+        setValue('heladero_precio_venta', prod?.heladero_precio_venta);
 
         let unspsc_id = prod?.unspsc_id??'';
 
-        if(unspsc_id != ''){
+        if(unspsc_id != '' && searchUNPSC){
           loadUnspsc(unspsc_id, 'codigo');
+          searchUNPSC=false;
         }
 
 
@@ -220,6 +223,7 @@ export const ProductosDetalle = () => {
                     <select id="marca" 
                             className='form-control'
                             {...register('marcas_id')}>
+                            <option value="0">-Seleccione una marca-</option>
                             {
                               listMarcas.map(({ nombre, id }, index)=>(
                                 <option value={id} key={id.toString()}>{nombre}</option>
