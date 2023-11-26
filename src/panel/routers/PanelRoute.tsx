@@ -37,14 +37,15 @@ import {  Home,
           MarcaDetalle,
           ConfiguracionPrincipal,
           LocalesSeries,
-          MiCuenta
+          MiCuenta,
+          StockHistorialHelados
 
         } from '../pages';
 
-import { Routes, Route, Outlet, Link, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { StockBarquillos } from '../pages/panel/stockBarquillos/StockBarquillos';
 import { Productos } from '../pages/panel/productos/Productos';
-import path from 'path';
+
 import { NotaHeladero } from '../pages/panel/notaHeladero/NotaHeladero';
 import { ReporteBoletas } from '../pages/panel/reportes/ReporteBoletas';
 import { Notificaciones } from '../pages/panel/micuenta/Notificaciones';
@@ -117,6 +118,12 @@ export const PanelRoute = () => {
 
             <Route path="/" element={<Stock />} />
 
+            {/* Stock helados */}
+            <Route path="/historial-helados/*" element={<Routes>
+
+              <Route path="/" element={<StockHistorialHelados />} />                          
+            </Routes>} />
+            
             {/* Stock helados */}
             <Route path="/helados/*" element={<Routes>
 
