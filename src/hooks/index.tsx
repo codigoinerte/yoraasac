@@ -14,3 +14,4 @@ export * from './useMarca';
 export * from './useConfigurationStore';
 export * from './useSeriesStore';
 export * from './useDestacados';
+export * from './useStockHeladosHistory';
