@@ -106,6 +106,7 @@ export const ProductosDetalle = () => {
         setValue('destacado', prod?.destacado);
         setValue('heladero_descuento', prod?.heladero_descuento);
         setValue('heladero_precio_venta', prod?.heladero_precio_venta);
+        setValue('cantidad_caja', prod?.cantidad_caja);
 
         let unspsc_id = prod?.unspsc_id??'';
 
@@ -138,7 +139,8 @@ export const ProductosDetalle = () => {
     descuento,
     destacado,
     heladero_precio_venta,
-    heladero_descuento }) => {
+    heladero_descuento,
+    cantidad_caja }) => {
             
     if(id == 0){
       // nuevo
@@ -159,7 +161,8 @@ export const ProductosDetalle = () => {
         precio_final:0,
         heladero_precio_venta,
         heladero_descuento,
-        heladero_precio_final : 0
+        heladero_precio_final : 0,
+        cantidad_caja
         
       });
     }else{
@@ -180,7 +183,8 @@ export const ProductosDetalle = () => {
         precio_final:0,
         heladero_precio_venta,
         heladero_descuento,
-        heladero_precio_final : 0
+        heladero_precio_final : 0,
+        cantidad_caja
         
       });
     }
@@ -350,6 +354,11 @@ export const ProductosDetalle = () => {
                               ))
                             }
                     </select>
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="cantidad_caja" className="form-label">Cantidad por caja</label>
+                    <input type="text" id="cantidad_caja" className={errors.cantidad_caja ? "form-control is-invalid" : "form-control"} {...register('cantidad_caja',{required:true})} />
                 </div>
                 
                 <div className="card p-3 mb-3">

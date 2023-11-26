@@ -197,6 +197,8 @@ export type FormProductosValues = {
     heladero_precio_venta: number | null;
     heladero_descuento:    number | null;
     heladero_precio_final: number | null;
+
+    cantidad_caja: number | null;
 }
 /***************************************** */
 export type FormBuscarStockHeladoValues = {
