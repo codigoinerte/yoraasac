@@ -62,18 +62,19 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                 <td className='sizeTitle'><strong>Imp.</strong></td>
                             </tr>
                             {
-                                active?.detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
+                                (active?.detalle) &&
+                                    active.detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
 
-                                    <tr key={detalle.id}>
+                                        <tr key={detalle.id}>
 
-                                        <td width={15}>{ detalle.devolucion??0 }</td>
-                                        <td width={15}>{ detalle.pedido??0 }</td>
-                                        <td>{ detalle.producto }</td>
-                                        <td width={15}>{ detalle.vendido??0 }</td>
-                                        <td width={15}>{ detalle.importe??0 }</td>
+                                            <td width={15}>{ detalle.devolucion??0 }</td>
+                                            <td width={15}>{ detalle.pedido??0 }</td>
+                                            <td>{ detalle.producto }</td>
+                                            <td width={15}>{ detalle.vendido??0 }</td>
+                                            <td width={15}>{ detalle.importe??0 }</td>
 
-                                    </tr>
-                                ))
+                                        </tr>
+                                    ))
                             }
                         </tbody>
                     </table>
