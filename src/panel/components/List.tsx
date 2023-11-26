@@ -4,15 +4,22 @@ import { Enlace } from '../helpers';
 import { TablalList } from '../interfaces'
 import { FormControls } from './FormControls';
 
-export const List = ({page, cabecera, detalle, eliminar, next, prev, children, category }:TablalList) => {
+export const List = ({page, cabecera, detalle, eliminar = function(){}, next, prev, children, category, options = true, actions = true }:TablalList) => {
 
     
 
   return (
     <>
-        <FormControls category={category} page={page} save={()=>console.log(1)} tipo='list' />
-
-        <hr className='border border-1 opacity-50'/>
+        {
+            options === true &&
+            (
+                <>
+                    <FormControls category={category} page={page} save={()=>console.log(1)} tipo='list'/>
+            
+                    <hr className='border border-1 opacity-50'/>
+                </>
+            )
+        }
 
         <div className="buscador">
             { children }
@@ -55,13 +62,19 @@ export const List = ({page, cabecera, detalle, eliminar, next, prev, children, c
                                                     </td>  
                                                 )})
                                             }
-
-                                            <td data-label="Acciones">
-                                                <div className="acciones-buttons">
-                                                    <Link to={enlaceDetalle} type="button" className="btn btn-outline-primary flex-fill"><i className="bi bi-pencil"></i></Link>
-                                                    <button onClick={()=> eliminar(id)} type="button" className="btn btn-outline-danger flex-fill"><i className="bi bi-trash3"></i></button>
-                                                </div>
-                                            </td>
+                                            {
+                                                actions === true &&
+                                                (
+                                                    <td data-label="Acciones">
+                                                        <div className="acciones-buttons">
+                                                            <Link to={enlaceDetalle} type="button" className="btn btn-outline-primary flex-fill"><i className="bi bi-pencil"></i></Link>
+                                                            <button onClick={()=> eliminar(id)} type="button" className="btn btn-outline-danger flex-fill"><i className="bi bi-trash3"></i></button>
+                                                        </div>
+                                                    </td>
+                                                )
+                                            }
+                                            
+                                            
                                         </tr>
                                     
                                 )})
