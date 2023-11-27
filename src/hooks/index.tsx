@@ -15,3 +15,4 @@ export * from './useConfigurationStore';
 export * from './useSeriesStore';
 export * from './useDestacados';
 export * from './useStockHeladosHistory';
+export * from './useStock';

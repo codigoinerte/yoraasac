@@ -63,7 +63,12 @@ export const MenuPersonas:MenuInterface[] = [
  ];
 
  
-export const MenuStock:MenuInterface[] = [
+export const MenuStock:MenuInterface[] = [   
+    {
+       "nombre":"Stock restante",
+       "alias":"/stock/stock-restante",
+       "icono":"bi bi-app"
+    },
     {
        "nombre":"Historial Movimientos (Helados)",
        "alias":"/stock/historial-helados",

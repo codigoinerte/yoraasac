@@ -17,3 +17,4 @@ export * from './Configuracion';
 export * from './configuracion';
 export * from './micuenta';
 export * from './stockHistorialHelados';
+export * from './stockRestante';

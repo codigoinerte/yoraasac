@@ -38,7 +38,8 @@ import {  Home,
           ConfiguracionPrincipal,
           LocalesSeries,
           MiCuenta,
-          StockHistorialHelados
+          StockHistorialHelados,
+          StockRestante
 
         } from '../pages';
 
@@ -122,6 +123,12 @@ export const PanelRoute = () => {
             <Route path="/historial-helados/*" element={<Routes>
 
               <Route path="/" element={<StockHistorialHelados />} />                          
+            </Routes>} />
+            
+            {/* Stock restante */}
+            <Route path="/stock-restante/*" element={<Routes>
+
+              <Route path="/" element={<StockRestante />} />                          
             </Routes>} />
             
             {/* Stock helados */}
