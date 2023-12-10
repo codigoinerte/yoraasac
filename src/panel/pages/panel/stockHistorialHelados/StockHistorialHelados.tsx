@@ -1,4 +1,3 @@
-import 'datatables.net';
 
 import { ContainerInner } from "../../../components"
 import { StockHistorialHeladoData, breadcrumb as bread } from '../../../interfaces';
@@ -8,6 +7,14 @@ import { useEffect, useState } from 'react';
 
 import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
 import ExpandOutlineIcon from '@rsuite/icons/ExpandOutline';
+
+import { useForm } from "react-hook-form";
+
+type FormValues = {
+  buscar: string
+}
+
+
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Stock', enlace: '/stock' },    
@@ -75,8 +82,21 @@ export const StockHistorialHelados = () => {
   const [expandedRowKeys, setExpandedRowKeys] = useState<any[]>([]);
   const { loadStockHelado } = useStockHeladosHistory();
   const [stock, setStock] = useState<StockHistorialHeladoData[]>();
+  const [stockOriginal, setOriginalStock] = useState<StockHistorialHeladoData[]>();
   const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
+
+  const { register, handleSubmit } = useForm<FormValues>({});
+  const onSubmit = handleSubmit(({buscar = ''}) => {
+    if(buscar == "") {
+      setStock(stockOriginal);
+      return false;
+    }
+    /*buscar por terminos*/
+    let resultadoBusqueda = stock?.filter((item)=> item.codigo_movimiento.toLowerCase().includes(buscar.toLowerCase()) || item.documento.toLowerCase().includes(buscar.toLowerCase()) || item.numero_documento.toLowerCase().includes(buscar.toLowerCase()) || item.fecha_movimiento.toLowerCase().includes(buscar.toLowerCase()));
+    setStock(resultadoBusqueda);
+    /*buscar por terminos*/
+  });
 
   const handleChangeLimit = (dataKey:any) => {
     setPage(1);
@@ -116,6 +136,7 @@ export const StockHistorialHelados = () => {
 
       
       setStock(response.data);
+      setOriginalStock(response.data);
 
     });
 
@@ -125,6 +146,12 @@ export const StockHistorialHelados = () => {
     return (
         <ContainerInner breadcrumb={breadcrumb}>
             <>
+            <form className="d-flex flex-wrap gap-2" onSubmit={onSubmit}>
+              <input type="text" className="form-control w-auto flex-fill" placeholder="Ingrese su busqueda" {...register("buscar")} />
+              <button className="btn btn-primary" type="submit">Buscar</button>
+              <button className="btn btn-info" type="submit">Resetear</button>
+            </form>
+            <hr />
             <div>
               <Table 
                 height={620} 
