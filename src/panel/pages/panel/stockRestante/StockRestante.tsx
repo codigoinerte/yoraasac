@@ -43,10 +43,10 @@ export const StockRestante = () => {
         let x:any = a[sortColumn]??'';
         let y:any = b[sortColumn]??'';
         if (typeof x === 'string') {
-          x = x!.charCodeAt();
+          x = x!.charCodeAt(0);
         }
         if (typeof y === 'string') {
-          y = y!.charCodeAt();
+          y = y!.charCodeAt(0);
         }
         if (sortType === 'asc') {
           return x - y;
