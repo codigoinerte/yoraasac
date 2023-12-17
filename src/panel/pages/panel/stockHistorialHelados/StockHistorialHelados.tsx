@@ -1,7 +1,7 @@
 
 import { ContainerInner } from "../../../components"
 import { StockHistorialHeladoData, breadcrumb as bread } from '../../../interfaces';
-import { useStockHeladosHistory } from '../../../../hooks';
+import { usePrintCsv, useStockHeladosHistory } from '../../../../hooks';
 import { Table, Pagination, IconButton } from 'rsuite';
 import { useEffect, useState } from 'react';
 
@@ -9,12 +9,11 @@ import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
 import ExpandOutlineIcon from '@rsuite/icons/ExpandOutline';
 
 import { useForm } from "react-hook-form";
+import moment from "moment";
 
 type FormValues = {
   buscar: string
 }
-
-
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Stock', enlace: '/stock' },    
@@ -79,14 +78,16 @@ const renderRowExpanded = (rowData:any) => {
 
 export const StockHistorialHelados = () => {
 
+  const fileName = `stockhistorialhelados${Math.floor(new Date().getTime() / 1000)}`;
   const [expandedRowKeys, setExpandedRowKeys] = useState<any[]>([]);
   const { loadStockHelado } = useStockHeladosHistory();
   const [stock, setStock] = useState<StockHistorialHeladoData[]>();
   const [stockOriginal, setOriginalStock] = useState<StockHistorialHeladoData[]>();
   const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
+  const { print } = usePrintCsv();
 
-  const { register, handleSubmit } = useForm<FormValues>({});
+  const { register, handleSubmit, reset } = useForm<FormValues>({});
   const onSubmit = handleSubmit(({buscar = ''}) => {
     if(buscar == "") {
       setStock(stockOriginal);
@@ -141,6 +142,16 @@ export const StockHistorialHelados = () => {
     });
 
   }, [])
+const resetForm = () => {
+  reset();
+  setStock(stockOriginal);
+}
+/*export to excel*/
+const exportToExcel = async() => {
+  
+  print(stock?.map(({ codigo_movimiento, created_at, documento, numero_documento })=> ({ codigo_movimiento, documento, numero_documento, created_at: moment(created_at).format("DD-MM-YYYY") })), fileName);
+}
+/*export to excel*/
       
 
     return (
@@ -149,7 +160,8 @@ export const StockHistorialHelados = () => {
             <form className="d-flex flex-wrap gap-2" onSubmit={onSubmit}>
               <input type="text" className="form-control w-auto flex-fill" placeholder="Ingrese su busqueda" {...register("buscar")} />
               <button className="btn btn-primary" type="submit">Buscar</button>
-              <button className="btn btn-info" type="submit">Resetear</button>
+              <button className="btn btn-info" type="button" onClick={resetForm}>Resetear</button>
+              <button className="btn btn-info" type="button" onClick={exportToExcel}>Exportar</button>
             </form>
             <hr />
             <div>
