@@ -1,0 +1,1 @@
+export const RequiredField = ({ content = '*Este campo es requerido' }) => <div className="invalid-feedback">{content}</div>
