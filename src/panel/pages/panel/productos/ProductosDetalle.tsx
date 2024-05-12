@@ -362,7 +362,7 @@ export const ProductosDetalle = () => {
                 </div>
                 
                 <div className="card p-3 mb-3">
-                  <h5>Precio de venta a usuarios</h5>
+                  <h5>Precio de venta a público general</h5>
                   <div className="mb-3">
                       <label htmlFor="precioventa" className="form-label">Precio de venta</label>
                       <input  type="text" 
