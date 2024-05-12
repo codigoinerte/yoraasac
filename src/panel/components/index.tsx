@@ -13,3 +13,4 @@ export * from './ListReportes';
 export * from './AccessCategory';
 export * from './FormControls';
 export * from './Loader';
+export * from './RequiredField';
