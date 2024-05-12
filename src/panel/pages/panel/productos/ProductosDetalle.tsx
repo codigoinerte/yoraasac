@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import { ContainerInner, FormControls } from '../../../components'
+import { ContainerInner, FormControls, RequiredField } from '../../../components'
 import { FormProductosValues, Breadcrumb as bread } from '../../../interfaces';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useHelpers, useProductosStore } from '../../../../hooks';
@@ -211,6 +211,7 @@ export const ProductosDetalle = () => {
                             aria-describedby="codigo"
                             className={errors.codigo ? "form-control is-invalid" : "form-control"}
                             {...register('codigo', {required: true})} />
+                    { (getValues("codigo")?.toString() == "" || errors.codigo) && <RequiredField/> }
                 </div>
 
                 <div className="mb-3">
@@ -220,6 +221,7 @@ export const ProductosDetalle = () => {
                             aria-describedby="nombreproducto"
                             className={errors.nombre ? "form-control is-invalid" : "form-control"}
                             {...register('nombre', {required:true})} />
+                    { (getValues("nombre")?.toString() == "" || errors.nombre) && <RequiredField/> }
                 </div>
 
                 <div className="mb-3">
@@ -248,6 +250,7 @@ export const ProductosDetalle = () => {
                           rules={{required:true}}
                           render={({ field }) => 
                           
+                          <>
                           <div ref={field.ref}>
                             <SelectPicker
                                 {...field} 
@@ -263,7 +266,9 @@ export const ProductosDetalle = () => {
                                 placeholder='Buscar UNSPSC de Sunat'                             
                                 className={getValues("unspsc_id")?.toString() == "" || errors.unspsc_id ? "form-control is-invalid p-0" : "form-control p-0"}
                             />
+                            { (getValues("unspsc_id")?.toString() == "" || errors.unspsc_id) && <RequiredField/>}
                           </div>
+                          </>
                       }/>
 
                  
@@ -359,6 +364,7 @@ export const ProductosDetalle = () => {
                 <div className="mb-3">
                     <label htmlFor="cantidad_caja" className="form-label">Cantidad por caja</label>
                     <input type="text" id="cantidad_caja" className={errors.cantidad_caja ? "form-control is-invalid" : "form-control"} {...register('cantidad_caja',{required:true})} />
+                    { (getValues("cantidad_caja")?.toString() == "" || errors.cantidad_caja) && <RequiredField/>}
                 </div>
                 
                 <div className="card p-3 mb-3">
