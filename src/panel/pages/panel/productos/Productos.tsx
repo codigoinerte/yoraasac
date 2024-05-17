@@ -30,9 +30,7 @@ export const Productos = () => {
     const [sortColumn, setSortColumn] = useState();
     const [sortType, setSortType] = useState();
     const [loading, setLoading] = useState(false);
-
-    const [pageActive, setPageActive] = useState<string | null>("1");
-    const [limit, setLimit] = useState(20);
+    const [limit, setLimit] = useState(13);
     const [page, setPage] = useState(1);
     
     const [buscar, setBuscar] = useState<BuscarProductos>({
@@ -78,11 +76,9 @@ export const Productos = () => {
 
     const { productos, loadProductos, deleteProducto } = useProductosStore();
 
-    useEffect(() => {
-        
-        loadProductos(pageActive!=null ? pageActive : "1", buscar);
-        
-    }, [pageActive, buscar]);
+    useEffect(() => {        
+        loadProductos("1", buscar);        
+    }, [buscar]);
 
     const detalle:any[] = productos.map(({ id, codigo, nombre, moneda, precio_venta, estado, created_at_spanish}) => ({
             id,
@@ -93,7 +89,12 @@ export const Productos = () => {
             estado:         estado??''.toString(),
             created_at:     created_at_spanish.toString()
         
-    }));
+    }))
+    .filter((v, i) => {
+        const start = limit * (page - 1);
+        const end = start + limit;
+        return i >= start && i < end;
+    });
 
     const eliminar = (id:number) => {
 
@@ -121,21 +122,9 @@ export const Productos = () => {
 
     const { register, handleSubmit, reset} = useForm<FormBuscarProductosValues>();
 
-    const onSubmit: SubmitHandler<FormBuscarProductosValues> = ({ codigo, producto, fechaCreacion }) => {
-      
-        
-        if(codigo != '' || producto!= '' || fechaCreacion?.toString() !== "") 
-        {
-            setPageActive(null);
-            setBuscar({codigo, producto, fechaCreacion, buscar:true})
-
-        }
-        else
-        {
-            // false
-            // agregar toast booostrap in version react, buscar alternativa solo codigo
-
-        }
+    const onSubmit: SubmitHandler<FormBuscarProductosValues> = ({ codigo, producto, fechaCreacion }) => {      
+        if(codigo == '' || producto== '' || fechaCreacion?.toString() == "")  return;
+        setBuscar({codigo, producto, fechaCreacion, buscar:true})
     };
 
     const resetQuery = () => {
@@ -257,8 +246,8 @@ export const Productos = () => {
                         maxButtons={5}
                         size="md"
                         layout={['total', '-', 'limit', '|', 'pager', 'skip']}
-                        total={detalle?.length??0}
-                        limitOptions={[10, 30, 50]}
+                        total={productos.length??0}
+                        limitOptions={[13, 30, 50]}
                         limit={limit}
                         activePage={page}
                         onChangePage={setPage}
