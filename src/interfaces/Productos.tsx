@@ -22,6 +22,7 @@ export interface Producto {
     moneda_id:     number;
     igv_id:        number;
     created_at:    string;
+    created_at_spanish:    string;
     updated_at:    null;
     moneda:        string;
     estado:        string;
