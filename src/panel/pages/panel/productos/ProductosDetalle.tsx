@@ -107,6 +107,7 @@ export const ProductosDetalle = () => {
         setValue('heladero_descuento', prod?.heladero_descuento);
         setValue('heladero_precio_venta', prod?.heladero_precio_venta);
         setValue('cantidad_caja', prod?.cantidad_caja);
+        setValue('proveedor_precio', prod?.proveedor_precio);
 
         let unspsc_id = prod?.unspsc_id??'';
 
@@ -140,7 +141,8 @@ export const ProductosDetalle = () => {
     destacado,
     heladero_precio_venta,
     heladero_descuento,
-    cantidad_caja }) => {
+    cantidad_caja,
+    proveedor_precio }) => {
             
     if(id == 0){
       // nuevo
@@ -162,7 +164,8 @@ export const ProductosDetalle = () => {
         heladero_precio_venta,
         heladero_descuento,
         heladero_precio_final : 0,
-        cantidad_caja
+        cantidad_caja,
+        proveedor_precio
         
       });
     }else{
@@ -184,7 +187,8 @@ export const ProductosDetalle = () => {
         heladero_precio_venta,
         heladero_descuento,
         heladero_precio_final : 0,
-        cantidad_caja
+        cantidad_caja,
+        proveedor_precio
         
       });
     }
@@ -413,7 +417,7 @@ export const ProductosDetalle = () => {
                   </div>
                 </div>
 
-                <div className="card p-3">
+                <div className="card p-3 mb-3">
                   <h5>Precio de venta a heladeros</h5>
                   <div className="mb-3">
                       <label htmlFor="precioventa" className="form-label">Precio de venta</label>
@@ -457,6 +461,23 @@ export const ProductosDetalle = () => {
                               defaultValue={0}
                               {...register('heladero_precio_final')} />
                   </div>
+                </div>
+
+                <div className="card p-3">
+                  <h5>Precio de compra a proveedores</h5>
+                  <div className="mb-3">
+                      <label htmlFor="proveedorprecio" className="form-label">Precio de compra</label>
+                      <input  type="text" 
+                              id="proveedorprecio" 
+                              aria-describedby="proveedorprecio" 
+                              defaultValue={0}
+                              className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
+                              onKeyUp={(e)=> setValue('proveedor_precio', validateNoNegative(e))}
+                              {...register('proveedor_precio',{
+                                onChange: calcularPrecioFinalHeladero,
+                                required:true
+                              })}/>
+                  </div>                                    
                 </div>
 
               </div>
