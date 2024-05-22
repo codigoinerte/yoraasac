@@ -1,18 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
-import queryString from 'query-string';
+import { useEffect, useState } from 'react'
 
-
-import { BuscarPersonas, listaDetalle, paginationInterface, PersonalList, FormBuscarPersonasValues } from '../../interfaces'
-import { List } from '../List'
+import { BuscarPersonas, PersonalList, FormBuscarPersonasValues } from '../../interfaces'
 import { useAlert, usePersonasStore } from '../../../hooks';
 import { Loader } from '../Loader';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ValidateDate } from '../../helpers';
+
 import Swal from 'sweetalert2';
 
+import { Table, Pagination } from 'rsuite';
+import { Link } from 'react-router-dom';
 
-export const ListPersonal = ({ page, category, tipo = 4 }:PersonalList) => {
+const { Column, HeaderCell, Cell } = Table;
+const rowKey = 'id';
+
+const DetailCell = ({ rowData, dataKey, eliminar, ...props }:any) => {
+    return (
+        <Cell {...props}>
+            <Link to={`edit/${rowData.id}`} type="button" className="btn btn-sm btn-outline-primary flex-fill me-2"><i className="bi bi-pencil"></i></Link>
+            <button onClick={()=> eliminar(rowData.id)} type="button" className="btn btn-sm btn-outline-danger flex-fill"><i className="bi bi-trash3"></i></button>
+        </Cell>
+    );
+};
+
+export const ListPersonal = ({ tipo = 4 }:PersonalList) => {
+
+    const [sortColumn, setSortColumn] = useState();
+    const [sortType, setSortType] = useState();
+    const [loading, setLoading] = useState(false);
+    const [limit, setLimit] = useState(13);
+    const [page, setPage] = useState(1);
 
     const [pageActive, setPageActive] = useState<string | null>("1");
     
@@ -23,10 +40,7 @@ export const ListPersonal = ({ page, category, tipo = 4 }:PersonalList) => {
         buscar:false
     });
 
-    const buttonPrev = useRef<any>();
-    const buttonNext = useRef<any>();
-
-    const { status, personas, nextPage, prevPage, loadPersonas, deletePersona } = usePersonasStore();
+    const { status, personas, loadPersonas, deletePersona } = usePersonasStore();
 
     const { warningDelete } = useAlert();
 
@@ -36,13 +50,39 @@ export const ListPersonal = ({ page, category, tipo = 4 }:PersonalList) => {
         
     }, [pageActive, buscar]);
 
-    
-    
-    const cabecera = [
-        "Documento",
-        "Nombre",
-        "Fecha de creación"
-    ];
+    const getData = () => {
+        if (sortColumn && sortType) {
+          return typeof detalle!="undefined" ? detalle.sort((a, b) => {
+            let x:any = a[sortColumn]??'';
+            let y:any = b[sortColumn]??'';
+            
+            if (isNaN(Number(x))) {
+              x = x!.charCodeAt(0);
+            }
+            if (isNaN(Number(y))) {
+              y = y!.charCodeAt(0);
+            }
+            if (sortType === 'asc') {
+              return x - y;
+            } else {
+              return y - x;
+            }
+          }) : [];
+        }
+        return detalle;
+    };
+
+    const handleSortColumn = (sortColumn:any, sortType:any) => {
+        setLoading(true);
+        setSortColumn(sortColumn);
+        setSortType(sortType);
+        setLoading(false);
+    };
+
+    const handleChangeLimit = (dataKey:any) => {
+        setPage(1);
+        setLimit(dataKey);
+    };
 
     const eliminar = (id:number) => {
 
@@ -68,81 +108,19 @@ export const ListPersonal = ({ page, category, tipo = 4 }:PersonalList) => {
         });
     }
 
-    const detalle:listaDetalle[] = personas.map(({ id, documento, name, apellidos, created_at}) => ({
+    const detalle:any[] = personas.map(({ id, documento, name, apellidos, created_at_spanish}) => ({
             id: id.toString(),
-            campos: [
-                documento.toString(),
-                `${name} ${apellidos}`,
-                created_at.toString()
-            ]
-        
+            documento: documento.toString(),
+            nombres: `${name} ${apellidos}`,
+            create_at: created_at_spanish??''.toString()                    
     }));
 
-    const next = (e:paginationInterface) => {
-        
-        buttonNext.current = e.target;
+    const { register, handleSubmit, reset } = useForm<FormBuscarPersonasValues>();
 
-        if(nextPage == null) 
-        {
-            // e.currentTarget.setAttribute("disabled", "true");
-        }
-        else
-        {
-            // e.currentTarget.removeAttribute("disabled");
-            setPageActive(nextPage);
-        }
-
-        if(prevPage == null)
-        {
-            // buttonPrev.current?.removeAttribute("disabled");
-        }
-       
-        
-    }
-    
-    const prev = (e:paginationInterface) => {
-            
-        buttonPrev.current = e.target;
-
-        if(prevPage == null) 
-        {
-            // e.currentTarget.setAttribute("disabled", "true");
-        }
-        else
-        {
-            // e.currentTarget.removeAttribute("disabled");
-            setPageActive(prevPage);
-        }
-
-        if(nextPage == null)
-        {
-            // buttonNext.current?.removeAttribute("disabled");
-        }
-    }
-
-    const navigate = useNavigate();
-
-    const location = useLocation();
-  
-    const { q = '' } = queryString.parse(location.search);
-    
-    const { register, handleSubmit, reset, formState:{ errors } } = useForm<FormBuscarPersonasValues>();
-
-    const onSubmit: SubmitHandler<FormBuscarPersonasValues> = ({ documento, nombres, fechaCreacion }) => {
-      
-        
-        if(documento != '' || nombres!= '' || fechaCreacion?.toString() !== "") 
-        {
-            setPageActive(null);
-            setBuscar({documento, nombres, fechaCreacion, buscar:true})
-
-        }
-        else
-        {
-            false
-            // agregar toast booostrap in version react, buscar alternativa solo codigo
-
-        }
+    const onSubmit: SubmitHandler<FormBuscarPersonasValues> = ({ documento, nombres, fechaCreacion }) => {              
+        if(documento == '' || nombres == '' || fechaCreacion?.toString() === "") return;
+        setPageActive(null);
+        setBuscar({documento, nombres, fechaCreacion, buscar:true})
     };
     
     const resetQuery = () => {
@@ -168,67 +146,109 @@ export const ListPersonal = ({ page, category, tipo = 4 }:PersonalList) => {
             )
             
         }
-        <List 
-                page={page} 
-                category={category}
-                cabecera={cabecera} 
-                detalle={detalle}               
-                eliminar={eliminar}
-                next={next}
-                prev={prev}>
-            <>
-            <form onSubmit={handleSubmit(onSubmit)} > 
-                <div className="row">
-                    <div className="col-xs-12">
-                        <h5>Buscador</h5>
+
+        <form onSubmit={handleSubmit(onSubmit)} > 
+            <div className="row">
+                <div className="col-xs-12">
+                    <h5>Buscador</h5>
+                </div>
+            </div>
+            <div className="row">
+
+                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div className="mb-3">
+                        <label htmlFor="documento" className="form-label">Documento</label>
+                        <input  type="text" 
+                                className="form-control" 
+                                id="documento" 
+                                aria-describedby="Buscador" 
+                                placeholder='Documento'
+                                {...register('documento')}/>
                     </div>
                 </div>
-                <div className="row">
-
-                    <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                        <div className="mb-3">
-                            <label htmlFor="documento" className="form-label">Documento</label>
-                            <input  type="text" 
-                                    className="form-control" 
-                                    id="documento" 
-                                    aria-describedby="Buscador" 
-                                    placeholder='Documento'
-                                    {...register('documento')}/>
-                        </div>
+                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <div className="mb-3">
+                        <label htmlFor="nombres" className="form-label">Nombre y apellido</label>
+                        <input  type="text" 
+                                className="form-control" 
+                                id="nombres" 
+                                aria-describedby="Buscador" 
+                                placeholder='Nombre y/o apellido'
+                                {...register('nombres')}/>
                     </div>
-                    <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                        <div className="mb-3">
-                            <label htmlFor="nombres" className="form-label">Nombre y apellido</label>
-                            <input  type="text" 
-                                    className="form-control" 
-                                    id="nombres" 
-                                    aria-describedby="Buscador" 
-                                    placeholder='Nombre y/o apellido'
-                                    {...register('nombres')}/>
-                        </div>
-                    </div>
-                    <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                        <div className="mb-3">
-                            <label htmlFor="fecha_creacion" className="form-label">Fecha de creaci&oacute;n</label>
-                            <input  type="date" 
-                                    placeholder="dd-mm-yyyy" 
-                                    className="form-control" 
-                                    id="fecha_creacion" 
-                                    aria-describedby="fechacreacion"
-                                    {...register('fechaCreacion', { validate :  ValidateDate  })}/>
-                        </div>
-                    </div>
-                    <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-end">
-                        <div className="w-100">                                
-                            <button className="btn btn-primary text-center w-100" type="submit"><i className="bi bi-search"></i> Buscar</button>
-                            <button onClick={resetQuery} className="btn btn-secondary text-center w-100 mt-1"><i className="bi bi-x-lg"></i> Resetear</button>
-                        </div>
-                    </div>
-
                 </div>
-            </form>
-            </>
-        </List>
+                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div className="mb-3">
+                        <label htmlFor="fecha_creacion" className="form-label">Fecha de creaci&oacute;n</label>
+                        <input  type="date" 
+                                placeholder="dd-mm-yyyy" 
+                                className="form-control" 
+                                id="fecha_creacion" 
+                                aria-describedby="fechacreacion"
+                                {...register('fechaCreacion', { validate :  ValidateDate  })}/>
+                    </div>
+                </div>
+                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-end">
+                    <div className="w-100">                                
+                        <button className="btn btn-primary text-center w-100" type="submit"><i className="bi bi-search"></i> Buscar</button>
+                        <button onClick={resetQuery} className="btn btn-secondary text-center w-100 mt-1"><i className="bi bi-x-lg"></i> Resetear</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        
+        <hr />
+
+        <div>
+            <Table 
+                height={620} 
+                data={getData()}
+                shouldUpdateScroll={false}
+                rowKey={rowKey}
+                sortColumn={sortColumn}
+                sortType={sortType}
+                onSortColumn={handleSortColumn}
+                loading={loading}
+                >
+                    <Column width={140} align="center" sortable fixed>
+                        <HeaderCell>Documento</HeaderCell>
+                        <Cell dataKey="documento"/>
+                    </Column>
+                    <Column flexGrow={1} sortable fixed>
+                        <HeaderCell>Nombre</HeaderCell>
+                        <Cell dataKey='nombres' />
+                    </Column>
+                    <Column width={140} sortable>
+                        <HeaderCell>Fecha de creación</HeaderCell>
+                        <Cell dataKey="create_at" />
+                    </Column>
+                    <Column width={120}>
+                        <HeaderCell>Acciones</HeaderCell>
+                        <DetailCell dataKey="id" eliminar={eliminar}/>
+                    </Column>
+            </Table>
+            <div style={{ padding: 20 }}>
+                <Pagination
+                prev
+                next
+                first
+                last
+                ellipsis
+                boundaryLinks
+                maxButtons={5}
+                size="md"
+                layout={['total', '-', 'limit', '|', 'pager', 'skip']}
+                total={personas.length??0}
+                limitOptions={[13, 30, 50]}
+                limit={limit}
+                activePage={page}
+                onChangePage={setPage}
+                onChangeLimit={handleChangeLimit}
+                />
+            </div>
+        </div>
+             
     </>
   )
 }
