@@ -73,28 +73,29 @@ export interface Persona {
 }
 */
 export interface Persona {
-    documento:      string;
-    documento_tipo: string;
-    name:           string;
-    apellidos:      string;
-    idpais:         number;
-    iddepartamento: number;
-    idprovincia:    number;
-    iddistrito:     number;
-    email:          string;
-    password?:       string;
-    celular:        string;
-    direccion:      string;
-    usuario_tipo:   string;
-    updated_at:     string;
-    created_at:     string;
-    id:             number;
+    documento:          string;
+    documento_tipo:     string;
+    name:               string;
+    apellidos:          string;
+    idpais:             number;
+    iddepartamento:     number;
+    idprovincia:        number;
+    iddistrito:         number;
+    email:              string;
+    password?:           string;
+    celular:            string;
+    direccion:          string;
+    usuario_tipo:       string;
+    updated_at:         string;
+    created_at:         string;
+    created_at_spanish: string;
+    id:                 number;
 
-    img_frontal?:   FileList;
-    img_posterior?: FileList;
+    img_frontal?:       FileList;
+    img_posterior?:     FileList;
 
-    foto_frontal?:  string;
-    foto_posterior?:string;
+    foto_frontal?:      string;
+    foto_posterior?:    string;
 }
 
 
