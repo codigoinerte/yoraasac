@@ -110,7 +110,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
 
     useEffect(() => {
         setValue('distrito', address.iddistrito ?? 0);
-    }, [distritos]);
+    }, [distritos, address.iddistrito]);
     
    const deleteImagen = async (imagen:deleImagenPersona) =>{
 
