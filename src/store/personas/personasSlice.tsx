@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { intialStatePersonas, Persona, Personas } from '../../interfaces';
-import { FormPersonasValues } from '../../panel/interfaces';
 
 const initialState: intialStatePersonas =  {
     status: true,
