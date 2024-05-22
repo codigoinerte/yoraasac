@@ -52,16 +52,51 @@ export const usePersonasStore = () => {
     const savePersona = async ( postdata:FormPersonasValuesSave) => {
         dispatch(onStatus(true));
 
+        let array: (FileList | undefined)[] = [];
+        
+
+        let url_frontal = postdata.foto_frontal ?? '';
+        let url_posterior = postdata.foto_posterior ?? '';
+        
+        if(postdata.img_frontal && postdata.img_frontal.length > 0) array.push(postdata.img_frontal);
+        if(postdata.img_posterior && postdata.img_posterior.length > 0) array.push(postdata.img_posterior);
+
         try {
 
-            const { data:info } = await backendApi.post(`/persona`, postdata);
+            const respuesta = await uploadImage(array); 
+            
+            const respuesta_frontal = respuesta[0]??'';
+            const respuesta_posterior = respuesta[1]??'';
+            
+            if(respuesta.length > 0)
+            {
+                if(postdata.img_frontal?.length && !postdata.img_posterior?.length){
+                    url_frontal = respuesta_frontal;
+                }else if(!postdata.img_frontal?.length && postdata.img_posterior?.length){
+                    url_posterior = respuesta_frontal;
+                }else{
+                    url_frontal = respuesta_frontal;
+                    url_posterior = respuesta_posterior;
+                }
+            }
+
+            let params = {
+                ...postdata
+            };
+
+            if(url_frontal != '') params.foto_frontal = url_frontal;
+            if(url_posterior != '') params.foto_posterior = url_posterior;
+
+            const { data:info } = await backendApi.post(`/persona`, params);
             const result = info.data;
             
             toastMessage(info);
             
             dispatch(onSetPersonasActive({
                 ...result,
-                password: postdata.password                
+                foto_frontal: result.foto_frontal,
+                foto_posterior: result.foto_posterior,
+                password: postdata.password
             }));
 
             
