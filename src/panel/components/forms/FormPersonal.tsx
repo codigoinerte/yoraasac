@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FormPersonasValues, PersonalForm, deleImagenPersona } from '../../interfaces'
 import { FormControls } from '../FormControls';
@@ -45,18 +45,22 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
     const dispatch = useDispatch();
 
     const URL_IMAGENES = import.meta.env.VITE_URL_IMAGES;
+
+    const [address, setAddress] = useState({
+        iddepartamento : 0,
+        idprovincia : 0,
+        iddistrito : 0,
+    });
     
     useEffect(() => {
-            
-        
-        
+                            
         if(id == 0){            
             loadDireccion();
             dispatch(onSetPersonasActive(null));
         }
         else{                        
             getPersona(parseInt(id))
-            .then((user)=>{
+            .then(async (user)=>{
                 
                 setValue('nombres', user?.name);
                 setValue('documento', user?.documento);
@@ -71,39 +75,17 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                     setValue('usuario_tipo', usuario_activo);
                 }
 
-                loadDireccion()
-                .then((dep)=>{
+                const callback1  = loadDireccion();
+                const callback2 = loadProvincias(user?.iddepartamento);
+                const callback3  = loadDistritos(user?.idprovincia);
 
-                    if(user?.iddepartamento !=0 && dep){
-    
-                        setValue('departamento', user?.iddepartamento??'');
-    
-                        loadProvincias(user?.iddepartamento)
-                        .then((prov)=>{
-                            
-                            if(user?.idprovincia != 0 && prov)
-                            {
-                                setValue('provincia', user?.idprovincia??'');
+                await Promise.all([callback1, callback2, callback3]);
 
-                                loadDistritos(user?.idprovincia)
-                                .then((dis)=>{
-                                    
-                                    if(user?.iddistrito != 0 && dis){
-                                        setValue('distrito', user?.iddistrito??'');                
-    
-                                    }
-    
-                                })                                
-                                
-                            }
-                        })
-    
-    
-                    }
-                })
-
-                
-
+                setAddress({
+                    iddepartamento : user?.iddepartamento,
+                    idprovincia : user?.idprovincia,
+                    iddistrito : user?.iddistrito,
+                });
                 
             });
 
@@ -116,7 +98,19 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
         setValue('foto_frontal', active?.foto_frontal);
         setValue('foto_posterior', active?.foto_posterior);
 
-    }, [active])
+    }, [active]);
+
+    useEffect(() => {
+        setValue('departamento', address.iddepartamento ?? 0);        
+    }, [departamentos, address.iddepartamento]);
+
+    useEffect(() => {
+        setValue('provincia', address.idprovincia ?? 0);
+    }, [provincias, address.idprovincia]);
+
+    useEffect(() => {
+        setValue('distrito', address.iddistrito ?? 0);
+    }, [distritos]);
     
    const deleteImagen = async (imagen:deleImagenPersona) =>{
 
@@ -268,10 +262,9 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                                                 
                         <div className="mb-3">
                             <label htmlFor="departamento" className="form-label">Departamento</label>
-                            <select 
-                                    id="departamento"
+                            <select id="departamento"
                                     className='form-control'
-                                    {...register('departamento', { onChange: (e)=> loadProvincias(e.target.value) })} >
+                                    {...register('departamento', { onChange: (e)=> loadProvincias(e.target.value) })}>
                                 <option value="">-seleccione una opcion-</option>
                                 {
                                     departamentos.map(( { id, nombre } ) => (
@@ -297,7 +290,9 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="distrito" className="form-label">Distrito</label>
-                            <select id="distrito" className='form-control' {...register('distrito')}>                                                                
+                            <select id="distrito" 
+                                    className='form-control' 
+                                    {...register('distrito')}>
                                 <option value="">-seleccione una opcion-</option>
                                 {
                                     distritos.map(( { id, nombre } ) => (
