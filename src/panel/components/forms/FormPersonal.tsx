@@ -102,15 +102,15 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
 
     useEffect(() => {
         setValue('departamento', address.iddepartamento ?? 0);        
-    }, [departamentos, address.iddepartamento]);
+    }, [departamentos, address.iddepartamento, document.getElementById("departamento")?.querySelectorAll("option").length]);
 
     useEffect(() => {
         setValue('provincia', address.idprovincia ?? 0);
-    }, [provincias, address.idprovincia]);
+    }, [provincias, address.idprovincia, document.getElementById("provincia")?.querySelectorAll("option").length]);
 
     useEffect(() => {
         setValue('distrito', address.iddistrito ?? 0);
-    }, [distritos, address.iddistrito]);
+    }, [distritos, address.iddistrito, document.getElementById("distrito")?.querySelectorAll("option").length]);
     
    const deleteImagen = async (imagen:deleImagenPersona) =>{
 
