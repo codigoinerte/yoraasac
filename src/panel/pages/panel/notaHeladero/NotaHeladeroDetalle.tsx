@@ -15,8 +15,9 @@ import NotasComponent from '../../../../prints/Notas';
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Nota heladero', enlace: '/nota-heladero' },
     { id:2, titulo: 'Nota heladero detalle', enlace: '' },
-  ];
+];
 
+type order = 'asc' | 'desc';
 
 export const NotaHeladeroDetalle = () => {
 
@@ -24,6 +25,8 @@ export const NotaHeladeroDetalle = () => {
     let navigate = useNavigate();
 
     const refId = useRef<any>('0')
+
+    const [orderDirection, setOrderDirection] = useState<order>("asc");
 
     const [estadoTitulo, setEstadoTitulo] = useState('Nueva cuenta');
 
@@ -280,6 +283,13 @@ export const NotaHeladeroDetalle = () => {
         content: () => componentRef.current,
     });
 
+    const onSortProducts = () => {
+       
+        setValue("productos", (orderDirection == "asc") ? fields.sort((a, b) => b.codigo!.localeCompare(a.codigo??'')) :  fields.sort((a, b) => a.codigo!.localeCompare(b.codigo??'')) );
+
+        setOrderDirection(orderDirection == "asc" ? "desc" : "asc");
+    }
+
     // const imprimir = ()=>{
     //     window.print();
     // }
@@ -390,7 +400,29 @@ export const NotaHeladeroDetalle = () => {
                                                 {
                                                     cabecera.map((titulo)=>(
                                                         <th key={titulo.desk} scope="col">
-                                                            <span className="desktop">{ titulo.desk }</span>
+                                                            <span className="desktop">
+                                                                {
+                                                                    (titulo.desk == 'Producto') ?
+                                                                    (
+                                                                        <button
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            e.stopPropagation();
+                                                                            
+                                                                            onSortProducts();                                                                                                                                       
+                                                                        }}>
+                                                                            { titulo.desk }
+
+                                                                            <i className={ orderDirection == "asc" ? 'bi bi-arrow-up' : 'bi bi-arrow-down' }></i>
+                                                                        </button>
+
+                                                                    )
+                                                                    :
+                                                                    (
+                                                                        titulo.desk
+                                                                    )
+                                                                }
+                                                            </span>
                                                             <span className="print">{ titulo.print }</span>
                                                         </th>
                                                     ))
