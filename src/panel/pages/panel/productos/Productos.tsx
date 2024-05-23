@@ -123,7 +123,7 @@ export const Productos = () => {
     const { register, handleSubmit, reset} = useForm<FormBuscarProductosValues>();
 
     const onSubmit: SubmitHandler<FormBuscarProductosValues> = ({ codigo, producto, fechaCreacion }) => {      
-        if(codigo == '' || producto== '' || fechaCreacion?.toString() == "")  return;
+        if(!codigo && !producto && !fechaCreacion)  return;
         setBuscar({codigo, producto, fechaCreacion, buscar:true})
     };
 
