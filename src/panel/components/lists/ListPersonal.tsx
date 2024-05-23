@@ -4,7 +4,6 @@ import { BuscarPersonas, PersonalList, FormBuscarPersonasValues } from '../../in
 import { useAlert, usePersonasStore } from '../../../hooks';
 import { Loader } from '../Loader';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { ValidateDate } from '../../helpers';
 
 import Swal from 'sweetalert2';
 
@@ -25,6 +24,8 @@ const DetailCell = ({ rowData, dataKey, eliminar, ...props }:any) => {
 
 export const ListPersonal = ({ tipo = 4 }:PersonalList) => {
 
+    const { register, handleSubmit, reset } = useForm<FormBuscarPersonasValues>();
+    
     const [sortColumn, setSortColumn] = useState();
     const [sortType, setSortType] = useState();
     const [loading, setLoading] = useState(false);
@@ -108,17 +109,15 @@ export const ListPersonal = ({ tipo = 4 }:PersonalList) => {
         });
     }
 
-    const detalle:any[] = personas.map(({ id, documento, name, apellidos, created_at_spanish}) => ({
+    const detalle:any[] = personas.map(({ id, documento, name, apellidos, created_at, created_at_spanish}) => ({
             id: id.toString(),
             documento: documento.toString(),
             nombres: `${name} ${apellidos}`,
-            create_at: created_at_spanish??''.toString()                    
+            create_at: (created_at_spanish??(created_at??'')).toString()                    
     }));
 
-    const { register, handleSubmit, reset } = useForm<FormBuscarPersonasValues>();
-
-    const onSubmit: SubmitHandler<FormBuscarPersonasValues> = ({ documento, nombres, fechaCreacion }) => {              
-        if(documento == '' || nombres == '' || fechaCreacion?.toString() === "") return;
+    const onSubmit: SubmitHandler<FormBuscarPersonasValues> = ({ documento, nombres, fechaCreacion }) => {
+        if(!documento && !nombres && !fechaCreacion) return;
         setPageActive(null);
         setBuscar({documento, nombres, fechaCreacion, buscar:true})
     };
@@ -147,7 +146,7 @@ export const ListPersonal = ({ tipo = 4 }:PersonalList) => {
             
         }
 
-        <form onSubmit={handleSubmit(onSubmit)} > 
+        <form onSubmit={handleSubmit(onSubmit)}> 
             <div className="row">
                 <div className="col-xs-12">
                     <h5>Buscador</h5>
@@ -185,7 +184,7 @@ export const ListPersonal = ({ tipo = 4 }:PersonalList) => {
                                 className="form-control" 
                                 id="fecha_creacion" 
                                 aria-describedby="fechacreacion"
-                                {...register('fechaCreacion', { validate :  ValidateDate  })}/>
+                                {...register('fechaCreacion')}/>
                     </div>
                 </div>
                 <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-end">
