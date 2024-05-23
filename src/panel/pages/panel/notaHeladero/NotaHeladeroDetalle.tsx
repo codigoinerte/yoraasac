@@ -285,7 +285,7 @@ export const NotaHeladeroDetalle = () => {
 
     const onSortProducts = () => {
        
-        setValue("productos", (orderDirection == "asc") ? fields.sort((a, b) => b.codigo!.localeCompare(a.codigo??'')) :  fields.sort((a, b) => a.codigo!.localeCompare(b.codigo??'')) );
+        setValue("productos", (orderDirection == "asc") ? fields.sort((a, b) => b.producto!.localeCompare(a.producto??'')) :  fields.sort((a, b) => a.producto!.localeCompare(b.producto??'')) );
 
         setOrderDirection(orderDirection == "asc" ? "desc" : "asc");
     }
