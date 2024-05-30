@@ -132,7 +132,7 @@ export const NotaHeladeroDetalle = () => {
         
                     if(heladero?.fecha_cierre && heladero.estado == 1){
         
-                        const dateNow = heladero.fecha_cierre??new Date();
+                        const dateNow = heladero.fecha_cierre;
                         const dateCurrent = moment(dateNow).format("YYYY-MM-DD HH:mm").toString();
                         setValue('fecha_operacion', dateCurrent);
 
@@ -238,7 +238,7 @@ export const NotaHeladeroDetalle = () => {
             }
 
             if(heladero?.fecha_cierre && heladero.estado == 1){
-                const dateNow = heladero.fecha_cierre??new Date();
+                const dateNow = heladero.fecha_cierre;
                 const dateCurrent = moment(dateNow).format("YYYY-MM-DD HH:mm").toString();
                 setValue('fecha_operacion', dateCurrent.replace(" ","T"));
             }else if(heladero.estado == 2 || heladero.estado == 3){
@@ -284,8 +284,8 @@ export const NotaHeladeroDetalle = () => {
     });
 
     const onSortProducts = () => {
-       
-        setValue("productos", (orderDirection == "asc") ? fields.sort((a, b) => b.producto!.localeCompare(a.producto??'')) :  fields.sort((a, b) => a.producto!.localeCompare(b.producto??'')) );
+        const productos = getValues("productos");
+        setValue("productos", (orderDirection == "asc") ? productos.sort((a, b) => b.producto!.localeCompare(a.producto??'')) :  productos.sort((a, b) => a.producto!.localeCompare(b.producto??'')) );
 
         setOrderDirection(orderDirection == "asc" ? "desc" : "asc");
     }
