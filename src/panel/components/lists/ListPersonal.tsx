@@ -154,7 +154,7 @@ export const ListPersonal = ({ tipo = 4 }:PersonalList) => {
             </div>
             <div className="row">
 
-                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div className="mb-3">
                         <label htmlFor="documento" className="form-label">Documento</label>
                         <input  type="text" 
@@ -176,7 +176,7 @@ export const ListPersonal = ({ tipo = 4 }:PersonalList) => {
                                 {...register('nombres')}/>
                     </div>
                 </div>
-                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div className="mb-3">
                         <label htmlFor="fecha_creacion" className="form-label">Fecha de creaci&oacute;n</label>
                         <input  type="date" 
@@ -187,11 +187,12 @@ export const ListPersonal = ({ tipo = 4 }:PersonalList) => {
                                 {...register('fechaCreacion')}/>
                     </div>
                 </div>
-                <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-end">
-                    <div className="w-100">                                
-                        <button className="btn btn-primary text-center w-100" type="submit"><i className="bi bi-search"></i> Buscar</button>
-                        <button onClick={resetQuery} className="btn btn-secondary text-center w-100 mt-1"><i className="bi bi-x-lg"></i> Resetear</button>
-                    </div>
+                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex flex-column flex-md-row flex-lg-row flex-xl-row flex-xxl-row justify-content-center align-items-end gap-3 ">
+                    
+                    <button className="btn btn-primary text-center w-100" type="submit"><i className="bi bi-search"></i> Buscar</button>
+                    <button onClick={resetQuery} className="btn btn-secondary text-center w-100 mt-1"><i className="bi bi-x-lg"></i> Resetear</button>
+                    <Link to={`new`} className="btn btn-primary text-center w-100">Nuevo</Link>
+                    
                 </div>
 
             </div>
