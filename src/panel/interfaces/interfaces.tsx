@@ -75,6 +75,7 @@ export interface ControlsInterface{
     category?:string;
     imprimir?:Function;
     page:string;
+    isPrint?:boolean;
 }
 export interface ListDetail{
     cabecera: string[],
@@ -296,6 +297,7 @@ export interface FormNotaHeladeroValues {
     updated_at:         string;
     cucharas_devueltas: number;
     conos_devueltas:    number;
+    parent_id?:         number;
     productos:            FormNotaHeladeroDetalleValues[];
 }
 
