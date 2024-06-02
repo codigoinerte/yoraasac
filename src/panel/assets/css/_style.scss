@@ -294,3 +294,13 @@ a{
         }
     }
 }
+
+input:read-only,
+input:read-only:is(:focus,:visited,:active){
+    background-color:#696262;
+    color: #fff;
+    box-shadow: none;
+    outline: none;
+    border-color: #696262;
+    pointer-events: none; 
+}
