@@ -14,7 +14,7 @@ export const useNotaHeladeroStore = () => {
   
     const rutaEndpoint = '/nota-heladero';
 
-    const { Monedas: notaHeladero, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.notaHeladero);
+    const { Heladeros, active, nextPage, prevPage } = useSelector((state:IRootState)=>state.notaHeladero);
 
     const { status, errorMessage } = useSelector((state:IRootState)=>state.general)
 
@@ -112,7 +112,7 @@ export const useNotaHeladeroStore = () => {
         try {            
 
             const { data:info } = await backendApi.get(`${rutaEndpoint}/${id}`);
-            
+
             dispatch(onSetNotaHeladeroActive(info.data));
 
             dispatch(onStatus(false));
@@ -156,8 +156,8 @@ export const useNotaHeladeroStore = () => {
     }
   
     return {
-        status, 
-        notaHeladero, 
+        status,
+        Heladeros,
         active, 
         errorMessage,
         nextPage,
