@@ -4,7 +4,7 @@ import { intialStateNotaHeladero, NotaHeladero, NotaHeladeros } from '../../inte
 
 const initialState: intialStateNotaHeladero =  {
     status: true,
-    Monedas: [],
+    Heladeros: [],
     nextPage: null,
     prevPage: null,
     active: null,
@@ -21,13 +21,13 @@ export const notaHeladeroSlice = createSlice({
         },
         onNotaHeladeroAdd : (state, { payload }) =>
         {
-            state.Monedas.push(payload);
+            state.Heladeros.push(payload);
             state.active = null;
         },
         onNotaHeladeroEdit : (state, { payload }:{ payload:NotaHeladero }) => 
         {
             
-            state.Monedas = state.Monedas.map((stock)=>{
+            state.Heladeros = state.Heladeros.map((stock)=>{
 
                 if(stock.id == payload.id){
                     return payload;
@@ -42,13 +42,13 @@ export const notaHeladeroSlice = createSlice({
             {
                 state.status = true;
     
-                state.Monedas = state.Monedas.filter((stock)=> stock.id != payload );
+                state.Heladeros = state.Heladeros.filter((item)=> item.id != payload );
             }
         },
         onNotaHeladeroList: (state, { payload }:{ payload: NotaHeladeros }) => 
         {
             state.status = false;
-            state.Monedas = payload.data;
+            state.Heladeros = payload.data;
             state.nextPage = payload.next_page;
             state.prevPage = payload.previous_page;
 
@@ -56,7 +56,7 @@ export const notaHeladeroSlice = createSlice({
         onNotaHeladeroLogout: (state) => 
         {
             state.status = false;
-            state.Monedas = [];
+            state.Heladeros = [];
             state.active = null;
         },
         onNotaHeladeroAddMessage : (state, { payload })=>
