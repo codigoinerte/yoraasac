@@ -40,7 +40,7 @@ export const NotaHeladero = () => {
 
     const { listEstadoHeladero, listNotaHeladeroEstado} = useHelpers();
 
-    const { notaHeladero, nextPage, prevPage, loadNotaHeladero, deleteNotaHeladero } = useNotaHeladeroStore();
+    const { Heladeros, nextPage, prevPage, loadNotaHeladero, deleteNotaHeladero } = useNotaHeladeroStore();
 
     useEffect(() => {
       
@@ -52,8 +52,7 @@ export const NotaHeladero = () => {
         listNotaHeladeroEstado();        
     }, [])
     
-    
-    const detalle:listaDetalle[] = notaHeladero.map(({ id, heladero_documento,heladero_nombre, created_at, fecha_cierre, fecha_guardado, estado, fecha_apertura}) => ({
+    const detalle:listaDetalle[] = Heladeros.map(({ id, heladero_documento,heladero_nombre, created_at, fecha_cierre, fecha_guardado, estado, fecha_apertura}) => ({
         id: id.toString(),
         campos: [
             heladero_documento??''.toString(),
@@ -66,7 +65,7 @@ export const NotaHeladero = () => {
         ]
   
     }));
-
+    
     const eliminar = (id:number) => {
         warningDelete(async function(){
             
