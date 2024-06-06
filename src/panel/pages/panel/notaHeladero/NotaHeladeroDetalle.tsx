@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ContainerInner, FormControls } from '../../../components'
-import { FormNotaHeladeroValues, ProductosPublicados, breadcrumb as bread, listaDetalle} from '../../../interfaces';
+import { ContainerInner, FormControls, ModalNotaHeladeroRegister } from '../../../components'
+import { FormNotaHeladeroValues, ProductosPublicados, breadcrumb as bread } from '../../../interfaces';
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DatePicker, SelectPicker } from 'rsuite';
+import { SelectPicker } from 'rsuite';
 import { useDispatch } from 'react-redux';
-import { onSetNotaHeladeroActive, onStatus } from '../../../../store';
+import {  onSetNotaHeladeroActive, onStatus } from '../../../../store';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 import NotasComponent from '../../../../prints/Notas';
@@ -18,43 +18,59 @@ const breadcrumb:bread[] = [
 ];
 
 type order = 'asc' | 'desc';
-
+/*
+    Estados : {
+        1: 'Cierre'
+        2: 'Reapertura',
+        3: 'Guardado',
+    }
+*/
 export const NotaHeladeroDetalle = () => {
 
     //const [principalId, setPrincipalId] = useState<any>("0");
     let navigate = useNavigate();
 
-    const refId = useRef<any>('0')
+    const refId = useRef<any>('0');
 
     const [orderDirection, setOrderDirection] = useState<order>("asc");
 
     const [estadoTitulo, setEstadoTitulo] = useState('Nueva cuenta');
 
+    const [isNewRegister, setisNewRegister] = useState(false);
+
+    const [openModal, setOpenModal] = useState(false);
+
+    const [state, setState] = useState<number|null>(null);
+
+    const [isReadOnlyInputs, setisReadOnlyInputs] = useState({
+        isReadOnlyDevolucion : false,
+        isReadOnlyPedido : false,
+        isReadOnlyVendido : false,
+        isReadOnlyImporte : false,
+    })
+
     const {  saveNotaHeladero, updateNotaHeladero, getNotaHeladero, active  } = useNotaHeladeroStore();
 
-    const { listEstadoHeladero, listUsuario, listProductosPublicados, listNotaGuardada, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
+    const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
     const [selectUsuario, setSelectUsuario] = useState<ProductosPublicados>();    
 
-    const { register, handleSubmit, reset, formState, setValue, getValues, control } = useForm<FormNotaHeladeroValues>({
+    const { register, handleSubmit, formState, setValue, getValues, control } = useForm<FormNotaHeladeroValues>({
         defaultValues:{       
             productos: []
         }
     });
 
-    const { fields, append, prepend, remove, swap, move, insert, replace} = useFieldArray({
+    const { fields } = useFieldArray({
         control,
         name: "productos"
     });
 
+    const dispatch = useDispatch();
+
     const { errors } = formState;
 
     const { id = 0 } = useParams(); 
-    
-    // useEffect(() => {
-    //     console.log(id);
-        
-    // }, [id])
 
     const calcImporte = (index:number)=> {
 
@@ -72,6 +88,7 @@ export const NotaHeladeroDetalle = () => {
         
        return (precio_final < 0 ?  0 : precio_final);
     }
+
     
     useEffect(() => {
         
@@ -110,40 +127,40 @@ export const NotaHeladeroDetalle = () => {
 
                 if(heladero != undefined){
                     
-
-                  
+                    dispatch(onSetNotaHeladeroActive(heladero));
 
                     let detalle = heladero.detalle??[];
-        
+                    
                     if(heladero?.estado != undefined) {
         
                         let estado = (heladero.estado == 3) ? 2 : heladero.estado;
-        
+                       
                         if(estado == 3){
-                            setEstadoTitulo('Reserva');
+                            setEstadoTitulo('Guardado');
+                        }else if(estado == 2){
+                            setEstadoTitulo('Reapertura');
                         }else if(estado == 1){
                             setEstadoTitulo('Cierre');
-                        }else{
+                        }
+                        else{
                             setEstadoTitulo('Apertura');
                         }
 
                         setValue('estado', estado);
                     }
-        
-                    if(heladero?.fecha_cierre && heladero.estado == 1){
-        
-                        const dateNow = heladero.fecha_cierre;
-                        const dateCurrent = moment(dateNow).format("YYYY-MM-DD HH:mm").toString();
-                        setValue('fecha_operacion', dateCurrent);
+                    
+                    setState(heladero.estado);
 
-                    }else{
-                        let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
-                        setValue('fecha_operacion', dateNow);
-                    }
+                    ///console.log(heladero?.fecha_cierre);
+                    ///console.log(heladero?.fecha_apertura);
+                    ///console.log(heladero?.fecha_guardado);
+                    ///console.log(heladero?.fecha_movimiento);
+                    
+                    let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
+                    setValue('fecha_operacion', dateNow);
         
-                    if(detalle.length > 0){
-                        setValue('productos', heladero.detalle);
-                    }
+                    if(detalle.length > 0)
+                    setValue('productos', heladero.detalle);
 
                     //cargar lista de heladeros
 
@@ -154,7 +171,6 @@ export const NotaHeladeroDetalle = () => {
                         loadBuscarUsuario(heladero_id, "codigo");
                         setValue('user_id', heladero?.user_id);
                     }
-                                
                 }
 
             });
@@ -201,8 +217,7 @@ export const NotaHeladeroDetalle = () => {
         },
     ];
 
-    const dispatch = useDispatch();
-
+    // region Buscar Nota por Heladero
     const buscarUsuarioReserva = async (user:any)=> {
 
         if(user == undefined) return false;
@@ -211,8 +226,9 @@ export const NotaHeladeroDetalle = () => {
 
         const heladero = await loadBuscarNotaHeladeroGuardada(parseInt(user.toString()));
         
+            /* si heladero(toda la info de la nota del headero) existe previamente se completa la data*/
         if(heladero != undefined && heladero !== false && heladero.id != undefined){
-
+            setisNewRegister(false);
             //setPrincipalId(heladero.id);
             refId.current = heladero.id;
 
@@ -234,8 +250,10 @@ export const NotaHeladeroDetalle = () => {
                
                if(heladero.estado == 2 && heladero.fecha_cierre != null){
                     setEstadoTitulo('Cuenta cerrada');
-               }
+               }           
+               setState(heladero.estado);
             }
+
 
             if(heladero?.fecha_cierre && heladero.estado == 1){
                 const dateNow = heladero.fecha_cierre;
@@ -252,16 +270,20 @@ export const NotaHeladeroDetalle = () => {
     
             dispatch(onStatus(false));
         }else{
-
+            /* si heladero(toda la info de la nota del headero) no existe previamente se define estado en reapertura, el cual funciona como un nuevo dia */
             refId.current = 0;
-            setValue('estado', 3);
+            
+            setState(2);
+            setValue('estado', 2);
+            setisNewRegister(true);
+
             let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
             setValue('fecha_operacion', dateNow.replace(" ","T"));            
             setEstadoTitulo('Guardando productos del dia');
 
-            fields.map((item, index) => {
+            fields.map((_, index) => {
                 setValue(`productos.${index}.pedido`, 0);
-                setValue(`productos.${index}.devolucion`, 0);                
+                setValue(`productos.${index}.devolucion`, 0);
                 setValue(`productos.${index}.vendido`, 0);
                 setValue(`productos.${index}.importe`, '');
                 setValue(`productos.${index}.precio_operacion`, 0);
@@ -276,6 +298,13 @@ export const NotaHeladeroDetalle = () => {
 
     }
 
+    const getDisableDate = (id:number) => {
+        if((id == 1 && active?.fecha_cierre) || (id == 2 && active?.fecha_apertura) || (id == 3 && active?.fecha_guardado)){
+            return true;
+        }
+
+        return false;
+    }
 
     const componentRef = useRef(null);
 
@@ -290,9 +319,106 @@ export const NotaHeladeroDetalle = () => {
         setOrderDirection(orderDirection == "asc" ? "desc" : "asc");
     }
 
-    // const imprimir = ()=>{
-    //     window.print();
-    // }
+    useEffect(() => {
+        const cleanProducts = fields.map((item) => ({
+            ...item,
+            id : item.id,
+            devolucion : item.devolucion,
+            pedido : 0,
+            vendido : 0,
+            importe : item.importe,
+            nota_heladeros_id : item.nota_heladeros_id,
+            created_at : item.created_at,
+            updated_at : item.updated_at,
+            codigo : item.codigo,
+            producto : item.producto,
+        }))
+        setValue("user_id", 0);
+        setValue("estado", 0);
+        setValue("fecha_operacion", moment(new Date()).format("YYYY-MM-DD HH:mm").toString());
+        setValue("productos", cleanProducts);        
+    }, [id == 0]);
+
+
+    useEffect(() => {
+        
+       //if(isNewRegister == false) return;
+       //console.log({state, isNewRegister});
+       
+        if(state == null){
+            setisReadOnlyInputs((s) => ({
+                ...s,
+                isReadOnlyDevolucion : true,
+                isReadOnlyPedido : false,
+                isReadOnlyVendido : true,
+                isReadOnlyImporte : true,
+            }));
+            return;
+        }
+
+        if(isNewRegister == true || state == 2){ // activar apertura | reapertura
+            setisReadOnlyInputs((s) => ({
+                ...s,
+                isReadOnlyDevolucion : true,
+                isReadOnlyPedido : false,
+                isReadOnlyVendido : true,
+                isReadOnlyImporte : true,
+            }));
+            return;
+        }
+       
+        if(state == 3){ // activar guardado
+            setisReadOnlyInputs((s) => ({
+                ...s,
+                isReadOnlyDevolucion : true,
+                isReadOnlyPedido : true,
+                isReadOnlyVendido : true,
+                isReadOnlyImporte : true,
+            }));
+            setOpenModal(true);
+            /* abrir modal para guardar helados*/
+            return;
+        }
+
+        if(state == 1){ // activar cierre
+            setisReadOnlyInputs((s) => ({
+                ...s,
+                isReadOnlyDevolucion : true,
+                isReadOnlyPedido : true,
+                isReadOnlyVendido : true,
+                isReadOnlyImporte : true,
+            }));
+
+            fields.forEach((item, index) => {
+                
+                const pedido = getValues(`productos.${index}.pedido`)??0;
+                const devolucion = getValues(`productos.${index}.devolucion`)??0;
+                const devolucion_today = getValues(`productos.${index}.devolucion_today`) ?? 0;
+                const precio_operacion = getValues(`productos.${index}.precio_operacion`)??0;
+
+                const vendido = ((devolucion + pedido) - devolucion_today);
+                const importe = (vendido * precio_operacion).toFixed(2);
+
+                setValue(`productos.${index}.vendido`, vendido);
+                setValue(`productos.${index}.importe`, importe.toString());
+            })
+
+            /*
+            setValue("productos", [
+                ...fields.map(({ nombre, codigo, heladero_descuento, heladero_precio_venta }:ProductosPublicados)=>({
+                    producto: nombre,
+                    precio_operacion: calculo_precio_final(heladero_precio_venta, heladero_descuento),
+                    codigo
+                }))
+            ]);
+            */
+            return;
+        }
+
+
+    },[isNewRegister, state])
+    
+    const isPrint = (): boolean => active?.fecha_cierre ? true : false;
 
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo}`}>
@@ -302,7 +428,7 @@ export const NotaHeladeroDetalle = () => {
                      
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
-                    <FormControls save={()=> redirectToFactura() } page="nota-heladero" imprimir={()=> imprimir() }/>
+                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()}/>
 
                     <hr className='border border-1 opacity-50'/>
 
@@ -335,7 +461,7 @@ export const NotaHeladeroDetalle = () => {
                                     style={{ width: 224 }}                        
                                     onSearch={updateData}
                                     onChange={buscarUsuarioReserva}
-                                    placeholder='Buscar Producto'
+                                    placeholder='Buscar Usuario'
                                     className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
                                 />
                             
@@ -359,11 +485,18 @@ export const NotaHeladeroDetalle = () => {
                                 <label htmlFor="estado" className="form-label">Estado</label>
                                 <select 
                                 className={errors.estado ? "form-control is-invalid" : "form-control"}
-                                {...register('estado', {required: true})} >
+                                {...register('estado', {
+                                    required: true,
+                                    onChange: (e) => {
+                                        setState(parseInt(e.target.value));
+                                        setValue("estado", e.target.value);
+                                    }
+                                })
+                                } >
                                 <option value="">Seleccione una opci&oacute;n</option>
                                     {
                                         listEstadoHeladero.map(({ id, nombre })=>(
-                                            <option key={id} value={id}>{nombre}</option>
+                                            <option key={id} value={id} disabled={getDisableDate(id)}>{nombre}</option>
                                         ))
                                     }
                                 </select>
@@ -436,10 +569,10 @@ export const NotaHeladeroDetalle = () => {
                                                 return (
                                                 <tr key={item.id}>                                                    
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.devolucion`)} />
+                                                        <input type="text" className='form-control' {...register(`productos.${index}.devolucion`)} readOnly={isReadOnlyInputs.isReadOnlyDevolucion}/>
                                                     </td>                                                     
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.pedido`)} />
+                                                        <input type="text" className='form-control' {...register(`productos.${index}.pedido`)} readOnly={isReadOnlyInputs.isReadOnlyPedido}/>
                                                     </td>                                                     
                                                     <td>
                                                         { item.producto }
@@ -448,11 +581,11 @@ export const NotaHeladeroDetalle = () => {
                                                     <td>
                                                         <input type="text" className='form-control' {...register(`productos.${index}.vendido`,{
                                                             onChange: () => calcImporte(index)
-                                                        })}/>
+                                                        })}  readOnly={isReadOnlyInputs.isReadOnlyVendido}/>
                                                     </td> 
                                                     <td>                                                        
                                                         <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
-                                                        <input type="text" className='form-control'  {...register(`productos.${index}.importe`)}/>
+                                                        <input type="text" className='form-control'  {...register(`productos.${index}.importe`)} readOnly={isReadOnlyInputs.isReadOnlyImporte}/>
                                                     </td> 
 
                                                 </tr>
@@ -483,6 +616,12 @@ export const NotaHeladeroDetalle = () => {
                     </div>
                 
                 </form>
+
+                <ModalNotaHeladeroRegister
+                        openModal={openModal}
+                        handlerOpenModal={setOpenModal}
+                        setValueOrigin={setValue}
+                    />
             </>
         </ContainerInner>
     )
