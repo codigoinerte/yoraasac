@@ -68,8 +68,7 @@ export const notaHeladeroSlice = createSlice({
             state.errorMessage = undefined;
         },
         onNotaHeladeroStatus:(state, {payload}:{payload:boolean}) =>{            
-            state.status = payload;
-            
+            state.status = payload;            
         }
     }
 });
