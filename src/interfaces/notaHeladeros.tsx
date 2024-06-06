@@ -39,6 +39,7 @@ export interface NotaHeladero{
 export interface FormNotaHeladeroDetalleValues {
     id?:                number;
     devolucion?:        number;
+    devolucion_today?:  number;
     pedido?:            number;
     vendido?:           number;
     importe?:           string;
@@ -47,11 +48,12 @@ export interface FormNotaHeladeroDetalleValues {
     updated_at?:        string;
     codigo?:            string;
     producto?:          string;
+    precio_operacion?:  number;
 }
 
 export interface intialStateNotaHeladero {
     status: boolean;
-    Monedas:NotaHeladero[];
+    Heladeros:NotaHeladero[];
     nextPage: string | null;
     prevPage: string | null;
     active: NotaHeladero | null;
