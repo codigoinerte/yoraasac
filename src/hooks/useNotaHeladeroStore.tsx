@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState, NotaHeladero } from '../interfaces';
-import { FormBuscarNotaHeladeroValues, FormNotaHeladeroValues, ReporteItemNota, ReporteNotaForm, ReporteNotaHeladero } from '../panel/interfaces';
+import { FormBuscarNotaHeladeroValues, FormNotaFechaOperacion, FormNotaHeladeroValues, ReporteItemNota, ReporteNotaForm, ReporteNotaHeladero } from '../panel/interfaces';
 import { onStatus, onNotaHeladeroAddMessage, onNotaHeladeroClearMessage, onNotaHeladeroDelete, onNotaHeladeroList, onSetNotaHeladeroActive } from '../store'
 
 
@@ -62,7 +62,7 @@ export const useNotaHeladeroStore = () => {
         }
     }
 
-    const saveNotaHeladero = async ( postdata:FormNotaHeladeroValues) => {
+    const saveNotaHeladero = async ( postdata:FormNotaHeladeroValues, updateSaved:boolean = false ) => {
         dispatch(onStatus(true));    
         try {
             const { data:info } = await backendApi.post(rutaEndpoint, {
@@ -72,10 +72,24 @@ export const useNotaHeladeroStore = () => {
             const result = info.data;
             
             toastMessage(info);
-            
-            dispatch(onSetNotaHeladeroActive({
-                ...result               
-            }));
+            if(updateSaved == true){
+                const sendedProductos = postdata.productos;
+                const newProductos = active?.detalle.map((producto, index)=>{
+                    return {
+                        ...producto,
+                        devolucion_today : sendedProductos.find(p=>p.id == producto.id)?.devolucion_today ?? 0
+                    }
+                });
+                
+                dispatch(onSetNotaHeladeroActive({
+                    ...result,
+                    detalle: newProductos
+                }));
+            }else{
+                dispatch(onSetNotaHeladeroActive({
+                    ...result
+                }));
+            }
 
             
             dispatch(onStatus(false));
@@ -154,6 +168,38 @@ export const useNotaHeladeroStore = () => {
             console.log(error);
         }
     }
+
+    const updateDateOperation = async (params: FormNotaFechaOperacion) =>{
+        
+        dispatch(onStatus(true));
+
+        try {            
+
+            const response = await backendApi.post(`/hota-heladero-fecha-operacion/${params.id}`, {...params});
+            if(active){
+                dispatch(onSetNotaHeladeroActive({
+                    ...active,
+                    fecha_cierre: (params.estado == 1) ? params.fecha_operacion : active.fecha_cierre,
+                    fecha_apertura: (params.estado == 2) ? params.fecha_operacion : active.fecha_apertura,
+                    fecha_guardado: (params.estado == 3) ? params.fecha_operacion : active.fecha_guardado,
+                    estado: 1,
+                }));
+            }
+           
+            console.log(response);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const updateStateNotaHeladero = async (estado:number) =>{
+        if(active)
+        dispatch(onSetNotaHeladeroActive({
+            ...active,
+            estado,
+        }));
+    }
   
     return {
         status,
@@ -164,12 +210,14 @@ export const useNotaHeladeroStore = () => {
         prevPage,
         reporte,
 
+        dispatch,
         loadNotaHeladero,
         saveNotaHeladero,
         updateNotaHeladero,
         getNotaHeladero,
         deleteNotaHeladero,
         reporteHeladero,
-       
+        updateDateOperation,
+        updateStateNotaHeladero
     }
 }
