@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ContainerInner, FormControls, ModalNotaHeladeroRegister } from '../../../components'
 import { FormNotaHeladeroValues, ProductosPublicados, breadcrumb as bread } from '../../../interfaces';
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SelectPicker } from 'rsuite';
+import { Tooltip } from 'react-tooltip'
 import { useDispatch } from 'react-redux';
 import {  onSetNotaHeladeroActive, onStatus } from '../../../../store';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 import NotasComponent from '../../../../prints/Notas';
-
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Nota heladero', enlace: '/nota-heladero' },
@@ -25,6 +25,7 @@ type order = 'asc' | 'desc';
         3: 'Guardado',
     }
 */
+
 export const NotaHeladeroDetalle = () => {
 
     //const [principalId, setPrincipalId] = useState<any>("0");
@@ -52,8 +53,6 @@ export const NotaHeladeroDetalle = () => {
     const {  saveNotaHeladero, updateNotaHeladero, getNotaHeladero, active  } = useNotaHeladeroStore();
 
     const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
-
-    const [selectUsuario, setSelectUsuario] = useState<ProductosPublicados>();    
 
     const { register, handleSubmit, formState, setValue, getValues, control } = useForm<FormNotaHeladeroValues>({
         defaultValues:{       
@@ -125,53 +124,58 @@ export const NotaHeladeroDetalle = () => {
             getNotaHeladero(refId.current)
             .then((heladero)=>{
 
-                if(heladero != undefined){
-                    
-                    dispatch(onSetNotaHeladeroActive(heladero));
+                if(!heladero) return;
+                
+                dispatch(onSetNotaHeladeroActive(heladero));
 
-                    let detalle = heladero.detalle??[];
+                let detalle = heladero.detalle??[];
+                
+                if(heladero?.estado != undefined) {
+    
+                    let estado = (heladero.estado == 3) ? 2 : heladero.estado;
                     
-                    if(heladero?.estado != undefined) {
-        
-                        let estado = (heladero.estado == 3) ? 2 : heladero.estado;
-                       
-                        if(estado == 3){
-                            setEstadoTitulo('Guardado');
-                        }else if(estado == 2){
-                            setEstadoTitulo('Reapertura');
-                        }else if(estado == 1){
-                            setEstadoTitulo('Cierre');
-                        }
-                        else{
-                            setEstadoTitulo('Apertura');
-                        }
-
-                        setValue('estado', estado);
+                    if(estado == 3){
+                        setEstadoTitulo('Guardado');
+                    }else if(estado == 2){
+                        setEstadoTitulo('Reapertura');
+                    }else if(estado == 1){
+                        setEstadoTitulo('Cierre');
                     }
-                    
-                    setState(heladero.estado);
-
-                    ///console.log(heladero?.fecha_cierre);
-                    ///console.log(heladero?.fecha_apertura);
-                    ///console.log(heladero?.fecha_guardado);
-                    ///console.log(heladero?.fecha_movimiento);
-                    
-                    let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
-                    setValue('fecha_operacion', dateNow);
-        
-                    if(detalle.length > 0)
-                    setValue('productos', heladero.detalle);
-
-                    //cargar lista de heladeros
-
-                    let heladero_id = heladero.user_id??0;
-
-                    if(heladero_id != 0){
-                        
-                        loadBuscarUsuario(heladero_id, "codigo");
-                        setValue('user_id', heladero?.user_id);
+                    else{
+                        setEstadoTitulo('Apertura');
                     }
+
+                    setValue('estado', estado);
                 }
+                
+                setState(heladero.estado);
+
+                ///console.log(heladero?.fecha_cierre);
+                ///console.log(heladero?.fecha_apertura);
+                ///console.log(heladero?.fecha_guardado);
+                ///console.log(heladero?.fecha_movimiento);
+                
+                let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
+                setValue('fecha_operacion', dateNow);
+    
+                if(detalle.length > 0)
+                setValue('productos', heladero.detalle);
+
+                //cargar lista de heladeros
+
+                let heladero_id = heladero.user_id??0;
+
+                if(heladero_id != 0){
+                    
+                    loadBuscarUsuario(heladero_id, "codigo");
+                    setValue('user_id', heladero?.user_id);
+                }
+
+                setValue(`monto`, (heladero.monto??0).toString());
+                setValue(`pago`, (heladero.pago??0).toString());
+                setValue(`ahorro`, (heladero.ahorro??0).toString());
+                setValue(`debe`, (heladero.debe??0).toString());
+                
 
             });
         }
@@ -389,6 +393,7 @@ export const NotaHeladeroDetalle = () => {
                 isReadOnlyImporte : true,
             }));
 
+            let subtotal = 0;
             fields.forEach((item, index) => {
                 
                 const pedido = getValues(`productos.${index}.pedido`)??0;
@@ -401,8 +406,21 @@ export const NotaHeladeroDetalle = () => {
 
                 setValue(`productos.${index}.vendido`, vendido);
                 setValue(`productos.${index}.importe`, importe.toString());
+                subtotal+=parseFloat(importe);
             })
 
+            if(subtotal < 0) {
+                setValue(`monto`, (0.00).toString());
+                setValue(`pago`, (0.00).toString());
+                setValue(`ahorro`, (0.00).toString());
+                setValue(`debe`, (0.00).toString());
+            }
+            
+            setValue(`monto`, subtotal.toString());
+            setValue(`pago`, (0.00).toString());
+            setValue(`ahorro`, (0.00).toString());
+            setValue(`debe`, subtotal.toString());
+            
             /*
             setValue("productos", [
                 ...fields.map(({ nombre, codigo, heladero_descuento, heladero_precio_venta }:ProductosPublicados)=>({
@@ -493,7 +511,6 @@ export const NotaHeladeroDetalle = () => {
                                     }
                                 })
                                 } >
-                                <option value="">Seleccione una opci&oacute;n</option>
                                     {
                                         listEstadoHeladero.map(({ id, nombre })=>(
                                             <option key={id} value={id} disabled={getDisableDate(id)}>{nombre}</option>
@@ -574,7 +591,13 @@ export const NotaHeladeroDetalle = () => {
                                                     <td>
                                                         <input type="text" className='form-control' {...register(`productos.${index}.pedido`)} readOnly={isReadOnlyInputs.isReadOnlyPedido}/>
                                                     </td>                                                     
-                                                    <td>
+                                                    <td data-tooltip-id={`tooltip-html-${index}`}
+                                                        data-tooltip-html={`
+                                                        <div style="text-align:left">
+                                                            <b>Precio</b>: S/ ${getValues(`productos.${index}.precio_operacion`)??0}
+                                                        </div>
+                                                        `}>
+                                                        <Tooltip id={`tooltip-html-${index}`} />
                                                         { item.producto }
                                                         <input type="hidden" className='form-control' {...register(`productos.${index}.codigo`)} />
                                                     </td>
@@ -593,7 +616,53 @@ export const NotaHeladeroDetalle = () => {
                                             })
 
                                         }
-                                            
+                                        {
+                                            state == 1 &&
+                                            (
+                                                <>
+                                                    <tr>
+                                                        <td colSpan={3}>&nbsp;</td>
+                                                        <td align='center'>Monto (subtotal)</td>
+                                                        <td><input type="text" {...register('monto')} className='form-control' /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colSpan={3}>&nbsp;</td>
+                                                        <td align='center'>Pago</td>
+                                                        <td><input type="text" {...register('pago', {
+                                                            onChange: (e) =>{
+                                                                const monto = parseFloat(getValues('monto') ?? 0);
+                                                                const ahorro = parseFloat(getValues('ahorro') ?? 0);
+                                                                const pago = parseFloat(e.target.value ?? 0);
+
+                                                                const debe = (monto-(pago+ahorro)).toFixed(2);
+                                                                setValue('debe', debe.toString());
+                                                                
+                                                            }
+                                                        })} className='form-control' /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colSpan={3}>&nbsp;</td>
+                                                        <td align='center'>Ahorro</td>
+                                                        <td><input type="text" {...register('ahorro', {
+                                                            onChange: (e) =>{
+                                                                const monto = parseFloat(getValues('monto') ?? 0);
+                                                                const ahorro = parseFloat(e.target.value ?? 0);
+                                                                const pago = parseFloat(getValues('pago') ?? 0);
+
+                                                                const debe = (monto-(pago+ahorro)).toFixed(2);
+                                                                setValue('debe', debe.toString());
+                                                            }
+                                                        })} className='form-control' /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colSpan={3}>&nbsp;</td>
+                                                        <td align='center'>Debe</td>
+                                                        <td><input type="text" {...register('debe')} className='form-control' readOnly={true} /></td>
+                                                    </tr>
+                                                </>
+                                            )
+                                        }
+
                                         </tbody>
                                     </table>   
                                     
