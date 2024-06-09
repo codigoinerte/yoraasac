@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import {  Grid, Row, Col, Button, Modal } from 'rsuite'
 import { useNotaHeladeroStore } from '../../hooks';
 import { SubmitHandler, UseFormSetValue, useFieldArray, useForm } from 'react-hook-form';
@@ -10,9 +10,10 @@ interface ModalNotaHeladeroRegisterProps {
     openModal: boolean;
     handlerOpenModal: (state:boolean) => void;
     setValueOrigin: UseFormSetValue<FormNotaHeladeroValues>;
+    updateStateHeladero: Dispatch<SetStateAction<number | null>>;
 }
 
-export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin }: ModalNotaHeladeroRegisterProps) => {
+export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin, updateStateHeladero }: ModalNotaHeladeroRegisterProps) => {
 
     const {  saveNotaHeladero, updateDateOperation, active  } = useNotaHeladeroStore();
 
@@ -69,6 +70,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             id: active?.id ?? 0,
             estado: 3        
         });
+        updateStateHeladero(1);
         setValueOrigin("estado", 1);
         handlerOpenModal(false);
     }
