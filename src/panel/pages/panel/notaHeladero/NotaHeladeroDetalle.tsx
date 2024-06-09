@@ -93,6 +93,8 @@ export const NotaHeladeroDetalle = () => {
         
         if(refId.current == 0){            
             saveNotaHeladero({...data});
+            setisNewRegister(false);
+
         }else{            
             updateNotaHeladero({...data});
         }
@@ -197,7 +199,6 @@ export const NotaHeladeroDetalle = () => {
                 setValue(`productos.${index}.devolucion`, 0);
                 setValue(`productos.${index}.vendido`, 0);
                 setValue(`productos.${index}.importe`, '');
-                setValue(`productos.${index}.precio_operacion`, 0);
             });
         }
 
@@ -255,7 +256,7 @@ export const NotaHeladeroDetalle = () => {
             setValue('user_id', 0);
             setisNewRegister(true);
     
-            let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm:ss").toString();
+            let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
             setValue('fecha_operacion', dateNow.replace(" ", "T"));
         }
         else
@@ -547,10 +548,22 @@ export const NotaHeladeroDetalle = () => {
                                                 return (
                                                 <tr key={item.id}>                                                    
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.devolucion`)} readOnly={isReadOnlyInputs.isReadOnlyDevolucion}/>
+                                                        <input type="text" 
+                                                                className='form-control' 
+                                                                readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
+                                                                {...register(`productos.${index}.devolucion`)} 
+                                                                tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
+                                                                />
                                                     </td>                                                     
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.pedido`)} readOnly={isReadOnlyInputs.isReadOnlyPedido}/>
+                                                        <input type="number" 
+                                                                className='form-control' 
+                                                                readOnly={isReadOnlyInputs.isReadOnlyPedido}
+                                                                {...register(`productos.${index}.pedido`,{
+                                                                    pattern: /^\d+$/i
+                                                                })}
+                                                                tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
+                                                                />
                                                     </td>                                                     
                                                     <td data-tooltip-id={`tooltip-html-${index}`}
                                                         data-tooltip-html={`
@@ -560,12 +573,18 @@ export const NotaHeladeroDetalle = () => {
                                                         `}>
                                                         <Tooltip id={`tooltip-html-${index}`} />
                                                         { item.producto }
-                                                        <input type="hidden" className='form-control' {...register(`productos.${index}.codigo`)} />
+                                                        <input type="hidden" 
+                                                                className='form-control' 
+                                                                {...register(`productos.${index}.codigo`)} 
+                                                                />
                                                     </td>
                                                     <td>
-                                                        <input type="text" className='form-control' {...register(`productos.${index}.vendido`,{
-                                                            onChange: () => calcImporte(index)
-                                                        })}  readOnly={isReadOnlyInputs.isReadOnlyVendido}/>
+                                                        <input type="text" className='form-control' 
+                                                                {...register(`productos.${index}.vendido`,{
+                                                                    onChange: () => calcImporte(index)
+                                                                })}  
+                                                                readOnly={isReadOnlyInputs.isReadOnlyVendido}
+                                                                />
                                                     </td> 
                                                     <td>                                                        
                                                         <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
