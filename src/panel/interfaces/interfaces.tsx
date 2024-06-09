@@ -76,6 +76,10 @@ export interface ControlsInterface{
     imprimir?:Function;
     page:string;
     isPrint?:boolean;
+    isNew?:boolean;
+    isEdit?:boolean;
+    isDelete?:boolean;
+    isList?:boolean;
 }
 export interface ListDetail{
     cabecera: string[],
