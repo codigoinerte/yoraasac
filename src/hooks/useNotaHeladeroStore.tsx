@@ -200,6 +200,10 @@ export const useNotaHeladeroStore = () => {
             estado,
         }));
     }
+
+    const setNullNotaHeladero = () =>{
+        dispatch(onSetNotaHeladeroActive(null));
+    }
   
     return {
         status,
@@ -218,6 +222,7 @@ export const useNotaHeladeroStore = () => {
         deleteNotaHeladero,
         reporteHeladero,
         updateDateOperation,
-        updateStateNotaHeladero
+        updateStateNotaHeladero,
+        setNullNotaHeladero
     }
 }
