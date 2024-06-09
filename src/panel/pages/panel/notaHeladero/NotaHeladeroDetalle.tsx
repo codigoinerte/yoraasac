@@ -670,6 +670,7 @@ export const NotaHeladeroDetalle = () => {
                         openModal={openModal}
                         handlerOpenModal={setOpenModal}
                         setValueOrigin={setValue}
+                        updateStateHeladero={setState}
                     />
             </>
         </ContainerInner>
