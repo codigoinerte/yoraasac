@@ -232,48 +232,27 @@ export const NotaHeladeroDetalle = () => {
         {
             setNullNotaHeladero();
               
-            if(listProductosPublicados!= undefined){
-                //{ nombre, codigo, heladero_descuento, heladero_precio_venta }
-                setValue("productos", [
-                    ...listProductosPublicados.map((item:ProductosPublicados)=>({
-                        producto: item.nombre,
-                        precio_operacion: calculo_precio_final(item.heladero_precio_venta, item.heladero_descuento),
-                        codigo: item.codigo,
+            if(listProductosPublicados!= undefined)                
+            setValue("productos", [
+                ...listProductosPublicados.map((item:ProductosPublicados)=>({
+                    producto: item.nombre,
+                    precio_operacion: calculo_precio_final(item.heladero_precio_venta, item.heladero_descuento),
+                    codigo: item.codigo,
 
-                        id : item.id,
-                        devolucion : 0,
-                        pedido : 0,
-                        vendido : 0,
-                        importe : "0",
-                        nota_heladeros_id : 0,
-                        created_at : item.created_at,
-                        updated_at : item.updated_at,
-                        
-                        }))
-                ]);
-            }
-
-            /*
-            if(fields.length > 0){
-                const cleanProducts = fields.map((item) => ({
-                    ...item,
                     id : item.id,
                     devolucion : 0,
                     pedido : 0,
                     vendido : 0,
-                    importe : item.importe,
-                    nota_heladeros_id : item.nota_heladeros_id,
+                    importe : "0",
+                    nota_heladeros_id : 0,
                     created_at : item.created_at,
                     updated_at : item.updated_at,
-                    codigo : item.codigo,
-                    producto : item.producto,
-                }))
-                setValue('productos', cleanProducts);
-            }*/
+                    
+                    }))
+            ]);            
                         
             setValue('estado', 2);
             setValue('user_id', 0);
-            //
             setisNewRegister(true);
     
             let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm:ss").toString();
