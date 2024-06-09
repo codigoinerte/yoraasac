@@ -50,12 +50,13 @@ export const NotaHeladeroDetalle = () => {
         isReadOnlyImporte : false,
     })
 
-    const {  saveNotaHeladero, updateNotaHeladero, getNotaHeladero, active  } = useNotaHeladeroStore();
+    const {  saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
 
     const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
     const { register, handleSubmit, formState, setValue, getValues, control } = useForm<FormNotaHeladeroValues>({
-        defaultValues:{       
+        defaultValues:{   
+            estado: 2,    
             productos: []
         }
     });
@@ -87,100 +88,6 @@ export const NotaHeladeroDetalle = () => {
         
        return (precio_final < 0 ?  0 : precio_final);
     }
-
-    
-    useEffect(() => {
-        
-        refId.current = id;
-        //console.log(id);
-        //setPrincipalId(id);
-
-        listNotaHeladeroEstado();
-
-        loadProductosDisponibles()
-        .then((productos)=>{
-            
-            if(productos!= undefined){
-
-                setValue("productos", [
-                    ...productos.map(({ nombre, codigo, heladero_descuento, heladero_precio_venta }:ProductosPublicados)=>({
-                        producto: nombre,
-                        precio_operacion: calculo_precio_final(heladero_precio_venta, heladero_descuento),
-                        codigo
-                    }))
-                ]);
-            }
-        });
-
-        
-        //si no hay id principal
-        if(refId.current == 0)
-        {
-            let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
-            setValue('fecha_operacion', dateNow.replace(" ", "T"));
-        }
-        else
-        {            
-            getNotaHeladero(refId.current)
-            .then((heladero)=>{
-
-                if(!heladero) return;
-                
-                dispatch(onSetNotaHeladeroActive(heladero));
-
-                let detalle = heladero.detalle??[];
-                
-                if(heladero?.estado != undefined) {
-    
-                    let estado = (heladero.estado == 3) ? 2 : heladero.estado;
-                    
-                    if(estado == 3){
-                        setEstadoTitulo('Guardado');
-                    }else if(estado == 2){
-                        setEstadoTitulo('Reapertura');
-                    }else if(estado == 1){
-                        setEstadoTitulo('Cierre');
-                    }
-                    else{
-                        setEstadoTitulo('Apertura');
-                    }
-
-                    setValue('estado', estado);
-                }
-                
-                setState(heladero.estado);
-
-                ///console.log(heladero?.fecha_cierre);
-                ///console.log(heladero?.fecha_apertura);
-                ///console.log(heladero?.fecha_guardado);
-                ///console.log(heladero?.fecha_movimiento);
-                
-                let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
-                setValue('fecha_operacion', dateNow);
-    
-                if(detalle.length > 0)
-                setValue('productos', heladero.detalle);
-
-                //cargar lista de heladeros
-
-                let heladero_id = heladero.user_id??0;
-
-                if(heladero_id != 0){
-                    
-                    loadBuscarUsuario(heladero_id, "codigo");
-                    setValue('user_id', heladero?.user_id);
-                }
-
-                setValue(`monto`, (heladero.monto??0).toString());
-                setValue(`pago`, (heladero.pago??0).toString());
-                setValue(`ahorro`, (heladero.ahorro??0).toString());
-                setValue(`debe`, (heladero.debe??0).toString());
-                
-
-            });
-        }
-      
-    }, []);
 
     const onSubmit: SubmitHandler<FormNotaHeladeroValues> = (data) => {
         
@@ -296,19 +203,9 @@ export const NotaHeladeroDetalle = () => {
 
     }
 
-    const redirectToFactura = async () => {
+    const redirectToFactura = () => navigate(`/facturacion/new?gf=nota&id=${refId.current}`); 
 
-        navigate(`/facturacion/new?gf=nota&id=${refId.current}`);
-
-    }
-
-    const getDisableDate = (id:number) => {
-        if((id == 1 && active?.fecha_cierre) || (id == 2 && active?.fecha_apertura) || (id == 3 && active?.fecha_guardado)){
-            return true;
-        }
-
-        return false;
-    }
+    const getDisableDate = (id:number) => ((id == 1 && active?.fecha_cierre) || (id == 2 && active?.fecha_apertura) || (id == 3 && active?.fecha_guardado)) ? true : false;
 
     const componentRef = useRef(null);
 
@@ -319,36 +216,117 @@ export const NotaHeladeroDetalle = () => {
     const onSortProducts = () => {
         const productos = getValues("productos");
         setValue("productos", (orderDirection == "asc") ? productos.sort((a, b) => b.producto!.localeCompare(a.producto??'')) :  productos.sort((a, b) => a.producto!.localeCompare(b.producto??'')) );
-
         setOrderDirection(orderDirection == "asc" ? "desc" : "asc");
     }
 
-    useEffect(() => {
-        const cleanProducts = fields.map((item) => ({
-            ...item,
-            id : item.id,
-            devolucion : item.devolucion,
-            pedido : 0,
-            vendido : 0,
-            importe : item.importe,
-            nota_heladeros_id : item.nota_heladeros_id,
-            created_at : item.created_at,
-            updated_at : item.updated_at,
-            codigo : item.codigo,
-            producto : item.producto,
-        }))
-        setValue("user_id", 0);
-        setValue("estado", 0);
-        setValue("fecha_operacion", moment(new Date()).format("YYYY-MM-DD HH:mm").toString());
-        setValue("productos", cleanProducts);        
-    }, [id == 0]);
+    const onLoadNotaHeladero = async () => {
 
+        refId.current = id;
 
+        await listNotaHeladeroEstado();
+    
+        const productos = await loadProductosDisponibles();
+        
+        if(productos)
+        setValue("productos", [
+            ...productos.map(({ nombre, codigo, heladero_descuento, heladero_precio_venta }:ProductosPublicados)=>({
+                producto: nombre,
+                precio_operacion: calculo_precio_final(heladero_precio_venta, heladero_descuento),
+                codigo
+            }))
+        ]);
+                    
+        //si no hay id principal
+        if(refId.current == 0)
+        {
+            setNullNotaHeladero();
+    
+            const cleanProducts = fields.map((item) => ({
+                ...item,
+                id : item.id,
+                devolucion : 0,
+                pedido : 0,
+                vendido : 0,
+                importe : item.importe,
+                nota_heladeros_id : item.nota_heladeros_id,
+                created_at : item.created_at,
+                updated_at : item.updated_at,
+                codigo : item.codigo,
+                producto : item.producto,
+            }))
+                        
+            setValue('estado', 2);
+            setValue('user_id', 0);
+            setValue('productos', cleanProducts);
+            setisNewRegister(true);
+    
+            let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm:ss").toString();
+            setValue('fecha_operacion', dateNow.replace(" ", "T"));
+        }
+        else
+        {            
+            const heladero = await getNotaHeladero(refId.current);
+            
+            if(!heladero) return;
+            
+            dispatch(onSetNotaHeladeroActive(heladero));
+
+            let detalle = heladero.detalle??[];
+            
+            if(heladero?.estado != undefined) {
+
+                let estado = (heladero.estado == 3) ? 2 : heladero.estado;
+                
+                if(estado == 3){
+                    setEstadoTitulo('Guardado');
+                }else if(estado == 2){
+                    setEstadoTitulo('Reapertura');
+                }else if(estado == 1){
+                    setEstadoTitulo('Cierre');
+                }
+                else{
+                    setEstadoTitulo('Apertura');
+                }
+
+                setValue('estado', estado);
+            }
+            
+            setState(heladero.estado);
+            
+            let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
+            setValue('fecha_operacion', dateNow);
+
+            if(detalle.length > 0)
+            setValue('productos', heladero.detalle);
+
+            //cargar lista de heladeros
+
+            let heladero_id = heladero.user_id??0;
+
+            if(heladero_id != 0){
+                
+                loadBuscarUsuario(heladero_id, "codigo");
+                setValue('user_id', heladero?.user_id);
+            }
+
+            setValue(`monto`, (heladero.monto??0).toString());
+            setValue(`pago`, (heladero.pago??0).toString());
+            setValue(`ahorro`, (heladero.ahorro??0).toString());
+            setValue(`debe`, (heladero.debe??0).toString());
+        }
+    }
+        
     useEffect(() => {
         
-       //if(isNewRegister == false) return;
-       //console.log({state, isNewRegister});
-       
+        onLoadNotaHeladero()
+        .then(()=>{
+            
+        });
+      
+    }, []);
+
+
+    useEffect(() => {
         if(state == null){
             setisReadOnlyInputs((s) => ({
                 ...s,
@@ -357,6 +335,7 @@ export const NotaHeladeroDetalle = () => {
                 isReadOnlyVendido : true,
                 isReadOnlyImporte : true,
             }));
+            setValue('estado', 2);
             return;
         }
 
@@ -419,17 +398,7 @@ export const NotaHeladeroDetalle = () => {
             setValue(`monto`, subtotal.toString());
             setValue(`pago`, (0.00).toString());
             setValue(`ahorro`, (0.00).toString());
-            setValue(`debe`, subtotal.toString());
-            
-            /*
-            setValue("productos", [
-                ...fields.map(({ nombre, codigo, heladero_descuento, heladero_precio_venta }:ProductosPublicados)=>({
-                    producto: nombre,
-                    precio_operacion: calculo_precio_final(heladero_precio_venta, heladero_descuento),
-                    codigo
-                }))
-            ]);
-            */
+            setValue(`debe`, subtotal.toString());           
             return;
         }
 
@@ -508,7 +477,7 @@ export const NotaHeladeroDetalle = () => {
                                     onChange: (e) => {
                                         setState(parseInt(e.target.value));
                                         setValue("estado", e.target.value);
-                                    }
+                                    },
                                 })
                                 } >
                                     {
