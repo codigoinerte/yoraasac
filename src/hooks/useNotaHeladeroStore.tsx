@@ -175,7 +175,7 @@ export const useNotaHeladeroStore = () => {
 
         try {            
 
-            const response = await backendApi.post(`/hota-heladero-fecha-operacion/${params.id}`, {...params});
+            await backendApi.post(`/hota-heladero-fecha-operacion/${params.id}`, {...params});
             if(active){
                 dispatch(onSetNotaHeladeroActive({
                     ...active,
@@ -184,9 +184,7 @@ export const useNotaHeladeroStore = () => {
                     fecha_guardado: (params.estado == 3) ? params.fecha_operacion : active.fecha_guardado,
                     estado: 1,
                 }));
-            }
-           
-            console.log(response);
+            }                       
 
         } catch (error) {
             console.log(error);
