@@ -225,39 +225,55 @@ export const NotaHeladeroDetalle = () => {
 
         await listNotaHeladeroEstado();
     
-        const productos = await loadProductosDisponibles();
-        
-        if(productos)
-        setValue("productos", [
-            ...productos.map(({ nombre, codigo, heladero_descuento, heladero_precio_venta }:ProductosPublicados)=>({
-                producto: nombre,
-                precio_operacion: calculo_precio_final(heladero_precio_venta, heladero_descuento),
-                codigo
-            }))
-        ]);
-                    
+        const listProductosPublicados = await loadProductosDisponibles();
+                            
         //si no hay id principal
         if(refId.current == 0)
         {
             setNullNotaHeladero();
-    
-            const cleanProducts = fields.map((item) => ({
-                ...item,
-                id : item.id,
-                devolucion : 0,
-                pedido : 0,
-                vendido : 0,
-                importe : item.importe,
-                nota_heladeros_id : item.nota_heladeros_id,
-                created_at : item.created_at,
-                updated_at : item.updated_at,
-                codigo : item.codigo,
-                producto : item.producto,
-            }))
+              
+            if(listProductosPublicados!= undefined){
+                //{ nombre, codigo, heladero_descuento, heladero_precio_venta }
+                setValue("productos", [
+                    ...listProductosPublicados.map((item:ProductosPublicados)=>({
+                        producto: item.nombre,
+                        precio_operacion: calculo_precio_final(item.heladero_precio_venta, item.heladero_descuento),
+                        codigo: item.codigo,
+
+                        id : item.id,
+                        devolucion : 0,
+                        pedido : 0,
+                        vendido : 0,
+                        importe : "0",
+                        nota_heladeros_id : 0,
+                        created_at : item.created_at,
+                        updated_at : item.updated_at,
+                        
+                        }))
+                ]);
+            }
+
+            /*
+            if(fields.length > 0){
+                const cleanProducts = fields.map((item) => ({
+                    ...item,
+                    id : item.id,
+                    devolucion : 0,
+                    pedido : 0,
+                    vendido : 0,
+                    importe : item.importe,
+                    nota_heladeros_id : item.nota_heladeros_id,
+                    created_at : item.created_at,
+                    updated_at : item.updated_at,
+                    codigo : item.codigo,
+                    producto : item.producto,
+                }))
+                setValue('productos', cleanProducts);
+            }*/
                         
             setValue('estado', 2);
             setValue('user_id', 0);
-            setValue('productos', cleanProducts);
+            //
             setisNewRegister(true);
     
             let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm:ss").toString();
@@ -318,10 +334,7 @@ export const NotaHeladeroDetalle = () => {
         
     useEffect(() => {
         
-        onLoadNotaHeladero()
-        .then(()=>{
-            
-        });
+        onLoadNotaHeladero();
       
     }, []);
 
@@ -415,7 +428,7 @@ export const NotaHeladeroDetalle = () => {
                      
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
-                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()}/>
+                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()} isNew={true}/>
 
                     <hr className='border border-1 opacity-50'/>
 
