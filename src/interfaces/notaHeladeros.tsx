@@ -11,10 +11,10 @@ export interface NotaHeladero{
     user_id:                 number;
     moneda_id:               number;
     id_sucursal:             number;
-    monto?:                  string;
-    pago?:                   string;
-    debe?:                   string;
-    ahorro?:                 string;
+    monto?:                  number;
+    pago?:                   number;
+    debe?:                   number;
+    ahorro?:                 number;
     estado?:                 any;
     cucharas?:               number;
     conos?:                  number;
@@ -42,11 +42,11 @@ export interface FormNotaHeladeroDetalleValues {
     devolucion_today?:  number;
     pedido?:            number;
     vendido?:           number;
-    importe?:           string;
+    importe?:           number;
     nota_heladeros_id?: number;
     created_at?:        string;
     updated_at?:        string;
-    codigo?:            string;
+    codigo:             string;
     producto?:          string;
     precio_operacion?:  number;
 }
