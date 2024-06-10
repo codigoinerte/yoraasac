@@ -184,8 +184,7 @@ export const useNotaHeladeroStore = () => {
                     fecha_guardado: (params.estado == 3) ? params.fecha_operacion : active.fecha_guardado,
                     estado: 1,
                 }));
-            }                       
-
+            }           
         } catch (error) {
             console.log(error);
         }
