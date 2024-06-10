@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import {  Grid, Row, Col, Button, Modal } from 'rsuite'
 import { useNotaHeladeroStore } from '../../hooks';
-import { SubmitHandler, UseFormSetValue, useFieldArray, useForm } from 'react-hook-form';
+import { SubmitHandler, UseFormGetValues, UseFormSetValue, useFieldArray, useForm } from 'react-hook-form';
 import { FormNotaHeladeroValues } from '../interfaces';
 import moment from 'moment';
 import { alert } from '../../helpers';
@@ -10,10 +10,11 @@ interface ModalNotaHeladeroRegisterProps {
     openModal: boolean;
     handlerOpenModal: (state:boolean) => void;
     setValueOrigin: UseFormSetValue<FormNotaHeladeroValues>;
+    getValuesOrigin: UseFormGetValues<FormNotaHeladeroValues>;
     updateStateHeladero: Dispatch<SetStateAction<number | null>>;
 }
 
-export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin, updateStateHeladero }: ModalNotaHeladeroRegisterProps) => {
+export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin, getValuesOrigin, updateStateHeladero }: ModalNotaHeladeroRegisterProps) => {
 
     const {  saveNotaHeladero, updateDateOperation, active  } = useNotaHeladeroStore();
 
@@ -34,7 +35,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         setValue('user_id', active?.user_id ?? 0);
         setValue('estado', active?.estado ?? 3);
         setValue('fecha_operacion', (moment(new Date()).format("YYYY-MM-DD HH:mm").toString()).replace('T', ' '));
-        setValue('productos', (active?.detalle ?? []));
+        setValue('productos', (active?.detalle ?? []).map((item) => ({...item, devolucion: 0})));
 
     }, [active]);
     
@@ -52,6 +53,14 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             }); 
             return;
         }
+
+
+
+        updateDateOperation({
+            fecha_operacion: data.fecha_operacion,
+            id: active?.id ?? 0,
+            estado: 3        
+        });
         saveNotaHeladero({
             ...data,
             productos: (data.productos).map((item) => {
@@ -59,19 +68,16 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                     ...item,
                     pedido: 0,                
                     vendido: 0,
-                    importe: '0.00'
+                    importe: 0
                 }
             }),
             parent_id: active?.id ?? 0,
-            estado: 3
-        });
-        updateDateOperation({
-            fecha_operacion: data.fecha_operacion,
-            id: active?.id ?? 0,
-            estado: 3        
-        });
-        updateStateHeladero(1);
-        setValueOrigin("estado", 1);
+            estado: 4 //se guarda con estado pendiente a reapertura del dia siguiente
+        }, true);
+
+        updateStateHeladero(3);
+        setValueOrigin("estado", 3);
+        //("fecha_guardado", data.fecha_operacion);
         handlerOpenModal(false);
     }
 
@@ -98,6 +104,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             showCancelButton : true,
             disableConfirmMessage: true,
             preConfirm : () => {
+                updateStateHeladero(2);
                 setValueOrigin("estado", 2);
                 handleClose();
             },
@@ -140,11 +147,11 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                                     <Col xs={12} sm={14} md={14}>
                                         <input type="number" className='form-control' {...register(`productos.${index}.devolucion`, {
                                             min: 0,
-                                            max:getValues(`productos.${index}.pedido`),
-                                            maxLength: getValues(`productos.${index}.pedido`),
                                             onChange: (e) => {
+                                                const devolucion = getValuesOrigin(`productos`).find((item)=> item.codigo == getValues(`productos.${index}.codigo`))?.devolucion ?? 0;
                                                 const pedido = getValues(`productos.${index}.pedido`) ?? 0;
-                                                if(pedido < e.target.value){                                                    
+                                                const menor = (parseInt(pedido.toString())+parseInt(devolucion.toString()));
+                                                if(menor < e.target.value){                                                    
                                                     e.target.value = 0;
                                                 }
                                             }
