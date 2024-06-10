@@ -75,15 +75,20 @@ export const useNotaHeladeroStore = () => {
             if(updateSaved == true){
                 const sendedProductos = postdata.productos;
                 const newProductos = active?.detalle.map((producto, index)=>{
+                    const devolucion_today = sendedProductos.find(p=>p.codigo == producto.codigo)?.devolucion ?? 0;
                     return {
                         ...producto,
-                        devolucion_today : sendedProductos.find(p=>p.id == producto.id)?.devolucion_today ?? 0
+                        devolucion_today: parseInt(devolucion_today.toString())
                     }
                 });
-                
+                if(active)
                 dispatch(onSetNotaHeladeroActive({
-                    ...result,
-                    detalle: newProductos
+                    ...active,
+                    fecha_cierre: (postdata.estado == 1) ? postdata.fecha_operacion : active.fecha_cierre,
+                    fecha_apertura: (postdata.estado == 2) ? postdata.fecha_operacion : active.fecha_apertura,
+                    fecha_guardado: (postdata.estado == 3) ? postdata.fecha_operacion : active.fecha_guardado,
+                    estado: 3,
+                    detalle: newProductos ?? []
                 }));
             }else{
                 dispatch(onSetNotaHeladeroActive({
@@ -127,11 +132,17 @@ export const useNotaHeladeroStore = () => {
 
             const { data:info } = await backendApi.get(`${rutaEndpoint}/${id}`);
 
-            dispatch(onSetNotaHeladeroActive(info.data));
+            dispatch(onSetNotaHeladeroActive({
+                ...info.data,
+                estado: info.data.estado == 4 ? 2 : info.data.estado
+            }));
 
             dispatch(onStatus(false));
 
-            return info.data;
+            return {
+                ...info.data,
+                estado: info.data.estado == 4 ? 2 : info.data.estado
+            };
 
         } catch (error) {
             console.log(error);
@@ -172,19 +183,8 @@ export const useNotaHeladeroStore = () => {
     const updateDateOperation = async (params: FormNotaFechaOperacion) =>{
         
         dispatch(onStatus(true));
-
         try {            
-
-            await backendApi.post(`/hota-heladero-fecha-operacion/${params.id}`, {...params});
-            if(active){
-                dispatch(onSetNotaHeladeroActive({
-                    ...active,
-                    fecha_cierre: (params.estado == 1) ? params.fecha_operacion : active.fecha_cierre,
-                    fecha_apertura: (params.estado == 2) ? params.fecha_operacion : active.fecha_apertura,
-                    fecha_guardado: (params.estado == 3) ? params.fecha_operacion : active.fecha_guardado,
-                    estado: 1,
-                }));
-            }           
+            await backendApi.post(`/hota-heladero-fecha-operacion/${params.id}`, {...params});           
         } catch (error) {
             console.log(error);
         }
