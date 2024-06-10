@@ -216,8 +216,10 @@ export const useHelpers = () => {
                     idusuario: parseInt(idusuario.toString())
                 }
             });
-            
-            return data.data;
+            return {
+                ...data.data,
+                estado: data.data.estado == 4 ? 2 : data.data.estado
+            };
             
     
         } catch (error) {
