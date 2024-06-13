@@ -35,7 +35,14 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         setValue('user_id', active?.user_id ?? 0);
         setValue('estado', active?.estado ?? 3);
         setValue('fecha_operacion', (moment(new Date()).format("YYYY-MM-DD HH:mm").toString()).replace('T', ' '));
-        setValue('productos', (active?.detalle ?? []).map((item) => ({...item, devolucion: 0})));
+        setValue('productos', (active?.detalle ?? []).map((item) => {
+            const response =  {
+            ...item,
+            pedido: ((item.pedido??0)+(item.devolucion??0)),
+            devolucion: 0
+            };            
+            return response;
+        }));
 
     }, [active]);
     
@@ -148,7 +155,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                                         <input type="number" className='form-control' {...register(`productos.${index}.devolucion`, {
                                             min: 0,
                                             onChange: (e) => {
-                                                const devolucion = getValuesOrigin(`productos`).find((item)=> item.codigo == getValues(`productos.${index}.codigo`))?.devolucion ?? 0;
+                                                const devolucion = 0; //getValuesOrigin(`productos`).find((item)=> item.codigo == getValues(`productos.${index}.codigo`))?.devolucion ?? 0;
                                                 const pedido = getValues(`productos.${index}.pedido`) ?? 0;
                                                 const menor = (parseInt(pedido.toString())+parseInt(devolucion.toString()));
                                                 if(menor < e.target.value){                                                    
