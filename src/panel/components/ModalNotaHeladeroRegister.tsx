@@ -160,6 +160,8 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                                                 const menor = (parseInt(pedido.toString())+parseInt(devolucion.toString()));
                                                 if(menor < e.target.value){                                                    
                                                     e.target.value = 0;
+                                                }else{
+                                                    e.target.value = parseInt((e.target.value).toString());
                                                 }
                                             }
                                         })} 

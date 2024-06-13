@@ -574,7 +574,10 @@ export const NotaHeladeroDetalle = () => {
                                                                 className='form-control' 
                                                                 readOnly={isReadOnlyInputs.isReadOnlyPedido}
                                                                 {...register(`productos.${index}.pedido`,{
-                                                                    pattern: /^\d+$/i
+                                                                    pattern: /^\d+$/i,
+                                                                    onChange: (e) => {
+                                                                        e.target.value = parseInt((e.target.value).toString());
+                                                                    }
                                                                 })}
                                                                 tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
                                                                 />
