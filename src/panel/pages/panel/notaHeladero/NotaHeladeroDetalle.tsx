@@ -205,7 +205,17 @@ export const NotaHeladeroDetalle = () => {
 
     const redirectToFactura = () => navigate(`/facturacion/new?gf=nota&id=${refId.current}`); 
 
-    const getDisableDate = (id:number) => ((id == 1 && active?.fecha_cierre) || (id == 2 && active?.fecha_apertura) || (id == 3 && (active?.fecha_guardado || active?.estado == 3)) || (id == 1 && active?.estado == 2 && active.fecha_cierre == null) ) ? true : false;
+    const getDisableDate = (id:number) => {
+        if(
+            (id == 1 && active?.fecha_cierre) || 
+            (id == 2 && active?.fecha_apertura) || 
+            (id == 3 && (active?.fecha_guardado || active?.estado == 3 || (!active?.fecha_apertura && active?.estado == 2))) || 
+            (id == 1 && active?.estado == 2 && active.fecha_cierre == null) ||
+            ((id == 1 || id == 3) && !active)
+        ) return true;
+        
+        return false;
+    }
 
     const componentRef = useRef(null);
 
