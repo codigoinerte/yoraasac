@@ -328,6 +328,9 @@ export const NotaHeladeroDetalle = () => {
 
 
     useEffect(() => {
+        let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
+            setValue('fecha_operacion', dateNow.replace(" ","T"));       
+            
         if(state == null){
             setisReadOnlyInputs((s) => ({
                 ...s,
@@ -351,7 +354,7 @@ export const NotaHeladeroDetalle = () => {
             return;
         }
        
-        if(state == 3){ // activar guardado
+        if(state == 3 && !active?.fecha_guardado){ // activar guardado
             setisReadOnlyInputs((s) => ({
                 ...s,
                 isReadOnlyDevolucion : true,
