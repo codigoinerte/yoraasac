@@ -39,14 +39,36 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                     <table className='cabecera'>
                         <tbody>
                             <tr>
-                                <td align='left' colSpan={2}>Nombre: {active?.heladero_nombre}</td>                        
+                                <td align='left' colSpan={2}><b>Heladero</b>: {active?.heladero_nombre}</td>
                             </tr>
                             <tr>
-                                <td align='left'>Fecha: { fechaOperacion }</td>
+                                <td align='left'><b>Fecha</b>: { fechaOperacion }</td>
                             </tr>
                             <tr>
-                                <td align='left'>Estado: { active?.estado_nombre }</td>
-                                <td align='left'>Moneda: { active?.moneda }</td>
+                                <td align='left'><b>Estado</b>: { active?.estado_nombre }</td>
+                            </tr>
+                            <tr>
+                                <td align='left'><b>Moneda</b>: { active?.moneda }</td>
+                            </tr>
+                            <tr style={{borderTop:'1px dotted #000'}}>
+                                <td align='left'>
+                                    <b>Monto(subtotal):</b> {active?.monto}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='left'>
+                                    <b>Pago:</b> {active?.pago}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='left'>
+                                    <b>ahorro:</b> {active?.ahorro}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='left'>
+                                    <b>ahorro:</b> {active?.debe}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
