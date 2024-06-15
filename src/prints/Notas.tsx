@@ -1,8 +1,9 @@
 import React, { forwardRef, useEffect, useState } from 'react'
-import { useNotaHeladeroStore } from '../hooks';
+//import { useNotaHeladeroStore } from '../hooks';
 import "/src/prints/assets/css/prints.scss";
-import { FormNotaHeladeroDetalleValues } from '../interfaces';
+import { FormNotaHeladeroDetalleValues, IRootState } from '../interfaces';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 
 
 
@@ -11,8 +12,8 @@ interface MyComponentProps {
 }
 const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> = (props, ref) => {
 
-    const {  active  } = useNotaHeladeroStore();
-
+    const { active } = useSelector((state:IRootState)=>state.notaHeladero);
+    
     const [fechaOperacion, setFechaOperacion] = useState('');
 
     useEffect(() => {
