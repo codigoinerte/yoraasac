@@ -411,14 +411,24 @@ export const NotaHeladeroDetalle = () => {
 
 
     },[isNewRegister, state])
+
+    useEffect(() => {
+
+        if(active?.detalle)
+            setValue('productos', active.detalle);
+      
+    }, [active?.detalle])
+    
     
     const isPrint = (): boolean => active?.fecha_cierre ? true : false;
 
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo}`}>
             <>     
-                
-                <NotasComponent ref={componentRef} />
+                {
+                    state == 1 &&
+                    <NotasComponent ref={componentRef} />
+                }
                      
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
