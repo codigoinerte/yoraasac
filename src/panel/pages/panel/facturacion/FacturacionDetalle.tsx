@@ -272,16 +272,22 @@ export const FacturacionDetalle = () => {
         
         if(nota_heladero_info?.detalle != undefined)
         {
-            detalle = nota_heladero_info!.detalle.map((item)=>({
-                id:item.id??0,
-                codigo:item.codigo??'',
-                Producto:item.producto,
-                cantidad: item.vendido??0,
-                descuento: 0,
-                precio: parseFloat( (item.importe??0).toString() ),
-                total: parseFloat(  ((item.vendido??1) * (parseFloat(item.importe??'0'))).toString()),
+            detalle = nota_heladero_info!.detalle.map((item)=>{
 
-            }))
+                const vendido = item.vendido??1;
+                const importe = item.importe??0;
+
+                return {
+                    id:item.id??0,
+                    codigo:item.codigo??'',
+                    Producto:item.producto,
+                    cantidad: item.vendido??0,
+                    descuento: 0,
+                    precio: parseFloat(importe.toString()),
+                    total: parseFloat((importe*vendido).toString()),
+    
+                }
+            })
         
             setValue('productos', detalle);
         }
