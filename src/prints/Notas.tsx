@@ -17,7 +17,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
     
     const [fechaOperacion, setFechaOperacion] = useState('');
 
-    const { configuration } = useConfiguration();
+    const { configuration, loadConfiguration } = useConfiguration();
 
     const URL_IMAGENES = import.meta.env.VITE_URL_IMAGES;
 
@@ -35,6 +35,10 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
             setFechaOperacion(dateNow);
         }
 
+        loadConfiguration()
+        .then((response)=>{
+            
+        });
         
     }, []);
     //70mm
