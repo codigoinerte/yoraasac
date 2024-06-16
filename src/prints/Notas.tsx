@@ -135,6 +135,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                     </table>
 
                     <div className="separate"></div>
+                    <div className="line"></div>
                 </div>
             </div>
         </div>
