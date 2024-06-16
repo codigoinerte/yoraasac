@@ -37,10 +37,15 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
         <div style={{display:"none"}}>
             <div className='ticket print-container' ref={ref}>
                 <div className="contenedor">
+                <div className="line"></div>
+                    <div className="text-center">
+                        <img src={'https://www.brandspe.com/cdn/shop/files/Logo_brands_store_2.png'} className='brand-logo' alt="" />
+                    </div>
+                <div className="line"></div>
                     <table className='cabecera'>
                         <tbody>
                             <tr>
-                                <td align='left' colSpan={2}><b>Heladero</b>: {active?.heladero_nombre}</td>
+                                <td align='left'><b>Heladero</b>: {active?.heladero_nombre}</td>
                             </tr>
                             <tr>
                                 <td align='left'><b>Fecha</b>: { fechaOperacion }</td>
@@ -51,7 +56,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                             <tr>
                                 <td align='left'><b>Moneda</b>: { active?.moneda }</td>
                             </tr>
-                            <tr style={{borderTop:'1px dotted #000'}}>
+                            <tr>
                                 <td align='left'>
                                     <b>Monto(subtotal):</b> {active?.monto}
                                 </td>
@@ -73,14 +78,13 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                             </tr>
                         </tbody>
                     </table>
-
-                    <table className='cuerpo'>
-                        
+                    <div className="line"></div>
+                    <table className='cuerpo' >                        
                         <tbody>
                             <tr>
+                                <td className='sizeTitle text-left'><strong>Prod.</strong></td>
                                 <td className='sizeTitle'><strong>Dev.</strong></td>
                                 <td className='sizeTitle'><strong>Ped.</strong></td>
-                                <td className='sizeTitle'><strong>Prod.</strong></td>
                                 <td className='sizeTitle'><strong>Ven.</strong></td>
                                 <td className='sizeTitle'><strong>Imp.</strong></td>
                             </tr>
@@ -89,18 +93,19 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                     active.detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
 
                                         <tr key={detalle.id}>
-
-                                            <td width={15}>{ detalle.devolucion??0 }</td>
-                                            <td width={15}>{ detalle.pedido??0 }</td>
-                                            <td>{ detalle.producto }</td>
-                                            <td width={15}>{ detalle.vendido??0 }</td>
-                                            <td width={15}>{ detalle.importe??0 }</td>
+                                            <td className='text-left'>{ detalle.producto }</td>
+                                            <td width={10}>{ detalle.devolucion??0 }</td>
+                                            <td width={10}>{ detalle.pedido??0 }</td>
+                                            <td width={10}>{ detalle.vendido??0 }</td>
+                                            <td width={10}>{ detalle.importe??0 }</td>
 
                                         </tr>
                                     ))
                             }
                         </tbody>
                     </table>
+
+                    <div className="separate"></div>
                 </div>
             </div>
         </div>
