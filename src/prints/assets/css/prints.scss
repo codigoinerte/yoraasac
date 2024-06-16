@@ -3,20 +3,67 @@
     display: none;
   }
 }
+.brand-logo{
+  max-width: 80%;
+  width: auto;
+  height: auto;
+  margin: auto;
+}
 .print{
   display: none;
 }
+.cabecera td,
+.text-left{
+  text-align: left !important;
+}
+.text-center{
+  text-align: center !important;
+}
+
+.row-flex{
+  display: flex;
+  flex-direction: row;
+}
+.row-flex > div:nth-child(1){
+  flex: 10;
+}
+.row-flex > div:not(:nth-child(1)){
+  flex: 1;
+}
+.separate{
+  height: 3rem;
+}
+.cuerpo{
+  border-top: 1px dashed #000;  
+}
+.print-container *{
+  color: #000 !important;
+  font-size: 0.85rem;
+}
+.print-container table td,
+.print-container table tr,
+.print-container table{
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
+.line{
+  border-top: 1px dashed #000;
+  width: 100%;
+  margin: 1rem 0;
+}
+
 @media print {
     @page {
       /*size: 50mm;*/
-      margin: 1mm 1mm 1mm 0mm;
+      margin: 0mm 0mm 0mm 0mm;
       height: auto;
       
     }
     html, body {
       margin: 0px;
-      /*height: 100vh !important;*/
-      /*-webkit-print-color-adjust: exact;      */
+      height: 100vh !important;
+      -webkit-print-color-adjust: exact;
     }
     .print,
     .print *{
@@ -76,11 +123,17 @@
       widows: 3;
     }
     *{
-      font-size: 1rem;
+      font-size: 0.85rem;
       background-color: transparent;
       border: 0;
       text-align: left;
       color: #000 !important;
+    }
+    .cuerpo{
+      max-width: 96%;
+    }
+    .cuerpo *{
+      font-size: 0.65rem;
     }
     input{
       padding: 0px;
@@ -91,12 +144,7 @@
       border: 0 !important;
       background-color: transparent !important;
     }
-
-    .ticket *{
-      font-size: 0.75rem;
-    }
     .ticket {
-      /*height: 100%;*/
       display: flex;
       flex-direction: row;
     }
@@ -114,8 +162,8 @@
       box-shadow: none ;
     }
 
-    .ticket .cabecera {
-      margin-bottom: 1rem;
+    .ticket .cabecera *{
+      font-size: 0.75rem;      
     }
     .ticket .cabecera td{
       text-align: left !important;
@@ -125,10 +173,16 @@
       border-bottom: 2px dotted #ebebeb;
       margin-bottom: 0.5rem;
     }
-    .ticket table td:nth-child(1),
     .ticket table td:nth-child(2),
-    .ticket table td:nth-child(4),
-    .ticket table td:nth-child(5){
-      width: 30px !important;
+    .ticket table td:nth-child(3),
+    .ticket table td:nth-child(4)
+    {
+      width: 24px !important;
+      text-align: left !important;
     }
+    .ticket table td:nth-child(5){
+      width: 28px !important;
+      text-align: left !important;
+    }
+    
 }
