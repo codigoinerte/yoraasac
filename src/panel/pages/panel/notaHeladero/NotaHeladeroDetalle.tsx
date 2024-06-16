@@ -54,7 +54,7 @@ export const NotaHeladeroDetalle = () => {
 
     const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
-    const { register, handleSubmit, formState, setValue, getValues, control } = useForm<FormNotaHeladeroValues>({
+    const { register, handleSubmit, formState, setValue, getValues, control, reset } = useForm<FormNotaHeladeroValues>({
         defaultValues:{   
             estado: 2,    
             productos: []
@@ -422,6 +422,43 @@ export const NotaHeladeroDetalle = () => {
     
     const isPrint = (): boolean => active?.fecha_cierre ? true : false;
 
+    const funcNew = async () => {
+        reset();
+        
+        setNullNotaHeladero();
+
+        const listProductosPublicados = await loadProductosDisponibles();
+              
+        if(listProductosPublicados!= undefined)                
+        setValue("productos", [
+            ...listProductosPublicados.map((item:ProductosPublicados)=>({
+                producto: item.nombre,
+                precio_operacion: calculo_precio_final(item.heladero_precio_venta, item.heladero_descuento),
+                codigo: item.codigo,
+
+                id : item.id,
+                devolucion : 0,
+                pedido : 0,
+                vendido : 0,
+                importe : 0,
+                nota_heladeros_id : 0,
+                created_at : item.created_at,
+                updated_at : item.updated_at,
+                
+                }))
+        ]);            
+                    
+        setValue('estado', 2);
+        setValue('user_id', 0);
+        setisNewRegister(true);
+
+        let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
+        setValue('fecha_operacion', dateNow.replace(" ", "T"));
+        refId.current = 0;
+
+        navigate("/nota-heladero/edit/new");
+    }
+
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo}`}>
             <>     
@@ -432,7 +469,7 @@ export const NotaHeladeroDetalle = () => {
                      
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
-                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()} isNew={true}/>
+                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()} isNew={true} funcNew={funcNew}/>
 
                     <hr className='border border-1 opacity-50'/>
 

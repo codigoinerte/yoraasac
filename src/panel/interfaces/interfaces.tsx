@@ -80,6 +80,8 @@ export interface ControlsInterface{
     isEdit?:boolean;
     isDelete?:boolean;
     isList?:boolean;
+
+    funcNew?: Function ;
 }
 export interface ListDetail{
     cabecera: string[],
