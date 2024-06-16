@@ -27,6 +27,7 @@ export const ConfiguracionPrincipal = () => {
            setValue('pagina_web', response.pagina_web);
            setValue('igv', response.igv);
            setValue('email_empresa', response.email_empresa);
+           setValue('logo', response.logo);
            setValue('contactos', response.contactos.map((e:ContactoConfig)=>({
             ...e,
             key: e.id,
