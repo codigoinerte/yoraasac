@@ -866,6 +866,8 @@ export interface formConfiguracion {
     email_empresa   : string;
     celular         : string;
     igv             : number;
+    logo            : string;
+    logo_field?     : FileList;
     contactos       : ContactoConfig[];
 }
 
@@ -890,6 +892,7 @@ export interface Configuration {
     igv:             number;
     contactos:       ContactoConfig[];
     igvs:            IgvConfig[];
+    logo?:           string;
 }
 
 export interface ContactoConfig {
