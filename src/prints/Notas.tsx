@@ -54,19 +54,19 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                         }
                         {
                             (configuration?.razon_comercial) &&
-                            <h4>{configuration.razon_comercial}</h4>
+                            <h4 className='text-center'>{configuration.razon_comercial}</h4>
                         }
                         {
                             (configuration?.ruc) &&
-                            <div><small><b>RUC:{configuration.ruc}</b></small></div>
+                            <div className='text-center'><small><b>RUC:{configuration.ruc}</b></small></div>
                         }
                         {
                             (configuration?.email_empresa) &&
-                            <div><small><b>Email:{configuration.email_empresa}</b></small></div>
+                            <div className='text-center'><small><b>Email:{configuration.email_empresa}</b></small></div>
                         }
                         {
                             (configuration?.celular) &&
-                            <div><small><b>Celular:{configuration?.celular}</b></small></div>
+                            <div className='text-center'><small><b>Celular:{configuration?.celular}</b></small></div>
                         }
                         
                     </div>
