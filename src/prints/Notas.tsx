@@ -4,6 +4,7 @@ import "/src/prints/assets/css/prints.scss";
 import { FormNotaHeladeroDetalleValues, IRootState } from '../interfaces';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
+import { useConfiguration } from '../hooks';
 
 
 
@@ -15,6 +16,10 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
     const { active } = useSelector((state:IRootState)=>state.notaHeladero);
     
     const [fechaOperacion, setFechaOperacion] = useState('');
+
+    const { configuration } = useConfiguration();
+
+    const URL_IMAGENES = import.meta.env.VITE_URL_IMAGES;
 
     useEffect(() => {
       
@@ -39,7 +44,27 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                 <div className="contenedor">
                 <div className="line"></div>
                     <div className="text-center">
-                        <img src={'https://www.brandspe.com/cdn/shop/files/Logo_brands_store_2.png'} className='brand-logo' alt="" />
+                        {
+                            (configuration?.logo) &&
+                            <img src={`${URL_IMAGENES}${configuration.logo}`} className='brand-logo'  alt="..."/>
+                        }
+                        {
+                            (configuration?.razon_comercial) &&
+                            <h4>{configuration.razon_comercial}</h4>
+                        }
+                        {
+                            (configuration?.ruc) &&
+                            <div><small><b>RUC:{configuration.ruc}</b></small></div>
+                        }
+                        {
+                            (configuration?.email_empresa) &&
+                            <div><small><b>Email:{configuration.email_empresa}</b></small></div>
+                        }
+                        {
+                            (configuration?.celular) &&
+                            <div><small><b>Celular:{configuration?.celular}</b></small></div>
+                        }
+                        
                     </div>
                 <div className="line"></div>
                     <table className='cabecera'>
