@@ -295,8 +295,8 @@ a{
     }
 }
 
-input:read-only,
-input:read-only:is(:focus,:visited,:active){
+input:not([type="file"]):read-only,
+input:not([type="file"]):read-only:is(:focus,:visited,:active){
     background-color:#696262;
     color: #fff;
     box-shadow: none;
