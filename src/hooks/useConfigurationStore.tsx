@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
-import { toastMessage } from '../helpers';
+import { toastMessage, uploadImage } from '../helpers';
 import { IRootState } from '../interfaces';
 import { Configurations } from '../panel/interfaces';
 import { onConfigAdd, onConfigAddMessage, onConfigClearMessage, onConfigDelete, onSetConfigActive, onStatus,  } from '../store'
@@ -62,7 +62,15 @@ export const useConfiguration = () => {
     const mainSystem = 1;
 
     const saveConfiguration = async ( params:formConfiguracion) => {
-        dispatch(onStatus(true));    
+        dispatch(onStatus(true));   
+        
+        /* save image */
+
+        let array: (FileList | undefined)[] = [];        
+        if(params.logo_field && params.logo_field.length > 0) array.push(params.logo_field);
+        const respuesta = await uploadImage(array); 
+        const logo:string = respuesta[0]??''
+        if(respuesta.length > 0 && params.logo?.length && !params.logo?.length) params.logo = logo;
         
         try {
             const { data } = await backendApi.put<Configurations>(`${rutaEndpoint}/${mainSystem}`, { ...params });
