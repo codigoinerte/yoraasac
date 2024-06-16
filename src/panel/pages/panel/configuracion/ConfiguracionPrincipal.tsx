@@ -21,6 +21,8 @@ export const ConfiguracionPrincipal = () => {
         loadConfiguration()
         .then((response)=>{
             
+           setValue('logo_field', undefined);
+
            setValue('ruc', response.ruc);
            setValue('razon_social', response.razon_social);
            setValue('razon_comercial', response.razon_comercial);
