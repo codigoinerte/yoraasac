@@ -47,6 +47,8 @@ export const ConfiguracionPrincipal = () => {
         }
     });
 
+    const URL_IMAGENES = import.meta.env.VITE_URL_IMAGES;
+
     //prepend, remove, swap, move, insert, replace
     const { fields, append, remove } = useFieldArray({
         control,
@@ -146,6 +148,22 @@ export const ConfiguracionPrincipal = () => {
 
                         </div>
 
+
+                    </div>
+                </div>
+
+                <div className="card mt-3">
+                    <div className="card-header">
+                        Logo
+                    </div>
+                    <div className="card-body">
+                        
+                        <input type="file" {...register('logo_field')} readOnly={false} className='form-control'/>
+
+                        {
+                            (configuration?.logo) &&
+                            <img src={`${URL_IMAGENES}${configuration.logo}`} alt="..."/>
+                        }
 
                     </div>
                 </div>
