@@ -65,15 +65,22 @@ export const useConfiguration = () => {
         dispatch(onStatus(true));   
         
         /* save image */
-
+        let customParmas = params;
         let array: (FileList | undefined)[] = [];        
         if(params.logo_field && params.logo_field.length > 0) array.push(params.logo_field);
         const respuesta = await uploadImage(array); 
         const logo:string = respuesta[0]??''
-        if(respuesta.length > 0 && params.logo?.length && !params.logo?.length) params.logo = logo;
-        
+        if(logo.length > 0) {
+            delete customParmas.logo_field;
+
+            customParmas = {
+                ...customParmas,
+                logo
+            };
+        }
+
         try {
-            const { data } = await backendApi.put<Configurations>(`${rutaEndpoint}/${mainSystem}`, { ...params });
+            const { data } = await backendApi.put<Configurations>(`${rutaEndpoint}/${mainSystem}`, { ...customParmas });
             
             dispatch(onStatus(false));
             dispatch(onSetConfigActive(data.data)); 
