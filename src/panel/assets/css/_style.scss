@@ -304,3 +304,12 @@ input:not([type="file"]):read-only:is(:focus,:visited,:active){
     border-color: #696262;
     pointer-events: none; 
 }
+
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type=number] { -moz-appearance:textfield; }
