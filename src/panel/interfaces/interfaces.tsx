@@ -3,7 +3,8 @@ import { NotaHeladero } from "../../interfaces";
 import { UseFormRegister } from "react-hook-form";
 
 export interface ContainerInterface  {
-    children:  React.ReactElement 
+    children:  React.ReactElement,
+    classContainer?: string
 }
 export interface breadcrumbInterface {
     breadcrumb : breadcrumb[],
@@ -19,6 +20,7 @@ export interface ContainerInner{
     children: React.ReactElement,
     breadcrumb : breadcrumb[],
     titulo?:string,
+    classContainer?:string;
 }
 export interface PersonalForm{
     category?: string;

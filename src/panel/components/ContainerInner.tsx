@@ -5,7 +5,7 @@ import { Container } from './Container'
 import { Footer } from './Footer'
 import { Header } from './Header'
 
-export const ContainerInner = ({ children, breadcrumb, titulo }: ContainerInterface) => {
+export const ContainerInner = ({ children, breadcrumb, titulo, classContainer }: ContainerInterface) => {
   return (
     <>
         {/* header */}
@@ -15,7 +15,7 @@ export const ContainerInner = ({ children, breadcrumb, titulo }: ContainerInterf
         <Breadcrumb breadcrumb={breadcrumb} titulo={titulo}/>
 
         {/* main */}
-        <Container>
+        <Container classContainer={classContainer}>
 
         <div className="inner-page">{ children }</div>
         
