@@ -524,22 +524,28 @@ export const NotaHeladeroDetalle = () => {
                             
                             <div className="mb-3">
                                 <label htmlFor="estado" className="form-label">Estado</label>
-                                <select 
-                                className={errors.estado ? "form-control is-invalid" : "form-control"}
-                                {...register('estado', {
-                                    required: true,
-                                    onChange: (e) => {
-                                        setState(parseInt(e.target.value));
-                                        setValue("estado", e.target.value);
-                                    },
-                                })
-                                } >
+                                <div className="btn-group d-block" role="group">
                                     {
                                         listEstadoHeladero.map(({ id, nombre })=>(
-                                            <option key={id} value={id} disabled={getDisableDate(id)}>{nombre}</option>
+                                            <button className="btn btn-primary"
+                                                    type="button"
+                                                    key={id} 
+                                                    value={id} 
+                                                    disabled={getDisableDate(id)}
+                                                    onClick={(e)=>{
+                                                        setState(parseInt(e.currentTarget.value));
+                                                        setValue("estado", parseInt(e.currentTarget.value));
+                                                    }}
+                                                    >
+                                                        {
+                                                            parseInt((getValues('estado')??0).toString()) == id &&
+                                                            <i className="bi bi-check"></i>
+                                                        }
+                                                        {nombre}
+                                                    </button>
                                         ))
                                     }
-                                </select>
+                                </div>
                             </div>
                                                 
                         </div>
