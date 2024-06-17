@@ -460,7 +460,7 @@ export const NotaHeladeroDetalle = () => {
     }
 
     return (
-        <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo}`}>
+        <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo}`} classContainer='nota-heladero'>
             <>     
                 {
                     state == 1 &&
@@ -673,31 +673,39 @@ export const NotaHeladeroDetalle = () => {
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
                                                         <td align='center'>Pago</td>
-                                                        <td><input type="text" {...register('pago', {
-                                                            onChange: (e) =>{
-                                                                const monto = (getValues('monto') ?? 0);
-                                                                const ahorro = (getValues('ahorro') ?? 0);
-                                                                const pago = parseFloat(e.target.value ?? 0);
+                                                        <td><input type="number" {...register('pago')} 
+                                                            className='form-control'
+                                                            onKeyUp={(e) => {
+                                                                let pago:any = e.currentTarget.value??0;
+                                                                    pago = pago == '' ? 0 : pago;
+                                                                    pago = parseFloat(pago);
+                                                                if(pago == 0) setValue('pago', pago);
 
+                                                                const monto = parseFloat((getValues('monto') ?? 0).toString());
+                                                                const ahorro = parseFloat((getValues('ahorro') ?? 0).toString());
+                                                                      
+                                                                
                                                                 const debe = (monto-(pago+ahorro)).toFixed(2);
                                                                 setValue('debe', parseFloat(debe));
-                                                                
-                                                            }
-                                                        })} className='form-control' /></td>
+                                                        }} /></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
                                                         <td align='center'>Ahorro</td>
-                                                        <td><input type="text" {...register('ahorro', {
-                                                            onChange: (e) =>{
-                                                                const monto = (getValues('monto') ?? 0);
-                                                                const ahorro = parseFloat(e.target.value ?? 0);
-                                                                const pago = (getValues('pago') ?? 0);
+                                                        <td><input type="number" {...register('ahorro')} 
+                                                        className='form-control'
+                                                        onKeyUp={(e) => {
+                                                            let ahorro:any = e.currentTarget.value ?? 0;
+                                                                    ahorro = ahorro == '' ? 0 : ahorro;
+                                                                    ahorro = parseFloat(ahorro);
+                                                                if(ahorro == 0) setValue('ahorro', ahorro);
+
+                                                                const monto = parseFloat((getValues('monto') ?? 0).toString());
+                                                                const pago = parseFloat((getValues('pago') ?? 0).toString());
 
                                                                 const debe = (monto-(pago+ahorro)).toFixed(2);
                                                                 setValue('debe', parseFloat(debe));
-                                                            }
-                                                        })} className='form-control' /></td>
+                                                        }} /></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
