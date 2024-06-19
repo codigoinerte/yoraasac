@@ -11,6 +11,7 @@ import {  onSetNotaHeladeroActive, onStatus } from '../../../../store';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 import NotasComponent from '../../../../prints/Notas';
+import toast, { Toaster } from 'react-hot-toast';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Nota heladero', enlace: '/nota-heladero' },
@@ -181,6 +182,8 @@ export const NotaHeladeroDetalle = () => {
             }
     
             dispatch(onStatus(false));
+
+            toast.success('Se importo la nota guardada del heladero correctamente');
         }else{
             /* si heladero(toda la info de la nota del headero) no existe previamente se define estado en reapertura, el cual funciona como un nuevo dia */
             refId.current = 0;
@@ -756,6 +759,7 @@ export const NotaHeladeroDetalle = () => {
                             updateStateHeladero={setState}
                         />)
                 }
+                <Toaster position="top-center" reverseOrder={true} />
             </>
         </ContainerInner>
     )
