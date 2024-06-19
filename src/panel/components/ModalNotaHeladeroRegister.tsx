@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect } from 'react'
-import {  Grid, Row, Col, Button, Modal } from 'rsuite'
+import {  Grid, Row, Col, Button, Modal, Drawer } from 'rsuite'
 import { useNotaHeladeroStore } from '../../hooks';
 import { SubmitHandler, UseFormGetValues, UseFormSetValue, useFieldArray, useForm } from 'react-hook-form';
 import { FormNotaHeladeroValues } from '../interfaces';
@@ -120,72 +120,70 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
 
     return (
         <>
-        <Modal
-                backdrop="static"
-                size="full"
-                open={openModal}
-                onClose={handleClose}
-            >
-            <form>
-                <Modal.Header>
-                    <Modal.Title>Guardar helados del día, para el siguiente día</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Grid fluid>
-                        <Row className="show-grid mb-3">
-                            <Col xs={6}>Fecha del movimiento</Col>
-                            <Col xs={18}>
-                                <input type="datetime-local" className='form-control' {...register('fecha_operacion', {required: true})}/>
-                                <input type="hidden" {...register('estado')} />
+
+<Drawer backdrop={false} open={openModal} onClose={handleClose} size="xs" >
+    <Drawer.Header closeButton={false} className='p-3'>
+        <Drawer.Title>Guardar</Drawer.Title>
+        <Drawer.Actions>
+            <Button onClick={onSave} appearance="primary">Guardar Helados</Button>
+            <Button onClick={onClose} appearance="subtle">Cancelar</Button>
+        </Drawer.Actions>
+    </Drawer.Header>
+    <Drawer.Body className='p-3'>
+        
+        <form>
+            <strong className='d-block mb-3'>Guardar helados del d&iacute;a, para el siguiente d&iacute;a</strong>
+            <Grid fluid>
+                <Row className="show-grid mb-3">
+                    <Col xs={6}>Fecha del movimiento</Col>
+                    <Col xs={18}>
+                        <input type="datetime-local" className='form-control' {...register('fecha_operacion', {required: true})}/>
+                        <input type="hidden" {...register('estado')} />
+                    </Col>
+                </Row>
+                {
+                    fields.map((item, index) => {
+                        return (
+                        <Row className="show-grid mb-3" key={item.id}>
+                            <Col xs={12} sm={12} md={12} className={ getValues(`productos.${index}.pedido`) ? "bg-warning p-2":""}>
+                                    { item.producto }
+                                    <input type="hidden" className='form-control' {...register(`productos.${index}.pedido`)}/>
+                                    <input type="hidden" className='form-control' {...register(`productos.${index}.codigo`)} />
+                                    <input type="hidden" className='form-control' {...register(`productos.${index}.vendido`)} />
+                                    <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
+                                    <input type="hidden" className='form-control'  {...register(`productos.${index}.importe`)}/>
+                            </Col>
+                            <Col xs={12} sm={12} md={12}>
+                                <input type="number" className='form-control' {...register(`productos.${index}.devolucion`, {
+                                    min: 0,
+                                    onChange: (e) => {
+                                        const devolucion = 0; //getValuesOrigin(`productos`).find((item)=> item.codigo == getValues(`productos.${index}.codigo`))?.devolucion ?? 0;
+                                        const pedido = getValues(`productos.${index}.pedido`) ?? 0;
+                                        const menor = (parseInt(pedido.toString())+parseInt(devolucion.toString()));
+                                        if(menor < e.target.value){                                                    
+                                            e.target.value = 0;
+                                        }else{
+                                            e.target.value = parseInt((e.target.value).toString());
+                                        }
+                                    }
+                                })} 
+                                readOnly={getValues(`productos.${index}.pedido`) == 0}
+                                />
+
                             </Col>
                         </Row>
-                        {
-                            fields.map((item, index) => {
-                                return (
-                                <Row className="show-grid mb-3" key={item.id}>
-                                    <Col xs={12} sm={10} md={8} className={ getValues(`productos.${index}.pedido`) ? "bg-warning p-2":""}>
-                                            { item.producto }
-                                            <input type="hidden" className='form-control' {...register(`productos.${index}.pedido`)}/>
-                                            <input type="hidden" className='form-control' {...register(`productos.${index}.codigo`)} />
-                                            <input type="hidden" className='form-control' {...register(`productos.${index}.vendido`)} />
-                                            <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
-                                            <input type="hidden" className='form-control'  {...register(`productos.${index}.importe`)}/>
-                                    </Col>
-                                    <Col xs={12} sm={14} md={14}>
-                                        <input type="number" className='form-control' {...register(`productos.${index}.devolucion`, {
-                                            min: 0,
-                                            onChange: (e) => {
-                                                const devolucion = 0; //getValuesOrigin(`productos`).find((item)=> item.codigo == getValues(`productos.${index}.codigo`))?.devolucion ?? 0;
-                                                const pedido = getValues(`productos.${index}.pedido`) ?? 0;
-                                                const menor = (parseInt(pedido.toString())+parseInt(devolucion.toString()));
-                                                if(menor < e.target.value){                                                    
-                                                    e.target.value = 0;
-                                                }else{
-                                                    e.target.value = parseInt((e.target.value).toString());
-                                                }
-                                            }
-                                        })} 
-                                        readOnly={getValues(`productos.${index}.pedido`) == 0}
-                                        />
+                        )
+                    })
 
-                                    </Col>
-                                </Row>
-                                )
-                            })
+                }
+            </Grid>
+        </form>
 
-                        }
-                    </Grid>
-                </Modal.Body>
-                <Modal.Footer className='p-3'>
-                    <Button onClick={onSave} appearance="primary">
-                        Guardar Helados
-                    </Button>
-                    <Button onClick={onClose} appearance="subtle">
-                        Cancelar
-                    </Button>
-                </Modal.Footer>
-            </form>
-        </Modal>
+    </Drawer.Body>
+</Drawer>
+
+        
+        
         </>
     )
 }
