@@ -23,7 +23,6 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
 
     useEffect(() => {
       
-
         if(active?.fecha_cierre && active.estado == 1){
         
             const dateNow = active.fecha_cierre??new Date();
@@ -35,10 +34,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
             setFechaOperacion(dateNow);
         }
 
-        loadConfiguration()
-        .then((response)=>{
-            
-        });
+        loadConfiguration();
         
     }, []);
     //70mm
@@ -115,6 +111,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                 <td className='sizeTitle'><strong>Dev.</strong></td>
                                 <td className='sizeTitle'><strong>Ped.</strong></td>
                                 <td className='sizeTitle'><strong>Ven.</strong></td>
+                                <td className='sizeTitle'><strong>Gua.</strong></td>
                                 <td className='sizeTitle'><strong>Imp.</strong></td>
                             </tr>
                             {
@@ -126,6 +123,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                             <td width={10}>{ detalle.devolucion??0 }</td>
                                             <td width={10}>{ detalle.pedido??0 }</td>
                                             <td width={10}>{ detalle.vendido??0 }</td>
+                                            <td width={10}>{ detalle.devolucion_today??0 }</td>
                                             <td width={10}>{ detalle.importe??0 }</td>
 
                                         </tr>
