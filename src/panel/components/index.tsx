@@ -15,3 +15,4 @@ export * from './FormControls';
 export * from './Loader';
 export * from './RequiredField';
 export * from './ModalNotaHeladeroRegister';
+export * from './SearchUser';
