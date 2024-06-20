@@ -175,13 +175,20 @@
     }
     .ticket table td:nth-child(2),
     .ticket table td:nth-child(3),
-    .ticket table td:nth-child(4)
+    .ticket table td:nth-child(4),
+    .ticket table td:nth-child(5)
     {
-      width: 24px !important;
+      width: 25px !important;
       text-align: left !important;
     }
     .ticket table td:nth-child(5){
-      width: 28px !important;
+      padding-left: 2px !important;
+      border-left: 1px dashed #000 !important;
+      border-right: 1px dashed #000 !important;
+    }
+    .ticket table td:nth-child(6){
+      padding-left: 2px !important;
+      width: 29px !important;
       text-align: left !important;
     }
     
