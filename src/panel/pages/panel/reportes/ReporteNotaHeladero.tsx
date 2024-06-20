@@ -1,11 +1,9 @@
-import queryString from 'query-string';
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ContainerInner, ListReportes } from '../../../components';
-import { ReporteItemNota, ReporteNotaForm, breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
+import { useEffect, useState } from 'react'
+import { ContainerInner, ListReportes, SearchUser } from '../../../components';
+import { ReporteNotaForm, breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 import { useForm } from 'react-hook-form';
 import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 import moment from 'moment';
 
 const breadcrumb:bread[] = [
@@ -40,13 +38,7 @@ export const ReporteNotaHeladero = () => {
     const prev = (e:paginationInterface) => {
         console.log(e);
     }
-
-    const navigate = useNavigate();
-
-    const location = useLocation();
   
-    const { q = '' } = queryString.parse(location.search);
-
     const { listEstadoHeladero, listNotaHeladeroEstado} = useHelpers();
 
     const { reporteHeladero, reporte } = useNotaHeladeroStore();
@@ -86,12 +78,11 @@ export const ReporteNotaHeladero = () => {
 
     }, []);
     
-    
+    const onChangeUser = (user_id:number) =>  setValue("user_id", user_id);
 
-    const { register, handleSubmit, reset, formState:{ errors } } = useForm<ReporteNotaForm>();
+    const { register, handleSubmit, reset, setValue, control } = useForm<ReporteNotaForm>();
 
     const onSubmit = async (params:ReporteNotaForm)=>{
-        
         await reporteHeladero(params);
     }
 
@@ -112,17 +103,13 @@ export const ReporteNotaHeladero = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>                    
                     <div className="row">
                         
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <div className="mb-3">
-                                <label htmlFor="documento" className="form-label">Documento</label>
-                                <input type="text" className="form-control" aria-describedby="Buscador" placeholder='Documento' {...register("documento")}/>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <div className="mb-3">
-                                <label htmlFor="nombres" className="form-label">Nombre y apellido</label>
-                                <input type="text" className="form-control" id="nombres" aria-describedby="Buscador" placeholder='Nombre y/o apellido' {...register("nombre")}/>
-                            </div>
+                        
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <SearchUser 
+                                control={control}
+                                className="form-control p-0 mb-3"
+                                onChange={onChangeUser}
+                            />
                         </div>                        
                         <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <div className="mb-3">

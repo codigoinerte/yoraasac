@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { ContainerInner, FormControls, ModalNotaHeladeroRegister } from '../../../components'
+import { ContainerInner, FormControls, ModalNotaHeladeroRegister, SearchUser } from '../../../components'
 import { FormNotaHeladeroValues, ProductosPublicados, breadcrumb as bread } from '../../../interfaces';
-import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import { SelectPicker } from 'rsuite';
 import { Tooltip } from 'react-tooltip'
 import { useDispatch } from 'react-redux';
 import {  onSetNotaHeladeroActive, onStatus } from '../../../../store';
@@ -53,7 +52,7 @@ export const NotaHeladeroDetalle = () => {
 
     const {  saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
 
-    const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
+    const { listEstadoHeladero, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
     const { register, handleSubmit, formState, setValue, getValues, control, reset } = useForm<FormNotaHeladeroValues>({
         defaultValues:{   
@@ -98,13 +97,6 @@ export const NotaHeladeroDetalle = () => {
         }else{            
             updateNotaHeladero({...data});
         }
-    }
-
-    const updateData = (buscar:string) => {
-        
-        if(typeof buscar == "undefined") return false;
-        
-        loadBuscarUsuario(buscar);        
     }
 
     const cabecera = [
@@ -485,38 +477,16 @@ export const NotaHeladeroDetalle = () => {
                                 <label htmlFor="tipo_movimiento" className="form-label">Heladero</label>
                                 
                                  
-                    <div className="d-block">
-                      
+                                    <div className="d-block">
+                                    
+                                        <SearchUser 
+                                            control={control}
+                                            onChange={buscarUsuarioReserva}
+                                            className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
+                                            required={true}
+                                        />
 
-                        <Controller
-                            name="user_id"
-                            control={control}
-                            rules={{required:true}}                            
-                            render={({ field }) => 
-
-                            <SelectPicker   
-                                    {...field}                      
-                                    data={
-                                        listUsuario.map((usuario)=>({
-                                            label: `${usuario.documento??''} - ${usuario.name??''}`,
-                                            value: usuario.id??''
-                                        }))
-                                    }
-                                    style={{ width: 224 }}                        
-                                    onSearch={updateData}
-                                    onChange={buscarUsuarioReserva}
-                                    placeholder='Buscar Usuario'
-                                    className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
-                                />
-                            
-                            
-                        }/>
-
-                 
-
-
-                    </div>
-                                
+                                    </div>                                
 
                             </div>
                             
