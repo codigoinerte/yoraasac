@@ -767,8 +767,7 @@ export interface FormNotaFechaOperacion{
 }
 
 export interface ReporteNotaForm{
-    documento?:     string;
-    nombre?:        string;
+    user_id?:       number;
     estado?:        number;
     tipo?:          number;
     fecha_inicio:   Date;
