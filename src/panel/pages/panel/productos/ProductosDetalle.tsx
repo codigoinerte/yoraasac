@@ -108,6 +108,7 @@ export const ProductosDetalle = () => {
         setValue('heladero_precio_venta', prod?.heladero_precio_venta);
         setValue('cantidad_caja', prod?.cantidad_caja);
         setValue('proveedor_precio', prod?.proveedor_precio);
+        setValue('is_litro', prod?.is_litro);
 
         let unspsc_id = prod?.unspsc_id??'';
 
@@ -142,7 +143,8 @@ export const ProductosDetalle = () => {
     heladero_precio_venta,
     heladero_descuento,
     cantidad_caja,
-    proveedor_precio }) => {
+    proveedor_precio,
+    is_litro }) => {
             
     if(id == 0){
       // nuevo
@@ -165,7 +167,8 @@ export const ProductosDetalle = () => {
         heladero_descuento,
         heladero_precio_final : 0,
         cantidad_caja,
-        proveedor_precio
+        proveedor_precio,
+        is_litro
         
       });
     }else{
@@ -188,7 +191,8 @@ export const ProductosDetalle = () => {
         heladero_descuento,
         heladero_precio_final : 0,
         cantidad_caja,
-        proveedor_precio
+        proveedor_precio,
+        is_litro
         
       });
     }
@@ -345,6 +349,13 @@ export const ProductosDetalle = () => {
                               ))
                             }
                     </select>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="tipoigv" className="form-label m-0 text-dark">Es Helado de litro</label>
+                    <select id="is_litro" {...register('is_litro')} className='form-control'>
+                      <option value={1} key={1}>Si</option>
+                      <option value={0} key={2}>No</option>
+                    </select>                    
                 </div>
 
                   
