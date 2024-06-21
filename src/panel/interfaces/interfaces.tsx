@@ -202,6 +202,8 @@ export type FormProductosValues = {
     moneda_id:    number | null;
     igv_id:       number | null;
     precio_final: number | null;
+    is_litro:     boolean;
+
 
     heladero_precio_venta: number | null;
     heladero_descuento:    number | null;
@@ -723,8 +725,8 @@ export interface ReporteNotaForm{
     documento?:     string;
     nombre?:        string;
     estado?:        number;
-    fecha_inicio:   Date;
-    fecha_fin:      Date;
+    fecha_inicio:   string;
+    fecha_fin:      string;
 }
 
 export interface ReporteNotaHeladero {
@@ -736,10 +738,10 @@ export interface ReporteItemNota {
     user_id:            number;
     moneda_id:          number;
     id_sucursal:        number;
-    monto:              string;
-    pago:               string;
-    debe:               string;
-    ahorro:             string;
+    monto:              number;
+    pago:               number;
+    debe:               number;
+    ahorro:             number;
     cucharas:           number;
     conos:              number;
     placas_entregas:    number;
@@ -770,8 +772,8 @@ export interface ReporteNotaForm{
     user_id?:       number;
     estado?:        number;
     tipo?:          number;
-    fecha_inicio:   Date;
-    fecha_fin:      Date;
+    fecha_inicio:   string;
+    fecha_fin:      string;
 }
 
 export interface ReporteFacturacion {
