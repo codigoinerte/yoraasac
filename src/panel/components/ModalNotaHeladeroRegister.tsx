@@ -40,9 +40,6 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             const pedido = item.pedido??0;
             const devolucion = item.devolucion??0;
             const precio_operacion = item.precio_operacion??0;
-
-            if(item.is_litro == true) console.log(item);
-
             const pedido_result = item.is_litro == false ? (pedido+devolucion) : (pedido*precio_operacion);
             const response =  {
             ...item,
