@@ -16,3 +16,4 @@ export * from './Loader';
 export * from './RequiredField';
 export * from './ModalNotaHeladeroRegister';
 export * from './SearchUser';
+export * from './InputNotaGuardada';
