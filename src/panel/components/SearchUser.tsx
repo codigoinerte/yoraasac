@@ -1,18 +1,19 @@
-import { SyntheticEvent } from "react"
+import { SyntheticEvent, useEffect } from "react"
 import { Control, Controller, ValidationRule } from "react-hook-form"
 import { SelectPicker } from "rsuite"
 import { useHelpers } from "../../hooks"
+import { BuscarUsuario } from "../interfaces"
 
 interface Props {
     control: Control<any> | undefined,
     onSearch?: ((searchKeyword: string, event?: SyntheticEvent<Element, Event> | undefined) => void) | undefined
     onChange?: ((value: any, event: SyntheticEvent<Element, Event>) => void) | undefined,
     className?: string | undefined,
-    required?: string | ValidationRule<boolean> | undefined
+    required?: string | ValidationRule<boolean> | undefined,
+    listUsuario: BuscarUsuario[],
+    loadBuscarUsuario: (buscar?: any, type?: string) => Promise<false | undefined>
 }
-export const SearchUser = ({ control, onSearch, onChange, className, required }: Props) => {
-
-    const { listUsuario, loadBuscarUsuario} = useHelpers();
+export const SearchUser = ({ control, onSearch, onChange, className, required , listUsuario, loadBuscarUsuario }: Props) => {
 
     const updateData = (buscar:string) => {
         
