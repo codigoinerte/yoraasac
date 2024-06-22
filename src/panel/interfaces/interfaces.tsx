@@ -324,6 +324,7 @@ export interface FormNotaHeladeroDetalleValues {
     codigo:             string;
     producto?:          string;
     precio_operacion?:  number;
+    is_litro?:          boolean;
 }
 
 
@@ -613,6 +614,7 @@ export interface ProductosPublicados {
     igv_id:       number;
     created_at:   string;
     updated_at:   string;
+    is_litro:     boolean;
 
     heladero_precio_venta: string;
     heladero_descuento:    string;

@@ -49,6 +49,7 @@ export interface FormNotaHeladeroDetalleValues {
     codigo:             string;
     producto?:          string;
     precio_operacion?:  number;
+    is_litro?:          boolean;
 }
 
 export interface intialStateNotaHeladero {
