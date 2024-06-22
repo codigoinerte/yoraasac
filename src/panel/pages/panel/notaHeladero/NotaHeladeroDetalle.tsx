@@ -327,7 +327,17 @@ export const NotaHeladeroDetalle = () => {
     useEffect(() => {
         let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
             setValue('fecha_operacion', dateNow.replace(" ","T"));       
-         
+        
+        if(active?.fecha_apertura && (state == 2)){
+            setisReadOnlyInputs((s) => ({
+                ...s,
+                isReadOnlyDevolucion : true,
+                isReadOnlyPedido : true,
+                isReadOnlyVendido : true,
+                isReadOnlyImporte : true,
+            }));
+            return;
+        }
         if(active?.fecha_apertura && active?.fecha_guardado && (state == null || state == 3)){
             setisReadOnlyInputs((s) => ({
                 ...s,
@@ -379,16 +389,18 @@ export const NotaHeladeroDetalle = () => {
                 setValue(`productos.${index}.devolucion_today`, devolucion_today_saved);
                 
                 const pedido = parseInt((getValues(`productos.${index}.pedido`)??0).toString());
-                const devolucion = parseInt((getValues(`productos.${index}.devolucion`)??0).toString());                
+                               
                 const precio_operacion = getValues(`productos.${index}.precio_operacion`)??0;
 
                 let vendido = 0;
                 let importe = 0;
 
                 if(item.is_litro){
+                    const devolucion = parseFloat((getValues(`productos.${index}.devolucion`)??0).toString()); 
                     const devolucion_today = parseFloat((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
-                    vendido = importe = ((devolucion+(pedido*precio_operacion))-devolucion_today);
+                    vendido = importe = ((devolucion+(pedido*precio_operacion))-devolucion_today);                    
                 }else{
+                    const devolucion = parseInt((getValues(`productos.${index}.devolucion`)??0).toString()); 
                     const devolucion_today = parseInt((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
                     vendido = ((devolucion+pedido)-devolucion_today);
                     importe = parseFloat((vendido * precio_operacion).toFixed(2));
