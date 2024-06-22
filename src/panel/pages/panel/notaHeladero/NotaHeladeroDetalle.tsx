@@ -52,7 +52,7 @@ export const NotaHeladeroDetalle = () => {
 
     const {  saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
 
-    const { listEstadoHeladero, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
+    const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
     const { register, handleSubmit, formState, setValue, getValues, control, reset } = useForm<FormNotaHeladeroValues>({
         defaultValues:{   
@@ -252,6 +252,7 @@ export const NotaHeladeroDetalle = () => {
                     nota_heladeros_id : 0,
                     created_at : item.created_at,
                     updated_at : item.updated_at,
+                    is_litro: item.is_litro,
                     
                     }))
             ]);            
@@ -290,6 +291,7 @@ export const NotaHeladeroDetalle = () => {
 
                 setValue('estado', estado);
             }
+            
             setState(heladero.estado);
             
             let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
@@ -304,8 +306,8 @@ export const NotaHeladeroDetalle = () => {
 
             if(heladero_id != 0){
                 
-                loadBuscarUsuario(heladero_id, "codigo");
-                setValue('user_id', heladero?.user_id);
+                await loadBuscarUsuario(heladero_id, "codigo");
+                setValue('user_id', heladero_id);
             }
 
             setValue(`monto`, (heladero.monto??0));
@@ -325,19 +327,18 @@ export const NotaHeladeroDetalle = () => {
     useEffect(() => {
         let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
             setValue('fecha_operacion', dateNow.replace(" ","T"));       
-            
-        if(state == null){
+         
+        if(active?.fecha_apertura && active?.fecha_guardado && (state == null || state == 3)){
             setisReadOnlyInputs((s) => ({
                 ...s,
                 isReadOnlyDevolucion : true,
-                isReadOnlyPedido : false,
+                isReadOnlyPedido : true,
                 isReadOnlyVendido : true,
                 isReadOnlyImporte : true,
             }));
-            setValue('estado', 2);
             return;
         }
-
+            
         if(isNewRegister == true || state == 2){ // activar apertura | reapertura
             setisReadOnlyInputs((s) => ({
                 ...s,
@@ -376,14 +377,22 @@ export const NotaHeladeroDetalle = () => {
 
                 const devolucion_today_saved = (active) ? ( active.detalle.find((item) => item.codigo == getValues(`productos.${index}.codigo`))!.devolucion_today ?? 0) : 0;
                 setValue(`productos.${index}.devolucion_today`, devolucion_today_saved);
-
+                
                 const pedido = parseInt((getValues(`productos.${index}.pedido`)??0).toString());
-                const devolucion = parseInt((getValues(`productos.${index}.devolucion`)??0).toString());
-                const devolucion_today = parseInt((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
+                const devolucion = parseInt((getValues(`productos.${index}.devolucion`)??0).toString());                
                 const precio_operacion = getValues(`productos.${index}.precio_operacion`)??0;
 
-                const vendido = ((devolucion+pedido)-devolucion_today);
-                const importe = parseFloat((vendido * precio_operacion).toFixed(2));
+                let vendido = 0;
+                let importe = 0;
+
+                if(item.is_litro){
+                    const devolucion_today = parseFloat((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
+                    vendido = importe = ((devolucion+(pedido*precio_operacion))-devolucion_today);
+                }else{
+                    const devolucion_today = parseInt((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
+                    vendido = ((devolucion+pedido)-devolucion_today);
+                    importe = parseFloat((vendido * precio_operacion).toFixed(2));
+                }
 
                 setValue(`productos.${index}.vendido`, vendido);
                 setValue(`productos.${index}.importe`, importe);
@@ -404,6 +413,18 @@ export const NotaHeladeroDetalle = () => {
             return;
         }
 
+        if(state == null){
+            //*abriendo  el detalle de un estado
+            setisReadOnlyInputs((s) => ({
+                ...s,
+                isReadOnlyDevolucion : true,
+                isReadOnlyPedido : false,
+                isReadOnlyVendido : true,
+                isReadOnlyImporte : true,
+            }));
+            setValue('estado', 2);
+            return;
+        }
 
     },[isNewRegister, state])
 
@@ -484,6 +505,8 @@ export const NotaHeladeroDetalle = () => {
                                             onChange={buscarUsuarioReserva}
                                             className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
                                             required={true}
+                                            listUsuario = {listUsuario}
+                                            loadBuscarUsuario = {loadBuscarUsuario}
                                         />
 
                                     </div>                                
@@ -587,15 +610,33 @@ export const NotaHeladeroDetalle = () => {
                                             fields.map((item, index) => {
                                                 return (
                                                 <tr key={item.id}>                                                    
-                                                    <td>
-                                                        <input type="text" 
-                                                                className='form-control' 
-                                                                readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
-                                                                {...register(`productos.${index}.devolucion`)} 
-                                                                tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
-                                                                />
+                                                    <td className={item.is_litro ? 'bg-info': ''}>
+                                                        {
+                                                            item.is_litro ?
+                                                            (
+                                                                <div className="input-group mb-3">
+                                                                    <span className="input-group-text" id="basic-addon1">S/</span>
+                                                                    <input type="text" 
+                                                                            className='form-control' 
+                                                                            readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
+                                                                            {...register(`productos.${index}.devolucion`)} 
+                                                                            tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
+                                                                        />
+                                                                </div>
+                                                            )
+                                                            :
+                                                            (
+                                                                <input type="text" 
+                                                                        className='form-control' 
+                                                                        readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
+                                                                        {...register(`productos.${index}.devolucion`)} 
+                                                                        tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
+                                                                    />
+                                                            )
+                                                        }
+                                                        
                                                     </td>                                                     
-                                                    <td>
+                                                    <td className={item.is_litro ? 'bg-info': ''}>
                                                         <input type="number" 
                                                                 className='form-control' 
                                                                 readOnly={isReadOnlyInputs.isReadOnlyPedido}
@@ -614,15 +655,23 @@ export const NotaHeladeroDetalle = () => {
                                                             <b>Codigo</b>:${getValues(`productos.${index}.codigo`)??0}<br/>
                                                             <b>Precio</b>: S/ ${getValues(`productos.${index}.precio_operacion`)??0}
                                                         </div>
-                                                        `}>
+                                                        `}
+                                                        className={item.is_litro ? 'bg-info': ''}
+                                                       >
                                                         <Tooltip id={`tooltip-html-${index}`} />
                                                         { item.producto }
+                                                        {
+                                                            item.is_litro ? (<>
+                                                                <br/>
+                                                                <span className="badge bg-dark d-inline-block">Helado de Litro</span>
+                                                            </>) : ''
+                                                        }
                                                         <input type="hidden" 
                                                                 className='form-control' 
                                                                 {...register(`productos.${index}.codigo`)} 
                                                                 />
                                                     </td>
-                                                    <td>
+                                                    <td  className={item.is_litro ? 'bg-info': ''}>
                                                         <input type="text" className='form-control' 
                                                                 {...register(`productos.${index}.vendido`,{
                                                                     onChange: () => calcImporte(index)
@@ -630,7 +679,7 @@ export const NotaHeladeroDetalle = () => {
                                                                 readOnly={isReadOnlyInputs.isReadOnlyVendido}
                                                                 />
                                                     </td> 
-                                                    <td>                                                        
+                                                    <td  className={item.is_litro ? 'bg-info': ''}>                                                        
                                                         <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
                                                         <input type="text" className='form-control'  {...register(`productos.${index}.importe`)} readOnly={isReadOnlyInputs.isReadOnlyImporte}/>
                                                     </td> 
