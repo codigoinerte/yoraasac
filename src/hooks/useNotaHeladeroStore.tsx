@@ -78,7 +78,7 @@ export const useNotaHeladeroStore = () => {
                     const devolucion_today = sendedProductos.find(p=>p.codigo == producto.codigo)?.devolucion ?? 0;
                     return {
                         ...producto,
-                        devolucion_today: parseInt(devolucion_today.toString())
+                        devolucion_today:(producto.is_litro)? parseFloat(devolucion_today.toString()) : parseInt(devolucion_today.toString())
                     }
                 });
                 if(active)
