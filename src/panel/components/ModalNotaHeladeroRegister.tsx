@@ -50,6 +50,10 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         }));
 
     }, [active]);
+
+    const removePaddingOnBody = () => {
+        document.body.style.padding = '0px';
+    }
     
     const onSubmit: SubmitHandler<FormNotaHeladeroValues> = (data) => {
         if(active?.id == null){
@@ -91,6 +95,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         setValueOrigin("estado", 3);
         //("fecha_guardado", data.fecha_operacion);
         handlerOpenModal(false);
+        removePaddingOnBody();
     }
 
     const onSave = (e:any) => {
@@ -119,6 +124,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                 updateStateHeladero(2);
                 setValueOrigin("estado", 2);
                 handleClose();
+                removePaddingOnBody();
             },
         });        
     }
