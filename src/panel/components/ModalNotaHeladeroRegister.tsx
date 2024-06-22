@@ -40,7 +40,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             const pedido = item.pedido??0;
             const devolucion = item.devolucion??0;
             const precio_operacion = item.precio_operacion??0;
-            const pedido_result = item.is_litro == false ? (pedido+devolucion) : (pedido*precio_operacion);
+            const pedido_result = item.is_litro == false ? (pedido+devolucion) : ((pedido*precio_operacion)+devolucion);
             const response =  {
             ...item,
             pedido: pedido_result,
@@ -153,6 +153,17 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                         <Row className="show-grid mb-3" key={item.id}>
                             <Col xs={12} sm={12} md={12} className={ getValues(`productos.${index}.pedido`) ? ( (item.is_litro) ? "bg-info p-2" : "bg-warning p-2"):""}>
                                     { item.producto }
+                                    {
+                                        item.is_litro ? 
+                                        (
+                                            <small>
+                                                <br/>
+                                                <b>Total soles: {getValues(`productos.${index}.pedido`)}</b>
+                                            </small>
+                                        )
+                                        :
+                                        ''
+                                    }
                                     <input type="hidden" className='form-control' {...register(`productos.${index}.pedido`)}/>
                                     <input type="hidden" className='form-control' {...register(`productos.${index}.codigo`)} />
                                     <input type="hidden" className='form-control' {...register(`productos.${index}.vendido`)} />
