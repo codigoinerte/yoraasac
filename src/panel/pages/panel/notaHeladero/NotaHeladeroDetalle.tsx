@@ -696,7 +696,7 @@ export const NotaHeladeroDetalle = () => {
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
                                                         <td align='center'>Monto (subtotal)</td>
-                                                        <td><input type="text" {...register('monto')} className='form-control' /></td>
+                                                        <td><input type="text" {...register('monto')} className='form-control' readOnly /></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
@@ -704,18 +704,27 @@ export const NotaHeladeroDetalle = () => {
                                                         <td><input type="number" {...register('pago')} 
                                                             className='form-control'
                                                             onKeyUp={(e) => {
-                                                                let pago:any = e.currentTarget.value??0;
-                                                                    pago = pago == '' ? 0 : pago;
-                                                                    pago = parseFloat(pago);
-                                                                if(pago == 0) setValue('pago', pago);
-
                                                                 const monto = parseFloat((getValues('monto') ?? 0).toString());
-                                                                const ahorro = parseFloat((getValues('ahorro') ?? 0).toString());
-                                                                      
+                                                                const ahorro = 0;
+                                                                let pago:any = e.currentTarget.value??0;
+                                                                    
+                                                                pago = pago == '' ? 0 : pago;
+                                                                pago = parseFloat(pago.toString());
+                                                                if(pago < 0){
+                                                                    pago = 0;
+                                                                    setValue('pago', 0);
+                                                                }
+                                                                if(pago > monto){
+                                                                    pago = monto;
+                                                                    setValue('pago', monto);
+                                                                }
                                                                 
                                                                 const debe = (monto-(pago+ahorro)).toFixed(2);
                                                                 setValue('debe', parseFloat(debe));
-                                                        }} /></td>
+                                                                
+                                                        }}
+                                                        step={0.01}
+                                                        readOnly={active?.fecha_cierre ? true : false} /></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
@@ -726,14 +735,17 @@ export const NotaHeladeroDetalle = () => {
                                                             let ahorro:any = e.currentTarget.value ?? 0;
                                                                     ahorro = ahorro == '' ? 0 : ahorro;
                                                                     ahorro = parseFloat(ahorro);
-                                                                if(ahorro == 0) setValue('ahorro', ahorro);
+                                                                    ahorro = ahorro < 0 ? 0 : ahorro;
 
-                                                                const monto = parseFloat((getValues('monto') ?? 0).toString());
-                                                                const pago = parseFloat((getValues('pago') ?? 0).toString());
+                                                                    setValue('ahorro', ahorro);
 
-                                                                const debe = (monto-(pago+ahorro)).toFixed(2);
-                                                                setValue('debe', parseFloat(debe));
-                                                        }} /></td>
+                                                                //const monto = parseFloat((getValues('monto') ?? 0).toString());
+                                                                //const pago = parseFloat((getValues('pago') ?? 0).toString());
+
+                                                                //const debe = (monto-(pago+ahorro)).toFixed(2);
+                                                                //setValue('debe', parseFloat(debe));
+                                                        }} 
+                                                        readOnly={active?.fecha_cierre ? true : false}/></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
