@@ -759,6 +759,7 @@ export interface ReporteItemNota {
     name:               string;
     nombre:             null;
     estado:             string;
+    deuda_total?:          number;
 }
 
 /* REPORTE FACTURACOIN */
