@@ -50,7 +50,7 @@ export const NotaHeladeroDetalle = () => {
         isReadOnlyImporte : false,
     })
 
-    const {  saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
+    const {  status, saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
 
     const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
@@ -97,6 +97,7 @@ export const NotaHeladeroDetalle = () => {
         }else{            
             updateNotaHeladero({...data});
         }
+        console.log(status);
     }
 
     const cabecera = [
@@ -386,6 +387,7 @@ export const NotaHeladeroDetalle = () => {
             fields.forEach((item, index) => {
 
                 const devolucion_today_saved = (active) ? ( active.detalle.find((item) => item.codigo == getValues(`productos.${index}.codigo`))!.devolucion_today ?? 0) : 0;
+                
                 setValue(`productos.${index}.devolucion_today`, devolucion_today_saved);
                 
                 const pedido = parseInt((getValues(`productos.${index}.pedido`)??0).toString());
@@ -396,9 +398,14 @@ export const NotaHeladeroDetalle = () => {
                 let importe = 0;
 
                 if(item.is_litro){
+                    
                     const devolucion = parseFloat((getValues(`productos.${index}.devolucion`)??0).toString()); 
                     const devolucion_today = parseFloat((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
-                    vendido = importe = ((devolucion+(pedido*precio_operacion))-devolucion_today);                    
+                    
+                    
+                    let pedidoOperacion = pedido*precio_operacion;
+                    let llevado =devolucion+pedidoOperacion;
+                    vendido = importe = parseFloat((llevado-devolucion_today).toFixed(2));
                 }else{
                     const devolucion = parseInt((getValues(`productos.${index}.devolucion`)??0).toString()); 
                     const devolucion_today = parseInt((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
@@ -438,7 +445,7 @@ export const NotaHeladeroDetalle = () => {
             return;
         }
 
-    },[isNewRegister, state])
+    },[isNewRegister, state, active?.id])
 
     useEffect(() => {
 
