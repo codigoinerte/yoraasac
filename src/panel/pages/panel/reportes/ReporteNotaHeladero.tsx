@@ -17,11 +17,11 @@ export const ReporteNotaHeladero = () => {
     const cabecera = [
         "DOCUMENTO",
         "NOMBRE",
-        "ESTADO",
-        "CREACIÓN",
-        "APERTURA",
-        "GUARDADO",
-        "CIERRE",
+        "MONTO",
+        "PAGO",
+        "DEBE",
+        "AHORRO",
+        "DEUDA TOTAL",
     ];
 
     const eliminar = (id:number) => {
@@ -38,8 +38,8 @@ export const ReporteNotaHeladero = () => {
     const prev = (e:paginationInterface) => {
         console.log(e);
     }
-  
-    const { listEstadoHeladero, listNotaHeladeroEstado} = useHelpers();
+    
+    const { listEstadoHeladero, listNotaHeladeroEstado, listUsuario, loadBuscarUsuario} = useHelpers();
 
     const { reporteHeladero, reporte } = useNotaHeladeroStore();
 
@@ -50,11 +50,11 @@ export const ReporteNotaHeladero = () => {
             campos: [
                 (item.heladero_documento??'').toString(),
                 (item.heladero_nombre??'').toString(),
-                (item.estado??'').toString(),
-                (item.created_at??'').toString(),
-                (item.fecha_apertura??'').toString(),
-                (item.fecha_guardado??'').toString(),
-                (item.fecha_cierre??'').toString(),
+                (item.monto??'').toString(),
+                (item.pago??'').toString(),
+                (item.debe??'').toString(),
+                (item.ahorro??'').toString(),
+                (item.deuda_total??'').toString(),
             ]
         }));
         
@@ -79,11 +79,23 @@ export const ReporteNotaHeladero = () => {
     }, []);
     
     const onChangeUser = (user_id:number) =>  setValue("user_id", user_id);
+    const dateNow = moment(new Date()).format("yyyy-MM-DD").toString();
 
-    const { register, handleSubmit, reset, setValue, control } = useForm<ReporteNotaForm>();
+    const { register, handleSubmit, reset, setValue, control } = useForm<ReporteNotaForm>({
+        defaultValues: {
+            estado: 1,
+            fecha_inicio:dateNow,
+            fecha_fin:dateNow,
+        }
+    });
 
     const onSubmit = async (params:ReporteNotaForm)=>{
-        await reporteHeladero(params);
+
+        await reporteHeladero({
+            ...params,
+            fecha_inicio: moment(params.fecha_inicio).format("YYYY-MM-DD"),
+            fecha_fin: moment(params.fecha_fin).format("YYYY-MM-DD"),
+        });
     }
 
     const resetear = () =>{
@@ -109,13 +121,14 @@ export const ReporteNotaHeladero = () => {
                                 control={control}
                                 className="form-control p-0 mb-3"
                                 onChange={onChangeUser}
+                                listUsuario = {listUsuario}
+                                loadBuscarUsuario = {loadBuscarUsuario}
                             />
                         </div>                        
                         <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <div className="mb-3">
                                 <label htmlFor="fecha_creacion" className="form-label">Estado</label>                                
                                 <select id="estado" className='form-control'  {...register('estado')}>
-                                    <option value="">Seleccione una opci&oacute;n</option>
                                     {
                                         listEstadoHeladero.map(({ id, nombre })=>(
                                             <option key={id} value={id}>{nombre}</option>
