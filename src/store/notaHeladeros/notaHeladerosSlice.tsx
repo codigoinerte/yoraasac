@@ -69,6 +69,10 @@ export const notaHeladeroSlice = createSlice({
         },
         onNotaHeladeroStatus:(state, {payload}:{payload:boolean}) =>{            
             state.status = payload;            
+        },
+        onSetNotaHeladeroActiveClear : (state) =>
+        {   
+            state.active = null;
         }
     }
 });
@@ -83,4 +87,5 @@ export const {  onSetNotaHeladeroActive,
                 onNotaHeladeroLogout,
                 onNotaHeladeroAddMessage,
                 onNotaHeladeroClearMessage,
-                onNotaHeladeroStatus } = notaHeladeroSlice.actions;
+                onNotaHeladeroStatus,
+                onSetNotaHeladeroActiveClear } = notaHeladeroSlice.actions;
