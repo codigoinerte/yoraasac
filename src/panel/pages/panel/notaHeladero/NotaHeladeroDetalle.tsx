@@ -50,12 +50,13 @@ export const NotaHeladeroDetalle = () => {
         isReadOnlyImporte : false,
     })
 
-    const {  status, saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
+    const { saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
 
     const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
     const { register, handleSubmit, formState, setValue, getValues, control, reset } = useForm<FormNotaHeladeroValues>({
-        defaultValues:{   
+        defaultValues:{
+            ahorro: 0,
             estado: 2,    
             productos: []
         }
@@ -97,7 +98,6 @@ export const NotaHeladeroDetalle = () => {
         }else{            
             updateNotaHeladero({...data});
         }
-        console.log(status);
     }
 
     const cabecera = [
@@ -180,7 +180,7 @@ export const NotaHeladeroDetalle = () => {
         }else{
             /* si heladero(toda la info de la nota del headero) no existe previamente se define estado en reapertura, el cual funciona como un nuevo dia */
             refId.current = 0;
-            
+            await setNullNotaHeladero();
             setState(2);
             setValue('estado', 2);
             setisNewRegister(true);
@@ -491,7 +491,7 @@ export const NotaHeladeroDetalle = () => {
         setValue('fecha_operacion', dateNow.replace(" ", "T"));
         refId.current = 0;
 
-        navigate("/nota-heladero/edit/new");
+        navigate("/nota-heladero/new");
     }
 
     return (
@@ -662,7 +662,11 @@ export const NotaHeladeroDetalle = () => {
                                                                 {...register(`productos.${index}.pedido`,{
                                                                     pattern: /^\d+$/i,
                                                                     onChange: (e) => {
-                                                                        e.target.value = parseInt((e.target.value).toString());
+                                                                        let quantity = e.target.value??'0';
+                                                                            quantity = quantity == '' || quantity == null ? '0' : quantity;
+                                                                            quantity = parseInt(quantity);
+                                                                        if(quantity < 0) e.target.value = 0;
+                                                                        setValue(`productos.${index}.pedido`, quantity);                                                                        
                                                                     }
                                                                 })}
                                                                 tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
@@ -708,8 +712,8 @@ export const NotaHeladeroDetalle = () => {
                                             })
 
                                         }
-                                        {
-                                            state == 1 &&
+                                        {   
+                                            (state == 1 && active?.fecha_apertura && active.fecha_guardado) &&
                                             (
                                                 <>
                                                     <tr>
@@ -748,22 +752,16 @@ export const NotaHeladeroDetalle = () => {
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
                                                         <td align='center'>Ahorro</td>
-                                                        <td><input type="number" {...register('ahorro')} 
+                                                        <td><input type="number" {...register('ahorro', {
+                                                            required: false,
+                                                            min: 0,
+                                                            onChange(event) {
+                                                                const ahorro = parseFloat(event.currentTarget.value ?? 0);
+                                                                setValue("ahorro", ahorro);
+                                                            },                                                            
+                                                        })} 
+                                                        step={0.01}
                                                         className='form-control'
-                                                        onKeyUp={(e) => {
-                                                            let ahorro:any = e.currentTarget.value ?? 0;
-                                                                    ahorro = ahorro == '' ? 0 : ahorro;
-                                                                    ahorro = parseFloat(ahorro);
-                                                                    ahorro = ahorro < 0 ? 0 : ahorro;
-
-                                                                    setValue('ahorro', ahorro);
-
-                                                                //const monto = parseFloat((getValues('monto') ?? 0).toString());
-                                                                //const pago = parseFloat((getValues('pago') ?? 0).toString());
-
-                                                                //const debe = (monto-(pago+ahorro)).toFixed(2);
-                                                                //setValue('debe', parseFloat(debe));
-                                                        }} 
                                                         readOnly={active?.fecha_cierre ? true : false}/></td>
                                                     </tr>
                                                     <tr>
