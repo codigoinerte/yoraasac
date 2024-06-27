@@ -8,6 +8,7 @@ export interface NotaHeladeros {
 
 export interface NotaHeladero{
     id:                      number;
+    parent_id:               number;
     user_id:                 number;
     moneda_id:               number;
     id_sucursal:             number;
