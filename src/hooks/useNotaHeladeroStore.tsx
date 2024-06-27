@@ -5,7 +5,7 @@ import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
 import { IRootState, NotaHeladero } from '../interfaces';
 import { FormBuscarNotaHeladeroValues, FormNotaFechaOperacion, FormNotaHeladeroValues, ReporteItemNota, ReporteNotaForm, ReporteNotaHeladero } from '../panel/interfaces';
-import { onStatus, onNotaHeladeroAddMessage, onNotaHeladeroClearMessage, onNotaHeladeroDelete, onNotaHeladeroList, onSetNotaHeladeroActive } from '../store'
+import { onStatus, onSetNotaHeladeroActiveClear, onNotaHeladeroAddMessage, onNotaHeladeroClearMessage, onNotaHeladeroDelete, onNotaHeladeroList, onSetNotaHeladeroActive } from '../store'
 
 
 export const useNotaHeladeroStore = () => {
@@ -84,9 +84,9 @@ export const useNotaHeladeroStore = () => {
                 if(active)
                 dispatch(onSetNotaHeladeroActive({
                     ...active,
-                    fecha_cierre: (postdata.estado == 1) ? postdata.fecha_operacion : active.fecha_cierre,
-                    fecha_apertura: (postdata.estado == 2) ? postdata.fecha_operacion : active.fecha_apertura,
-                    fecha_guardado: (postdata.estado == 3) ? postdata.fecha_operacion : active.fecha_guardado,
+                    //fecha_cierre: (postdata.estado == 1) ? postdata.fecha_operacion : active.fecha_cierre,
+                    //fecha_apertura: (postdata.estado == 2) ? postdata.fecha_operacion : active.fecha_apertura,
+                    fecha_guardado: postdata.fecha_operacion,
                     estado: 3,
                     detalle: newProductos ?? []
                 }));
@@ -198,8 +198,8 @@ export const useNotaHeladeroStore = () => {
         }));
     }
 
-    const setNullNotaHeladero = () =>{
-        dispatch(onSetNotaHeladeroActive(null));
+    const setNullNotaHeladero = async () =>{
+        dispatch(onSetNotaHeladeroActiveClear());
     }
   
     return {
