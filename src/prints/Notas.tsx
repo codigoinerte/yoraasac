@@ -98,7 +98,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                             </tr>
                             <tr>
                                 <td align='left'>
-                                    <b>ahorro:</b> {active?.debe}
+                                    <b>Debe:</b> {active?.debe}
                                 </td>
                             </tr>
                         </tbody>
