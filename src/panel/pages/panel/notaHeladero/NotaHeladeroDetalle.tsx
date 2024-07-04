@@ -95,8 +95,9 @@ export const NotaHeladeroDetalle = () => {
             saveNotaHeladero({...data});
             setisNewRegister(false);
             refId.current = active?.id;
-        }else{            
+        }else{
             updateNotaHeladero({...data});
+            setState(active?.estado);
         }
     }
 
@@ -445,7 +446,7 @@ export const NotaHeladeroDetalle = () => {
             return;
         }
 
-    },[isNewRegister, state, active?.id])
+    },[isNewRegister, state, active?.id, active])
 
     useEffect(() => {
 
@@ -798,7 +799,7 @@ export const NotaHeladeroDetalle = () => {
 
                 {
 
-                    (active?.estado!=3) &&
+                    (state==3 && !(active?.fecha_guardado)) &&
                     (<ModalNotaHeladeroRegister
                             openModal={openModal}
                             handlerOpenModal={setOpenModal}
