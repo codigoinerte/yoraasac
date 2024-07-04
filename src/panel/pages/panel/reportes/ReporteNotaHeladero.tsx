@@ -21,7 +21,6 @@ export const ReporteNotaHeladero = () => {
         "PAGO",
         "DEBE",
         "AHORRO",
-        "DEUDA TOTAL",
     ];
 
     const eliminar = (id:number) => {
@@ -54,7 +53,6 @@ export const ReporteNotaHeladero = () => {
                 (item.pago??'').toString(),
                 (item.debe??'').toString(),
                 (item.ahorro??'').toString(),
-                (item.deuda_total??'').toString(),
             ]
         }));
         
@@ -63,11 +61,11 @@ export const ReporteNotaHeladero = () => {
         setImprimible(reporte.map((item)=>({
             heladero_documento: (item.heladero_documento??'').toString(),
             heladero_nombre: (item.heladero_nombre??'').toString(),
-            estado: (item.estado??'').toString(),
-            fecha_creacion: (item.created_at??'').toString(),
-            fecha_apertura: (item.fecha_apertura??'').toString(),
-            fecha_guardado: (item.fecha_guardado??'').toString(),
-            fecha_cierre: (item.fecha_cierre??'').toString(),
+            
+            monto: (item.monto??'').toString(),
+            pago: (item.pago??'').toString(),
+            debe: (item.debe??'').toString(),
+            ahorro: (item.ahorro??'').toString()
         })))
         
     }, [reporte]);
