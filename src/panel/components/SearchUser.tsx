@@ -32,7 +32,7 @@ export const SearchUser = ({ control, onSearch, onChange, className, required , 
                     {...field}                      
                     data={
                         listUsuario.map((usuario)=>({
-                            label: `${usuario.documento??''} - ${usuario.name??''}`,
+                            label: `${usuario.documento??''} - ${usuario.name??''} ${usuario.apellidos??''}`,
                             value: usuario.id??''
                         }))
                     }
