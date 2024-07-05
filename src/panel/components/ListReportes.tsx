@@ -1,14 +1,72 @@
 import { useNavigate } from 'react-router-dom';
 import { ReportList } from '../interfaces'
+import { Table } from 'rsuite';
+import { useEffect, useState } from 'react';
 
 
 export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children }:ReportList) => {
 
+    const [sortColumn, setSortColumn] = useState();
+    const [sortType, setSortType] = useState();
+    const [loading, setLoading] = useState(false);
+    const [camposReseteados, setCamposReseteados] = useState<any[]>([]);
     const navigate = useNavigate();
 
     const onNavigateBack = () => {
         navigate(-1);
     }
+
+    const { Column, HeaderCell, Cell } = Table;
+
+
+
+    const getData = () => {
+        if (sortColumn && sortType) {
+          return typeof camposReseteados!="undefined" ? camposReseteados.sort((a, b) => {
+            let x:any = a[sortColumn]??'';
+            let y:any = b[sortColumn]??'';
+            
+            if (isNaN(Number(x))) {
+              x = x!.charCodeAt(0);
+            }
+            if (isNaN(Number(y))) {
+              y = y!.charCodeAt(0);
+            }
+            if (sortType === 'asc') {
+              return x - y;
+            } else {
+              return y - x;
+            }
+          }) : [];
+        }
+        return camposReseteados;
+    };
+
+    const handleSortColumn = (sortColumn:any, sortType:any) => {
+        setLoading(true);
+        setSortColumn(sortColumn);
+        setSortType(sortType);
+        setLoading(false);
+    };
+
+    useEffect(() => {
+      
+        const newArray = detalle.map((item) => {
+
+            const campos = item.campos ?? [];
+            let obj:any = {};
+    
+            campos.forEach((item_campos, i) => {
+    
+                    obj[`${cabecera[i]}`] = item_campos ?? '';                                
+            });
+    
+    
+            return obj;
+        });
+        setCamposReseteados(newArray);
+        
+    }, [detalle]);
 
     return (
         <>            
@@ -26,7 +84,27 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                 detalle.length > 0 ?
                 (
                     <>
-                        <table className='table'>
+
+                        <Table 
+                            height={620} 
+                            data={getData()}
+                            shouldUpdateScroll={false}
+                            sortColumn={sortColumn}
+                            sortType={sortType}
+                            onSortColumn={handleSortColumn}
+                            loading={loading}
+                            >
+                                {
+                                    cabecera.map((data_key, i) => (
+                                    <Column key={i} flexGrow={1} sortable>
+                                        <HeaderCell>{data_key}</HeaderCell>
+                                        <Cell dataKey={data_key} />
+                                    </Column>
+                                    ))
+                                }                                
+                        </Table>
+
+                        <table className='table d-none'>
                             <thead>
                                 <tr>
                                     {
