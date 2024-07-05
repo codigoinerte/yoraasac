@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage, uploadImage } from '../helpers';
 import { IRootState } from '../interfaces';
-import { BuscarPersonas, FormPersonasValuesSave, deleImagenPersona } from '../panel/interfaces';
+import { BuscarPersonas, DataHeladeroAssistencia, FormPersonasValuesSave, ReporteHeladeroAsistencia, deleImagenPersona, paramsHeladeroAsistencia } from '../panel/interfaces';
 import { onPersonasAddMessage, onPersonasClearMessage, onSetPersonasActive, onPersonasList, onStatus, onPersonasDelete } from '../store'
+import { useState } from 'react';
 export const usePersonasStore = () => {
   
     
@@ -13,6 +14,8 @@ export const usePersonasStore = () => {
     const { status, errorMessage } = useSelector((state:IRootState)=>state.general)
 
     const dispatch = useDispatch();
+
+    const [listReporteNotaHeladero, setlistReporteNotaHeladero] = useState<DataHeladeroAssistencia[]>([])
 
     const loadPersonas = async (tipo = 4, pagina = "1", buscar:BuscarPersonas) =>{
 
@@ -222,6 +225,23 @@ export const usePersonasStore = () => {
             console.log(error);
         }
     }
+
+    const reporteHeladeroAsistencia = async (params: paramsHeladeroAsistencia) => {
+        try {
+            const { data:info } = await backendApi.get<ReporteHeladeroAsistencia>(`/reporte-heladero-asistencia/`,{
+                params: {
+                    ...params
+                }
+            });
+
+            const result = info.data;
+            setlistReporteNotaHeladero(result);
+            dispatch(onStatus(false));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
 
     return {
@@ -231,12 +251,14 @@ export const usePersonasStore = () => {
         errorMessage,
         nextPage,
         prevPage,
+        listReporteNotaHeladero,
 
         loadPersonas,
         savePersona,
         updatePersona,
         getPersona,
         deletePersona,
-        deleteImagenPersona
+        deleteImagenPersona,
+        reporteHeladeroAsistencia
     }
 }

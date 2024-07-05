@@ -1110,3 +1110,22 @@ export interface StockData {
     total?:                number | null;
     cajas_restantes?:      number | null;
 }
+
+/* interface reporte heladero asistencia */
+export interface paramsHeladeroAsistencia{
+    user_id?: number,
+    anio?:  number,
+    mes?:   number
+}
+export interface ReporteHeladeroAsistencia {
+    data: DataHeladeroAssistencia[];
+}
+
+export interface DataHeladeroAssistencia {
+    id:                    number;
+    documento:             string;
+    heladero_nombre:       string;
+    dias_asistidos:        number;
+    dias_faltantes:        number;
+    porcentaje_asistencia: string;
+}

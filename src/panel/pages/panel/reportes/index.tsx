@@ -8,3 +8,4 @@ export * from './ReporteBaterias';
 export * from './ReporteNotaHeladero';
 export * from './ReporteFacturas';
 export * from './ReporteBoletas';
+export * from './ReporteNotaHeladeroAsistencia';

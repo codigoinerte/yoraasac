@@ -39,7 +39,8 @@ import {  Home,
           LocalesSeries,
           MiCuenta,
           StockHistorialHelados,
-          StockRestante
+          StockRestante,
+          ReporteNotaHeladeroAsistencia
 
         } from '../pages';
 
@@ -189,6 +190,7 @@ export const PanelRoute = () => {
             <Route path='/proveedores' element={<ReporteProveedores />} />
             <Route path='/personal' element={<ReportePersonal />} />
             <Route path='/heladeros' element={<ReporteHeladeros />} />
+            <Route path='/heladeros-asistencia' element={<ReporteNotaHeladeroAsistencia />} />
             <Route path='/helados' element={<ReporteHelados />} />
             <Route path='/barquillos' element={<ReporteBarquillos />} />
             <Route path='/baterias' element={<ReporteBaterias />} />

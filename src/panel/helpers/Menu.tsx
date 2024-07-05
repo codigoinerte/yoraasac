@@ -98,8 +98,8 @@ export const MenuStock:MenuInterface[] = [
       "icono":"bi bi-app"
    },    
    {
-      "nombre":"Facturas y Boletas",
-      "alias":"/reportes/facturas",
+      "nombre":"Reporte Heladero asistencia",
+      "alias":"/reportes/heladeros-asistencia",
       "icono":"bi bi-app"
    },
 ];
