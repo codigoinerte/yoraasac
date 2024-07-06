@@ -228,7 +228,7 @@ export const usePersonasStore = () => {
 
     const reporteHeladeroAsistencia = async (params: paramsHeladeroAsistencia) => {
         try {
-            const { data:info } = await backendApi.get<ReporteHeladeroAsistencia>(`/reporte-heladero-asistencia/`,{
+            const { data:info } = await backendApi.get<ReporteHeladeroAsistencia>(`/reporte-heladero-asistencia`,{
                 params: {
                     ...params
                 }
