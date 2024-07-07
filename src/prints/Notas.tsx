@@ -70,8 +70,8 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                     <table className='cabecera'>
                         <tbody>
                             <tr>
-                                <td align='center'>
-                                    <b>{active?.codigo}</b>
+                                <td align='center' style={{textAlign: 'center'}}>
+                                    <b style={{display:'block',margin:'auto',textAlign:'center'}}>{active?.codigo}</b>
                                 </td>
                             </tr>
                             <tr>
