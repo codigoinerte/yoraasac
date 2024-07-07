@@ -126,6 +126,10 @@ a{
     li,a,i{
         color: $primary-bg-color !important;
     }
+
+    .container > h1{
+        font-size: 1.5rem;
+    }
 }
 
 .main{
