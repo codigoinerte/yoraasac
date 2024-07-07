@@ -7,6 +7,7 @@ export interface NotaHeladeros {
 }
 
 export interface NotaHeladero{
+    codigo:                  string;
     id:                      number;
     parent_id:               number;
     user_id:                 number;
