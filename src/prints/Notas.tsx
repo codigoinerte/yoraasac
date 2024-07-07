@@ -70,6 +70,11 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                     <table className='cabecera'>
                         <tbody>
                             <tr>
+                                <td align='center'>
+                                    <b>{active?.codigo}</b>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td align='left'><b>Heladero</b>: {active?.heladero_nombre}</td>
                             </tr>
                             <tr>
