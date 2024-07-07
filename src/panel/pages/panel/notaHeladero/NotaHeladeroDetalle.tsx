@@ -37,6 +37,8 @@ export const NotaHeladeroDetalle = () => {
 
     const [estadoTitulo, setEstadoTitulo] = useState('Apertura de cuenta nueva');
 
+    const [codigoTitulo, setCodigoTitulo] = useState('');
+
     const [isNewRegister, setisNewRegister] = useState(false);
 
     const [openModal, setOpenModal] = useState(false);
@@ -265,6 +267,7 @@ export const NotaHeladeroDetalle = () => {
     
             let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
             setValue('fecha_operacion', dateNow.replace(" ", "T"));
+            setCodigoTitulo('');
         }
         else
         {            
@@ -294,6 +297,8 @@ export const NotaHeladeroDetalle = () => {
                 setValue('estado', estado);
             }
             
+            setCodigoTitulo(` - codigo: ${heladero.codigo}`);
+
             setState(heladero.estado);
             
             let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
@@ -325,8 +330,32 @@ export const NotaHeladeroDetalle = () => {
       
     }, []);
 
+    useEffect(() => {
+      
+        if(active?.estado)
+        {
+            setState(active.estado);
+
+            if(active.estado == 3){
+                setEstadoTitulo('Guardado');
+            }else if(active.estado == 2){
+                setEstadoTitulo('Reapertura');
+            }else if(active.estado == 1){
+                setEstadoTitulo('Cierre');
+            }
+            else{
+                setEstadoTitulo('Apertura');
+            }
+
+            setCodigoTitulo(` - codigo: ${active.codigo}`);
+        }
+        
+    }, [active?.id, active])
+    
 
     useEffect(() => {
+        
+
         let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
             setValue('fecha_operacion', dateNow.replace(" ","T"));       
         
@@ -496,7 +525,7 @@ export const NotaHeladeroDetalle = () => {
     }
 
     return (
-        <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo}`} classContainer='nota-heladero'>
+        <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo} ${codigoTitulo}`} classContainer='nota-heladero'>
             <>     
                 {
                     state == 1 &&
