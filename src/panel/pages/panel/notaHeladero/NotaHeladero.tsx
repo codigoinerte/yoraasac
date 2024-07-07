@@ -52,11 +52,12 @@ export const NotaHeladero = () => {
         listNotaHeladeroEstado();        
     }, [])
     
-    const detalle:listaDetalle[] = Heladeros.map(({ id, heladero_documento,heladero_nombre, created_at, fecha_cierre, fecha_guardado, estado, fecha_apertura}) => ({
+    const detalle:listaDetalle[] = Heladeros.map(({ id, codigo, heladero_documento,heladero_nombre, created_at, fecha_cierre, fecha_guardado, estado, fecha_apertura}) => ({
         id: id.toString(),
         campos: [
-            heladero_documento??''.toString(),
-            heladero_nombre??''.toString(),
+            codigo??''.toString(),
+            `${heladero_documento??''.toString()}\n
+            ${heladero_nombre??''.toString()}`,
             estado??''.toString(),
             (created_at??'').toString(),
             (fecha_apertura??'').toString(),
