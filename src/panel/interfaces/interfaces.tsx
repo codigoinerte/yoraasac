@@ -292,6 +292,8 @@ export interface FormNotaHeladeroValues {
     monto:              number;
     pago:               number;
     debe:               number;
+    deuda_anterior?:    number;
+    subtotal?:          number;
     ahorro:             number;
     estado:             number;
     cucharas:           number;
