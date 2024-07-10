@@ -12,6 +12,7 @@ import { useReactToPrint } from 'react-to-print';
 import NotasComponent from '../../../../prints/Notas';
 import toast, { Toaster } from 'react-hot-toast';
 
+
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Nota heladero', enlace: '/nota-heladero' },
     { id:2, titulo: 'Nota heladero detalle', enlace: '' },
@@ -29,9 +30,13 @@ type order = 'asc' | 'desc';
 export const NotaHeladeroDetalle = () => {
 
     //const [principalId, setPrincipalId] = useState<any>("0");
+    const componentRef = useRef(null);
+
     let navigate = useNavigate();
 
     const refId = useRef<any>('0');
+
+    const [listProductosPublicados, setListProductosPublicados] = useState([]);
 
     const [orderDirection, setOrderDirection] = useState<order>("asc");
 
@@ -58,6 +63,8 @@ export const NotaHeladeroDetalle = () => {
 
     const { register, handleSubmit, formState, setValue, getValues, control, reset } = useForm<FormNotaHeladeroValues>({
         defaultValues:{
+            subtotal: 0,
+            deuda_anterior: 0,
             ahorro: 0,
             estado: 2,    
             productos: []
@@ -216,7 +223,7 @@ export const NotaHeladeroDetalle = () => {
         return false;
     }
 
-    const componentRef = useRef(null);
+    
 
     const imprimir =  useReactToPrint({
         content: () => componentRef.current,
@@ -317,7 +324,13 @@ export const NotaHeladeroDetalle = () => {
                 setValue('user_id', heladero_id);
             }
 
-            setValue(`monto`, (heladero.monto??0));
+            let monto = parseFloat((heladero.monto??0).toString());
+            let deuda_anterior = parseFloat((heladero.deuda_anterior??0).toString());
+            let subtotal = monto+deuda_anterior;
+
+            setValue(`monto`, monto);
+            setValue(`deuda_anterior`, deuda_anterior);
+            setValue(`subtotal`, subtotal);
             setValue(`pago`, (heladero.pago??0));
             setValue(`ahorro`, (heladero.ahorro??0));
             setValue(`debe`, (heladero.debe??0));
@@ -413,6 +426,9 @@ export const NotaHeladeroDetalle = () => {
                 isReadOnlyImporte : true,
             }));
 
+            const pago = parseFloat((getValues('pago')??0).toString());
+            const deuda_anterior = parseFloat((getValues('deuda_anterior')??0).toString());
+            const ahorro = parseFloat((getValues('ahorro')??0).toString());
             let subtotal = 0;
             fields.forEach((item, index) => {
 
@@ -450,15 +466,19 @@ export const NotaHeladeroDetalle = () => {
 
             if(subtotal < 0) {
                 setValue(`monto`, 0);
+                setValue(`deuda_anterior`, 0);
+                setValue(`subtotal`, 0);
                 setValue(`pago`, 0);
                 setValue(`ahorro`, 0);
                 setValue(`debe`, 0);
             }
             
             setValue(`monto`, parseFloat(subtotal.toFixed(2)));
-            setValue(`pago`, 0);
-            setValue(`ahorro`, 0);
-            setValue(`debe`, parseFloat(subtotal.toFixed(2)));
+            setValue(`deuda_anterior`, deuda_anterior);
+            setValue(`subtotal`, parseFloat((subtotal+deuda_anterior).toFixed(2)));
+            setValue(`pago`, pago);
+            setValue(`ahorro`, ahorro);
+            setValue(`debe`, parseFloat(((subtotal+deuda_anterior)-pago).toFixed(2)));
             return;
         }
 
@@ -522,6 +542,31 @@ export const NotaHeladeroDetalle = () => {
         refId.current = 0;
 
         navigate("/nota-heladero/new");
+    }
+
+    // region acciones
+
+    const onChangePago = () => {
+        const monto = parseFloat((getValues('monto') ?? 0).toString());
+        const deuda_anterior = parseFloat((getValues('deuda_anterior') ?? 0).toString());
+        const subtotal = monto+deuda_anterior;
+
+        const ahorro = 0;
+        let pago:any = getValues('pago')??0;
+            
+        pago = pago == '' ? 0 : pago;
+        pago = parseFloat(pago.toString());
+        if(pago < 0){
+            pago = 0;
+            setValue('pago', 0);
+        }
+        if(pago > subtotal){
+            pago = subtotal;
+            setValue('pago', subtotal);
+        }
+        
+        const debe = (subtotal-(pago+ahorro)).toFixed(2);
+        setValue('debe', parseFloat(debe));
     }
 
     return (
@@ -748,34 +793,42 @@ export const NotaHeladeroDetalle = () => {
                                                 <>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
-                                                        <td align='center'>Monto (subtotal)</td>
+                                                        <td align='center'>Vendido</td>
                                                         <td><input type="text" {...register('monto')} className='form-control' readOnly /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colSpan={3}>&nbsp;</td>
+                                                        <td align='center'>Deuda anterior</td>
+                                                        <td><input type="number" {...register('deuda_anterior', {
+                                                            min:0,
+                                                            onChange: (event) => {  
+                                                                
+                                                                let deuda_anterior = parseFloat((getValues("deuda_anterior") ?? 0).toString());
+                                                                let value = isNaN(deuda_anterior) ? 0 : deuda_anterior;
+                                                                    //value = value == '' ? 0 : value;
+                                                                    value = parseFloat((value).toString());              
+                                                                    
+                                                                const monto = parseFloat((getValues('monto') ?? 0).toString());
+                                                                const subtotal = monto+value;
+                                                                
+                                                                setValue("deuda_anterior", value);
+                                                                setValue("subtotal", subtotal);
+
+                                                                onChangePago();
+                                                            }
+                                                        })} className='form-control' step={0.01}/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colSpan={3} style={{background: '#dedede'}}>&nbsp;</td>
+                                                        <td align='center' style={{background: '#dedede'}}>Subtotal</td>
+                                                        <td style={{background: '#dedede'}}><input type="text" {...register('subtotal')} className='form-control' readOnly /></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
                                                         <td align='center'>Pago</td>
                                                         <td><input type="number" {...register('pago')} 
                                                             className='form-control'
-                                                            onKeyUp={(e) => {
-                                                                const monto = parseFloat((getValues('monto') ?? 0).toString());
-                                                                const ahorro = 0;
-                                                                let pago:any = e.currentTarget.value??0;
-                                                                    
-                                                                pago = pago == '' ? 0 : pago;
-                                                                pago = parseFloat(pago.toString());
-                                                                if(pago < 0){
-                                                                    pago = 0;
-                                                                    setValue('pago', 0);
-                                                                }
-                                                                if(pago > monto){
-                                                                    pago = monto;
-                                                                    setValue('pago', monto);
-                                                                }
-                                                                
-                                                                const debe = (monto-(pago+ahorro)).toFixed(2);
-                                                                setValue('debe', parseFloat(debe));
-                                                                
-                                                        }}
+                                                            onKeyUp={onChangePago}
                                                         step={0.01}
                                                         readOnly={active?.fecha_cierre ? true : false} /></td>
                                                     </tr>
