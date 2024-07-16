@@ -12,6 +12,28 @@ import { useReactToPrint } from 'react-to-print';
 import NotasComponent from '../../../../prints/Notas';
 import toast, { Toaster } from 'react-hot-toast';
 
+const cabecera = [
+    {
+        desk: "Devolucion",
+        print: "Dev."
+    },
+    {
+        desk: "Pedido",
+        print: "Ped."
+    },
+    {
+        desk: "Producto",
+        print: "Prod."
+    },
+    {
+        desk: "Vendido",
+        print: "Vend"
+    },
+    {
+        desk: "Importe",
+        print: "Imp."
+    },
+];
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Nota heladero', enlace: '/nota-heladero' },
@@ -30,13 +52,14 @@ type order = 'asc' | 'desc';
 export const NotaHeladeroDetalle = () => {
 
     //const [principalId, setPrincipalId] = useState<any>("0");
+
+    const textUnid = "Unid.";
+
     const componentRef = useRef(null);
 
     let navigate = useNavigate();
 
     const refId = useRef<any>('0');
-
-    const [listProductosPublicados, setListProductosPublicados] = useState([]);
 
     const [orderDirection, setOrderDirection] = useState<order>("asc");
 
@@ -80,7 +103,9 @@ export const NotaHeladeroDetalle = () => {
 
     const { errors } = formState;
 
-    const { id = 0 } = useParams(); 
+    const { id = 0 } = useParams();
+
+    const redirectToFactura = () => navigate(`/facturacion/new?gf=nota&id=${refId.current}`); 
 
     const calcImporte = (index:number)=> {
 
@@ -110,28 +135,7 @@ export const NotaHeladeroDetalle = () => {
         }
     }
 
-    const cabecera = [
-        {
-            desk: "Devolucion",
-            print: "Dev."
-        },
-        {
-            desk: "Pedido",
-            print: "Ped."
-        },
-        {
-            desk: "Producto",
-            print: "Prod."
-        },
-        {
-            desk: "Vendido",
-            print: "Vend"
-        },
-        {
-            desk: "Importe",
-            print: "Imp."
-        },
-    ];
+
 
     // region Buscar Nota por Heladero
     const buscarUsuarioReserva = async (user:any)=> {
@@ -143,7 +147,7 @@ export const NotaHeladeroDetalle = () => {
         const heladero = await loadBuscarNotaHeladeroGuardada(parseInt(user.toString()));
         
             /* si heladero(toda la info de la nota del headero) existe previamente se completa la data*/
-        if(heladero != undefined && heladero !== false && heladero.id != undefined){
+        if(heladero && heladero.id){
             setisNewRegister(false);
             //setPrincipalId(heladero.id);
             refId.current = heladero.id;
@@ -170,6 +174,13 @@ export const NotaHeladeroDetalle = () => {
                setState(heladero.estado);
             }
 
+            
+            setValue("subtotal", 0);
+            setValue("deuda_anterior", heladero.deuda_anterior ?? 0);
+            setValue("ahorro", heladero.ahorro);
+            setValue("pago", heladero.pago);
+            setValue("debe", heladero.debe);
+            
 
             if(heladero?.fecha_cierre && heladero.estado == 1){
                 const dateNow = heladero.fecha_cierre;
@@ -189,27 +200,12 @@ export const NotaHeladeroDetalle = () => {
             toast.success('Se importo la nota guardada del heladero correctamente');
         }else{
             /* si heladero(toda la info de la nota del headero) no existe previamente se define estado en reapertura, el cual funciona como un nuevo dia */
-            refId.current = 0;
-            await setNullNotaHeladero();
-            setState(2);
-            setValue('estado', 2);
-            setisNewRegister(true);
-
-            let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
-            setValue('fecha_operacion', dateNow.replace(" ","T"));            
-            setEstadoTitulo('Apertura de cuenta nueva');
-
-            fields.map((_, index) => {
-                setValue(`productos.${index}.pedido`, 0);
-                setValue(`productos.${index}.devolucion`, 0);
-                setValue(`productos.${index}.vendido`, 0);
-                setValue(`productos.${index}.importe`, 0);
-            });
+            await resetNotaHeladero();
         }
 
     }
 
-    const redirectToFactura = () => navigate(`/facturacion/new?gf=nota&id=${refId.current}`); 
+    
 
     const getDisableDate = (id:number) => {
         if(
@@ -221,9 +217,7 @@ export const NotaHeladeroDetalle = () => {
         ) return true;
         
         return false;
-    }
-
-    
+    }    
 
     const imprimir =  useReactToPrint({
         content: () => componentRef.current,
@@ -235,46 +229,59 @@ export const NotaHeladeroDetalle = () => {
         setOrderDirection(orderDirection == "asc" ? "desc" : "asc");
     }
 
+    const resetNotaHeladero = async () => {
+        
+        reset();
+
+        setNullNotaHeladero();
+
+        const productos = await loadProductosDisponibles();
+        
+        if(productos)
+        setValue("productos", [
+            ...productos.map((item:ProductosPublicados)=>({
+                producto: item.nombre,
+                precio_operacion: calculo_precio_final(item.heladero_precio_venta, item.heladero_descuento),
+                codigo: item.codigo,
+
+                id : item.id,
+                devolucion : 0,
+                pedido : 0,
+                vendido : 0,
+                importe : 0,
+                nota_heladeros_id : 0,
+                created_at : item.created_at,
+                updated_at : item.updated_at,
+                is_litro: item.is_litro,
+                
+                }))
+        ]);            
+                    
+        setValue('estado', 2);
+        setValue('user_id', 0);
+        setisNewRegister(true);
+
+        let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
+        setValue('fecha_operacion', dateNow.replace(" ", "T"));
+
+        setCodigoTitulo('');
+
+        refId.current = 0;
+
+        navigate("/nota-heladero/new");
+    }
+
     const onLoadNotaHeladero = async () => {
 
         refId.current = id;
 
         await listNotaHeladeroEstado();
     
-        const listProductosPublicados = await loadProductosDisponibles();
-
+        
         //si no hay id principal
         if(refId.current == 0)
         {
-            setNullNotaHeladero();
-              
-            if(listProductosPublicados!= undefined)                
-            setValue("productos", [
-                ...listProductosPublicados.map((item:ProductosPublicados)=>({
-                    producto: item.nombre,
-                    precio_operacion: calculo_precio_final(item.heladero_precio_venta, item.heladero_descuento),
-                    codigo: item.codigo,
-
-                    id : item.id,
-                    devolucion : 0,
-                    pedido : 0,
-                    vendido : 0,
-                    importe : 0,
-                    nota_heladeros_id : 0,
-                    created_at : item.created_at,
-                    updated_at : item.updated_at,
-                    is_litro: item.is_litro,
-                    
-                    }))
-            ]);            
-                        
-            setValue('estado', 2);
-            setValue('user_id', 0);
-            setisNewRegister(true);
-    
-            let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
-            setValue('fecha_operacion', dateNow.replace(" ", "T"));
-            setCodigoTitulo('');
+            await resetNotaHeladero();
         }
         else
         {            
@@ -338,13 +345,10 @@ export const NotaHeladeroDetalle = () => {
     }
         
     useEffect(() => {
-        
-        onLoadNotaHeladero();
-      
+        onLoadNotaHeladero()      
     }, []);
 
-    useEffect(() => {
-      
+    useEffect(() => {        
         if(active?.estado)
         {
             setState(active.estado);
@@ -367,8 +371,6 @@ export const NotaHeladeroDetalle = () => {
     
 
     useEffect(() => {
-        
-
         let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
             setValue('fecha_operacion', dateNow.replace(" ","T"));       
         
@@ -426,8 +428,8 @@ export const NotaHeladeroDetalle = () => {
                 isReadOnlyImporte : true,
             }));
 
-            const pago = parseFloat((getValues('pago')??0).toString());
-            const deuda_anterior = parseFloat((getValues('deuda_anterior')??0).toString());
+            const pago = parseFloat((getValues('pago') && !isNaN(getValues('pago'))?getValues('pago'):0).toString());
+            const deuda_anterior = parseFloat((getValues('deuda_anterior') && !isNaN(getValues('deuda_anterior'))? getValues('deuda_anterior') : 0).toString());
             const ahorro = parseFloat((getValues('ahorro')??0).toString());
             let subtotal = 0;
             fields.forEach((item, index) => {
@@ -507,43 +509,6 @@ export const NotaHeladeroDetalle = () => {
     
     const isPrint = (): boolean => active?.fecha_cierre ? true : false;
 
-    const funcNew = async () => {
-        reset();
-        
-        setNullNotaHeladero();
-
-        const listProductosPublicados = await loadProductosDisponibles();
-              
-        if(listProductosPublicados!= undefined)                
-        setValue("productos", [
-            ...listProductosPublicados.map((item:ProductosPublicados)=>({
-                producto: item.nombre,
-                precio_operacion: calculo_precio_final(item.heladero_precio_venta, item.heladero_descuento),
-                codigo: item.codigo,
-
-                id : item.id,
-                devolucion : 0,
-                pedido : 0,
-                vendido : 0,
-                importe : 0,
-                nota_heladeros_id : 0,
-                created_at : item.created_at,
-                updated_at : item.updated_at,
-                
-                }))
-        ]);            
-                    
-        setValue('estado', 2);
-        setValue('user_id', 0);
-        setisNewRegister(true);
-
-        let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
-        setValue('fecha_operacion', dateNow.replace(" ", "T"));
-        refId.current = 0;
-
-        navigate("/nota-heladero/new");
-    }
-
     // region acciones
 
     const onChangePago = () => {
@@ -579,7 +544,7 @@ export const NotaHeladeroDetalle = () => {
                      
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
-                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()} isNew={true} funcNew={funcNew}/>
+                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()} isNew={true} funcNew={resetNotaHeladero}/>
 
                     <hr className='border border-1 opacity-50'/>
 
@@ -663,7 +628,7 @@ export const NotaHeladeroDetalle = () => {
                             fields.length > 0 ?
                             (
                                 <>
-                                    <table className='table'>
+                                    <table className='table table-nota-heladero'>
                                         <thead>
                                             <tr>
                                                 {
@@ -708,8 +673,10 @@ export const NotaHeladeroDetalle = () => {
                                                         {
                                                             item.is_litro ?
                                                             (
-                                                                <div className="input-group mb-3">
-                                                                    <span className="input-group-text" id="basic-addon1">S/</span>
+                                                                <div className="input-group">
+                                                                    <span className="input-group-text" id="basic-addon1">
+                                                                        <small>S/</small>
+                                                                    </span>
                                                                     <input type="text" 
                                                                             className='form-control' 
                                                                             readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
@@ -720,32 +687,42 @@ export const NotaHeladeroDetalle = () => {
                                                             )
                                                             :
                                                             (
-                                                                <input type="text" 
-                                                                        className='form-control' 
-                                                                        readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
-                                                                        {...register(`productos.${index}.devolucion`)} 
-                                                                        tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
-                                                                    />
+                                                                <div className="input-group">
+                                                                    <span className="input-group-text" id="basic-addon1">
+                                                                        <small>{textUnid}</small>
+                                                                    </span>
+                                                                    <input type="text" 
+                                                                            className='form-control' 
+                                                                            readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
+                                                                            {...register(`productos.${index}.devolucion`)} 
+                                                                            tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
+                                                                        />
+                                                                </div>
                                                             )
                                                         }
                                                         
                                                     </td>                                                     
                                                     <td className={item.is_litro ? 'bg-info': ''}>
-                                                        <input type="number" 
-                                                                className='form-control' 
-                                                                readOnly={isReadOnlyInputs.isReadOnlyPedido}
-                                                                {...register(`productos.${index}.pedido`,{
-                                                                    pattern: /^\d+$/i,
-                                                                    onChange: (e) => {
-                                                                        let quantity = e.target.value??'0';
-                                                                            quantity = quantity == '' || quantity == null ? '0' : quantity;
-                                                                            quantity = parseInt(quantity);
-                                                                        if(quantity < 0) e.target.value = 0;
-                                                                        setValue(`productos.${index}.pedido`, quantity);                                                                        
-                                                                    }
-                                                                })}
-                                                                tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
-                                                                />
+                                                        <div className="input-group">
+                                                            <span className="input-group-text" id="basic-addon1">
+                                                                <small>{textUnid}</small>
+                                                            </span>
+                                                            <input type="number" 
+                                                                    className='form-control' 
+                                                                    readOnly={isReadOnlyInputs.isReadOnlyPedido}
+                                                                    {...register(`productos.${index}.pedido`,{
+                                                                        pattern: /^\d+$/i,
+                                                                        onChange: (e) => {
+                                                                            let quantity = e.target.value??'0';
+                                                                                quantity = quantity == '' || quantity == null ? '0' : quantity;
+                                                                                quantity = parseInt(quantity);
+                                                                            if(quantity < 0) e.target.value = 0;
+                                                                            setValue(`productos.${index}.pedido`, quantity);                                                                        
+                                                                        }
+                                                                    })}
+                                                                    tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
+                                                                    />
+                                                        </div>
                                                     </td>                                                     
                                                     <td data-tooltip-id={`tooltip-html-${index}`}
                                                         data-tooltip-html={`
@@ -770,18 +747,27 @@ export const NotaHeladeroDetalle = () => {
                                                                 />
                                                     </td>
                                                     <td  className={item.is_litro ? 'bg-info': ''}>
-                                                        <input type="text" className='form-control' 
-                                                                {...register(`productos.${index}.vendido`,{
-                                                                    onChange: () => calcImporte(index)
-                                                                })}  
-                                                                readOnly={isReadOnlyInputs.isReadOnlyVendido}
-                                                                />
+                                                        <div className="input-group">
+                                                            <span className="input-group-text" id="basic-addon1">
+                                                                <small>S/</small>
+                                                            </span>
+                                                            <input type="text" className='form-control' 
+                                                                    {...register(`productos.${index}.vendido`,{
+                                                                        onChange: () => calcImporte(index)
+                                                                    })}  
+                                                                    readOnly={isReadOnlyInputs.isReadOnlyVendido}
+                                                                    />
+                                                        </div>
                                                     </td> 
-                                                    <td  className={item.is_litro ? 'bg-info': ''}>                                                        
-                                                        <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
-                                                        <input type="text" className='form-control'  {...register(`productos.${index}.importe`)} readOnly={isReadOnlyInputs.isReadOnlyImporte}/>
-                                                    </td> 
-
+                                                    <td  className={item.is_litro ? 'bg-info': ''}> 
+                                                        <div className="input-group">
+                                                            <span className="input-group-text" id="basic-addon1">
+                                                                <small>S/</small>
+                                                            </span>
+                                                            <input type="text" className='form-control'  {...register(`productos.${index}.importe`)} readOnly={isReadOnlyInputs.isReadOnlyImporte}/>
+                                                            <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                                 )
                                             })
