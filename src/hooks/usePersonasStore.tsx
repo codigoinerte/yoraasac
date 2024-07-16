@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage, uploadImage } from '../helpers';
 import { IRootState } from '../interfaces';
-import { BuscarPersonas, DataHeladeroAssistencia, FormPersonasValuesSave, ReporteHeladeroAsistencia, deleImagenPersona, paramsHeladeroAsistencia } from '../panel/interfaces';
+import { BuscarPersonas, DataHeladeroAssistencia, FormPersonasValuesSave, ReporteHeladeroAsistencia, deleImagenPersona } from '../panel/interfaces';
 import { onPersonasAddMessage, onPersonasClearMessage, onSetPersonasActive, onPersonasList, onStatus, onPersonasDelete } from '../store'
 import { useState } from 'react';
 export const usePersonasStore = () => {
@@ -226,13 +226,9 @@ export const usePersonasStore = () => {
         }
     }
 
-    const reporteHeladeroAsistencia = async (params: paramsHeladeroAsistencia) => {
+    const reporteHeladeroAsistencia = async () => {
         try {
-            const { data:info } = await backendApi.get<ReporteHeladeroAsistencia>(`/reporte-heladero-asistencia`,{
-                params: {
-                    ...params
-                }
-            });
+            const { data:info } = await backendApi.get<ReporteHeladeroAsistencia>(`/reporte-heladero-asistencia`);
 
             const result = info.data;
             setlistReporteNotaHeladero(result);
