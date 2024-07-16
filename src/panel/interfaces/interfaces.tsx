@@ -292,8 +292,8 @@ export interface FormNotaHeladeroValues {
     monto:              number;
     pago:               number;
     debe:               number;
-    deuda_anterior?:    number;
-    subtotal?:          number;
+    deuda_anterior:     number;
+    subtotal:           number;
     ahorro:             number;
     estado:             number;
     cucharas:           number;
@@ -1127,7 +1127,5 @@ export interface DataHeladeroAssistencia {
     id:                    number;
     documento:             string;
     heladero_nombre:       string;
-    dias_asistidos:        number;
-    dias_faltantes:        number;
-    porcentaje_asistencia: string;
+    asistio:               boolean;    
 }
