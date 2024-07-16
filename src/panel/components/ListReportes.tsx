@@ -3,6 +3,24 @@ import { ReportList } from '../interfaces'
 import { Table } from 'rsuite';
 import { useEffect, useState } from 'react';
 
+const { Cell } = Table;
+
+const CustomCell = ({ rowData, dataKey, ...props }:any) => {
+    
+    let value = '';
+    
+    for(let e in rowData ){
+        if(e==dataKey){
+            value = rowData[e];
+        }
+    }
+
+    return (
+        <Cell {...props}>
+            <div dangerouslySetInnerHTML={{ __html:value  }} />
+        </Cell>
+    );
+};
 
 export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children }:ReportList) => {
 
@@ -16,7 +34,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
         navigate(-1);
     }
 
-    const { Column, HeaderCell, Cell } = Table;
+    const { Column, HeaderCell } = Table;
 
 
 
@@ -98,7 +116,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                                     cabecera.map((data_key, i) => (
                                     <Column key={i} flexGrow={1} sortable>
                                         <HeaderCell>{data_key}</HeaderCell>
-                                        <Cell dataKey={data_key} />
+                                        <CustomCell dataKey={data_key} />
                                     </Column>
                                     ))
                                 }                                
