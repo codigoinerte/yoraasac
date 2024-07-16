@@ -190,19 +190,22 @@ export const useHelpers = () => {
             console.log(error);
         }
     }
-    const loadProductosDisponibles = async () => {
+    const loadProductosDisponibles = async (): Promise<ProductosPublicados[]> => {
                 
         try {
                                     
-            const { data } = await backendApi.get<ProductosPublicadosList>('/nota-heladero-productos');
-            
-            setListProductosPublicados(data.data);            
-            
-            return data.data;
+            const response = await backendApi.get<ProductosPublicadosList>('/nota-heladero-productos');
+            const data = response.data.data ?? [];
+                        
+            setListProductosPublicados([...data]);
+
+            return data;
 
         } catch (error) {
             
             console.log(error);
+
+            return [];
         }
     }
     const loadBuscarNotaHeladeroGuardada = async (idusuario:number)=>{
