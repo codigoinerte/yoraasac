@@ -4,7 +4,9 @@ import { ContainerInner, List } from '../../../components'
 import { BuscarNotasHeladeros, FormBuscarNotaHeladeroValues, breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 import { useAlert, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
 import Swal from 'sweetalert2';
+import { formatDate } from '../../../../helpers';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Nota heladero', enlace: '' },
@@ -59,10 +61,10 @@ export const NotaHeladero = () => {
             `${heladero_documento??''.toString()}\n
             ${heladero_nombre??''.toString()}`,
             estado??''.toString(),
-            (created_at??'').toString(),
-            (fecha_apertura??'').toString(),
-            (fecha_guardado??'').toString(),
-            (fecha_cierre??'').toString(),
+            formatDate(created_at, false),
+            formatDate(fecha_apertura),
+            formatDate(fecha_guardado),
+            formatDate(fecha_cierre),
         ]
   
     }));
