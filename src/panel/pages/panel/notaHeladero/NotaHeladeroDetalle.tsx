@@ -86,6 +86,10 @@ export const NotaHeladeroDetalle = () => {
 
     const { register, handleSubmit, formState, setValue, getValues, control, reset } = useForm<FormNotaHeladeroValues>({
         defaultValues:{
+
+            monto:0,
+            pago:0,
+            debe:0,
             subtotal: 0,
             deuda_anterior: 0,
             ahorro: 0,
@@ -147,7 +151,7 @@ export const NotaHeladeroDetalle = () => {
         const heladero = await loadBuscarNotaHeladeroGuardada(parseInt(user.toString()));
         
             /* si heladero(toda la info de la nota del headero) existe previamente se completa la data*/
-        if(heladero && heladero.id){
+        if(heladero && heladero.hasOwnProperty("id") && heladero.id){
             setisNewRegister(false);
             //setPrincipalId(heladero.id);
             refId.current = heladero.id;
@@ -200,7 +204,7 @@ export const NotaHeladeroDetalle = () => {
             toast.success('Se importo la nota guardada del heladero correctamente');
         }else{
             /* si heladero(toda la info de la nota del headero) no existe previamente se define estado en reapertura, el cual funciona como un nuevo dia */
-            await resetNotaHeladero();
+            await resetNotaHeladero(getValues("user_id"));
         }
 
     }
@@ -229,7 +233,7 @@ export const NotaHeladeroDetalle = () => {
         setOrderDirection(orderDirection == "asc" ? "desc" : "asc");
     }
 
-    const resetNotaHeladero = async () => {
+    const resetNotaHeladero = async (userId = 0) => {
         
         reset();
 
@@ -258,7 +262,7 @@ export const NotaHeladeroDetalle = () => {
         ]);            
                     
         setValue('estado', 2);
-        setValue('user_id', 0);
+        setValue('user_id', userId);
         setisNewRegister(true);
 
         let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
