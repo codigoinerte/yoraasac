@@ -67,8 +67,8 @@ export const List = ({page, cabecera, detalle, eliminar = function(){}, next, pr
                                                 (
                                                     <td data-label="Acciones">
                                                         <div className="acciones-buttons">
-                                                            <Link to={enlaceDetalle} type="button" className="btn btn-outline-primary flex-fill"><i className="bi bi-pencil"></i></Link>
-                                                            <button onClick={()=> eliminar(id)} type="button" className="btn btn-outline-danger flex-fill"><i className="bi bi-trash3"></i></button>
+                                                            <Link to={enlaceDetalle} type="button" className="btn btn-outline-primary"><i className="bi bi-eye"></i></Link>
+                                                            <button onClick={()=> eliminar(id)} type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
                                                         </div>
                                                     </td>
                                                 )
