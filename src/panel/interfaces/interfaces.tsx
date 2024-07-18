@@ -761,7 +761,9 @@ export interface ReporteItemNota {
     name:               string;
     nombre:             null;
     estado:             string;
-    deuda_total?:          number;
+    deuda_total?:           number;
+    dias_asistidos:         number;
+    porcentaje_asistencia:  string;
 }
 
 /* REPORTE FACTURACOIN */
