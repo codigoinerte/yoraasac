@@ -538,6 +538,16 @@ export const NotaHeladeroDetalle = () => {
         setValue('debe', parseFloat(debe));
     }
 
+    const editApertura = () => {
+        setisReadOnlyInputs((s) => ({
+            ...s,
+            isReadOnlyDevolucion : true,
+            isReadOnlyPedido : !s.isReadOnlyPedido,
+            isReadOnlyVendido : true,
+            isReadOnlyImporte : true,
+        }));
+    }
+
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo} ${codigoTitulo}`} classContainer='nota-heladero'>
             <>     
@@ -555,7 +565,7 @@ export const NotaHeladeroDetalle = () => {
                     <h4>Informaci&oacute;n</h4>
 
                     <div className="row">
-                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 
                             <div className="mb-3">
                                 <label htmlFor="tipo_movimiento" className="form-label">Heladero</label>
@@ -577,6 +587,17 @@ export const NotaHeladeroDetalle = () => {
                             </div>
                             
                         </div>
+                        {
+                            state == 2 ? (
+                                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-3 d-flex align-items-center justify-content-center">
+                                    <button type="button" className="btn btn-primary gap-2 d-flex " onClick={editApertura}> 
+                                        <i className={`bi ${isReadOnlyInputs.isReadOnlyPedido ? 'bi-pencil-square' : 'bi-x-octagon-fill'}`}></i>
+                                        { isReadOnlyInputs.isReadOnlyPedido ? 'Editar Apertura' : 'Cerrar edición'}                                
+                                    </button>
+                                </div>
+
+                            ) : ''
+                        }
                     </div>
                     <div className="row">
                         <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
