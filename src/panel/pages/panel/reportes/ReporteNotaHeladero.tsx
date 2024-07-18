@@ -15,17 +15,15 @@ const breadcrumb:bread[] = [
 export const ReporteNotaHeladero = () => {
 
     const cabecera = [
-        "DOCUMENTO",
-        "NOMBRE",
-        "MONTO",
-        "PAGO",
-        "DEBE",
-        "AHORRO",
+        "Documento",
+        "Nombre",
+        "Monto",
+        "Pago",
+        "Debe",
+        "Ahorro",
+        "Días asistidos",
+        "% Asistencia",
     ];
-
-    const eliminar = (id:number) => {
-        console.log(id);
-    }
 
     const [detalle, setDetalle] = useState<listaDetalle[]>([]);
     const [imprimible, setImprimible] = useState<any[]>([]);
@@ -38,7 +36,7 @@ export const ReporteNotaHeladero = () => {
         console.log(e);
     }
     
-    const { listEstadoHeladero, listNotaHeladeroEstado, listUsuario, loadBuscarUsuario} = useHelpers();
+    const { listNotaHeladeroEstado, listUsuario, loadBuscarUsuario} = useHelpers();
 
     const { reporteHeladero, reporte } = useNotaHeladeroStore();
 
@@ -53,6 +51,8 @@ export const ReporteNotaHeladero = () => {
                 (item.pago??'').toString(),
                 (item.debe??'').toString(),
                 (item.ahorro??'').toString(),
+                (item.dias_asistidos??'').toString(),
+                (item.porcentaje_asistencia??'').toString()
             ]
         }));
         
@@ -65,7 +65,10 @@ export const ReporteNotaHeladero = () => {
             monto: (item.monto??'').toString(),
             pago: (item.pago??'').toString(),
             debe: (item.debe??'').toString(),
-            ahorro: (item.ahorro??'').toString()
+            ahorro: (item.ahorro??'').toString(),
+
+            'dias asistidos': (item.dias_asistidos??'').toString(),
+            'porcentaje de asistencia': (item.porcentaje_asistencia??'').toString()
         })))
         
     }, [reporte]);
@@ -106,7 +109,7 @@ export const ReporteNotaHeladero = () => {
             <ListReportes                                   
                     cabecera={cabecera}                     
                     detalle={detalle}               
-                    descargar={eliminar}
+                    descargar={function(){}}
                     next={next}
                     prev={prev}>
                 
@@ -123,25 +126,13 @@ export const ReporteNotaHeladero = () => {
                                 loadBuscarUsuario = {loadBuscarUsuario}
                             />
                         </div>                        
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <div className="mb-3">
-                                <label htmlFor="fecha_creacion" className="form-label">Estado</label>                                
-                                <select id="estado" className='form-control'  {...register('estado')}>
-                                    {
-                                        listEstadoHeladero.map(({ id, nombre })=>(
-                                            <option key={id} value={id}>{nombre}</option>
-                                        ))
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                        <div className="col-xs-12 col-sm-12 col-md-6">
                             <div className="mb-3">
                                 <label htmlFor="fecha_creacion" className="form-label">Fecha de inicio</label>
                                 <input type="date" placeholder="dd-mm-yyyy" className="form-control" id="fecha_creacion" aria-describedby="fechacreacion" {...register("fecha_inicio")}/>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                        <div className="col-xs-12 col-sm-12 col-md-6">
                             <div className="mb-3">
                                 <label htmlFor="fecha_fin" className="form-label">Fecha fin</label>
                                 <input type="date" placeholder="dd-mm-yyyy" className="form-control" id="fecha_fin" aria-describedby="fechafin" {...register("fecha_fin")}/>
