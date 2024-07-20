@@ -11,6 +11,7 @@ import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 import NotasComponent from '../../../../prints/Notas';
 import toast, { Toaster } from 'react-hot-toast';
+import { formatDateForInput } from '../../../../helpers';
 
 const cabecera = [
     {
@@ -185,15 +186,14 @@ export const NotaHeladeroDetalle = () => {
             setValue("pago", heladero.pago);
             setValue("debe", heladero.debe);
             
-
-            if(heladero?.fecha_cierre && heladero.estado == 1){
-                const dateNow = heladero.fecha_cierre;
-                const dateCurrent = moment(dateNow).format("YYYY-MM-DD HH:mm").toString();
-                setValue('fecha_operacion', dateCurrent.replace(" ","T"));
-            }else if(heladero.estado == 2 || heladero.estado == 3){
-                let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
-                setValue('fecha_operacion', dateNow.replace(" ","T"));
-            }
+            let fecha_operacion = null;
+            if(heladero.estado == 1 && heladero.fecha_cierre) fecha_operacion = heladero.fecha_cierre
+            else if(heladero.estado == 2 && heladero.fecha_apertura) fecha_operacion = heladero.fecha_apertura
+            else if(heladero.estado == 3 && heladero.fecha_guardado) fecha_operacion = heladero.fecha_guardado
+            else if(heladero.estado == 2 && !heladero.fecha_apertura && heladero.created_at) fecha_operacion = formatDateForInput(heladero.created_at)
+            else fecha_operacion = new Date();
+            
+            setValue('fecha_operacion', fecha_operacion);
 
             if(detalle.length > 0){
                 setValue('productos', heladero.detalle);
@@ -319,7 +319,12 @@ export const NotaHeladeroDetalle = () => {
 
             setState(heladero.estado);
             
-            let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                        
+            let fecha_operacion = new Date();
+            if(heladero.estado == 1 && heladero.fecha_cierre) fecha_operacion = heladero.fecha_cierre
+            else if(heladero.estado == 2 && heladero.fecha_apertura) fecha_operacion = heladero.fecha_apertura
+            else if(heladero.estado == 3 && heladero.fecha_guardado) fecha_operacion = heladero.fecha_guardado
+            
+            let dateNow = moment(fecha_operacion).format("YYYY-MM-DD HH:mm").toString();                        
             setValue('fecha_operacion', dateNow);
 
             if(detalle.length > 0)
@@ -375,8 +380,6 @@ export const NotaHeladeroDetalle = () => {
     
 
     useEffect(() => {
-        let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
-            setValue('fecha_operacion', dateNow.replace(" ","T"));       
         
         if(active?.fecha_apertura && (state == 2)){
             setisReadOnlyInputs((s) => ({
@@ -565,7 +568,7 @@ export const NotaHeladeroDetalle = () => {
                     <h4>Informaci&oacute;n</h4>
 
                     <div className="row">
-                        <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                        <div className={`col-xs-12 col-sm-12 ${state == 2 ? 'col-md-9 col-lg-9' : 'col-md-12 col-lg-12'}`}>
 
                             <div className="mb-3">
                                 <label htmlFor="tipo_movimiento" className="form-label">Heladero</label>
@@ -615,6 +618,9 @@ export const NotaHeladeroDetalle = () => {
                                                     onClick={(e)=>{
                                                         setState(parseInt(e.currentTarget.value));
                                                         setValue("estado", parseInt(e.currentTarget.value));
+
+                                                        let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
+                                                        setValue('fecha_operacion', dateNow.replace(" ","T"));
                                                     }}
                                                     >
                                                         {
