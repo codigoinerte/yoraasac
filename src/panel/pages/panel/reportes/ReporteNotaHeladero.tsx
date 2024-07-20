@@ -17,7 +17,9 @@ export const ReporteNotaHeladero = () => {
     const cabecera = [
         "Documento",
         "Nombre",
-        "Monto",
+        "Vendido",
+        "Deuda Pagada",
+        "Total a pagar",
         "Pago",
         "Debe",
         "Ahorro",
@@ -47,7 +49,9 @@ export const ReporteNotaHeladero = () => {
             campos: [
                 (item.heladero_documento??'').toString(),
                 (item.heladero_nombre??'').toString(),
-                (item.monto??'').toString(),
+                (item.vendido??'').toString(),
+                (item.deuda_pagada??'').toString(),
+                (item.total_pagar??'').toString(),
                 (item.pago??'').toString(),
                 (item.debe??'').toString(),
                 (item.ahorro??'').toString(),
@@ -59,13 +63,16 @@ export const ReporteNotaHeladero = () => {
         setDetalle(nuevoDetalle);
 
         setImprimible(reporte.map((item)=>({
-            heladero_documento: (item.heladero_documento??'').toString(),
-            heladero_nombre: (item.heladero_nombre??'').toString(),
+            "documento": (item.heladero_documento??'').toString(),
+            "nombre": (item.heladero_nombre??'').toString(),
             
-            monto: (item.monto??'').toString(),
-            pago: (item.pago??'').toString(),
-            debe: (item.debe??'').toString(),
-            ahorro: (item.ahorro??'').toString(),
+            "vendido": (item.vendido??'').toString(),
+            "deuda pagada": (item.deuda_pagada??'').toString(),
+            "total pagar": (item.total_pagar??'').toString(),
+
+            "pago": (item.pago??'').toString(),
+            "debe": (item.debe??'').toString(),
+            "ahorro": (item.ahorro??'').toString(),
 
             'dias asistidos': (item.dias_asistidos??'').toString(),
             'porcentaje de asistencia': (item.porcentaje_asistencia??'').toString()

@@ -742,7 +742,9 @@ export interface ReporteItemNota {
     user_id:            number;
     moneda_id:          number;
     id_sucursal:        number;
-    monto:              number;
+    vendido:            number;
+    deuda_pagada:       number;
+    total_pagar:        number;
     pago:               number;
     debe:               number;
     ahorro:             number;
