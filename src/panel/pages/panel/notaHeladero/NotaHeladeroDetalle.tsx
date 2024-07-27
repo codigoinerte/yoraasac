@@ -186,7 +186,7 @@ export const NotaHeladeroDetalle = () => {
             setValue("pago", heladero.pago);
             setValue("debe", heladero.debe);
             
-            let fecha_operacion = null;
+            let fecha_operacion:any = null;
             if(heladero.estado == 1 && heladero.fecha_cierre) fecha_operacion = heladero.fecha_cierre
             else if(heladero.estado == 2 && heladero.fecha_apertura) fecha_operacion = heladero.fecha_apertura
             else if(heladero.estado == 3 && heladero.fecha_guardado) fecha_operacion = heladero.fecha_guardado
@@ -568,7 +568,7 @@ export const NotaHeladeroDetalle = () => {
                     <h4>Informaci&oacute;n</h4>
 
                     <div className="row">
-                        <div className={`col-xs-12 col-sm-12 ${state == 2 ? 'col-md-9 col-lg-9' : 'col-md-12 col-lg-12'}`}>
+                        <div className={`col-xs-12 col-sm-12 ${(state == 2 && active?.fecha_apertura) ? 'col-md-9 col-lg-9' : 'col-md-12 col-lg-12'}`}>
 
                             <div className="mb-3">
                                 <label htmlFor="tipo_movimiento" className="form-label">Heladero</label>
@@ -591,7 +591,7 @@ export const NotaHeladeroDetalle = () => {
                             
                         </div>
                         {
-                            state == 2 ? (
+                            (state == 2 && active?.fecha_apertura) ? (
                                 <div className="col-xs-12 col-sm-12 col-md-12 col-lg-3 d-flex align-items-center justify-content-center">
                                     <button type="button" className="btn btn-primary gap-2 d-flex " onClick={editApertura}> 
                                         <i className={`bi ${isReadOnlyInputs.isReadOnlyPedido ? 'bi-pencil-square' : 'bi-x-octagon-fill'}`}></i>
