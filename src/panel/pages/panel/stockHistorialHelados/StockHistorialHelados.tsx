@@ -16,7 +16,7 @@ type FormValues = {
 }
 
 const breadcrumb:bread[] = [
-    { id:1, titulo: 'Stock', enlace: '/stock' },    
+    { id:1, titulo: 'Reportes', enlace: '/reportes' },
     { id:2, titulo: 'Stock Historial de movimientos', enlace: '' },
 ];
 const { Column, HeaderCell, Cell } = Table;
@@ -62,7 +62,7 @@ const renderRowExpanded = (rowData:any) => {
           rowData.detalle.map((item:any, i:any)=>{
             return (
               
-              <p key={`${rowData.id}${item.id}${i}`}>{item.codigo} - {item.nombre}: {item.cantidad}</p>
+              <p key={`${rowData.id}${item.id}${i}`}><b>{item.codigo} - {item.nombre}:</b>  Cantidad por cajas: {item.caja_cantidad} | Cajas: {item.caja} | Total unidades: {item.cantidad}</p>
               
             )
           })
@@ -171,7 +171,7 @@ const exportToExcel = async() => {
 
                 shouldUpdateScroll={false} // Prevent the scrollbar from scrolling to the top after the table content area height changes.                
                 rowKey={rowKey}
-                expandedRowKeys={expandedRowKeys}
+                expandedRowKeys={expandedRowKeys}                
                 onRowClick={data => {
                   /*onclick on display */
                 }}

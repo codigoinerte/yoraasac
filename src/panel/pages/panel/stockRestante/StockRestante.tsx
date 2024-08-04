@@ -5,7 +5,7 @@ import { Table, Pagination } from 'rsuite';
 import { useEffect, useState } from 'react';
 
 const breadcrumb:bread[] = [
-    { id:1, titulo: 'Stock', enlace: '/stock' },    
+    { id:1, titulo: 'Reportes', enlace: '/reportes' },
     { id:2, titulo: 'Stock restante', enlace: '' },
 ];
 const { Column, HeaderCell, Cell } = Table;
@@ -42,10 +42,10 @@ export const StockRestante = () => {
       return typeof stock!="undefined" ? stock.sort((a, b) => {
         let x:any = a[sortColumn]??'';
         let y:any = b[sortColumn]??'';
-        if (typeof x === 'string') {
+        if (isNaN(Number(x))) {
           x = x!.charCodeAt(0);
         }
-        if (typeof y === 'string') {
+        if (isNaN(Number(y))) {
           y = y!.charCodeAt(0);
         }
         if (sortType === 'asc') {
