@@ -329,3 +329,7 @@ input[type=number] { -moz-appearance:textfield; }
     justify-content: center;
     
 }
+
+.rs-table-row .rs-table-row-expanded{
+    overflow-y: scroll !important;
+}
