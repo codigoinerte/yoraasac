@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ContainerInner, FormControls, ModalNotaHeladeroRegister, SearchUser } from '../../../components'
 import { FormNotaHeladeroValues, ProductosPublicados, breadcrumb as bread } from '../../../interfaces';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
-import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
+import { useConfiguration, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip'
 import { useDispatch } from 'react-redux';
@@ -80,6 +80,8 @@ export const NotaHeladeroDetalle = () => {
         isReadOnlyVendido : false,
         isReadOnlyImporte : false,
     })
+
+    const { configuration, loadConfiguration } = useConfiguration();
 
     const { saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
 
@@ -179,8 +181,8 @@ export const NotaHeladeroDetalle = () => {
                setState(heladero.estado);
             }
 
-            
             setValue("subtotal", 0);
+            setValue('cargo_baterias', heladero.cargo_baterias ?? configuration!.cargo_baterias);
             setValue("deuda_anterior", heladero.deuda_anterior ?? 0);
             setValue("ahorro", heladero.ahorro);
             setValue("pago", heladero.pago);
@@ -260,7 +262,8 @@ export const NotaHeladeroDetalle = () => {
                 
                 }))
         ]);            
-                    
+          
+        setValue('cargo_baterias', configuration!.cargo_baterias)
         setValue('estado', 2);
         setValue('user_id', userId);
         setisNewRegister(true);
@@ -279,9 +282,10 @@ export const NotaHeladeroDetalle = () => {
 
         refId.current = id;
 
+        await loadConfiguration();
+
         await listNotaHeladeroEstado();
-    
-        
+            
         //si no hay id principal
         if(refId.current == 0)
         {
@@ -344,6 +348,7 @@ export const NotaHeladeroDetalle = () => {
             let deuda_anterior = parseFloat((heladero.deuda_anterior??0).toString());
             let subtotal = monto+deuda_anterior;
 
+            setValue('cargo_baterias', ((heladero.cargo_baterias && heladero.cargo_baterias!=0) ? heladero.cargo_baterias : configuration!.cargo_baterias))
             setValue(`monto`, monto);
             setValue(`deuda_anterior`, deuda_anterior);
             setValue(`subtotal`, subtotal);
@@ -438,7 +443,9 @@ export const NotaHeladeroDetalle = () => {
             const pago = parseFloat((getValues('pago') && !isNaN(getValues('pago'))?getValues('pago'):0).toString());
             const deuda_anterior = parseFloat((getValues('deuda_anterior') && !isNaN(getValues('deuda_anterior'))? getValues('deuda_anterior') : 0).toString());
             const ahorro = parseFloat((getValues('ahorro')??0).toString());
+            const cargo_baterias = configuration!.cargo_baterias ?? 0;
             let subtotal = 0;
+            
             fields.forEach((item, index) => {
 
                 const devolucion_today_saved = (active) ? ( active.detalle.find((item) => item.codigo == getValues(`productos.${index}.codigo`))!.devolucion_today ?? 0) : 0;
@@ -484,10 +491,10 @@ export const NotaHeladeroDetalle = () => {
             
             setValue(`monto`, parseFloat(subtotal.toFixed(2)));
             setValue(`deuda_anterior`, deuda_anterior);
-            setValue(`subtotal`, parseFloat((subtotal+deuda_anterior).toFixed(2)));
+            setValue(`subtotal`, parseFloat((subtotal+deuda_anterior+cargo_baterias).toFixed(2)));
             setValue(`pago`, pago);
             setValue(`ahorro`, ahorro);
-            setValue(`debe`, parseFloat(((subtotal+deuda_anterior)-pago).toFixed(2)));
+            setValue(`debe`, parseFloat(((subtotal+deuda_anterior+cargo_baterias)-pago).toFixed(2)));
             return;
         }
 
@@ -519,9 +526,10 @@ export const NotaHeladeroDetalle = () => {
     // region acciones
 
     const onChangePago = () => {
+        const cargo_baterias =getValues("cargo_baterias");
         const monto = parseFloat((getValues('monto') ?? 0).toString());
         const deuda_anterior = parseFloat((getValues('deuda_anterior') ?? 0).toString());
-        const subtotal = monto+deuda_anterior;
+        const subtotal = monto+deuda_anterior+cargo_baterias;
 
         const ahorro = 0;
         let pago:any = getValues('pago')??0;
@@ -808,6 +816,12 @@ export const NotaHeladeroDetalle = () => {
                                             (state == 1 && active?.fecha_apertura && active.fecha_guardado) &&
                                             (
                                                 <>
+
+                                                    <tr>
+                                                        <td colSpan={3}>&nbsp;</td>
+                                                        <td align='center'>Cargo por baterias</td>
+                                                        <td><input type="number" {...register('cargo_baterias')} className='form-control' readOnly /></td>
+                                                    </tr>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
                                                         <td align='center'>Vendido</td>
@@ -819,14 +833,14 @@ export const NotaHeladeroDetalle = () => {
                                                         <td><input type="number" {...register('deuda_anterior', {
                                                             min:0,
                                                             onChange: (event) => {  
-                                                                
+                                                                let cargo_baterias = getValues('cargo_baterias');
                                                                 let deuda_anterior = parseFloat((getValues("deuda_anterior") ?? 0).toString());
                                                                 let value = isNaN(deuda_anterior) ? 0 : deuda_anterior;
                                                                     //value = value == '' ? 0 : value;
                                                                     value = parseFloat((value).toString());              
                                                                     
                                                                 const monto = parseFloat((getValues('monto') ?? 0).toString());
-                                                                const subtotal = monto+value;
+                                                                const subtotal = monto+value+cargo_baterias;
                                                                 
                                                                 setValue("deuda_anterior", value);
                                                                 setValue("subtotal", subtotal);
