@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { ContainerInner, FormControls } from '../../../components'
 import { BuscarProducto, FormStockHeladoValues, Breadcrumb as bread } from '../../../interfaces';
@@ -13,6 +13,8 @@ const breadcrumb:bread[] = [
   { id:2, titulo: 'Stock helados', enlace: '/stock/helados' },
   { id:3, titulo: 'Stock helados detalle', enlace: '' }
 ];
+
+type idorigin = string | 0;
 
 export const StockHeladosDetalle = () => {
 
@@ -32,7 +34,7 @@ export const StockHeladosDetalle = () => {
             loadTipoDocumento,
             loadBuscarProducto,} = useHelpers();
 
-    const { register, handleSubmit, setValue, control } = useForm<FormStockHeladoValues>({
+    const { register, handleSubmit, setValue, getValues, control } = useForm<FormStockHeladoValues>({
         defaultValues:{
             codigo_movimiento:'',
             fecha_movimiento:'',            
@@ -42,7 +44,9 @@ export const StockHeladosDetalle = () => {
 
     
 
-    const { id = 0 } = useParams();   
+    const { id: idOrigin = 0 } = useParams();   
+
+    const [id, setId] = useState<idorigin>(idOrigin);
 
     const { saveStockHelado, updateStockHelado, getStockHelado } = useStockHeladosStore();
 
@@ -78,12 +82,35 @@ export const StockHeladosDetalle = () => {
                                                         name: "detalle"
                                                     });
 
-    const onSubmit: SubmitHandler<FormStockHeladoValues> = (data) => {
+                        
+
+    const onSubmit: SubmitHandler<FormStockHeladoValues> = async (data) => {
         
         if(id == 0){
-            saveStockHelado({...data});
+            const response = await saveStockHelado({...data});
+            if(response.id){
+                window.history.pushState(null, '', `/stock/helados/${response.id}`);
+                setId(response.id);
+
+                if(response.detalle){
+                    setValue("detalle", null);
+
+                    let i = 0;
+                    for(let i of response.detalle){
+                        setValue(`detalle.${i}.caja`, i.caja);
+                        setValue(`detalle.${i}.caja_cantidad`, i.caja_cantidad);
+                        setValue(`detalle.${i}.cantidad`, i.cantidad);
+                        setValue(`detalle.${i}.id`, i.id);
+                        setValue(`detalle.${i}.codigo`, i.codigo);
+                        setValue(`detalle.${i}.producto`, i.producto);
+
+                        i++;
+                    }
+                    console.log(i);
+                }
+            }
         }else{
-            updateStockHelado({...data});
+            await updateStockHelado({...data});
         }
     }
     
@@ -103,6 +130,8 @@ export const StockHeladosDetalle = () => {
             append({ 
                 codigo: selectProducto?.codigo,
                 producto: selectProducto?.nombre,
+                caja_cantidad: selectProducto!.cantidad_caja,
+                caja: 0,
                 cantidad: 0,
              });
 
@@ -234,9 +263,27 @@ export const StockHeladosDetalle = () => {
                                                 <td data-label="Codigo">{item.codigo}</td> 
                                                 <td data-label="Producto">{item.producto}</td>
                                                 <td data-label="Cantidad" className='d-flex'>
-                                                        <input className='form-control'
-                                                            {...register(`detalle.${index}.cantidad`, { required: true })}
-                                                        />
+
+                                                        <div className="input-group mb-3">
+                                                            <span className="input-group-text" id="basic-addon1">Cajas</span>
+                                                            <input type='text' {...register(`detalle.${index}.caja`, { 
+                                                                required: true,
+                                                                onChange : () => {
+                                                                    const cajas = getValues(`detalle.${index}.caja`);
+                                                                    const cajas_cantidad = getValues(`detalle.${index}.caja_cantidad`);
+
+                                                                    const cantidad = cajas*cajas_cantidad;
+
+                                                                    setValue(`detalle.${index}.cantidad` ,cantidad)
+                                                                }
+                                                            })}  className='form-control' tabIndex={1}  />
+                                                            
+                                                        </div>
+
+                                                        <input type='hidden' {...register(`detalle.${index}.caja_cantidad`, { required: true })} />
+                                                        <input type='hidden' {...register(`detalle.${index}.cantidad`, { required: true })}/>
+                                                        
+                                                        <input type='hidden' {...register(`detalle.${index}.id`)}/>
                                                     </td>
                                                 <td data-label="Acciones">
                                                         <button type="button" className='btn btn-danger' onClick={() =>  remove(index)}>
