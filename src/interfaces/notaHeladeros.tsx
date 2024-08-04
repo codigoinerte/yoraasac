@@ -17,6 +17,7 @@ export interface NotaHeladero{
     pago:                    number;
     debe:                    number;
     deuda_anterior?:         number;
+    cargo_baterias:          number;
     ahorro:                  number;
     estado?:                 any;
     cucharas?:               number;
