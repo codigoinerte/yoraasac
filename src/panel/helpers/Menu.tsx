@@ -65,16 +65,6 @@ export const MenuPersonas:MenuInterface[] = [
  
 export const MenuStock:MenuInterface[] = [   
     {
-       "nombre":"Stock restante",
-       "alias":"/stock/stock-restante",
-       "icono":"bi bi-app"
-    },
-    {
-       "nombre":"Historial Movimientos (Helados)",
-       "alias":"/stock/historial-helados",
-       "icono":"bi bi-app"
-    },
-    {
        "nombre":"Helados",
        "alias":"/stock/helados",
        "icono":"bi bi-app"
@@ -100,6 +90,16 @@ export const MenuStock:MenuInterface[] = [
    {
       "nombre":"Reporte Heladero asistencia",
       "alias":"/reportes/heladeros-asistencia",
+      "icono":"bi bi-app"
+   },
+   {
+      "nombre":"Stock restante",
+      "alias":"/reportes/stock-restante",
+      "icono":"bi bi-app"
+   },
+   {
+      "nombre":"Historial Movimientos (Helados)",
+      "alias":"/reportes/historial-helados",
       "icono":"bi bi-app"
    },
 ];

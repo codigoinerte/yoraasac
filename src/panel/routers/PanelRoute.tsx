@@ -119,18 +119,6 @@ export const PanelRoute = () => {
           <Route path="/stock/*" element={<Routes>
 
             <Route path="/" element={<Stock />} />
-
-            {/* Stock helados */}
-            <Route path="/historial-helados/*" element={<Routes>
-
-              <Route path="/" element={<StockHistorialHelados />} />                          
-            </Routes>} />
-            
-            {/* Stock restante */}
-            <Route path="/stock-restante/*" element={<Routes>
-
-              <Route path="/" element={<StockRestante />} />                          
-            </Routes>} />
             
             {/* Stock helados */}
             <Route path="/helados/*" element={<Routes>
@@ -197,6 +185,16 @@ export const PanelRoute = () => {
             <Route path='/nota-heladeros' element={<ReporteNotaHeladero />} />
             <Route path='/facturas' element={<ReporteFacturas />} />
             <Route path='/boletas' element={<ReporteBoletas />} />
+
+            {/* Stock helados */}
+            <Route path="/historial-helados/*" element={<Routes>
+              <Route path="/" element={<StockHistorialHelados />} />
+            </Routes>} />
+
+            {/* Stock restante */}
+            <Route path="/stock-restante/*" element={<Routes>
+              <Route path="/" element={<StockRestante />} />
+            </Routes>} />
               
             
             <Route path="*" element={<Reportes />} />   
