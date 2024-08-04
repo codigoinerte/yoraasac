@@ -28,6 +28,7 @@ export const ConfiguracionPrincipal = () => {
            setValue('razon_comercial', response.razon_comercial);
            setValue('pagina_web', response.pagina_web);
            setValue('igv', response.igv);
+           setValue('cargo_baterias', response.cargo_baterias);
            setValue('email_empresa', response.email_empresa);
            setValue('logo', response.logo);
            setValue('contactos', response.contactos.map((e:ContactoConfig)=>({
@@ -272,6 +273,26 @@ export const ConfiguracionPrincipal = () => {
                                             ))
                                         }
                                     </select>
+                                </div>
+                            </div>                           
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className="card mt-3">
+                    <div className="card-header">
+                        Extras
+                    </div>
+                    <div className="card-body"> 
+
+                        <div className="row">
+
+                            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div className="mb-3">
+                                    <label htmlFor="precio_venta" className="form-label">Cargo fijos por baterias</label>
+                                    <input type="number" {...register('cargo_baterias', { required:true })} className='form-control' />
                                 </div>
                             </div>                           
 
