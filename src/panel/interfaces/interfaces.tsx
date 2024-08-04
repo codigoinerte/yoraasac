@@ -236,6 +236,8 @@ export interface DetalleStockHelado {
     id?:               number;
     codigo?:           string;
     producto?:         string;
+    caja_cantidad:      number;
+    caja:               number;
     stock_helados_id?: number;
     cantidad?:         number;
     created_at?:       string;
@@ -293,6 +295,7 @@ export interface FormNotaHeladeroValues {
     pago:               number;
     debe:               number;
     deuda_anterior:     number;
+    cargo_baterias:     number;
     subtotal:           number;
     ahorro:             number;
     estado:             number;
@@ -663,6 +666,7 @@ export interface BuscarProducto {
     nombre:       string;
     orden:        number;
     stock_alerta: number;
+    cantidad_caja:number;
     precio_venta: string;
     descuento:    string;
     destacado:    number;
@@ -880,6 +884,7 @@ export interface formConfiguracion {
     email_empresa   : string;
     celular         : string;
     igv             : number;
+    cargo_baterias  : number;
     logo            : string;
     logo_field?     : FileList;
     contactos       : ContactoConfig[];
@@ -904,6 +909,7 @@ export interface Configuration {
     email_empresa:   string;
     celular:         string;
     igv:             number;
+    cargo_baterias:  number;
     contactos:       ContactoConfig[];
     igvs:            IgvConfig[];
     logo?:           string;
