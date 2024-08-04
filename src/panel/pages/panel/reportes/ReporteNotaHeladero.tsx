@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { CSVLink } from "react-csv";
 import moment from 'moment';
+import { CurrencyConvert } from '../../../helpers';
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Reportes', enlace: '/reportes' },
@@ -19,7 +20,7 @@ export const ReporteNotaHeladero = () => {
         "Nombre",
         "Vendido",
         "Deuda Pagada",
-        "Total a pagar",
+        "Totales",
         "Pago",
         "Debe",
         "Ahorro",
@@ -49,12 +50,12 @@ export const ReporteNotaHeladero = () => {
             campos: [
                 (item.heladero_documento??'').toString(),
                 (item.heladero_nombre??'').toString(),
-                (item.vendido??'').toString(),
-                (item.deuda_pagada??'').toString(),
-                (item.total_pagar??'').toString(),
-                (item.pago??'').toString(),
-                (item.debe??'').toString(),
-                (item.ahorro??'').toString(),
+                (CurrencyConvert(item.vendido??'', true)).toString(),
+                (CurrencyConvert(item.deuda_pagada??'', true)).toString(),
+                (CurrencyConvert(item.total_pagar??'', true)).toString(),
+                (CurrencyConvert(item.pago??'', true)).toString(),
+                (CurrencyConvert(item.debe??'', true)).toString(),
+                (CurrencyConvert(item.ahorro??'', true)).toString(),
                 (item.dias_asistidos??'').toString(),
                 (item.porcentaje_asistencia??'').toString()
             ]
@@ -66,13 +67,13 @@ export const ReporteNotaHeladero = () => {
             "documento": (item.heladero_documento??'').toString(),
             "nombre": (item.heladero_nombre??'').toString(),
             
-            "vendido": (item.vendido??'').toString(),
-            "deuda pagada": (item.deuda_pagada??'').toString(),
-            "total pagar": (item.total_pagar??'').toString(),
+            "vendido": (CurrencyConvert(item.vendido??'', true)).toString(),
+            "deuda pagada": (CurrencyConvert(item.deuda_pagada??'', true)).toString(),
+            "totales": (CurrencyConvert(item.total_pagar??'', true)).toString(),
 
-            "pago": (item.pago??'').toString(),
-            "debe": (item.debe??'').toString(),
-            "ahorro": (item.ahorro??'').toString(),
+            "pago": (CurrencyConvert(item.pago??'', true)).toString(),
+            "debe": (CurrencyConvert(item.debe??'', true)).toString(),
+            "ahorro": (CurrencyConvert(item.ahorro??'', true)).toString(),
 
             'dias asistidos': (item.dias_asistidos??'').toString(),
             'porcentaje de asistencia': (item.porcentaje_asistencia??'').toString()
