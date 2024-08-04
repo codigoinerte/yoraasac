@@ -76,6 +76,8 @@ export const useStockHeladosStore = () => {
             
             dispatch(onStatus(false));
 
+            return result;
+
         } catch (error) {
             console.log(error);
         }
@@ -95,6 +97,8 @@ export const useStockHeladosStore = () => {
                 ...result                
             }));
             dispatch(onStatus(false));
+
+            return result;
 
         } catch (error) {
             console.log(error);
