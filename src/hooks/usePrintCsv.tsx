@@ -41,7 +41,7 @@ export const usePrintCsv = () => {
         let csvContent = "data:text/csv;charset=utf-8,"+titles;
         let dataClean = convertToCSV(data);
             csvContent+= dataClean;
-            console.log(dataClean);
+        // console.log(dataClean);
         // dataClean.forEach((rowArray) => {
             
         //     row = row.join(",");
