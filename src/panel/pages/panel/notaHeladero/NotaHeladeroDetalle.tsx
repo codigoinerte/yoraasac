@@ -142,7 +142,14 @@ export const NotaHeladeroDetalle = () => {
         }
     }
 
-
+    const setCargoBaterias = async () => {
+        if(!configuration){
+            const data = await loadConfiguration();           
+            setValue('cargo_baterias', data.cargo_baterias)
+        }else{
+            setValue('cargo_baterias', configuration.cargo_baterias)
+        }
+    }
 
     // region Buscar Nota por Heladero
     const buscarUsuarioReserva = async (user:any)=> {
@@ -181,8 +188,9 @@ export const NotaHeladeroDetalle = () => {
                setState(heladero.estado);
             }
 
+            await setCargoBaterias();
+
             setValue("subtotal", 0);
-            setValue('cargo_baterias', heladero.cargo_baterias ?? configuration!.cargo_baterias);
             setValue("deuda_anterior", heladero.deuda_anterior ?? 0);
             setValue("ahorro", heladero.ahorro);
             setValue("pago", heladero.pago);
@@ -259,11 +267,12 @@ export const NotaHeladeroDetalle = () => {
                 created_at : item.created_at,
                 updated_at : item.updated_at,
                 is_litro: item.is_litro,
-                
+                stock_alert_input: item.stock_alert_input
                 }))
         ]);            
           
-        setValue('cargo_baterias', configuration!.cargo_baterias)
+
+        await setCargoBaterias();
         setValue('estado', 2);
         setValue('user_id', userId);
         setisNewRegister(true);
@@ -747,8 +756,8 @@ export const NotaHeladeroDetalle = () => {
                                                                 <small>{textUnid}</small>
                                                             </span>
                                                             <input type="number" 
-                                                                    className='form-control' 
-                                                                    readOnly={isReadOnlyInputs.isReadOnlyPedido}
+                                                                    className={`form-control ${getValues(`productos.${index}.stock_alert_input`) == 2 ? 'bg-warning' : ''}`}
+                                                                    readOnly={isReadOnlyInputs.isReadOnlyPedido || getValues(`productos.${index}.stock_alert_input`) == 1}
                                                                     {...register(`productos.${index}.pedido`,{
                                                                         pattern: /^\d+$/i,
                                                                         onChange: (e) => {
