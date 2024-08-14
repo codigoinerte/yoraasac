@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
-import { toastMessage } from '../helpers';
+import { toastMessage, uploadImage } from '../helpers';
 import { IRootState } from '../interfaces';
 import { FormBuscarStockHeladoValues, FormStockHeladoValues } from '../panel/interfaces';
 import { onStatus, onStockHeladoList, onSetStockHeladoActive, onStockHeladoDelete, onStockHeladoAddMessage, onStockHeladoClearMessage } from '../store'
@@ -61,8 +61,16 @@ export const useStockHeladosStore = () => {
 
     const saveStockHelado = async ( postdata:FormStockHeladoValues) => {
         dispatch(onStatus(true));
-        
+
         try {
+            
+            /* subir imagen */
+            let array: (FileList | undefined)[] = [];
+            let url_frontal = postdata.image_file ?? '';
+            if(postdata.image_input && postdata.image_input.length > 0) array.push(postdata.image_input);        
+            const respuesta = await uploadImage(array);             
+            postdata.image_file = respuesta[0]??url_frontal;
+            /* subir imagen */
 
             const { data:info } = await backendApi.post(rutaEndpoint, postdata);
             const result = info.data;
@@ -87,6 +95,14 @@ export const useStockHeladosStore = () => {
         dispatch(onStatus(true));
         
         try {
+
+            /* subir imagen */
+            let array: (FileList | undefined)[] = [];
+            let url_frontal = postdata.image_file ?? '';
+            if(postdata.image_input && postdata.image_input.length > 0) array.push(postdata.image_input);        
+            const respuesta = await uploadImage(array);             
+            postdata.image_file = respuesta[0]??url_frontal;
+            /* subir imagen */
 
             const { data:info } = await backendApi.put(`${rutaEndpoint}/${active!.id}`, postdata);
             const result = info.data;
@@ -154,7 +170,25 @@ export const useStockHeladosStore = () => {
             // console.log(error);
             return false;
         }
-    }    
+    }
+    
+    const deleteImagenStockHelado = async (id:number, imagen:string) => {
+
+        try {
+            const { data:info } = await backendApi.post(`/eliminar-foto-nota/${id}`,{ imagen });
+
+            const result = info.data;
+
+            toastMessage(info);
+            
+            dispatch(onSetStockHeladoActive(result));
+
+            dispatch(onStatus(false));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return {
         status, 
@@ -170,5 +204,6 @@ export const useStockHeladosStore = () => {
         getStockHelado,
         deleteStockHelado,
         deleteStockHeladoDetalle,
+        deleteImagenStockHelado
     }
 }
