@@ -19,6 +19,7 @@ type idorigin = string | 0;
 export const StockHeladosDetalle = () => {
 
     const [selectProducto, setSelectProducto] = useState<BuscarProducto>();
+    const [tipo, setTipo] = useState(1);
 
     const cabecera = [
         "codigo",
@@ -42,13 +43,13 @@ export const StockHeladosDetalle = () => {
         }
     });
 
-    
+    const URL_IMAGENES = import.meta.env.VITE_URL_IMAGES;
 
     const { id: idOrigin = 0 } = useParams();   
 
     const [id, setId] = useState<idorigin>(idOrigin);
 
-    const { saveStockHelado, updateStockHelado, getStockHelado } = useStockHeladosStore();
+    const { saveStockHelado, updateStockHelado, getStockHelado, deleteImagenStockHelado } = useStockHeladosStore();
 
     useEffect(() => {
       
@@ -69,8 +70,9 @@ export const StockHeladosDetalle = () => {
                 setValue('tipo_documento_id', stock?.tipo_documento_id);
                 setValue('fecha_movimiento', stock?.fecha_movimiento);
                 setValue('numero_documento', stock?.numero_documento);
+                setValue('image_file', stock?.imagen);
                 setValue('detalle', stock?.detalle);
-
+                setTipo(stock?.movimientos_id);
 
             });
         }
@@ -141,6 +143,16 @@ export const StockHeladosDetalle = () => {
         }
 
     }
+
+    const deleteImageHelado = async () => {
+
+        if(!getValues("image_file") || getValues("image_file") == undefined) return;
+
+        deleteImagenStockHelado(parseInt(id.toString()), getValues("image_file")??'');
+
+        setValue("image_file", "");
+        
+    }
     
 
   return (
@@ -162,7 +174,13 @@ export const StockHeladosDetalle = () => {
                     <div className="mb-3">
                         <label htmlFor="tipo_movimiento" className="form-label">Tipo de movimiento</label>
                         <select   className='form-control'
-                                    {...register('movimientos_id', {required: true})} >
+                                    {...register('movimientos_id', {
+                                        required: true,
+                                        onChange: (e) => {
+                                            setTipo(e.target.value);
+                                        }
+
+                                    })} >
                             <option value="">-seleccione una opcion-</option>                          
                             {
                                 listMovimiento.map(({ id, movimiento })=>(
@@ -207,6 +225,20 @@ export const StockHeladosDetalle = () => {
                     </div>            
 
                 </div>
+                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+                    <div className="input-group">
+                        <input type="file" className="form-control" placeholder="subir documento" aria-label="subir documento" {...register('image_input')} />
+                        {
+                            getValues("image_file") ?
+                            (
+                                <>
+                                    <a className="btn btn-info btn-sm" role='button' target='_blank' href={`${URL_IMAGENES}${getValues("image_file")}`}><i className="bi bi-cloud-arrow-down"></i> Descargar imagen</a>
+                                    <button className="btn btn-danger btn-sm" type="button" onClick={deleteImageHelado}><i className="bi bi-x"></i> Eliminar</button>
+                                </>
+                            ) : ''
+                        }
+                    </div>
+                </div>            
 
             </div>  
 
@@ -264,25 +296,45 @@ export const StockHeladosDetalle = () => {
                                                 <td data-label="Producto">{item.producto}</td>
                                                 <td data-label="Cantidad" className='d-flex'>
 
-                                                        <div className="input-group mb-3">
-                                                            <span className="input-group-text" id="basic-addon1">Cajas</span>
-                                                            <input type='text' {...register(`detalle.${index}.caja`, { 
-                                                                required: true,
-                                                                onChange : () => {
-                                                                    const cajas = getValues(`detalle.${index}.caja`);
-                                                                    const cajas_cantidad = getValues(`detalle.${index}.caja_cantidad`);
+                                                    {
+                                                        tipo == 1 ?
+                                                        (
+                                                            <>
+                                                                <div className="input-group mb-3">
+                                                                    <span className="input-group-text" id="basic-addon1">Cajas</span>
+                                                                    <input type='text' {...register(`detalle.${index}.caja`, { 
+                                                                        required: true,
+                                                                        onChange : () => {
+                                                                            const cajas = getValues(`detalle.${index}.caja`);
+                                                                            const cajas_cantidad = getValues(`detalle.${index}.caja_cantidad`);
 
-                                                                    const cantidad = cajas*cajas_cantidad;
+                                                                            const cantidad = cajas*cajas_cantidad;
 
-                                                                    setValue(`detalle.${index}.cantidad` ,cantidad)
-                                                                }
-                                                            })}  className='form-control' tabIndex={1}  />
-                                                            
-                                                        </div>
+                                                                            setValue(`detalle.${index}.cantidad` ,cantidad)
+                                                                        }
+                                                                    })}  className='form-control' tabIndex={1}  />
+                                                                    
+                                                                </div>
+                                                                <input type='hidden' {...register(`detalle.${index}.cantidad`, { required: true })}/>
+                                                            </>
+
+                                                        )
+                                                        :
+                                                        (
+                                                            <>
+                                                                <div className="input-group mb-3">
+                                                                    <span className="input-group-text" id="basic-addon1">Unid.</span>
+                                                                    <input type='text'
+                                                                    {...register(`detalle.${index}.cantidad`, { required: true })} 
+                                                                    className='form-control' tabIndex={1}  />
+                                                                    
+                                                                </div>
+                                                                <input type='hidden' {...register(`detalle.${index}.caja`)}/>
+                                                            </>
+                                                        )
+                                                    }
 
                                                         <input type='hidden' {...register(`detalle.${index}.caja_cantidad`, { required: true })} />
-                                                        <input type='hidden' {...register(`detalle.${index}.cantidad`, { required: true })}/>
-                                                        
                                                         <input type='hidden' {...register(`detalle.${index}.id`)}/>
                                                     </td>
                                                 <td data-label="Acciones">
