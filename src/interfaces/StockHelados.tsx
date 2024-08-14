@@ -15,6 +15,7 @@ export interface StockHelado {
     documento:         string;
     created_at:        string;
     updated_at:        string;
+    imagen?:           string;
 }
 
 
