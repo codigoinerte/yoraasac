@@ -1,6 +1,6 @@
 import { ContainerInner } from "../../../components"
 import { StockData, breadcrumb as bread } from '../../../interfaces';
-import { useStock } from '../../../../hooks';
+import { usePrintCsv, useStock } from '../../../../hooks';
 import { Table, Pagination } from 'rsuite';
 import { useEffect, useState } from 'react';
 
@@ -24,6 +24,8 @@ const TotalCell = ({ rowData, dataKey, ...props }:any) => {
 
 export const StockRestante = () => {
 
+  const fileName = `stockrestante${Math.floor(new Date().getTime() / 1000)}`;
+  const { print } = usePrintCsv();
   const { loadStockHelado } = useStock();
   const [sortColumn, setSortColumn] = useState();
   const [sortType, setSortType] = useState();
@@ -31,6 +33,19 @@ export const StockRestante = () => {
   const [stock, setStock] = useState<StockData[]>([]);
   const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
+
+  const exportToExcel = () => {
+    print(stock?.map(({ codigo, nombre, stock_alerta, cantidad_caja, entrantes, salientes, cajas_restantes, total })=> ({ 
+      "codigo": codigo ?? '',
+      "nombre": nombre ?? '',
+      "cantidad alerta": stock_alerta ?? 0,
+      "Unidades por cajas": cantidad_caja ?? 0,
+      "Entradas (Unid)": entrantes ?? 0,
+      "salidas (Unid): ": salientes ?? 0,
+      "Cajas restantes (Cajas)": cajas_restantes ?? 0,
+      "total (Unidades)": total ?? 0 
+    })), fileName);
+  }
 
   const handleChangeLimit = (dataKey:any) => {
     setPage(1);
@@ -81,11 +96,10 @@ export const StockRestante = () => {
       setStock(response.data.map((item:StockData, i:number)=>{
         
         let cantidad_cajas = item.cantidad_caja ?? 0;
-        let entrantes = item.entrantes ?? 0;
-        let salientes = item.salientes ?? 0;
+        let entrantes = item.entrantes ? parseInt((item.entrantes).toString()) : 0;
+        let salientes = item.salientes ? parseInt((item.salientes).toString()) : 0;
         let total = entrantes-salientes;
-        let cajas_restantes = total > 0 ? Math.ceil(total / cantidad_cajas) : 0;
-
+        let cajas_restantes = total > 0 ? Math.round(total / cantidad_cajas) : 0;
         return {
             ...item,
             id:i+1,
@@ -100,9 +114,11 @@ export const StockRestante = () => {
       
 
     return (
+      <>
         <ContainerInner breadcrumb={breadcrumb}>
             <>
             <div>
+              <button className="btn btn-info mb-2" type="button" onClick={exportToExcel}>Exportar</button>
               <Table 
                 height={850} 
                 data={getData()}                
@@ -114,7 +130,7 @@ export const StockRestante = () => {
                 sortType={sortType}
                 onSortColumn={handleSortColumn}
                 loading={loading}
-
+                headerHeight={70}
                 >
                 <Column width={50} align="center" resizable sortable>
                   <HeaderCell>Id</HeaderCell>
@@ -131,29 +147,30 @@ export const StockRestante = () => {
                   <Cell dataKey="nombre" />
                 </Column>
                 <Column width={90} resizable sortable>
-                  <HeaderCell>cant. alerta</HeaderCell>
+                  <HeaderCell align="center">cant. alerta<br/>(Unid.)</HeaderCell>
                   <Cell dataKey="stock_alerta" />
                 </Column>
-                <Column width={80} resizable sortable>
-                  <HeaderCell>cant. caja</HeaderCell>
+                <Column width={90} resizable sortable>
+                  <HeaderCell align="center">Unidades<br/>por cajas</HeaderCell>
                   <Cell dataKey="cantidad_caja" />
                 </Column>                
-                <Column width={80} resizable sortable>
-                  <HeaderCell>Entradas</HeaderCell>
+                <Column width={85} resizable sortable>
+                  <HeaderCell align="center">Entradas<br/>(Unid.)</HeaderCell>
                   <Cell dataKey="entrantes" />
                 </Column>
-                <Column width={80} resizable sortable>
-                  <HeaderCell>Salidas</HeaderCell>
+                <Column width={85} resizable sortable>
+                  <HeaderCell align="center">Salidas<br/>(Unid.)</HeaderCell>
                   <Cell dataKey="salientes" />
                 </Column>
-                <Column width={110} resizable sortable>
-                  <HeaderCell>Total (unid.)</HeaderCell>
-                  <TotalCell dataKey="total" />
-                </Column>
-                <Column width={110} resizable sortable>
-                  <HeaderCell>Cajas restantes</HeaderCell>
+                 <Column width={110} resizable sortable>
+                  <HeaderCell align="center">Cajas restantes<br/>(Cajas)</HeaderCell>
                   <Cell dataKey="cajas_restantes" />
                 </Column>
+                <Column width={110} resizable sortable>
+                  <HeaderCell align="center">Total<br/>(unid.)</HeaderCell>
+                  <TotalCell dataKey="total" />
+                </Column>
+               
                 
               </Table>
               <div style={{ padding: 20 }}>
@@ -178,5 +195,6 @@ export const StockRestante = () => {
     </div>
             </>
         </ContainerInner>
+      </>
     )
 }
