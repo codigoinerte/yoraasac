@@ -229,6 +229,8 @@ export interface FormStockHeladoValues {
     fecha_movimiento:  string | null;
     created_at:        string | null;
     updated_at:        string | null;
+    image_file?:       string;
+    image_input?:      FileList;
     detalle:           DetalleStockHelado[] | null;
 }
 
@@ -330,6 +332,7 @@ export interface FormNotaHeladeroDetalleValues {
     producto?:          string;
     precio_operacion?:  number;
     is_litro?:          boolean;
+    stock_alert_input?:  number;
 }
 
 
@@ -620,6 +623,7 @@ export interface ProductosPublicados {
     created_at:   string;
     updated_at:   string;
     is_litro:     boolean;
+    stock_alert_input: number;
 
     heladero_precio_venta: string;
     heladero_descuento:    string;
