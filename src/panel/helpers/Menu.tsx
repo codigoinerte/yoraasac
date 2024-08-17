@@ -78,7 +78,12 @@ export const MenuStock:MenuInterface[] = [
        "nombre":"Baterias",
        "alias":"/stock/baterias",
        "icono":"bi bi-app"
-    },    
+    },
+    {
+      "nombre":"Reajuste",
+      "alias":"/stock/reajuste",
+      "icono":"bi bi-app"
+    }  
  ];
 
  export const MenuReportes:MenuInterface[] = [
