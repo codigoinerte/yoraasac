@@ -20,6 +20,7 @@ export const StockHeladosDetalle = () => {
 
     const [selectProducto, setSelectProducto] = useState<BuscarProducto>();
     const [tipo, setTipo] = useState(1);
+    const [TipoDocumentoItem, setTipoDocumentoItem] = useState(3);
 
     const cabecera = [
         "codigo",
@@ -73,7 +74,7 @@ export const StockHeladosDetalle = () => {
                 setValue('image_file', stock?.imagen);
                 setValue('detalle', stock?.detalle);
                 setTipo(stock?.movimientos_id);
-
+                setTipoDocumentoItem(stock?.tipo_documento_id);
             });
         }
       
@@ -213,7 +214,9 @@ export const StockHeladosDetalle = () => {
                         <input    type="date" 
                                     className="form-control" 
                                     aria-describedby="fecha_movimiento" 
-                                    {...register('fecha_movimiento', { required:true })}/>
+                                    {...register('fecha_movimiento', { required:true, onChange: (e) => {
+                                        setTipoDocumentoItem(e.target.value);
+                                    } })}/>
                     </div>            
                     
                     <div className="mb-3">
@@ -297,7 +300,7 @@ export const StockHeladosDetalle = () => {
                                                 <td data-label="Cantidad" className='d-flex'>
 
                                                     {
-                                                        tipo == 1 ?
+                                                        tipo == 1 && TipoDocumentoItem == 3 ?
                                                         (
                                                             <>
                                                                 <div className="input-group mb-3">
