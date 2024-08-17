@@ -40,8 +40,9 @@ import {  Home,
           MiCuenta,
           StockHistorialHelados,
           StockRestante,
-          ReporteNotaHeladeroAsistencia
-
+          ReporteNotaHeladeroAsistencia,
+          Reajuste,
+          ReajusteDetalle,
         } from '../pages';
 
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -146,6 +147,16 @@ export const PanelRoute = () => {
               <Route path="/new" element={<StockBateriasDetalle />} />
               <Route path="/edit/:id" element={<StockBateriasDetalle />} />
               <Route path="*" element={<StockBaterias />} />   
+            </Routes>} />
+
+            {/* Reajustes */}
+            <Route path="/reajuste/*" element={<Routes>
+
+              
+              <Route path="/" element={<Reajuste />} />
+              <Route path="/new" element={<ReajusteDetalle />} />
+              <Route path="/edit/:id" element={<ReajusteDetalle />} />
+              <Route path="*" element={<Reajuste />} />   
             </Routes>} />
 
           </Routes>} />
