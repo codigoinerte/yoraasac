@@ -18,3 +18,4 @@ export * from './configuracion/index';
 export * from './micuenta';
 export * from './stockHistorialHelados';
 export * from './stockRestante';
+export * from './reajuste';
