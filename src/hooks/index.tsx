@@ -17,3 +17,4 @@ export * from './useDestacados';
 export * from './useStockHeladosHistory';
 export * from './useStock';
 export * from './usePrintCsv';
+export * from './useReajusteStore';
