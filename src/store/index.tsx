@@ -12,4 +12,5 @@ export * from './marca/marcaSlice';
 export * from './configuration/configurationSlice';
 export * from './configuration/localesSeriesSlice';
 export * from './configuration/destacadoSlice';
+export * from './reajustes/reajustesSlice';
 export * from './store';
