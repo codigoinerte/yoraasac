@@ -6,3 +6,4 @@ export * from './StockBaterias';
 export * from './StockBarquillos';
 export * from './notaHeladeros';
 export * from './facturacion';
+export * from './reajustes';
