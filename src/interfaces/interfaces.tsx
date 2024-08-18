@@ -1,5 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { authSlice, configurationSlice, destacadoSlice, localesSeriesSlice, marcaSlice, monedaSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, stockHeladosSlice } from "../store";
+import { authSlice, configurationSlice, destacadoSlice, localesSeriesSlice, marcaSlice, monedaSlice, personasSlice, stockBarquillosSlice, stockBateriasSlice, stockHeladosSlice, stockReajustesSlice } from "../store";
 import { generalSlice } from "../store/personas/generalSlice";
 import { productosSlice } from "../store/productos/productosSlice";
 import { notaHeladeroSlice } from "../store/notaHeladeros/notaHeladerosSlice";
@@ -59,6 +59,7 @@ const rootReducer = combineReducers({
     stockHelados: stockHeladosSlice.reducer,
     stockBaterias: stockBateriasSlice.reducer,
     stockBarquillos: stockBarquillosSlice.reducer,
+    reajustes: stockReajustesSlice.reducer,
     notaHeladero: notaHeladeroSlice.reducer,
     facturacion: facturacionSlice.reducer,
     moneda: monedaSlice.reducer,
