@@ -196,7 +196,11 @@ export const StockHeladosDetalle = () => {
                     <div className="mb-3">
                         <label htmlFor="tipo_documento" className="form-label">Tipo de Documento</label>
                         <select className='form-control'
-                                    {...register('tipo_documento_id')}>
+                                    {...register('tipo_documento_id', {
+                                        onChange: (e) => {
+                                            setTipoDocumentoItem(e.target.value);
+                                        }
+                                    })}>
                             <option value="">-seleccione una opcion-</option>                          
                             {
                                 listTipoDocumento.map(({id, documento})=>(
