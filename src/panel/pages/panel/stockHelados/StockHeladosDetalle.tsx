@@ -203,7 +203,9 @@ export const StockHeladosDetalle = () => {
                                     })}>
                             <option value="">-seleccione una opcion-</option>                          
                             {
-                                listTipoDocumento.map(({id, documento})=>(
+                                listTipoDocumento
+                                .filter((item)=> (item.tipo == getValues("movimientos_id") || item.tipo == 0))
+                                .map(({id, documento})=>(
                                     <option value={id} key={id}>{documento}</option>
                                 ))
                             }
