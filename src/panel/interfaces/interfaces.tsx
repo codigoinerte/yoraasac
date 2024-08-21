@@ -569,6 +569,7 @@ export interface TipoDocumentoList {
 export interface TipoDocumentoItem {
     id:         number;
     documento:  string;
+    tipo?:       number;
     created_at: null;
     updated_at: null;
 }
