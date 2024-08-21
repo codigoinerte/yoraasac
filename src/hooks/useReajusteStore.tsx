@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
 import { toastMessage } from '../helpers';
-import { FormReajusteValues, IRootState, loadReajusteCallback } from '../interfaces';
+import { FormReajusteValues, IRootState, loadReajusteCallback, ReajusteData } from '../interfaces';
 import { onStatus,   onReajustesList, onReajustesAddMessage, onReajustesClearMessage, onSetReajustesActive, onReajustesDelete } from '../store'
 
 export const useReajusteStore = () => {
@@ -15,7 +15,7 @@ export const useReajusteStore = () => {
 
     const dispatch = useDispatch();
 
-    const geReajuste = async(id:number) => {
+    const geReajuste = async(id:number):Promise<ReajusteData | null> => {
         
         dispatch(onStatus(true));
 
