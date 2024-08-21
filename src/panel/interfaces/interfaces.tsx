@@ -624,7 +624,7 @@ export interface ProductosPublicados {
     updated_at:   string;
     is_litro:     boolean;
     stock_alert_input: number;
-
+    stock?: number;
     heladero_precio_venta: string;
     heladero_descuento:    string;
 }
