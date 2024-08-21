@@ -94,7 +94,9 @@ export const Reajuste = () => {
 
     warningDelete(async function(){
         
-            const result = await deleteReajuste(id);                
+            const result = await deleteReajuste(id);
+            
+            setReajuste([...reajuste.filter((item) => item.id !== id)]);
 
             if(result){
                 Swal.fire(
