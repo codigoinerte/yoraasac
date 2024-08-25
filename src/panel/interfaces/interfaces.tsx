@@ -1,4 +1,4 @@
-import { SyntheticEvent } from "react";
+import React, { Component, ReactNode, SyntheticEvent } from "react";
 import { NotaHeladero } from "../../interfaces";
 import { UseFormRegister } from "react-hook-form";
 
@@ -43,6 +43,7 @@ export interface TablalList{
     prev: Function,
     options?: Boolean,
     actions?: Boolean
+    NewComponent?: ReactNode,
 }
 export interface ReportList{
     children: React.ReactElement,
@@ -84,6 +85,7 @@ export interface ControlsInterface{
     isList?:boolean;
 
     funcNew?: Function ;
+    NewComponent?:ReactNode;
 }
 export interface ListDetail{
     cabecera: string[],
@@ -1143,4 +1145,8 @@ export interface DataHeladeroAssistencia {
     documento:             string;
     heladero_nombre:       string;
     asistio:               boolean;    
+}
+
+export interface FormImportNota{
+    file: FileList
 }
