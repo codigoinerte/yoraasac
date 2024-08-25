@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { ContainerInner, List } from '../../../components'
+import { ContainerInner, List, ModalImportNota } from '../../../components'
 import { BuscarNotasHeladeros, FormBuscarNotaHeladeroValues, breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 import { useAlert, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -18,6 +18,7 @@ export const NotaHeladero = () => {
     const buttonPrev = useRef<any>();
     const buttonNext = useRef<any>();
 
+    const [open, setOpen] = useState(false);
     const [pageActive, setPageActive] = useState<string | null>("1");
 
     const [buscar, setBuscar] = useState<BuscarNotasHeladeros>({
@@ -174,7 +175,8 @@ export const NotaHeladero = () => {
                     detalle={detalle}               
                     eliminar={eliminar}
                     next={next}
-                    prev={prev}>
+                    prev={prev}
+                    NewComponent={<button className='btn btn-warning flex-fill' onClick={()=> setOpen(e=>!e)}>Importar nota heladero</button>}>
                 <>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">
@@ -186,8 +188,8 @@ export const NotaHeladero = () => {
 
                         <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                             <div className="mb-3">
-                                <label htmlFor="documento" className="form-label">Documento</label>
-                                <input type="text" className="form-control" id="documento" aria-describedby="Buscador" placeholder='Documento'  {...register('documento')}/>
+                                <label htmlFor="documento" className="form-label">Documento de usuario</label>
+                                <input type="text" className="form-control" id="documento" aria-describedby="Buscador" placeholder='Documento de usuario'  {...register('documento')}/>
                             </div>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -218,6 +220,8 @@ export const NotaHeladero = () => {
 
                     </div>
                 </form>
+                <ModalImportNota open={open} setOpen={setOpen} setBuscar={setBuscar} />
+                
                 </>
             </List>
 
