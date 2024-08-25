@@ -17,3 +17,4 @@ export * from './RequiredField';
 export * from './ModalNotaHeladeroRegister';
 export * from './SearchUser';
 export * from './InputNotaGuardada';
+export * from './ModalImportNota';
