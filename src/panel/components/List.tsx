@@ -4,7 +4,7 @@ import { Enlace } from '../helpers';
 import { TablalList } from '../interfaces'
 import { FormControls } from './FormControls';
 
-export const List = ({page, cabecera, detalle, eliminar = function(){}, next, prev, children, category, options = true, actions = true }:TablalList) => {
+export const List = ({page, cabecera, detalle, eliminar = function(){}, next, prev, children, category, options = true, actions = true, NewComponent = undefined }:TablalList) => {
 
     
 
@@ -14,7 +14,7 @@ export const List = ({page, cabecera, detalle, eliminar = function(){}, next, pr
             options === true &&
             (
                 <>
-                    <FormControls category={category} page={page} save={()=>console.log(1)} tipo='list'/>
+                    <FormControls category={category} page={page} save={()=>console.log(1)} tipo='list' NewComponent={NewComponent}/>
             
                     <hr className='border border-1 opacity-50'/>
                 </>
