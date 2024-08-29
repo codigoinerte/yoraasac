@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ContainerInner, FormControls } from '../../../components'
 import { BuscarProducto, FormStockHeladoValues, Breadcrumb as bread } from '../../../interfaces';
 import { useHelpers, useStockHeladosStore } from '../../../../hooks';
+import moment from 'moment';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { SelectPicker } from 'rsuite';
@@ -21,6 +22,7 @@ export const StockHeladosDetalle = () => {
     const [selectProducto, setSelectProducto] = useState<BuscarProducto>();
     const [tipo, setTipo] = useState(1);
     const [TipoDocumentoItem, setTipoDocumentoItem] = useState(3);
+    const [unidades, setUnidades] = useState(1);
 
     const cabecera = [
         "codigo",
@@ -35,14 +37,17 @@ export const StockHeladosDetalle = () => {
             loadMovimientos,
             loadTipoDocumento,
             loadBuscarProducto,} = useHelpers();
-
-    const { register, handleSubmit, setValue, getValues, control } = useForm<FormStockHeladoValues>({
+    const currentDate = moment(new Date()).format("yyyy-MM-DD").toString();  
+    const { register, handleSubmit, setValue, getValues, control, formState } = useForm<FormStockHeladoValues>({
         defaultValues:{
+            unidades: 1,
             codigo_movimiento:'',
-            fecha_movimiento:'',            
+            fecha_movimiento: currentDate,            
             detalle: []
         }
     });
+
+    const { errors } = formState;
 
     const URL_IMAGENES = import.meta.env.VITE_URL_IMAGES;
 
@@ -67,6 +72,8 @@ export const StockHeladosDetalle = () => {
             getStockHelado(parseInt(id))
             .then((stock)=>{
                 
+                setUnidades(stock?.unidades);
+                setValue('unidades', stock?.unidades);
                 setValue('movimientos_id', stock?.movimientos_id);
                 setValue('tipo_documento_id', stock?.tipo_documento_id);
                 setValue('fecha_movimiento', stock?.fecha_movimiento);
@@ -88,7 +95,6 @@ export const StockHeladosDetalle = () => {
                         
 
     const onSubmit: SubmitHandler<FormStockHeladoValues> = async (data) => {
-        
         if(id == 0){
             const response = await saveStockHelado({...data});
             if(response.id){
@@ -96,24 +102,14 @@ export const StockHeladosDetalle = () => {
                 setId(response.id);
 
                 if(response.detalle){
-                    setValue("detalle", null);
-
-                    let i = 0;
-                    for(let i of response.detalle){
-                        setValue(`detalle.${i}.caja`, i.caja);
-                        setValue(`detalle.${i}.caja_cantidad`, i.caja_cantidad);
-                        setValue(`detalle.${i}.cantidad`, i.cantidad);
-                        setValue(`detalle.${i}.id`, i.id);
-                        setValue(`detalle.${i}.codigo`, i.codigo);
-                        setValue(`detalle.${i}.producto`, i.producto);
-
-                        i++;
-                    }
-                    console.log(i);
+                    setValue("detalle", response.detalle);
                 }
             }
         }else{
-            await updateStockHelado({...data});
+            const response = await updateStockHelado({...data});
+            if(response.detalle){
+                setValue("detalle", response.detalle);
+            }
         }
     }
     
@@ -170,11 +166,30 @@ export const StockHeladosDetalle = () => {
             <h4>Informaci&oacute;n</h4>
 
             <div className="row">
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                    <div className="mb-3">
+                        <label htmlFor="tipo_movimiento" className="form-label">Unidades de transferencia</label>
+                        
+                        <div className="btn-group d-block" role="group">
+                            <button type="button" className={`btn btn-primary ${unidades == 1 ? 'active' : ''}`} onClick={() => {
+                                setUnidades(1);
+                                setValue("unidades", 1);
+                            }}>
+                                Unidades { unidades == 1 && <i className="bi bi-check"></i> }
+                            </button>
+                            <button type="button" className={`btn btn-primary ${unidades == 2 ? 'active' : ''}`} onClick={() => {
+                                setUnidades(2);
+                                setValue("unidades", 2);
+                            }}>
+                                Cajas { unidades == 2 && <i className="bi bi-check"></i> }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <div className="mb-3">
                         <label htmlFor="tipo_movimiento" className="form-label">Tipo de movimiento</label>
-                        <select   className='form-control'
+                        <select className={errors.movimientos_id ? "form-control is-invalid" : "form-control"}
                                     {...register('movimientos_id', {
                                         required: true,
                                         onChange: (e) => {
@@ -192,7 +207,8 @@ export const StockHeladosDetalle = () => {
                             }
                         </select>
                     </div>
-                    
+                </div>
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <div className="mb-3">
                         <label htmlFor="tipo_documento" className="form-label">Tipo de Documento</label>
                         <select className='form-control'
@@ -211,44 +227,46 @@ export const StockHeladosDetalle = () => {
                             }
                         </select>
                     </div>
-
-                </div>
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                
+                </div>               
+            </div>
+            <div className="row">
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">                                
                     <div className="mb-3">
                         <label htmlFor="fecha_movimiento" className="form-label">Fecha del movimiento</label>
-                        <input    type="date" 
-                                    className="form-control" 
+                        <input type="date" 
+                                    className={errors.fecha_movimiento ? "form-control is-invalid" : "form-control"}
                                     aria-describedby="fecha_movimiento" 
                                     {...register('fecha_movimiento', { required:true, onChange: (e) => {
                                         setTipoDocumentoItem(e.target.value);
                                     } })}/>
-                    </div>            
-                    
+                    </div>
+                </div>
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <div className="mb-3">
                         <label htmlFor="num_documento" className="form-label">N&uacute;m de documento</label>
                         <input    type="text" 
                                     className="form-control" 
                                     aria-describedby="num_documento"
                                     {...register('numero_documento')} />
-                    </div>            
-
+                    </div>
                 </div>
-                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
-                    <div className="input-group">
-                        <input type="file" className="form-control" placeholder="subir documento" aria-label="subir documento" {...register('image_input')} />
-                        {
-                            getValues("image_file") ?
-                            (
-                                <>
-                                    <a className="btn btn-info btn-sm" role='button' target='_blank' href={`${URL_IMAGENES}${getValues("image_file")}`}><i className="bi bi-cloud-arrow-down"></i> Descargar imagen</a>
-                                    <button className="btn btn-danger btn-sm" type="button" onClick={deleteImageHelado}><i className="bi bi-x"></i> Eliminar</button>
-                                </>
-                            ) : ''
-                        }
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                    <div className="mb-3">
+                        <label htmlFor="num_documento" className="form-label">Documento adjunto</label>
+                        <div className="input-group">
+                            <input type="file" className="form-control" placeholder="subir documento" aria-label="subir documento" {...register('image_input')} />
+                            {
+                                getValues("image_file") ?
+                                (
+                                    <>
+                                        <a className="btn btn-info btn-sm" role='button' target='_blank' href={`${URL_IMAGENES}${getValues("image_file")}`}><i className="bi bi-cloud-arrow-down"></i> Descargar imagen</a>
+                                        <button className="btn btn-danger btn-sm" type="button" onClick={deleteImageHelado}><i className="bi bi-x"></i> Eliminar</button>
+                                    </>
+                                ) : ''
+                            }
+                        </div>                        
                     </div>
                 </div>            
-
             </div>  
 
             <h4>Productos o items del movimiento</h4>
@@ -306,7 +324,7 @@ export const StockHeladosDetalle = () => {
                                                 <td data-label="Cantidad" className='d-flex'>
 
                                                     {
-                                                        tipo == 1 && TipoDocumentoItem == 3 ?
+                                                        unidades == 2 ?
                                                         (
                                                             <>
                                                                 <div className="input-group mb-3">
@@ -321,7 +339,7 @@ export const StockHeladosDetalle = () => {
 
                                                                             setValue(`detalle.${index}.cantidad` ,cantidad)
                                                                         }
-                                                                    })}  className='form-control' tabIndex={1}  />
+                                                                    })}  className={errors.detalle ? "form-control is-invalid" : "form-control"} tabIndex={1}  />
                                                                     
                                                                 </div>
                                                                 <input type='hidden' {...register(`detalle.${index}.cantidad`, { required: true })}/>

@@ -8,6 +8,7 @@ export interface StockHelados {
 
 export interface StockHelado {
     id:                number;
+    unidades:          number;
     codigo_movimiento: string;
     numero_documento:  string;
     fecha_movimiento:  string;

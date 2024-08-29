@@ -224,6 +224,7 @@ export type FormBuscarStockHeladoValues = {
 
 export interface FormStockHeladoValues {
     id:                number | null;
+    unidades:          number | null;
     codigo_movimiento: string | null;
     movimientos_id:    number | null;
     tipo_documento_id: number | null;
