@@ -578,7 +578,9 @@ export const NotaHeladeroDetalle = () => {
                      
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
-                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()} isNew={true} funcNew={resetNotaHeladero}/>
+                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()} isNew={true} funcNew={()=>{
+                         window.location.href = '/nota-heladero/new';
+                    }}/>
 
                     <hr className='border border-1 opacity-50'/>
 
