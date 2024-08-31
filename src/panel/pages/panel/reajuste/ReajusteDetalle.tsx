@@ -27,13 +27,15 @@ export const ReajusteDetalle = () => {
 
   const { loadProductosDisponibles } = useHelpers();
 
+  const currentDate = moment(new Date()).format("yyyy-MM-DD").toString(); 
+
   const { register, handleSubmit, formState, setValue, getValues, control, reset } = useForm<FormReajusteValues>({
       defaultValues:{
           codigo: null,
           codigo_ingreso: null,
           codigo_salida: null,
           user_id: 1,
-          fecha_reajuste: new Date(),
+          fecha_reajuste: currentDate,
           detalle: []
       }
   });
