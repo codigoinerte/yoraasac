@@ -33,7 +33,7 @@ export interface ReajusteData {
     fecha_reajuste: Date | string;
     created_at:     Date;
     updated_at:     Date;
-    detalle:        Detalle[];
+    detalle:        DetalleReajuste[];
 }
 
 export interface FormReajusteValues extends ReajusteData {}
@@ -42,7 +42,7 @@ export interface FormReajustesValues {
     buscar:         string;
 }
 
-export interface Detalle {
+export interface DetalleReajuste {
     id:               number;
     producto:         string;
     stock:            number;
