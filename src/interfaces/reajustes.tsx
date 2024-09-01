@@ -6,9 +6,9 @@ export interface Reajuste {
     id:             number;
     codigo:         string;
     codigo_ingreso: string;
-    codigo_salida:  null;
+    codigo_salida:  string;
     user_id:        number;
-    fecha_reajuste: Date;
+    fecha_reajuste: Date | string;
     created_at:     Date;
     updated_at:     Date;
 }
@@ -26,9 +26,9 @@ export interface ReajusteDetail {
 
 export interface ReajusteData {
     id:             number;
-    codigo:         string | null;
-    codigo_ingreso: string | null;
-    codigo_salida:  string | null;
+    codigo:         string;
+    codigo_ingreso: string;
+    codigo_salida:  string;
     user_id:        number;
     fecha_reajuste: Date | string;
     created_at:     Date;
