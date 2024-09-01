@@ -65,3 +65,54 @@ export interface intialStateNotaHeladero {
     errorMessage: string | null | undefined;
 }
 
+export interface NotaIncomplete {
+    data: DataNoteIncomplete[];
+}
+
+export interface DataNoteIncomplete {
+    id:                 number;
+    parent_id:          number;
+    user_id:            number;
+    moneda_id:          number;
+    id_sucursal:        number;
+    monto:              string;
+    pago:               string;
+    debe:               string;
+    ahorro:             string;
+    estado:             number;
+    cucharas:           number;
+    conos:              number;
+    placas_entregas:    number;
+    placas_devueltas:   number;
+    fecha_guardado:     null;
+    fecha_apertura:     null;
+    fecha_cierre:       null;
+    id_usuario:         number;
+    created_at:         Date;
+    updated_at:         Date;
+    cucharas_devueltas: number;
+    conos_devueltas:    number;
+    codigo:             string;
+    deuda_anterior:     number;
+    cargo_baterias:     number;
+    detalle:            Detalle[];
+}
+
+export interface Detalle {
+    id:                    number;
+    devolucion:            number;
+    pedido:                number;
+    vendido:               number;
+    importe:               string;
+    nota_heladeros_id:     number;
+    created_at:            Date;
+    updated_at:            Date;
+    codigo:                string;
+    producto:              string;
+    heladero_precio_venta: string;
+    heladero_descuento:    string;
+    is_litro:              number;
+    devolucion_today:      null;
+    stock_alert_input:     string;
+    cantidad_caja:         number;
+}

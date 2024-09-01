@@ -247,6 +247,9 @@ export interface DetalleStockHelado {
     cantidad?:         number;
     created_at?:       string;
     updated_at?:       string;
+    min_cantidad?:      number;
+    id_importado?:      number;
+    is_litro?:      number;
 }
 /***************************************** */
 export type FormBuscarStockBateriaValues = {

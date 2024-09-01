@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { ContainerInner, FormControls } from '../../../components'
+import { ContainerInner, FormControls, SearchNota } from '../../../components'
 import { BuscarProducto, FormStockHeladoValues, Breadcrumb as bread } from '../../../interfaces';
 import { useHelpers, useStockHeladosStore } from '../../../../hooks';
 import moment from 'moment';
@@ -244,10 +244,50 @@ export const StockHeladosDetalle = () => {
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <div className="mb-3">
                         <label htmlFor="num_documento" className="form-label">N&uacute;m de documento</label>
-                        <input    type="text" 
-                                    className="form-control" 
-                                    aria-describedby="num_documento"
-                                    {...register('numero_documento')} />
+                        {
+                            getValues("tipo_documento_id") == 5 ?
+
+                            (
+                                <SearchNota 
+                                    control={control}
+                                    className={`form-control p-0`}
+                                    required={true}                                     
+                                    setLoadFind={(nota)=> {
+                                        const productos = nota.detalle ?? [];
+                                        setValue("numero_documento", nota.codigo);
+                                        setValue("detalle", []);
+
+                                        if(productos.length > 0){
+                                            productos.forEach((producto)=>{
+                                                if(producto.devolucion > 0){
+                                        
+                                                    append({ 
+                                                        codigo: producto.codigo,
+                                                        producto: producto.producto,
+                                                        caja_cantidad: producto.cantidad_caja,
+                                                        caja: 0,
+                                                        cantidad: 0,
+                                                        min_cantidad: producto.devolucion,
+                                                        id_importado: producto.id,
+                                                        is_litro: producto.is_litro
+                                                     });
+                                        
+                                                }
+
+                                            });
+                                        }
+
+                                    }}
+                                />
+                            )
+                            :
+                            (
+                                <input  type="text" 
+                                        className="form-control" 
+                                        aria-describedby="num_documento"
+                                        {...register('numero_documento')} />
+                            )
+                        }
                     </div>
                 </div>
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
@@ -352,7 +392,25 @@ export const StockHeladosDetalle = () => {
                                                                 <div className="input-group mb-3">
                                                                     <span className="input-group-text" id="basic-addon1">Unid.</span>
                                                                     <input type='text'
-                                                                    {...register(`detalle.${index}.cantidad`, { required: true })} 
+                                                                    {...register(`detalle.${index}.cantidad`, { 
+                                                                        required: true,
+                                                                        onChange: (e) => {
+                                                                            const is_litro = getValues(`detalle.${index}.is_litro`) ?? 0;
+                                                                            const cantidad = getValues(`detalle.${index}.cantidad`) ?? 0;
+                                                                            const cantidad_max = getValues(`detalle.${index}.min_cantidad`) ?? null;
+                                                                            
+                                                                            if(cantidad_max){
+                                                                                if(is_litro == 1){
+                                                                                    setValue(`detalle.${index}.cantidad`, cantidad > 0 ? 1 : 0);
+                                                                                    return;
+                                                                                }
+
+                                                                                if(cantidad > cantidad_max){
+                                                                                    setValue(`detalle.${index}.cantidad`, cantidad_max);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                     })} 
                                                                     className='form-control' tabIndex={1}  />
                                                                     
                                                                 </div>
