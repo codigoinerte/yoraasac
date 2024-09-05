@@ -11,17 +11,23 @@ interface Props {
     className?: string | undefined,
     required?: string | ValidationRule<boolean> | undefined,
     setLoadFind?: (nota:DataNoteIncomplete) => void;
+    readOnly?: boolean;
+    documento?: any;
     //listUsuario: BuscarUsuario[],
     //loadBuscarUsuario: (buscar?: any, type?: string) => Promise<false | undefined>
 }
 
-export const SearchNota = ({control, required, className, setLoadFind}: Props) => {
+export const SearchNota = ({control, required, className, readOnly = false, documento = null, setLoadFind}: Props) => {
 
     const [data, setNotaList] = useState<DataNoteIncomplete[]>([])
 
     const loadBuscarNota = async() =>{
         try {
-            const { data } = await backendApi.get<NotaIncomplete>(`/buscar-nota-incompleta`);
+            const { data } = await backendApi.get<NotaIncomplete>(`/buscar-nota-incompleta`,{
+                params: {
+                    documento 
+                }
+            });
             setNotaList(data.data);                
         } catch (error) {
             setNotaList([]);
@@ -54,6 +60,8 @@ export const SearchNota = ({control, required, className, setLoadFind}: Props) =
                             if(setLoadFind && nota)
                                 setLoadFind(nota);
                         }}
+
+                        readOnly={readOnly}
                     />
 
             }/>
