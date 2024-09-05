@@ -180,7 +180,7 @@ export const StockHeladosDetalle = () => {
                             <button type="button" className={`btn btn-primary ${unidades == 2 ? 'active' : ''}`} onClick={() => {
                                 setUnidades(2);
                                 setValue("unidades", 2);
-                            }}>
+                            }} disabled={ TipoDocumentoItem == 5 ? true : false }>
                                 Cajas { unidades == 2 && <i className="bi bi-check"></i> }
                             </button>
                         </div>
@@ -196,7 +196,9 @@ export const StockHeladosDetalle = () => {
                                             setTipo(e.target.value);
                                         }
 
-                                    })} >
+                                    })}
+                                    disabled={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}
+                                    >
                             <option value="">-seleccione una opcion-</option>                          
                             {
                                 listMovimiento.map(({ id, movimiento })=>(
@@ -215,8 +217,13 @@ export const StockHeladosDetalle = () => {
                                     {...register('tipo_documento_id', {
                                         onChange: (e) => {
                                             setTipoDocumentoItem(e.target.value);
+                                            if(e.target.value == 5){
+                                                setUnidades(1);
+                                                setValue("unidades", 1);
+                                            }
                                         }
-                                    })}>
+                                    })}
+                                    disabled={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}>
                             <option value="">-seleccione una opcion-</option>                          
                             {
                                 listTipoDocumento
@@ -249,9 +256,11 @@ export const StockHeladosDetalle = () => {
 
                             (
                                 <SearchNota 
+                                    readOnly={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}
                                     control={control}
                                     className={`form-control p-0`}
-                                    required={true}                                     
+                                    required={true}
+                                    documento={getValues("numero_documento")}
                                     setLoadFind={(nota)=> {
                                         const productos = nota.detalle ?? [];
                                         setValue("numero_documento", nota.codigo);
@@ -312,29 +321,33 @@ export const StockHeladosDetalle = () => {
             <h4>Productos o items del movimiento</h4>
 
             <div className="row">
-                
-                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div className="input-group mb-3">
-                        <SelectPicker                        
-                            data={
-                                listBuscarProducto.map((producto)=>({
-                                    label: `${producto.codigo??''} - ${producto.nombre??''}`,
-                                    value: producto.id??''
-                                }))
-                            }
-                            style={{ width: 224 }}                        
-                            onSearch={updateData}
-                            onChange={(e)=>{
-                                setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
-                            }}
-                            placeholder='Buscar Producto'
-                            className="form-control p-0 w-auto no-width"
-                        />
-                        <button onClick={loadProducto} className="btn btn-primary" type="button"><i className="bi bi-plus"></i> Agregar</button>
-                        <Toaster />
-                    </div>
+                {
+                    (TipoDocumentoItem != 5) ?
+                    (
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div className="input-group mb-3">
+                                <SelectPicker                        
+                                    data={
+                                        listBuscarProducto.map((producto)=>({
+                                            label: `${producto.codigo??''} - ${producto.nombre??''}`,
+                                            value: producto.id??''
+                                        }))
+                                    }
+                                    style={{ width: 224 }}                        
+                                    onSearch={updateData}
+                                    onChange={(e)=>{
+                                        setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
+                                    }}
+                                    placeholder='Buscar Producto'
+                                    className="form-control p-0 w-auto no-width"
+                                />
+                                <button onClick={loadProducto} className="btn btn-primary" type="button"><i className="bi bi-plus"></i> Agregar</button>
+                                <Toaster />
+                            </div>
 
-                </div>
+                        </div>
+                    ) : ''
+                }
 
                 <div className='px-3'>
                 {
@@ -379,7 +392,10 @@ export const StockHeladosDetalle = () => {
 
                                                                             setValue(`detalle.${index}.cantidad` ,cantidad)
                                                                         }
-                                                                    })}  className={errors.detalle ? "form-control is-invalid" : "form-control"} tabIndex={1}  />
+                                                                    })}  
+                                                                    className={errors.detalle ? "form-control is-invalid" : "form-control"} 
+                                                                    tabIndex={1}
+                                                                    readOnly={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}  />
                                                                     
                                                                 </div>
                                                                 <input type='hidden' {...register(`detalle.${index}.cantidad`, { required: true })}/>
@@ -411,7 +427,10 @@ export const StockHeladosDetalle = () => {
                                                                             }
                                                                         }
                                                                      })} 
-                                                                    className='form-control' tabIndex={1}  />
+                                                                    className='form-control' 
+                                                                    tabIndex={1}
+                                                                    readOnly={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}
+                                                                    />
                                                                     
                                                                 </div>
                                                                 <input type='hidden' {...register(`detalle.${index}.caja`)}/>
@@ -423,9 +442,15 @@ export const StockHeladosDetalle = () => {
                                                         <input type='hidden' {...register(`detalle.${index}.id`)}/>
                                                     </td>
                                                 <td data-label="Acciones">
-                                                        <button type="button" className='btn btn-danger' onClick={() =>  remove(index)}>
-                                                            Delete
-                                                        </button>
+                                                    {
+                                                        TipoDocumentoItem != 5 ?
+                                                        (
+                                                            <button type="button" className='btn btn-danger' onClick={() =>  remove(index)}>
+                                                                Delete
+                                                            </button>
+
+                                                        ) : ''
+                                                    }
                                                     </td> 
 
                                             </tr>
