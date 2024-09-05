@@ -351,7 +351,7 @@ export const ProductosDetalle = () => {
                     </select>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="tipoigv" className="form-label m-0 text-dark">Es Helado de litro</label>
+                    <label htmlFor="tipoigv" className="form-label m-0 text-dark">Es helado de 5 litros</label>
                     <select id="is_litro" {...register('is_litro')} className='form-control'>
                       <option value={1} key={1}>Si</option>
                       <option value={0} key={2}>No</option>

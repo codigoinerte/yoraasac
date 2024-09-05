@@ -788,7 +788,7 @@ export const NotaHeladeroDetalle = () => {
                                                         {
                                                             item.is_litro ? (<>
                                                                 <br/>
-                                                                <span className="badge bg-dark d-inline-block">Helado de Litro</span>
+                                                                <span className="badge bg-dark d-inline-block">helado de 5 litros</span>
                                                             </>) : ''
                                                         }
                                                         <input type="hidden" 
