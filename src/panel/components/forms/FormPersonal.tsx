@@ -101,14 +101,17 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
     }, [active]);
 
     useEffect(() => {
+        if(address.iddepartamento)
         setValue('departamento', address.iddepartamento ?? 0);        
     }, [departamentos, address.iddepartamento, document.getElementById("departamento")?.querySelectorAll("option").length]);
 
     useEffect(() => {
+        if(address.idprovincia)
         setValue('provincia', address.idprovincia ?? 0);
     }, [provincias, address.idprovincia, document.getElementById("provincia")?.querySelectorAll("option").length]);
 
     useEffect(() => {
+        if(address.iddistrito)
         setValue('distrito', address.iddistrito ?? 0);
     }, [distritos, address.iddistrito, document.getElementById("distrito")?.querySelectorAll("option").length]);
     
