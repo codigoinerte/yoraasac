@@ -203,7 +203,9 @@ export const ProductosDetalle = () => {
     <ContainerInner breadcrumb={breadcrumb}>
         <>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControls page="productos" save={()=>handleSubmit(onSubmit)} />
+            <FormControls page="productos" save={()=>handleSubmit(onSubmit)} funcNew={()=>{
+              window.location.href = '/productos/new';
+            }}/>
 
             <hr className='border border-1 opacity-50'/>
 
