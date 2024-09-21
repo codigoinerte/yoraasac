@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Table, Pagination } from 'rsuite';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const breadcrumb:bread[] = [  
     { id:1, titulo: 'Productos', enlace: '' },
@@ -140,10 +140,22 @@ export const Productos = () => {
         loadProductos("1", buscar);
     }
 
+    const navigate = useNavigate();
+
     return (
         <>
         <ContainerInner breadcrumb={breadcrumb}>
             <>
+                <div className="d-flex gap-2 mb-4 flex-wrap">
+                    <button onClick={() => {
+                        window.location.href = '/productos/new';
+                    }} className="btn btn-primary btn-lg flex-fill">Nuevo</button>
+
+                    <button type='button' onClick={()=> {
+                        navigate(-1);
+                    }} className="btn btn-danger btn-lg flex-fill">Atr&aacute;s</button>
+                </div>
+                <hr className='border border-1 opacity-50'/>
                 <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="row">
                             <div className="col-xs-12">
