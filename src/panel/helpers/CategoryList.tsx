@@ -5,7 +5,7 @@ export const CategoryList = (menu: Menu, loadMenuSelecteds:Function) => {
   return (
         <li key={id}>
             <div className="form-check">
-                <input className="form-check-input" type="checkbox" onChange={(ele)=>loadMenuSelecteds(ele)} value={menu.id}/>
+                <input className="form-check-input no-readonly" type="checkbox" onChange={(ele)=>loadMenuSelecteds(ele)} value={menu.id}/>
 
                 <label className="form-check-label" htmlFor="flexCheckIndeterminate">
                     {nombre}
