@@ -74,7 +74,7 @@ export const useMarca = () => {
             
             dispatch(onSetMarcaActive(null));
 
-            
+            return info;
             dispatch(onStatus(false));
 
         } catch (error) {
