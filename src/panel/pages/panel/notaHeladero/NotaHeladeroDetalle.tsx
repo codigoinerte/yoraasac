@@ -12,6 +12,7 @@ import { useReactToPrint } from 'react-to-print';
 import NotasComponent from '../../../../prints/Notas';
 import toast, { Toaster } from 'react-hot-toast';
 import { formatDateForInput } from '../../../../helpers';
+import Swal from 'sweetalert2';
 
 const cabecera = [
     {
@@ -771,6 +772,16 @@ export const NotaHeladeroDetalle = () => {
                                                                         }
                                                                     })}
                                                                     tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
+                                                                    onFocus={(e)=> {
+                                                                        const heladero = getValues("user_id") ?? null;
+                                                                        if(!heladero){
+                                                                            Swal.fire(
+                                                                                'Alerta!',
+                                                                                'Debe completar primero el heladero.',
+                                                                                'warning'
+                                                                            );
+                                                                        }                                                                        
+                                                                    }}
                                                                     />
                                                         </div>
                                                     </td>                                                     
