@@ -12,8 +12,8 @@ export const Menu:MenuInterface[] = [
        "icono":"bi bi-box-seam"
     },
     {
-       "nombre":"Stock",
-       "alias":"/stock",
+       "nombre":"Movimientos",
+       "alias":"/movimiento",
        "icono":"bi bi-ui-checks-grid"
     },
     {
@@ -65,23 +65,23 @@ export const MenuPersonas:MenuInterface[] = [
  
 export const MenuStock:MenuInterface[] = [   
     {
-       "nombre":"Helados",
-       "alias":"/stock/helados",
+       "nombre":"Movimiento de Helados",
+       "alias":"/movimiento/helados",
        "icono":"bi bi-app"
     },
     {
-       "nombre":"Barquillos",
-       "alias":"/stock/barquillos",
+       "nombre":"Movimiento de Barquillos",
+       "alias":"/movimiento/barquillos",
        "icono":"bi bi-app"
     },
     {
-       "nombre":"Baterias",
-       "alias":"/stock/baterias",
+       "nombre":"Movimiento de Baterias",
+       "alias":"/movimiento/baterias",
        "icono":"bi bi-app"
     },
     {
-      "nombre":"Reajuste",
-      "alias":"/stock/reajuste",
+      "nombre":"Movimiento de Reajuste",
+      "alias":"/movimiento/reajuste",
       "icono":"bi bi-app"
     }  
  ];
@@ -98,7 +98,7 @@ export const MenuStock:MenuInterface[] = [
       "icono":"bi bi-app"
    },
    {
-      "nombre":"Stock restante",
+      "nombre":"Stock",
       "alias":"/reportes/stock-restante",
       "icono":"bi bi-app"
    },
