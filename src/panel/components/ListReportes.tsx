@@ -114,7 +114,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                             >
                                 {
                                     cabecera.map((data_key, i) => (
-                                    <Column key={i} flexGrow={1} sortable>
+                                    <Column key={i} flexGrow={1} sortable resizable>
                                         <HeaderCell>{data_key}</HeaderCell>
                                         <CustomCell dataKey={data_key} />
                                     </Column>
