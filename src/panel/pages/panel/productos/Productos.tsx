@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Table, Pagination } from 'rsuite';
 import { Link, useNavigate } from 'react-router-dom';
+import { Producto } from '../../../../interfaces';
 
 const breadcrumb:bread[] = [  
     { id:1, titulo: 'Productos', enlace: '' },
@@ -32,7 +33,8 @@ export const Productos = () => {
     const [loading, setLoading] = useState(false);
     const [limit, setLimit] = useState(13);
     const [page, setPage] = useState(1);
-    
+    const [pageSize, setPageSize] = useState(10);
+
     const [buscar, setBuscar] = useState<BuscarProductos>({
         codigo: null,
         producto:null,
@@ -41,8 +43,10 @@ export const Productos = () => {
     });
 
     const getData = () => {
+        let sortedData = resortmap(productos);
+
         if (sortColumn && sortType) {
-          return typeof detalle!="undefined" ? detalle.sort((a, b) => {
+            sortedData = typeof sortedData!="undefined" ? sortedData.sort((a, b) => {
             let x:any = a[sortColumn]??'';
             let y:any = b[sortColumn]??'';
             
@@ -59,7 +63,9 @@ export const Productos = () => {
             }
           }) : [];
         }
-        return detalle;
+
+        return sortedData.slice((page - 1) * limit, page * limit);
+        //return detalle;
     };
 
     const handleSortColumn = (sortColumn:any, sortType:any) => {
@@ -79,8 +85,8 @@ export const Productos = () => {
     useEffect(() => {        
         loadProductos("1", buscar);        
     }, [buscar]);
-
-    const detalle:any[] = productos.map(({ id, codigo, nombre, moneda, precio_venta, estado, created_at_spanish}) => ({
+    const resortmap = (producto:Producto[]) => {
+        return productos.map(({ id, codigo, nombre, moneda, precio_venta, estado, created_at_spanish}) => ({
             id,
             codigo:         codigo.toString(),
             nombre:         nombre.toString(),
@@ -89,12 +95,14 @@ export const Productos = () => {
             estado:         estado??''.toString(),
             created_at:     created_at_spanish.toString()
         
-    }))
-    .filter((v, i) => {
-        const start = limit * (page - 1);
-        const end = start + limit;
-        return i >= start && i < end;
-    });
+        }));
+    }
+    const detalle:any[] = resortmap(productos)
+                            .filter((v, i) => {
+                                const start = limit * (page - 1);
+                                const end = start + limit;
+                                return i >= start && i < end;
+                            });
 
     const eliminar = (id:number) => {
 
@@ -217,6 +225,7 @@ export const Productos = () => {
                         sortType={sortType}
                         onSortColumn={handleSortColumn}
                         loading={loading}
+                        
                         >
                             <Column width={100} align="center" sortable fixed>
                                 <HeaderCell>Codigo</HeaderCell>
