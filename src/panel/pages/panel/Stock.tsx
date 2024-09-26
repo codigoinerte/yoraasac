@@ -6,7 +6,7 @@ import { MenuStock } from '../../helpers/Menu';
 import { useParams } from 'react-router-dom';
 
 const breadcrumb:bread[] = [
-    { id:1, titulo: 'Stock', enlace: '' },
+    { id:1, titulo: 'Movimientos', enlace: '' },
 ];
 
 export const Stock = () => {

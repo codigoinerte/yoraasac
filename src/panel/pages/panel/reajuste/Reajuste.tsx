@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 const breadcrumb:bread[] = [
-    { id:1, titulo: 'Stock', enlace: '/stock' },    
+    { id:1, titulo: 'Movimientos', enlace: '/movimiento' },    
     { id:2, titulo: 'Reajuste', enlace: '' },
 ];
 const { Column, HeaderCell, Cell } = Table;
@@ -17,7 +17,7 @@ const Detail = ({ rowData, dataKey, eliminar, ...props }:any) => {
   return (
     <Cell {...props}>
       <div className='d-flex gap-2'>
-        <Link to={`/stock/reajuste/edit/${rowData.id}`} type="button" className="btn btn-sm btn-outline-primary"><i className="bi bi-eye"></i></Link>
+        <Link to={`/movimiento/reajuste/edit/${rowData.id}`} type="button" className="btn btn-sm btn-outline-primary"><i className="bi bi-eye"></i></Link>
         <button onClick={()=> eliminar(rowData.id)} type="button" className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i></button>
       </div>
     </Cell>
@@ -130,7 +130,7 @@ export const Reajuste = () => {
         <>
             <div className="d-flex gap-2">
               <div>
-                <button type="button" onClick={() => { window.location.href = "/stock/reajuste/new" }} className="btn btn-primary btn-lg flex-fill">Nuevo</button>
+                <button type="button" onClick={() => { window.location.href = "/movimiento/reajuste/new" }} className="btn btn-primary btn-lg flex-fill">Nuevo</button>
               </div>
               <div>
                 <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg flex-fill">Atr&aacute;s</button>

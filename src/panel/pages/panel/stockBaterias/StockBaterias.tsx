@@ -9,8 +9,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { FormBuscarStockBateriaValues } from '../../../interfaces/interfaces';
 
 const breadcrumb:bread[] = [
-  { id:1, titulo: 'Stock', enlace: '/stock' },
-  { id:2, titulo: 'Stock baterias', enlace: '' },
+  { id:1, titulo: 'Movimientos', enlace: '/movimiento' },
+  { id:2, titulo: 'Baterias', enlace: '' },
 ];
 
 export const StockBaterias = () => {
@@ -158,7 +158,7 @@ export const StockBaterias = () => {
 return (
   <ContainerInner breadcrumb={breadcrumb}>
     <List   page='baterias'
-            category='stock'
+            category='movimiento'
             cabecera={cabecera} 
             detalle={detalle}
             eliminar={eliminar}

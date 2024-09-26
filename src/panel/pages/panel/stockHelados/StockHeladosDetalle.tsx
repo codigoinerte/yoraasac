@@ -10,9 +10,9 @@ import { SelectPicker } from 'rsuite';
 import toast , { Toaster } from 'react-hot-toast';
 
 const breadcrumb:bread[] = [
-  { id:1, titulo: 'Stock', enlace: '/stock' },
-  { id:2, titulo: 'Stock helados', enlace: '/stock/helados' },
-  { id:3, titulo: 'Stock helados detalle', enlace: '' }
+  { id:1, titulo: 'Movimientos', enlace: '/movimiento' },
+  { id:2, titulo: 'Helados', enlace: '/movimiento/helados' },
+  { id:3, titulo: 'Helados detalle', enlace: '' }
 ];
 
 type idorigin = string | 0;

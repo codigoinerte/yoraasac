@@ -7,8 +7,8 @@ import { useHelpers, useReajusteStore } from '../../../../hooks';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 const breadcrumb:bread[] = [
-    { id:1, titulo: 'Stock', enlace: '/stock' },    
-    { id:2, titulo: 'Reajuste', enlace: '/stock/reajuste' },
+    { id:1, titulo: 'Movimientos', enlace: '/movimiento' },    
+    { id:2, titulo: 'Reajuste', enlace: '/movimiento/reajuste' },
     { id:3, titulo: 'Reajuste detalle', enlace: '' }
 ];
 const cabecera = [
@@ -48,7 +48,7 @@ export const ReajusteDetalle = () => {
   });
 
   const newRegister = () => {
-    window.location.href = '/stock/reajuste/new';
+    window.location.href = '/movimiento/reajuste/new';
   }
 
   const onSubmit: SubmitHandler<FormReajusteValues> = async (data) => {
@@ -57,7 +57,7 @@ export const ReajusteDetalle = () => {
       refId.current = response?.id;
 
       if(response?.id)
-        window.history.pushState(null, '', `/stock/reajuste/edit/${response.id}`);
+        window.history.pushState(null, '', `/movimiento/reajuste/edit/${response.id}`);
       if(response?.detalle)
         setValue("detalle", response.detalle);
     }else{

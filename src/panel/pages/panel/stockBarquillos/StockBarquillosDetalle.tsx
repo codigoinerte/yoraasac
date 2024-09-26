@@ -8,9 +8,9 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../interfaces';
 
 const breadcrumb:bread[] = [
-  { id:1, titulo: 'Stock', enlace: '/stock' },
-  { id:2, titulo: 'Stock barquillos', enlace: '/stock/barquillos' },
-  { id:3, titulo: 'Stock barquillos detalle', enlace: '' }
+  { id:1, titulo: 'Movimientos', enlace: '/movimiento' },
+  { id:2, titulo: 'Barquillos', enlace: '/movimiento/barquillos' },
+  { id:3, titulo: 'Barquillos detalle', enlace: '' }
 ];
 
 export const StockBarquillosDetalle = () => {
@@ -68,7 +68,7 @@ export const StockBarquillosDetalle = () => {
           
             <form onSubmit={handleSubmit(onSubmit)}>
 
-            <FormControls category="stock" save={()=>console.log(1)} page="barquillos"/>
+            <FormControls category="movimiento" save={()=>console.log(1)} page="barquillos"/>
 
             <hr className='border border-1 opacity-50'/>
 

@@ -6,9 +6,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 const breadcrumb:bread[] = [
-  { id:1, titulo: 'Stock', enlace: '/stock' },
-  { id:2, titulo: 'Stock baterias', enlace: '/stock/baterias' },
-  { id:3, titulo: 'Stock baterias detalle', enlace: '' }
+  { id:1, titulo: 'Movimientos', enlace: '/movimiento' },
+  { id:2, titulo: 'Baterias', enlace: '/movimiento/baterias' },
+  { id:3, titulo: 'Baterias detalle', enlace: '' }
 ];
 
 export const StockBateriasDetalle = () => {
@@ -66,7 +66,7 @@ export const StockBateriasDetalle = () => {
         
         <form onSubmit={handleSubmit(onSubmit)}>
         
-            <FormControls category="stock" save={()=>console.log(1)} page="baterias"/>
+            <FormControls category="movimiento" save={()=>console.log(1)} page="baterias"/>
 
             <hr className='border border-1 opacity-50'/>
 

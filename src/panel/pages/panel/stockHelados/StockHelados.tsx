@@ -8,8 +8,8 @@ import Swal from 'sweetalert2';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 const breadcrumb:bread[] = [
-  { id:1, titulo: 'Stock', enlace: '/stock' },    
-  { id:2, titulo: 'Stock helados', enlace: '' },
+  { id:1, titulo: 'Movimientos', enlace: '/movimiento' },    
+  { id:2, titulo: 'Helados', enlace: '' },
 ];
 
 export const StockHelados = () => {
@@ -153,7 +153,7 @@ const resetQuery = () => {
 return (
   <ContainerInner breadcrumb={breadcrumb}>
     <List   page='helados'
-            category='stock'
+            category='movimiento'
             cabecera={cabecera} 
             detalle={detalle}            
             eliminar={eliminar}

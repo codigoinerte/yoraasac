@@ -117,7 +117,7 @@ export const PanelRoute = () => {
           </Routes>} />
           
           {/* Stock helados */}
-          <Route path="/stock/*" element={<Routes>
+          <Route path="/movimiento/*" element={<Routes>
 
             <Route path="/" element={<Stock />} />
             
