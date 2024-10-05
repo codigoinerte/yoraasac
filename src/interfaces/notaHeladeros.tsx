@@ -20,6 +20,7 @@ export interface NotaHeladero{
     cargo_baterias:          number;
     ahorro:                  number;
     estado?:                 any;
+    idestado?:               number;
     cucharas?:               number;
     conos?:                  number;
     placas_entregas?:        number;
