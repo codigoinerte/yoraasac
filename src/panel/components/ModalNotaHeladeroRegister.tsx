@@ -63,6 +63,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                 icon : 'warning',
                 confirmButtonText : 'Cerrar modal',
                 showCancelButton : true,
+                disableConfirmMessage: true,
                 preConfirm : () => {
                     handlerOpenModal(false);
                 },
@@ -106,6 +107,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         icon : 'question',
         confirmButtonText : 'Guardar registro',
         showCancelButton : true,
+        disableConfirmMessage: true,
         preConfirm : () => {
             handleSubmit(onSubmit)();
         },
