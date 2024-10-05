@@ -407,6 +407,7 @@ export interface FormFacturacionDetalleValues {
 /***************************************** */
 export interface listaDetalle  {
     id: string,
+    avaibleDelete?: boolean;
     campos?: string[] | undefined   
 };
 
