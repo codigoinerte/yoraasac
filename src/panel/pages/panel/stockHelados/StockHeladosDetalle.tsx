@@ -16,19 +16,44 @@ const breadcrumb:bread[] = [
 ];
 
 type idorigin = string | 0;
-
+type order = 'asc' | 'desc';
+interface cabecera {
+    key: string,
+    keyDetail: string,
+    titulo: string,
+    order: order,
+    active: boolean,
+}
 export const StockHeladosDetalle = () => {
 
+    const [cabecera, setCabecera] = useState<cabecera[]>([
+        {
+            key: "col-1",
+            titulo: "codigo",
+            order: "asc",
+            keyDetail: "codigo",
+            active: false,
+        },
+        {
+            key: "col-2",
+            keyDetail: "producto",
+            titulo: "Producto",
+            order: "asc",
+            active: false,
+        },
+        {
+            key: "col-3",
+            keyDetail: "cantidad",
+            titulo: "cantidad",
+            order: "asc",
+            active: false,
+        },
+    ])
+    const [orderDirection, setOrderDirection] = useState<order>("asc");
     const [selectProducto, setSelectProducto] = useState<BuscarProducto>();
     const [tipo, setTipo] = useState(1);
     const [TipoDocumentoItem, setTipoDocumentoItem] = useState(3);
     const [unidades, setUnidades] = useState(1);
-
-    const cabecera = [
-        "codigo",
-        "Producto",
-        "cantidad"
-    ];  
   
     const { listMovimiento,
             listTipoDocumento,
@@ -150,7 +175,41 @@ export const StockHeladosDetalle = () => {
         setValue("image_file", "");
         
     }
-    
+
+    const onSortProducts = (key:string) => {
+        const detalle = getValues("detalle");
+        const objectSorter = cabecera.find((item) => item.key == key);
+
+        const keyDetail  = objectSorter!.keyDetail;
+        const orderDirection = objectSorter!.order;
+
+        if(!detalle) return;
+
+        let order = null;        
+        if (orderDirection == "asc") {
+            order = detalle.sort((a, b) => b[keyDetail]!.localeCompare(a[keyDetail]??'')) 
+        }else{
+            order =  detalle.sort((a, b) => a[keyDetail]!.localeCompare(b[keyDetail]??''))
+        }
+
+        setValue("detalle", order);
+        
+        setCabecera(cabecera.map((item)=>{
+            if(item.key == key){
+                return {
+                    ...item,
+                    order: item.order == "asc" ? "desc" : "asc",
+                    active: true
+                    
+                }
+            }else{
+                return {
+                    ...item,
+                    active: false,
+                };
+            }
+        }));
+    }
 
   return (
     <ContainerInner breadcrumb={breadcrumb}>
@@ -358,8 +417,31 @@ export const StockHeladosDetalle = () => {
                                 <thead>
                                     <tr>
                                         {
-                                            cabecera.map((titulo)=>(
-                                                <th key={titulo} scope="col">{ titulo }</th>
+                                            cabecera.map((item)=>(
+                                                <th key={item.key} scope="col">
+                                                    {
+                                                        (item.key == 'col-1' || item.key == 'col-2') ?
+                                                        (
+                                                            <button
+                                                                className={ (item.active ? 'bg-success' : '') }
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    
+                                                                    onSortProducts(item.key);                                                                                                                                       
+                                                                }}>
+                                                                { item.titulo }
+                                                                <i className={ (item.order == "asc" ? 'bi bi-arrow-up' : 'bi bi-arrow-down') }></i>
+                                                            </button>
+                                                        )                                            
+                                                        :
+                                                        (
+                                                            item.titulo
+                                                        )
+                                                        
+                                                        
+                                                    }
+                                                </th>
                                             ))
                                         }
                                             <th scope="col">Acciones</th>

@@ -238,6 +238,7 @@ export interface FormStockHeladoValues {
 }
 
 export interface DetalleStockHelado {
+    [key: string]:      any;
     id?:               number;
     codigo?:           string;
     producto?:         string;
