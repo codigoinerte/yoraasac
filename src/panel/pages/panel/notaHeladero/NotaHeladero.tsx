@@ -18,6 +18,7 @@ export const NotaHeladero = () => {
     const buttonPrev = useRef<any>();
     const buttonNext = useRef<any>();
 
+    const [detalle, setDetalle] = useState<listaDetalle[]>([]);
     const [open, setOpen] = useState(false);
     const [pageActive, setPageActive] = useState<string | null>("1");
 
@@ -55,20 +56,28 @@ export const NotaHeladero = () => {
         listNotaHeladeroEstado();        
     }, [])
     
-    const detalle:listaDetalle[] = Heladeros.map(({ id, codigo, heladero_documento,heladero_nombre, created_at, fecha_cierre, fecha_guardado, estado, fecha_apertura}) => ({
-        id: id.toString(),
-        campos: [
-            codigo??''.toString(),
-            `${heladero_documento??''.toString()}\n
-            ${heladero_nombre??''.toString()}`,
-            estado??''.toString(),
-            formatDate(created_at, false),
-            formatDate(fecha_apertura),
-            formatDate(fecha_guardado),
-            formatDate(fecha_cierre),
-        ]
-  
-    }));
+    useEffect(() => {
+      
+        const detalle:listaDetalle[] = Heladeros.map(({ id, codigo, heladero_documento,heladero_nombre, created_at, fecha_cierre, fecha_guardado, estado, fecha_apertura, idestado }) => ({
+            id: id.toString(),
+            avaibleDelete: idestado == 1 || idestado == 3 ? false : true,
+            campos: [
+                codigo??''.toString(),
+                `${heladero_documento??''.toString()}\n
+                ${heladero_nombre??''.toString()}`,
+                estado??''.toString(),
+                formatDate(created_at, false),
+                formatDate(fecha_apertura),
+                formatDate(fecha_guardado),
+                formatDate(fecha_cierre),
+            ]
+      
+        }));
+
+        setDetalle(detalle);
+        
+    }, [Heladeros])
+    
     
     const eliminar = (id:number) => {
         warningDelete(async function(){
