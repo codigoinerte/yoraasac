@@ -43,10 +43,11 @@ export const List = ({page, cabecera, detalle, eliminar = function(){}, next, pr
                         <tbody>
                             
                             {
-                                detalle.map(({ id, campos })=>{
+                                detalle.map(({ id, avaibleDelete, campos })=>{
                                     
                                     const keyrow = `fila${id}`;
                                     const enlaceDetalle = Enlace(category, page, id);
+                                    const isAvailableToDelete = typeof avaibleDelete == "undefined" || avaibleDelete == true ? true : false;                                    
                                 return (                                    
                                     
                                         <tr key={keyrow}>
@@ -68,7 +69,14 @@ export const List = ({page, cabecera, detalle, eliminar = function(){}, next, pr
                                                     <td data-label="Acciones">
                                                         <div className="acciones-buttons">
                                                             <Link to={enlaceDetalle} type="button" className="btn btn-outline-primary"><i className="bi bi-eye"></i></Link>
-                                                            <button onClick={()=> eliminar(id)} type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                                                            {
+                                                                isAvailableToDelete ? 
+                                                                (
+                                                                    <button onClick={()=> eliminar(id)} type="button" className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                                                                ): (<div className="flex-fill">&nbsp;</div>)
+                                                            }
+                                                            
+                                                            
                                                         </div>
                                                     </td>
                                                 )
