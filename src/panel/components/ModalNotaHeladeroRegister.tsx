@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {  Grid, Row, Col, Button, Drawer } from 'rsuite'
 import { useNotaHeladeroStore } from '../../hooks';
 import { SubmitHandler, UseFormGetValues, UseFormSetValue, useFieldArray, useForm } from 'react-hook-form';
@@ -16,6 +16,8 @@ interface ModalNotaHeladeroRegisterProps {
 }
 
 export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin, getValuesOrigin, updateStateHeladero }: ModalNotaHeladeroRegisterProps) => {
+
+    let closeNota = false;
 
     const {  saveNotaHeladero, updateDateOperation, active  } = useNotaHeladeroStore();
 
@@ -55,7 +57,8 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         document.body.style.padding = '0px';
     }
     
-    const onSubmit: SubmitHandler<FormNotaHeladeroValues> = (data) => {
+    const onSubmit: SubmitHandler<FormNotaHeladeroValues> = async (data) => {
+        console.log(closeNota);
         if(active?.id == null){
             alert({
                 title : 'No se encuentro el registro padre',
@@ -71,36 +74,41 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             return;
         }
 
-
-
-        updateDateOperation({
+        await updateDateOperation({
             fecha_operacion: data.fecha_operacion,
             id: active?.id ?? 0,
             estado: 3        
         });
-        saveNotaHeladero({
+        await saveNotaHeladero({
             ...data,
             productos: (data.productos).map((item) => {
                 return {
                     ...item,
+                    devolucion: (item.devolucion == 0 || !item.devolucion) && closeNota ? item.pedido : item.devolucion,
                     pedido: 0,                
                     vendido: 0,
-                    importe: 0
+                    importe: 0,
+                    pedido_anterior: item.pedido,
                 }
             }),
             parent_id: active?.id ?? 0,
             estado: 4 //se guarda con estado pendiente a reapertura del dia siguiente
-        }, true);
+        }, true, closeNota);
 
         updateStateHeladero(3);
         setValueOrigin("estado", 3);
         //("fecha_guardado", data.fecha_operacion);
         handlerOpenModal(false);
         removePaddingOnBody();
+
+        setTimeout(() => {
+            if(closeNota)
+                window.location.reload();
+        }, 500);
     }
 
     const onSave = (e:any) => {
-        
+        closeNota = false;
        alert({
         title :'Desea guardar el registro?',
         text : 'Revise bien las cantidades guardadas',
@@ -115,6 +123,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
     }
 
     const onClose = () => {
+        closeNota = false;
         alert({
             title : 'Seguro que desea salir?',
             text : 'Si cierra el modal se perderán los datos',
@@ -129,6 +138,21 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                 removePaddingOnBody();
             },
         });        
+    }
+
+    const saveForNextDay = (e:any) => {
+        closeNota = true;
+        alert({
+            title :'Desea mover el registro para el día siguiente?',
+            text : 'Al mover el registro al dia siguiente se cerrara la nota actual sin ventas registradas y el unico valor considerado sera el valor de cargo por baterias',
+            icon : 'question',
+            confirmButtonText : 'Guardar registro',
+            showCancelButton : true,
+            disableConfirmMessage: true,
+            preConfirm : () => {
+                handleSubmit(onSubmit)();
+            },
+        });
     }
 
     return (
@@ -204,6 +228,11 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                     })
 
                 }
+                <Row>
+                    <Col>
+                        <button className='btn btn-danger w-100' type='button' onClick={saveForNextDay}>Si el heladero no puede declarar ahora "Mover para otro día"</button>
+                    </Col>
+                </Row>
             </Grid>
         </form>
 

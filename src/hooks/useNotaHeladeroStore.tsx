@@ -62,12 +62,13 @@ export const useNotaHeladeroStore = () => {
         }
     }
 
-    const saveNotaHeladero = async ( postdata:FormNotaHeladeroValues, updateSaved:boolean = false ) => {
+    const saveNotaHeladero = async ( postdata:FormNotaHeladeroValues, updateSaved:boolean = false, closeNota:boolean = false ) => {
         dispatch(onStatus(true));    
         try {
             const { data:info } = await backendApi.post(rutaEndpoint, {
                 ...postdata,
-                id_sucursal: 1
+                id_sucursal: 1,
+                closeNota
             });
             const result = info.data;
             
