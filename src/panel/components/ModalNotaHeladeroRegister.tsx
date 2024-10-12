@@ -13,15 +13,20 @@ interface ModalNotaHeladeroRegisterProps {
     setValueOrigin: UseFormSetValue<FormNotaHeladeroValues>;
     getValuesOrigin: UseFormGetValues<FormNotaHeladeroValues>;
     updateStateHeladero: Dispatch<SetStateAction<number | null>>;
+    setOpenModalGuardado: Dispatch<SetStateAction<boolean>>;
+    idChildren: number;
 }
 
-export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin, getValuesOrigin, updateStateHeladero }: ModalNotaHeladeroRegisterProps) => {
+export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin, getValuesOrigin, updateStateHeladero, setOpenModalGuardado, idChildren }: ModalNotaHeladeroRegisterProps) => {
 
     let closeNota = false;
 
-    const {  saveNotaHeladero, updateDateOperation, active  } = useNotaHeladeroStore();
+    const {  saveNotaHeladero, updateDateOperation, getNotaHeladero, updateNotaHeladero, active  } = useNotaHeladeroStore();
 
-    const handleClose = () => handlerOpenModal(false);
+    const handleClose = () => {
+        handlerOpenModal(false);
+        setOpenModalGuardado(false);
+    }
 
     const { register, handleSubmit, setValue, getValues, control } = useForm<FormNotaHeladeroValues>({
         defaultValues:{
@@ -34,22 +39,54 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         name: "productos"
     });
 
+    const getNotaInfo = async () => {
+        const idChildren = getValuesOrigin("id_children") ?? 0;
+        
+        if(idChildren > 0){
+            const response = await getNotaHeladero(idChildren, false);
+
+            setValue('user_id', response?.user_id ?? 0);
+            setValue('estado', response?.estado ?? 3);
+            setValue('fecha_operacion', (moment(response?.created_at).format("YYYY-MM-DD HH:mm").toString()).replace('T', ' '));
+ 
+            setValue('productos', (response?.detalle ?? []).map((item) => {
+
+                const codigo = item.codigo ?? '';
+                const infoSavedItem = active?.detalle.find((i) => i.codigo == codigo);
+
+                const pedido = infoSavedItem?.pedido??0;
+                const devolucion = infoSavedItem?.devolucion??0;
+                const precio_operacion = infoSavedItem?.precio_operacion??0;
+                const pedido_result = infoSavedItem?.is_litro == false ? (pedido+devolucion) : ((pedido*precio_operacion)+devolucion);
+                const response =  {
+                ...item,
+                pedido: pedido_result,
+                devolucion: item.devolucion??0
+                };            
+                return response;
+            }));
+
+        }else{
+            setValue('user_id', active?.user_id ?? 0);
+            setValue('estado', active?.estado ?? 3);
+            setValue('fecha_operacion', (moment(new Date()).format("YYYY-MM-DD HH:mm").toString()).replace('T', ' '));
+            setValue('productos', (active?.detalle ?? []).map((item) => {
+                const pedido = item.pedido??0;
+                const devolucion = item.devolucion??0;
+                const precio_operacion = item.precio_operacion??0;
+                const pedido_result = item.is_litro == false ? (pedido+devolucion) : ((pedido*precio_operacion)+devolucion);
+                const response =  {
+                ...item,
+                pedido: pedido_result,
+                devolucion: 0
+                };            
+                return response;
+            }));
+        }
+    }
+
     useEffect(() => {
-        setValue('user_id', active?.user_id ?? 0);
-        setValue('estado', active?.estado ?? 3);
-        setValue('fecha_operacion', (moment(new Date()).format("YYYY-MM-DD HH:mm").toString()).replace('T', ' '));
-        setValue('productos', (active?.detalle ?? []).map((item) => {
-            const pedido = item.pedido??0;
-            const devolucion = item.devolucion??0;
-            const precio_operacion = item.precio_operacion??0;
-            const pedido_result = item.is_litro == false ? (pedido+devolucion) : ((pedido*precio_operacion)+devolucion);
-            const response =  {
-            ...item,
-            pedido: pedido_result,
-            devolucion: 0
-            };            
-            return response;
-        }));
+        getNotaInfo();        
 
     }, [active]);
 
@@ -58,7 +95,6 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
     }
     
     const onSubmit: SubmitHandler<FormNotaHeladeroValues> = async (data) => {
-        console.log(closeNota);
         if(active?.id == null){
             alert({
                 title : 'No se encuentro el registro padre',
@@ -74,12 +110,27 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             return;
         }
 
+        if(idChildren > 0)
+        {
+            // si ya existe el children se debe actualizar el contenido
+            await updateNotaHeladero({...data}, idChildren, false);
+
+            setTimeout(function(){
+                
+                window.location.reload();
+
+            }, 350);
+            
+            // si ya existe el children se debe actualizar el contenido
+            return;
+        }
+
         await updateDateOperation({
             fecha_operacion: data.fecha_operacion,
             id: active?.id ?? 0,
             estado: 3        
         });
-        await saveNotaHeladero({
+        const response = await saveNotaHeladero({
             ...data,
             productos: (data.productos).map((item) => {
                 return {
@@ -94,6 +145,9 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             parent_id: active?.id ?? 0,
             estado: 4 //se guarda con estado pendiente a reapertura del dia siguiente
         }, true, closeNota);
+        
+        if(response?.id)
+            setValueOrigin("id_children", response.id);
 
         updateStateHeladero(3);
         setValueOrigin("estado", 3);

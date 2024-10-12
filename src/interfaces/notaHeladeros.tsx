@@ -38,6 +38,8 @@ export interface NotaHeladero{
     nombre?:                 string;
     estado_nombre?:          string;
     moneda?:                 string;
+    observaciones?:          string;
+    id_children:             number;
     detalle:                 FormNotaHeladeroDetalleValues[];
 }
 

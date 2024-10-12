@@ -62,7 +62,7 @@ export const useNotaHeladeroStore = () => {
         }
     }
 
-    const saveNotaHeladero = async ( postdata:FormNotaHeladeroValues, updateSaved:boolean = false, closeNota:boolean = false ) => {
+    const saveNotaHeladero = async ( postdata:FormNotaHeladeroValues, updateSaved:boolean = false, closeNota:boolean = false ):Promise<NotaHeladero | undefined> => {
         dispatch(onStatus(true));    
         try {
             const { data:info } = await backendApi.post(rutaEndpoint, {
@@ -100,32 +100,37 @@ export const useNotaHeladeroStore = () => {
             
             dispatch(onStatus(false));
 
+            return result;
+
         } catch (error) {
             console.log(error);
         }
     }
     
-    const updateNotaHeladero = async (postdata:FormNotaHeladeroValues) => {
+    const updateNotaHeladero = async (postdata:FormNotaHeladeroValues, id = 0,  enableDispatch = true):Promise<NotaHeladero | undefined> => {
         dispatch(onStatus(true));
 
         try {
 
-            const { data:info } = await backendApi.put(`${rutaEndpoint}/${active!.id}`, { ...postdata,  id_sucursal: 1});
+            const { data:info } = await backendApi.put(`${rutaEndpoint}/${ id && id > 0 ? id: active!.id}`, { ...postdata,  id_sucursal: 1});
             const result = info.data;
             
             toastMessage(info);
-            
-            dispatch(onSetNotaHeladeroActive({
-                ...result                
-            }));
-            dispatch(onStatus(false));
+            if(enableDispatch){
+                dispatch(onSetNotaHeladeroActive({
+                    ...result                
+                }));
+                dispatch(onStatus(false));
+            }
+
+            return result;
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const getNotaHeladero = async(id:number):Promise<NotaHeladero|undefined>=>{
+    const getNotaHeladero = async(id:number, enableDispatch = true):Promise<NotaHeladero|undefined>=>{
         
         dispatch(onStatus(true));
 
@@ -133,12 +138,13 @@ export const useNotaHeladeroStore = () => {
 
             const { data:info } = await backendApi.get(`${rutaEndpoint}/${id}`);
 
-            dispatch(onSetNotaHeladeroActive({
-                ...info.data,
-                estado: info.data.estado == 4 ? 2 : info.data.estado
-            }));
-
-            dispatch(onStatus(false));
+            if(enableDispatch){
+                dispatch(onSetNotaHeladeroActive({
+                    ...info.data,
+                    estado: info.data.estado == 4 ? 2 : info.data.estado
+                }));    
+                dispatch(onStatus(false));
+            }
 
             return {
                 ...info.data,

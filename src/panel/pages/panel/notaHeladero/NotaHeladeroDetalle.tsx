@@ -63,6 +63,8 @@ export const NotaHeladeroDetalle = () => {
 
     const refId = useRef<any>('0');
 
+    const [openModalGuardado, setOpenModalGuardado] = useState<boolean>(false);
+
     const [orderDirection, setOrderDirection] = useState<order>("asc");
 
     const [estadoTitulo, setEstadoTitulo] = useState('Apertura de cuenta nueva');
@@ -132,14 +134,16 @@ export const NotaHeladeroDetalle = () => {
        return (precio_final < 0 ?  0 : precio_final);
     }
 
-    const onSubmit: SubmitHandler<FormNotaHeladeroValues> = (data) => {
+    const onSubmit: SubmitHandler<FormNotaHeladeroValues> = async (data) => {
         if(refId.current == 0){
-            saveNotaHeladero({...data});
+            await saveNotaHeladero({...data});
             setisNewRegister(false);
             refId.current = active?.id;
         }else{
-            updateNotaHeladero({...data});
-            setState(active?.estado);
+            const response = await updateNotaHeladero({...data});
+            setState(active?.estado);            
+            if(response?.id_children)
+                setValue("id_children", response.id_children);
         }
     }
 
@@ -196,6 +200,12 @@ export const NotaHeladeroDetalle = () => {
             setValue("ahorro", heladero.ahorro);
             setValue("pago", heladero.pago);
             setValue("debe", heladero.debe);
+
+            setValue("codigo", heladero.codigo);
+            setValue("heladero_nombre", heladero.heladero_nombre);
+            setValue("estado_nombre", heladero.estado_nombre);
+            setValue("moneda", heladero.moneda);
+            setValue("id_children", heladero.id_children);
             
             let fecha_operacion:any = null;
             if(heladero.estado == 1 && heladero.fecha_cierre) fecha_operacion = heladero.fecha_cierre
@@ -306,6 +316,12 @@ export const NotaHeladeroDetalle = () => {
             const heladero = await getNotaHeladero(refId.current);
             
             if(!heladero) return;
+
+            setValue("codigo", heladero.codigo);
+            setValue("heladero_nombre", heladero.heladero_nombre);
+            setValue("estado_nombre", heladero.estado_nombre);
+            setValue("moneda", heladero.moneda);
+            setValue("id_children", heladero.id_children);
             
             dispatch(onSetNotaHeladeroActive(heladero));
 
@@ -531,8 +547,8 @@ export const NotaHeladeroDetalle = () => {
     }, [active?.detalle])
     
     
-    const isPrint = (): boolean => active?.fecha_cierre ? true : false;
-
+    const isPrint = (): boolean => active?.fecha_cierre || getValues("estado") == 1 ? true : false;
+    const isFactura = (): boolean => active?.fecha_cierre ? true : false;
     // region acciones
 
     const onChangePago = () => {
@@ -574,14 +590,33 @@ export const NotaHeladeroDetalle = () => {
             <>     
                 {
                     state == 1 &&
-                    <NotasComponent ref={componentRef} />
+                    <NotasComponent ref={componentRef} currentNota={ getValues() } />
                 }
                      
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
-                    <FormControls save={redirectToFactura} page="nota-heladero" imprimir={imprimir} isPrint={isPrint()} isNew={true} funcNew={()=>{
+                    <FormControls 
+                        save={redirectToFactura} 
+                        page="nota-heladero" 
+                        imprimir={imprimir} 
+                        isPrint={isPrint()} 
+                        isFactura={isFactura()} 
+                        isNew={true} 
+                        funcNew={()=>{
                          window.location.href = '/nota-heladero/new';
-                    }}/>
+                        }}
+                        NewComponent={
+                            <>
+                                {
+                                    getValues("estado") == 1 && 
+                                    <button className="btn btn-warning flex-fill" type="button" onClick={()=>{
+                                        setOpenModalGuardado(true);
+                                        setOpenModal(true);
+                                    }}>Editar guardado</button>
+                                }
+                            </>
+                        } />
+                    
 
                     <hr className='border border-1 opacity-50'/>
 
@@ -641,6 +676,12 @@ export const NotaHeladeroDetalle = () => {
 
                                                         let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
                                                         setValue('fecha_operacion', dateNow.replace(" ","T"));
+
+                                                        //estadoGuardado debe ser 1
+                                                        // console.log({
+                                                        //     estadoGuardado: active?.estado,
+                                                        //     estadoSeleccionado: parseInt(e.currentTarget.value)
+                                                        // });
                                                     }}
                                                     >
                                                         {
@@ -876,35 +917,46 @@ export const NotaHeladeroDetalle = () => {
                                                         <td align='center' style={{background: '#dedede'}}>Subtotal</td>
                                                         <td style={{background: '#dedede'}}><input type="text" {...register('subtotal')} className='form-control' readOnly /></td>
                                                     </tr>
-                                                    <tr>
-                                                        <td colSpan={3}>&nbsp;</td>
-                                                        <td align='center'>Pago</td>
-                                                        <td><input type="number" {...register('pago')} 
-                                                            className='form-control'
-                                                            onKeyUp={onChangePago}
-                                                        step={0.01}
-                                                        readOnly={active?.fecha_cierre ? true : false} /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colSpan={3}>&nbsp;</td>
-                                                        <td align='center'>Ahorro</td>
-                                                        <td><input type="number" {...register('ahorro', {
-                                                            required: false,
-                                                            min: 0,
-                                                            onChange(event) {
-                                                                const ahorro = parseFloat(event.currentTarget.value ?? 0);
-                                                                setValue("ahorro", ahorro);
-                                                            },                                                            
-                                                        })} 
-                                                        step={0.01}
-                                                        className='form-control'
-                                                        readOnly={active?.fecha_cierre ? true : false}/></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colSpan={3}>&nbsp;</td>
-                                                        <td align='center'>Debe</td>
-                                                        <td><input type="text" {...register('debe')} className='form-control' readOnly={true} /></td>
-                                                    </tr>
+                                                    {
+                                                        active.estado == 1  ?
+                                                        (
+                                                            <>                                                            
+                                                                <tr>
+                                                                    <td colSpan={3}>&nbsp;</td>
+                                                                    <td align='center'>Pago</td>
+                                                                    <td><input type="number" {...register('pago')} 
+                                                                        className='form-control'
+                                                                        onKeyUp={onChangePago}
+                                                                    step={0.01} /></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colSpan={3}>&nbsp;</td>
+                                                                    <td align='center'>Ahorro</td>
+                                                                    <td><input type="number" {...register('ahorro', {
+                                                                        required: false,
+                                                                        min: 0,
+                                                                        onChange(event) {
+                                                                            const ahorro = parseFloat(event.currentTarget.value ?? 0);
+                                                                            setValue("ahorro", ahorro);
+                                                                        },                                                            
+                                                                    })} 
+                                                                    step={0.01}
+                                                                    className='form-control'/></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colSpan={3}>&nbsp;</td>
+                                                                    <td align='center'>Debe</td>
+                                                                    <td><input type="text" {...register('debe')} className='form-control' readOnly={true} /></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colSpan={5}>
+                                                                        <strong>Observaciones</strong>
+                                                                        <textarea {...register('observaciones')} className='form-control'/>
+                                                                    </td>
+                                                                </tr>
+                                                            </>
+                                                        ) : ''
+                                                    }
                                                 </>
                                             )
                                         }
@@ -933,14 +985,15 @@ export const NotaHeladeroDetalle = () => {
                 </form>
 
                 {
-
-                    (state==3 && !(active?.fecha_guardado)) &&
+                    ((state==3 && !(active?.fecha_guardado)) || openModalGuardado) &&
                     (<ModalNotaHeladeroRegister
                             openModal={openModal}
                             handlerOpenModal={setOpenModal}
                             setValueOrigin={setValue}
                             getValuesOrigin={getValues}
                             updateStateHeladero={setState}
+                            setOpenModalGuardado={setOpenModalGuardado}
+                            idChildren={getValues("id_children")??0}
                         />)
                 }
                 <Toaster position="top-center" reverseOrder={true} />

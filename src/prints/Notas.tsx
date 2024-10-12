@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useState } from 'react'
 //import { useNotaHeladeroStore } from '../hooks';
 import "/src/prints/assets/css/prints.scss";
 import { FormNotaHeladeroDetalleValues, IRootState } from '../interfaces';
+import { FormNotaHeladeroValues } from '../panel/interfaces'
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useConfiguration } from '../hooks';
@@ -10,16 +11,21 @@ import { useConfiguration } from '../hooks';
 
 interface MyComponentProps {
     // Añade aquí las propiedades del componente si las tiene.
+    currentNota: FormNotaHeladeroValues
 }
 const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> = (props, ref) => {
 
-    const { active } = useSelector((state:IRootState)=>state.notaHeladero);
+    const { active: infoSaved } = useSelector((state:IRootState)=>state.notaHeladero);
     
     const [fechaOperacion, setFechaOperacion] = useState('');
 
     const { configuration, loadConfiguration } = useConfiguration();
 
     const URL_IMAGENES = import.meta.env.VITE_URL_IMAGES;
+
+    const active = infoSaved?.estado == 1 ? infoSaved : props.currentNota;
+
+    const detalle = infoSaved?.estado == 1 ? (infoSaved?.detalle ?? []) :  props.currentNota.productos ?? [];
 
     useEffect(() => {
       
@@ -42,6 +48,17 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
         <div style={{display:"none"}}>
             <div className='ticket print-container' ref={ref}>
                 <div className="contenedor">
+                {
+                    infoSaved?.estado != 1 ?
+                    (
+                        <>
+                        <div className="line"></div>
+
+                        <h2 className='text-center vista-previa'>Vista Previa</h2>
+                        
+                        </>
+                    ) : ''
+                }
                 <div className="line"></div>
                     <div className="text-center">
                         {
@@ -91,21 +108,28 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                     <b>Monto(subtotal):</b> {active?.monto}
                                 </td>
                             </tr>
-                            <tr>
-                                <td align='left'>
-                                    <b>Pago:</b> {active?.pago}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align='left'>
-                                    <b>ahorro:</b> {active?.ahorro}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align='left'>
-                                    <b>Debe:</b> {active?.debe}
-                                </td>
-                            </tr>
+                            {
+                                infoSaved?.estado == 1 ?
+                                (
+                                    <>
+                                        <tr>
+                                            <td align='left'>
+                                                <b>Pago:</b> {active?.pago}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align='left'>
+                                                <b>ahorro:</b> {active?.ahorro}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align='left'>
+                                                <b>Debe:</b> {active?.debe}
+                                            </td>
+                                        </tr>
+                                    </>
+                                ) : ''
+                            }
                         </tbody>
                     </table>
                     <div className="line"></div>
@@ -120,8 +144,8 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                 <td className='sizeTitle'><strong>Imp.</strong></td>
                             </tr>
                             {
-                                (active?.detalle) &&
-                                    active.detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
+                                (detalle) &&
+                                    detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
 
                                         <tr key={detalle.id}>
                                             <td className='text-left'>{ detalle.producto }</td>

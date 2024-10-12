@@ -79,6 +79,7 @@ export interface ControlsInterface{
     imprimir?:Function;
     page:string;
     isPrint?:boolean;
+    isFactura?:boolean;
     isNew?:boolean;
     isEdit?:boolean;
     isDelete?:boolean;
@@ -322,6 +323,15 @@ export interface FormNotaHeladeroValues {
     cucharas_devueltas: number;
     conos_devueltas:    number;
     parent_id?:         number;
+    observaciones?:     string;
+
+    codigo?:            string;
+    heladero_nombre?:   string;        
+    estado_nombre?:     string;    
+    moneda?:            string;
+
+    id_children:       number;
+
     productos:            FormNotaHeladeroDetalleValues[];
 }
 

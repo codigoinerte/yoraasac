@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ControlsInterface } from '../interfaces'
 
-export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isPrint = false, isNew = false, funcNew = undefined, NewComponent = undefined }:ControlsInterface) => {
+export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isPrint = false, isFactura = false, isNew = false, funcNew = undefined, NewComponent = undefined }:ControlsInterface) => {
 
     const { id = 0 } = useParams();
 
@@ -37,13 +37,20 @@ export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isP
                     )
                 }
                 {
-                    isPrint &&
+                    isFactura &&
                     (
                         <>
                             <button type='button' onClick={()=> {
                                 if(typeof save != "undefined"){ save(); }
                             } } className="btn btn-success btn-lg flex-fill">Generar Factura</button>        
                             
+                        </>
+                    )
+                }
+                {
+                    isPrint &&
+                    (
+                        <>                           
                             <button type='button' onClick={()=> {
                                 if(typeof imprimir != "undefined"){ imprimir();}
                             } } className="btn btn-success btn-lg flex-fill">Imprimir</button>        
