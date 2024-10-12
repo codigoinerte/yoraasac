@@ -16,7 +16,8 @@ export const ReporteNotaHeladeroAsistencia = () => {
     const cabecera = [
         "DOCUMENTO",
         "NOMBRE",
-        "ASISTENCIAS"
+        "APERTURA",
+        "CIERRE"
     ];
 
     const [detalle, setDetalle] = useState<listaDetalle[]>([]);
@@ -32,8 +33,13 @@ export const ReporteNotaHeladeroAsistencia = () => {
                 (item.documento??'').toString(),
                 (item.heladero_nombre??'').toString(),
                 `
-                <button class="btn btn-sm ${item.asistio?'btn-success':'btn-danger'}">
-                    <i class="bi ${item.asistio?'bi-check':'bi-x'}"></i>
+                <button class="btn btn-sm ${item.asistencia_apertura?'btn-success':'btn-danger'}">
+                    <i class="bi ${item.asistencia_apertura?'bi-check':'bi-x'}"></i>
+                </button>
+                `,
+                `
+                <button class="btn btn-sm ${item.asistencia_cierre?'btn-success':'btn-danger'}">
+                    <i class="bi ${item.asistencia_cierre?'bi-check':'bi-x'}"></i>
                 </button>
                 `
             ]
@@ -44,7 +50,8 @@ export const ReporteNotaHeladeroAsistencia = () => {
         setImprimible(reporte.map((item)=>({
             "heladero documento": (item.documento??'').toString(),
             "heladero nombre": (item.heladero_nombre??'').toString(),
-            "asistio": item.asistio?'si':'no',
+            "asistencia apertura": item.asistencia_apertura?'si':'no',
+            "asistencia cierre": item.asistencia_cierre?'si':'no',
         })))
         
     }, [reporte]);

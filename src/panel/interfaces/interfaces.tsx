@@ -1150,7 +1150,8 @@ export interface DataHeladeroAssistencia {
     id:                    number;
     documento:             string;
     heladero_nombre:       string;
-    asistio:               boolean;    
+    asistencia_apertura:   boolean;
+    asistencia_cierre:     boolean;
 }
 
 export interface FormImportNota{
