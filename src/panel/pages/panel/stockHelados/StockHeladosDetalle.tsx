@@ -80,35 +80,36 @@ export const StockHeladosDetalle = () => {
 
     const [id, setId] = useState<idorigin>(idOrigin);
 
-    const { saveStockHelado, updateStockHelado, getStockHelado, deleteImagenStockHelado } = useStockHeladosStore();
+    const { active, saveStockHelado, updateStockHelado, getStockHelado, deleteImagenStockHelado } = useStockHeladosStore();
+
+    const initLoadContent = async () => {
+        const idStock = parseInt(id.toString());
+
+        await loadMovimientos();
+        await loadTipoDocumento();
+        await loadBuscarProducto();
+
+        if(idStock == 0) return;
+
+        const stock = await getStockHelado(idStock);
+
+        setUnidades(stock?.unidades);
+        setValue('unidades', stock?.unidades);
+        setValue('movimientos_id', stock?.movimientos_id);
+        setValue('tipo_documento_id', stock?.tipo_documento_id);
+        setValue('fecha_movimiento', stock?.fecha_movimiento);
+        setValue('numero_documento', stock?.numero_documento);
+        setValue('image_file', stock?.imagen);
+        setValue('detalle', stock?.detalle);
+        setTipo(stock?.movimientos_id);
+        setTipoDocumentoItem(stock?.tipo_documento_id);
+
+        console.log(active?.movimientos_id);
+    }
 
     useEffect(() => {
       
-        loadMovimientos();
-        loadTipoDocumento();
-        loadBuscarProducto();
-
-        if(id == 0)
-        {
-            /* */
-        }
-        else
-        {
-            getStockHelado(parseInt(id))
-            .then((stock)=>{
-                
-                setUnidades(stock?.unidades);
-                setValue('unidades', stock?.unidades);
-                setValue('movimientos_id', stock?.movimientos_id);
-                setValue('tipo_documento_id', stock?.tipo_documento_id);
-                setValue('fecha_movimiento', stock?.fecha_movimiento);
-                setValue('numero_documento', stock?.numero_documento);
-                setValue('image_file', stock?.imagen);
-                setValue('detalle', stock?.detalle);
-                setTipo(stock?.movimientos_id);
-                setTipoDocumentoItem(stock?.tipo_documento_id);
-            });
-        }
+        initLoadContent();
       
     }, []);
 
@@ -211,6 +212,10 @@ export const StockHeladosDetalle = () => {
         }));
     }
 
+    const getDisableInput = () => {        
+        return parseInt(id.toString()) > 0 && active?.movimientos_id == 5 && TipoDocumentoItem == 5 ? true : false
+    }
+
   return (
     <ContainerInner breadcrumb={breadcrumb}>
         <>
@@ -256,7 +261,7 @@ export const StockHeladosDetalle = () => {
                                         }
 
                                     })}
-                                    disabled={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}
+                                    disabled={getDisableInput()}
                                     >
                             <option value="">-seleccione una opcion-</option>                          
                             {
@@ -282,7 +287,7 @@ export const StockHeladosDetalle = () => {
                                             }
                                         }
                                     })}
-                                    disabled={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}>
+                                    disabled={getDisableInput()}>
                             <option value="">-seleccione una opcion-</option>                          
                             {
                                 listTipoDocumento
@@ -315,7 +320,7 @@ export const StockHeladosDetalle = () => {
 
                             (
                                 <SearchNota 
-                                    readOnly={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}
+                                    readOnly={getDisableInput()}
                                     control={control}
                                     className={`form-control p-0`}
                                     required={true}
@@ -477,7 +482,7 @@ export const StockHeladosDetalle = () => {
                                                                     })}  
                                                                     className={errors.detalle ? "form-control is-invalid" : "form-control"} 
                                                                     tabIndex={1}
-                                                                    readOnly={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}  />
+                                                                    readOnly={getDisableInput()}  />
                                                                     
                                                                 </div>
                                                                 <input type='hidden' {...register(`detalle.${index}.cantidad`, { required: true })}/>
@@ -511,7 +516,7 @@ export const StockHeladosDetalle = () => {
                                                                      })} 
                                                                     className='form-control' 
                                                                     tabIndex={1}
-                                                                    readOnly={parseInt(id.toString()) > 0 && TipoDocumentoItem == 5 ? true : false}
+                                                                    readOnly={getDisableInput()}
                                                                     />
                                                                     
                                                                 </div>

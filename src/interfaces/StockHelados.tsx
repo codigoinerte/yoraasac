@@ -12,7 +12,7 @@ export interface StockHelado {
     codigo_movimiento: string;
     numero_documento:  string;
     fecha_movimiento:  string;
-    movimiento:        null;
+    movimientos_id:    number;
     documento:         string;
     created_at:        string;
     updated_at:        string;
