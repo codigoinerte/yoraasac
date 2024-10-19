@@ -206,6 +206,7 @@ export type FormProductosValues = {
     igv_id:       number | null;
     precio_final: number | null;
     is_litro:     boolean;
+    is_barquillo:     boolean;
 
 
     heladero_precio_venta: number | null;
@@ -280,6 +281,7 @@ export type FormBuscarStockBarquilloValues = {
 
 export interface FormStockBarquilloValues {
     id:                number;
+    unidades:          number | null;
     codigo_movimiento: string;
     movimientos_id:    number;
     tipo_documento_id: number;
@@ -288,6 +290,24 @@ export interface FormStockBarquilloValues {
     fecha_movimiento:  string;
     created_at:        string;
     updated_at:        string;
+    image_file?:       string;
+    image_input?:      FileList;
+    detalle:           DetalleBarquillo[] | null;
+}
+export interface DetalleBarquillo {
+    [key: string]:      any;
+    id?:               number;
+    codigo?:           string;
+    producto?:         string;
+    caja_cantidad:      number;
+    caja:               number;
+    stock_helados_id?: number;
+    cantidad?:         number;
+    created_at?:       string;
+    updated_at?:       string;
+    min_cantidad?:      number;
+    id_importado?:      number;
+    is_litro?:      number;
 }
 /***************************************** */
 export type FormBuscarNotaHeladeroValues = {
@@ -701,6 +721,8 @@ export interface BuscarProducto {
     igv_id:       number;
     estado:       string;
     moneda:       string;
+    is_litro:     boolean;
+    is_barquillo: boolean;
     created_at:   string;
     updated_at:   string;
 }
