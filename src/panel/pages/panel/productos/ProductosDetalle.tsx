@@ -114,6 +114,7 @@ export const ProductosDetalle = () => {
         setValue('cantidad_caja', prod?.cantidad_caja);
         setValue('proveedor_precio', prod?.proveedor_precio);
         setValue('is_litro', prod?.is_litro);
+        setValue('is_barquillo', prod?.is_barquillo);
 
         calcularPrecioFinal();
         calcularPrecioFinalHeladero();
@@ -142,6 +143,7 @@ export const ProductosDetalle = () => {
     heladero_descuento,
     cantidad_caja,
     proveedor_precio,
+    is_barquillo,
     is_litro }) => {
             
     if(id == 0){
@@ -166,7 +168,8 @@ export const ProductosDetalle = () => {
         heladero_precio_final : 0,
         cantidad_caja,
         proveedor_precio,
-        is_litro
+        is_litro,
+        is_barquillo
         
       });
     }else{
@@ -190,7 +193,8 @@ export const ProductosDetalle = () => {
         heladero_precio_final : 0,
         cantidad_caja,
         proveedor_precio,
-        is_litro
+        is_litro,
+        is_barquillo
         
       });
     }
@@ -355,6 +359,13 @@ export const ProductosDetalle = () => {
                     <select id="is_litro" {...register('is_litro')} className='form-control'>
                       <option value={1} key={1}>Si</option>
                       <option value={0} key={2}>No</option>
+                    </select>                    
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="tipoigv" className="form-label m-0 text-dark">El producto es barquillo</label>
+                    <select id="is_barquillo" {...register('is_barquillo')} className='form-control'>
+                      <option value={0} key={2}>No</option>
+                      <option value={1} key={1}>Si</option>
                     </select>                    
                 </div>
 

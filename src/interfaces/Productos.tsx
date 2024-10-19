@@ -31,6 +31,7 @@ export interface Producto {
     sep_decimales: string;
     sep_miles:     string;
     principal:     number;
+    is_barquillo:  boolean;
 }
 
 export interface intialStateProductos {
