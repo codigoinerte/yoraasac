@@ -100,7 +100,7 @@ export const useProductosStore = () => {
         }
     }
 
-    const getProducto = async (id:number) => {
+    const getProducto = async (id:number | string) => {
         
         dispatch(onStatus(true));
 

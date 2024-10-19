@@ -73,25 +73,30 @@ export const ProductosDetalle = () => {
     loadUnspsc(buscar);
   }
 
-  useEffect(() => {
-    
-    loadEstados();
-    loadMarcas();
-    laodUnidades();
-    loadMoneda();
-    loadIgv();
+  const initLoadContent = async () => {
+    await loadEstados();
+    await loadMarcas();
+    await laodUnidades();
+    await loadMoneda();
+    await loadIgv();
 
     if(id == 0){
 
-      setValue('estados_id', 1);
-      setValue('igv_id', 1);
-      setValue('moneda_id', 1);
-      setValue('unidad_id', 1);
+        setValue('estados_id', 1);
+        setValue('igv_id', 1);
+        setValue('moneda_id', 1);
+        setValue('unidad_id', 1);
 
     }else{
-      getProducto(parseInt(id))
-      .then((prod)=>{
+        const prod = await getProducto(id);
 
+        let unspsc_id = prod?.unspsc_id??'';
+
+        if(unspsc_id != '' && searchUNPSC){
+          await loadUnspsc(unspsc_id, 'codigo');
+          searchUNPSC=false;
+        }
+      
         setValue('codigo', prod?.codigo);
         setValue('nombre', prod?.nombre);
         setValue('marcas_id', prod?.marcas_id);
@@ -110,21 +115,14 @@ export const ProductosDetalle = () => {
         setValue('proveedor_precio', prod?.proveedor_precio);
         setValue('is_litro', prod?.is_litro);
 
-        let unspsc_id = prod?.unspsc_id??'';
-
-        if(unspsc_id != '' && searchUNPSC){
-          loadUnspsc(unspsc_id, 'codigo');
-          searchUNPSC=false;
-        }
-
-
         calcularPrecioFinal();
         calcularPrecioFinalHeladero();
-      });
-
-
     }
 
+  }
+
+  useEffect(() => {  
+    initLoadContent();
   }, []);
   
   const onSubmit: SubmitHandler<FormProductosValues> = ({ 
