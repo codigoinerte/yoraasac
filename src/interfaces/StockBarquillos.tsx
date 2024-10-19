@@ -8,14 +8,16 @@ export interface StockBarquillos {
 
 export interface StockBarquillo {
     id:                number;
+    unidades:          number;
     codigo_movimiento: string;
     numero_documento:  string;
     fecha_movimiento:  string;
     cantidad:          number;
-    movimiento:        null;
+    movimientos_id:    number;
     documento:         string;
     created_at:        string;
     updated_at:        string;
+    imagen?:           string;
 }
 
 

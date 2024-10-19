@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendApi } from '../api';
-import { toastMessage } from '../helpers';
+import { toastMessage, uploadImage } from '../helpers';
 import { IRootState } from '../interfaces';
 import { FormBuscarStockBarquilloValues, FormStockBarquilloValues } from '../panel/interfaces';
 import { onStatus, onStockBarquilloList, onSetStockBarquilloActive, onStockBarquilloDelete, onStockBarquilloAddMessage, onStockBarquilloClearMessage } from '../store'
@@ -64,6 +64,14 @@ export const useStockBarquillosStore = () => {
 
         try {
 
+            /* subir imagen */
+            let array: (FileList | undefined)[] = [];
+            let url_frontal = postdata.image_file ?? '';
+            if(postdata.image_input && postdata.image_input.length > 0) array.push(postdata.image_input);        
+            const respuesta = await uploadImage(array);             
+            postdata.image_file = respuesta[0]??url_frontal;
+            /* subir imagen */
+
             const { data:info } = await backendApi.post(rutaEndpoint, postdata);
             const result = info.data;
             
@@ -72,9 +80,10 @@ export const useStockBarquillosStore = () => {
             dispatch(onSetStockBarquilloActive({
                 ...result               
             }));
-
             
             dispatch(onStatus(false));
+
+            return result;
 
         } catch (error) {
             console.log(error);
@@ -86,6 +95,14 @@ export const useStockBarquillosStore = () => {
 
         try {
 
+            /* subir imagen */
+            let array: (FileList | undefined)[] = [];
+            let url_frontal = postdata.image_file ?? '';
+            if(postdata.image_input && postdata.image_input.length > 0) array.push(postdata.image_input);        
+            const respuesta = await uploadImage(array);             
+            postdata.image_file = respuesta[0]??url_frontal;
+            /* subir imagen */
+
             const { data:info } = await backendApi.put(`${rutaEndpoint}/${active!.id}`, postdata);
             const result = info.data;
             
@@ -95,6 +112,8 @@ export const useStockBarquillosStore = () => {
                 ...result                
             }));
             dispatch(onStatus(false));
+
+            return result;
 
         } catch (error) {
             console.log(error);
@@ -136,6 +155,23 @@ export const useStockBarquillosStore = () => {
         }
     }    
 
+    const deleteImagenBarquillo = async (id:number, imagen:string) => {
+        try {
+            const { data:info } = await backendApi.post(`/eliminar-foto-stock-barquillo/${id}`,{ imagen });
+
+            const result = info.data;
+
+            toastMessage(info);
+            
+            dispatch(onSetStockBarquilloActive(result));
+
+            dispatch(onStatus(false));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return {
         status, 
         StockBarquillo, 
@@ -149,5 +185,6 @@ export const useStockBarquillosStore = () => {
         updateStockBarquillo,
         getStockBarquillo,
         deleteStockBarquillo,
+        deleteImagenBarquillo,
     }
 }
