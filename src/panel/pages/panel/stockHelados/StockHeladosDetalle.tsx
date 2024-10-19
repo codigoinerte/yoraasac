@@ -124,7 +124,7 @@ export const StockHeladosDetalle = () => {
         if(id == 0){
             const response = await saveStockHelado({...data});
             if(response.id){
-                window.history.pushState(null, '', `/stock/helados/${response.id}`);
+                window.history.pushState(null, '', `/movimiento/helados/${response.id}`);
                 setId(response.id);
 
                 if(response.detalle){
