@@ -90,7 +90,7 @@ export const NotaHeladeroDetalle = () => {
 
     const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
-    const { register, handleSubmit, formState, setValue, getValues, control, reset } = useForm<FormNotaHeladeroValues>({
+    const { register, handleSubmit, formState, setValue, getValues, control, reset, setFocus } = useForm<FormNotaHeladeroValues>({
         defaultValues:{
 
             monto:0,
@@ -805,23 +805,51 @@ export const NotaHeladeroDetalle = () => {
                                                                     {...register(`productos.${index}.pedido`,{
                                                                         pattern: /^\d+$/i,
                                                                         onChange: (e) => {
+                                                                            const heladero = getValues("user_id") ?? null;
+                                                                            if(!heladero){
+                                                                                setValue(`productos.${index}.pedido`, 0);
+                                                                                e.stopPropagation();
+                                                                                e.preventDefault();
+                                                                            }
                                                                             let quantity = e.target.value??'0';
                                                                                 quantity = quantity == '' || quantity == null ? '0' : quantity;
                                                                                 quantity = parseInt(quantity);
                                                                             if(quantity < 0) e.target.value = 0;
-                                                                            setValue(`productos.${index}.pedido`, quantity);                                                                        
-                                                                        }
+                                                                            setValue(`productos.${index}.pedido`, quantity);
+                                                                        },
                                                                     })}
-                                                                    tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
-                                                                    onFocus={(e)=> {
+                                                                    //tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
+                                                                    onClick={async (e) => {
                                                                         const heladero = getValues("user_id") ?? null;
                                                                         if(!heladero){
-                                                                            Swal.fire(
+                                                                           
+                                                                            await Swal.fire(
                                                                                 'Alerta!',
                                                                                 'Debe completar primero el heladero.',
                                                                                 'warning'
                                                                             );
-                                                                        }                                                                        
+
+                                                                            document.querySelector("body")?.focus();
+                                                                            e.stopPropagation();
+                                                                            e.preventDefault();
+                                                                        }
+                                                                    }}
+                                                                    onFocus={async (e)=> {
+                                                                        // const heladero = getValues("user_id") ?? null;
+                                                                        // if(!heladero){
+                                                                           
+                                                                        //     Swal.fire(
+                                                                        //         'Alerta!',
+                                                                        //         'Debe completar primero el heladero.',
+                                                                        //         'warning'
+                                                                        //     )
+                                                                        //     .then(() => {
+                                                                        //         setFocus('fecha_operacion');
+                                                                        //     });
+
+                                                                        //     e.stopPropagation();
+                                                                        //     e.preventDefault();
+                                                                        // }
                                                                     }}
                                                                     />
                                                         </div>
