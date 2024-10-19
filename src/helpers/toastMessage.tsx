@@ -11,19 +11,21 @@ interface props{
     message: string,
     success: Boolean,
     custom?: customObj,
+    title?: string,
+    icon: 'success' | 'error' | 'warning' | 'info' | 'question'
 }
 
 
-export const toastMessage = ({data, message, success, custom}:props) => {
+export const toastMessage = ({data, message, success, icon = 'success', title = 'Exito!', custom}:props) => {
     
     if(success){
 
-        const { title, icon, confirmButtonText } = custom ?? {};
+        const { title:titleCustom = title, icon:iconCustom = icon , confirmButtonText } = custom ?? {};
         
         Swal.fire({
-            title: title ?? 'Exito!',
+            title: titleCustom,
             text: message,
-            icon: icon ?? 'success',
+            icon: iconCustom,
             confirmButtonText: confirmButtonText ?? 'ok'
           })
 
