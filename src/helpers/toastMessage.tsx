@@ -12,7 +12,7 @@ interface props{
     success: Boolean,
     custom?: customObj,
     title?: string,
-    icon: 'success' | 'error' | 'warning' | 'info' | 'question'
+    icon?: 'success' | 'error' | 'warning' | 'info' | 'question'
 }
 
 
