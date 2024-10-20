@@ -13,6 +13,7 @@ export interface StockBarquillo {
     numero_documento:  string;
     fecha_movimiento:  string;
     cantidad:          number;
+    movimiento:        string;
     movimientos_id:    number;
     documento:         string;
     created_at:        string;
