@@ -103,8 +103,6 @@ export const StockHeladosDetalle = () => {
         setValue('detalle', stock?.detalle);
         setTipo(stock?.movimientos_id);
         setTipoDocumentoItem(stock?.tipo_documento_id);
-
-        console.log(active?.movimientos_id);
     }
 
     useEffect(() => {

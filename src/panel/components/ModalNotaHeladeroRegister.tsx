@@ -44,9 +44,9 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         
         if(idChildren > 0){
             const response = await getNotaHeladero(idChildren, false);
-
             setValue('user_id', response?.user_id ?? 0);
             setValue('estado', response?.estado ?? 3);
+            setValue('estado_original', response?.estado_original ?? 0);
             setValue('fecha_operacion', (moment(response?.created_at).format("YYYY-MM-DD HH:mm").toString()).replace('T', ' '));
  
             setValue('productos', (response?.detalle ?? []).map((item) => {
@@ -113,14 +113,20 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         if(idChildren > 0)
         {
             // si ya existe el children se debe actualizar el contenido
-            await updateNotaHeladero({...data}, idChildren, false);
+            const productos = data.productos.map((item) => ({
+                ...item,
+                pedido: 0
+            }))
+            const estado = getValues("estado_original");
+            //! el estado al momento de ser llamado pasa a un estado 2, el cual debe de ser validado, tambien se debe considerar la validación de la edición de guardado, puesto que una vez la nota guardada ya fue reaperturada, no debe poder ser editada
+           
+            await updateNotaHeladero({...data, productos, estado }, idChildren, false, false);
 
-            setTimeout(function(){
-                
-                window.location.reload();
-
-            }, 350);
-            
+            localStorage.setItem("notification", JSON.stringify({
+                message : "Las cantidades guardadas fueron actualizadas correctamente",
+                type : "success"
+            }));
+            location.replace(location.pathname);
             // si ya existe el children se debe actualizar el contenido
             return;
         }

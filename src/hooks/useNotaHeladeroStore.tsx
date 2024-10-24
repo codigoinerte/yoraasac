@@ -107,15 +107,15 @@ export const useNotaHeladeroStore = () => {
         }
     }
     
-    const updateNotaHeladero = async (postdata:FormNotaHeladeroValues, id = 0,  enableDispatch = true):Promise<NotaHeladero | undefined> => {
+    const updateNotaHeladero = async (postdata:FormNotaHeladeroValues, id = 0,  enableDispatch = true, enableAlert = true):Promise<NotaHeladero | undefined> => {
         dispatch(onStatus(true));
 
         try {
 
             const { data:info } = await backendApi.put(`${rutaEndpoint}/${ id && id > 0 ? id: active!.id}`, { ...postdata,  id_sucursal: 1});
             const result = info.data;
-            
-            toastMessage(info);
+            if(enableAlert)
+                toastMessage(info);
             if(enableDispatch){
                 dispatch(onSetNotaHeladeroActive({
                     ...result                
@@ -141,14 +141,16 @@ export const useNotaHeladeroStore = () => {
             if(enableDispatch){
                 dispatch(onSetNotaHeladeroActive({
                     ...info.data,
-                    estado: info.data.estado == 4 ? 2 : info.data.estado
+                    estado: info.data.estado == 4 ? 2 : info.data.estado,
+                    estado_original: info.data.estado
                 }));    
                 dispatch(onStatus(false));
             }
 
             return {
                 ...info.data,
-                estado: info.data.estado == 4 ? 2 : info.data.estado
+                estado: info.data.estado == 4 ? 2 : info.data.estado,
+                estado_original: info.data.estado
             };
 
         } catch (error) {

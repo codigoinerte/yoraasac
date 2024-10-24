@@ -3,7 +3,7 @@ import { ContainerInner, FormControls, ModalNotaHeladeroRegister, SearchUser } f
 import { FormNotaHeladeroValues, ProductosPublicados, breadcrumb as bread } from '../../../interfaces';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useConfiguration, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip'
 import { useDispatch } from 'react-redux';
 import {  onSetNotaHeladeroActive, onStatus } from '../../../../store';
@@ -12,7 +12,7 @@ import { useReactToPrint } from 'react-to-print';
 import NotasComponent from '../../../../prints/Notas';
 import toast, { Toaster } from 'react-hot-toast';
 import { formatDateForInput } from '../../../../helpers';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertIcon } from 'sweetalert2';
 
 const cabecera = [
     {
@@ -63,6 +63,8 @@ export const NotaHeladeroDetalle = () => {
 
     const refId = useRef<any>('0');
 
+    const { search } = useLocation();
+
     const [openModalGuardado, setOpenModalGuardado] = useState<boolean>(false);
 
     const [orderDirection, setOrderDirection] = useState<order>("asc");
@@ -74,6 +76,8 @@ export const NotaHeladeroDetalle = () => {
     const [isNewRegister, setisNewRegister] = useState(false);
 
     const [openModal, setOpenModal] = useState(false);
+
+    const [firstMessage, setfirstMessage] = useState(true);
 
     const [state, setState] = useState<number|null>(null);
 
@@ -136,12 +140,15 @@ export const NotaHeladeroDetalle = () => {
 
     const onSubmit: SubmitHandler<FormNotaHeladeroValues> = async (data) => {
         if(refId.current == 0){
-            await saveNotaHeladero({...data});
+            const response = await saveNotaHeladero({...data});            
             setisNewRegister(false);
-            refId.current = active?.id;
+            if(response?.id){
+                refId.current = response?.id;               
+                window.history.pushState(null, '', `/nota-heladero/edit/${response?.id}`);
+            }
         }else{
             const response = await updateNotaHeladero({...data});
-            setState(active?.estado);            
+            setState(response?.estado);            
             if(response?.id_children)
                 setValue("id_children", response.id_children);
         }
@@ -290,7 +297,7 @@ export const NotaHeladeroDetalle = () => {
 
         let dateNow = moment(new Date()).format("yyyy-MM-DD hh:mm").toString();
         setValue('fecha_operacion', dateNow.replace(" ", "T"));
-
+        setValue(`observaciones`, '');
         setCodigoTitulo('');
 
         refId.current = 0;
@@ -381,7 +388,24 @@ export const NotaHeladeroDetalle = () => {
             setValue(`pago`, (heladero.pago??0));
             setValue(`ahorro`, (heladero.ahorro??0));
             setValue(`debe`, (heladero.debe??0));
+            setValue(`observaciones`, (heladero.observaciones??''));
+
         }
+
+         
+        // const message = params.get("message") ?? '';
+        // const type = params.get("type") ?? 'success';
+
+        const { message, type } = JSON.parse(localStorage.getItem("notification") ?? '{}');
+        
+        if(message && firstMessage){
+            if(type == "success"){
+                Swal.fire("Exito!", message, "success");
+            }
+            localStorage.removeItem("notification");
+        }
+
+        setfirstMessage(false);
     }
         
     useEffect(() => {
@@ -608,7 +632,7 @@ export const NotaHeladeroDetalle = () => {
                         NewComponent={
                             <>
                                 {
-                                    getValues("estado") == 1 && 
+                                    getValues("estado") == 1 && active?.estado !=1 && 
                                     <button className="btn btn-warning flex-fill" type="button" onClick={()=>{
                                         setOpenModalGuardado(true);
                                         setOpenModal(true);
@@ -676,12 +700,6 @@ export const NotaHeladeroDetalle = () => {
 
                                                         let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
                                                         setValue('fecha_operacion', dateNow.replace(" ","T"));
-
-                                                        //estadoGuardado debe ser 1
-                                                        // console.log({
-                                                        //     estadoGuardado: active?.estado,
-                                                        //     estadoSeleccionado: parseInt(e.currentTarget.value)
-                                                        // });
                                                     }}
                                                     >
                                                         {
@@ -818,7 +836,7 @@ export const NotaHeladeroDetalle = () => {
                                                                             setValue(`productos.${index}.pedido`, quantity);
                                                                         },
                                                                     })}
-                                                                    //tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
+                                                                    tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
                                                                     onClick={async (e) => {
                                                                         const heladero = getValues("user_id") ?? null;
                                                                         if(!heladero){

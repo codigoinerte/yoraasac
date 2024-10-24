@@ -329,6 +329,7 @@ export interface FormNotaHeladeroValues {
     subtotal:           number;
     ahorro:             number;
     estado:             number;
+    estado_original:    number;
     cucharas:           number;
     conos:              number;
     placas_entregas:    number;
