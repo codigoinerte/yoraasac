@@ -58,9 +58,10 @@ export const NotaHeladero = () => {
     
     useEffect(() => {
       
-        const detalle:listaDetalle[] = Heladeros.map(({ id, codigo, heladero_documento,heladero_nombre, created_at, fecha_cierre, fecha_guardado, estado, fecha_apertura, idestado }) => ({
+        const detalle:listaDetalle[] = Heladeros.map(({ id, codigo, heladero_documento,heladero_nombre, created_at, fecha_cierre, fecha_guardado, estado, fecha_apertura, idestado, avaibleDelete, avaibleDeleteMessage }) => ({
             id: id.toString(),
-            avaibleDelete: idestado == 1 || idestado == 3 ? false : true,
+            avaibleDelete,
+            avaibleDeleteMessage,
             campos: [
                 codigo??''.toString(),
                 `${heladero_documento??''.toString()}\n

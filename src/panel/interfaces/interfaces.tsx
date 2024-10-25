@@ -439,6 +439,7 @@ export interface FormFacturacionDetalleValues {
 export interface listaDetalle  {
     id: string,
     avaibleDelete?: boolean;
+    avaibleDeleteMessage?: string;
     campos?: string[] | undefined   
 };
 

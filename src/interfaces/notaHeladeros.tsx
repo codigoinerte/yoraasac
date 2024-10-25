@@ -42,6 +42,8 @@ export interface NotaHeladero{
     moneda?:                 string;
     observaciones?:          string;
     id_children:             number;
+    avaibleDelete:           boolean;
+    avaibleDeleteMessage:    string;
     detalle:                 FormNotaHeladeroDetalleValues[];
 }
 
