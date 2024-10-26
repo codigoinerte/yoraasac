@@ -37,6 +37,7 @@ export const useNotaHeladeroStore = () => {
             });
             
             dispatch(onStatus(false));
+            dispatch(onSetNotaHeladeroActive(null));
             dispatch(onNotaHeladeroList(data));            
 
         } catch (error) {
