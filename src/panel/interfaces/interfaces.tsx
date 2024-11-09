@@ -84,7 +84,7 @@ export interface ControlsInterface{
     isEdit?:boolean;
     isDelete?:boolean;
     isList?:boolean;
-
+    onNavigateBack?: React.MouseEventHandler<HTMLButtonElement> | undefined;
     funcNew?: Function ;
     NewComponent?:ReactNode;
 }
@@ -334,7 +334,7 @@ export interface FormNotaHeladeroValues {
     conos:              number;
     placas_entregas:    number;
     placas_devueltas:   number;
-    fecha_guardado:     null;
+    fecha_guardado?:     Date;
     fecha_apertura:     string;
     fecha_cierre:       null;
     fecha_operacion?:   any;
