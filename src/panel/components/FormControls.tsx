@@ -57,7 +57,7 @@ export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isP
                 {
                     NewComponent ? NewComponent : ''
                 }
-                <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg flex-fill">Atr&aacute;s</button>
+                <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg flex-fill">Volver al listado</button>
             </div>
         </>
     )
