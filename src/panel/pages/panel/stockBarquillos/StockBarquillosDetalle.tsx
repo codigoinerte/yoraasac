@@ -249,7 +249,7 @@ export const StockBarquillosDetalle = () => {
                                     })}
                                     disabled={getDisableInput()}
                                     >
-                            <option value="">-Seleccione una opcion-</option>                          
+                            <option value="">-Seleccione una opción-</option>                          
                             {
                                 listMovimiento.map(({ id, movimiento })=>(
                                     
@@ -274,7 +274,7 @@ export const StockBarquillosDetalle = () => {
                                         }
                                     })}
                                     disabled={getDisableInput()}>
-                            <option value="">-Seleccione una opcion-</option>                          
+                            <option value="">-Seleccione una opción-</option>                          
                             {
                                 listTipoDocumento
                                 .filter((item)=> (item.tipo == getValues("movimientos_id") || item.tipo == 0))

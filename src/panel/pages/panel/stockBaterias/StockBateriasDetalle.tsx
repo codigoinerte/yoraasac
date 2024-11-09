@@ -79,7 +79,7 @@ export const StockBateriasDetalle = () => {
                         <label htmlFor="tipo_movimiento" className="form-label">Tipo de movimiento</label>
                         <select className='form-control'
                                 {...register('movimientos_id', {required: true})} >
-                            <option value="">-Seleccione una opcion-</option>
+                            <option value="">-Seleccione una opción-</option>
                             {
                                 listMovimiento.map(({ id, movimiento })=>(
                                     
@@ -94,7 +94,7 @@ export const StockBateriasDetalle = () => {
                         <label htmlFor="tipo_documento" className="form-label">Tipo de Documento</label>
                         <select className='form-control'
                                 {...register('tipo_documento_id')}>
-                            <option value="">-Seleccione una opcion-</option>
+                            <option value="">-Seleccione una opción-</option>
                             {
                                 listTipoDocumento.map(({id, documento})=>(
                                     <option value={id} key={id}>{documento}</option>

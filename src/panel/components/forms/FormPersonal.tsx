@@ -270,7 +270,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                             <select id="departamento"
                                     className='form-control'
                                     {...register('departamento', { onChange: (e)=> loadProvincias(e.target.value) })}>
-                                <option value="">-Seleccione una opcion-</option>
+                                <option value="">-Seleccione una opción-</option>
                                 {
                                     departamentos.map(( { id, nombre } ) => (
                                         <option value={id} 
@@ -284,7 +284,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                             <select id="provincia" 
                                     className='form-control' 
                                     {...register('provincia', { onChange: (e)=> loadDistritos(e.target.value) })}>
-                                <option value="">-Seleccione una opcion-</option>
+                                <option value="">-Seleccione una opción-</option>
                                 {
                                     provincias.map(( { id, nombre } ) => (
                                         <option value={id} 
@@ -298,7 +298,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                             <select id="distrito" 
                                     className='form-control' 
                                     {...register('distrito')}>
-                                <option value="">-Seleccione una opcion-</option>
+                                <option value="">-Seleccione una opción-</option>
                                 {
                                     distritos.map(( { id, nombre } ) => (
                                         <option value={id} 
