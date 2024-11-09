@@ -75,7 +75,7 @@ export const useStockHeladosStore = () => {
             const { data:info } = await backendApi.post(rutaEndpoint, postdata);
             const result = info.data;
             
-            toastMessage(info);
+            //toastMessage(info);
             
             dispatch(onSetStockHeladoActive({
                 ...result               
@@ -84,7 +84,7 @@ export const useStockHeladosStore = () => {
             
             dispatch(onStatus(false));
 
-            return result;
+            return {...result, message: info.message ?? ''};
 
         } catch (error) {
             console.log(error);
@@ -107,14 +107,14 @@ export const useStockHeladosStore = () => {
             const { data:info } = await backendApi.put(`${rutaEndpoint}/${active!.id}`, postdata);
             const result = info.data;
             
-            toastMessage(info);
+            //toastMessage(info);
             
             dispatch(onSetStockHeladoActive({
                 ...result                
             }));
             dispatch(onStatus(false));
 
-            return result;
+            return {...result, message: info.message ?? ''};
 
         } catch (error) {
             console.log(error);
