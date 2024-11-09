@@ -55,7 +55,7 @@ export const ReporteCliente = () => {
                             <div className="mb-3">
                                 <label htmlFor="distrito" className="form-label">Distrito</label>
                                 <select name="distrito" id="distrito" className="form-control">
-                                    <option value="">-seleccione una opción-</option>
+                                    <option value="">-Seleccione una opción-</option>
                                 </select>
                             </div>
                         </div>

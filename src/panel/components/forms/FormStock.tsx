@@ -25,7 +25,7 @@ export const FormStock = ({category, page }:PersonalForm) => {
                 <div className="mb-3">
                     <label htmlFor="tipo_movimiento" className="form-label">Tipo de movimiento</label>
                     <select name="tipo_movimiento" id="tipo_movimiento" className='form-control'>
-                        <option value="">-seleccione una opcion-</option>
+                        <option value="">-Seleccione una opcion-</option>
                         <option value="1">Compra</option>
                         <option value="2">Devoluci&oacute;n</option>
                     </select>
