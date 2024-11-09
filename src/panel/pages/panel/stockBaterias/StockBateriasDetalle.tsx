@@ -66,7 +66,9 @@ export const StockBateriasDetalle = () => {
         
         <form onSubmit={handleSubmit(onSubmit)}>
         
-            <FormControls category="movimiento" save={()=>console.log(1)} page="baterias"/>
+            <FormControls category="movimiento" save={()=>console.log(1)} page="baterias" onNavigateBack={()=>{
+                    window.location.href = `/movimiento/baterias`;
+            }}/>
 
             <hr className='border border-1 opacity-50'/>
 
@@ -91,7 +93,7 @@ export const StockBateriasDetalle = () => {
                     </div>    
 
                     <div className="mb-3">
-                        <label htmlFor="tipo_documento" className="form-label">Tipo de Documento</label>
+                        <label htmlFor="tipo_documento" className="form-label">Tipo de documento</label>
                         <select className='form-control'
                                 {...register('tipo_documento_id')}>
                             <option value="">-Seleccione una opción-</option>
@@ -115,7 +117,7 @@ export const StockBateriasDetalle = () => {
                     </div>    
 
                     <div className="mb-3">
-                        <label htmlFor="num_documento" className="form-label">N&uacute;m de documento</label>
+                        <label htmlFor="num_documento" className="form-label">N&uacute;m. de documento</label>
                         <input  type="text" 
                                 className="form-control" 
                                 aria-describedby="num_documento"

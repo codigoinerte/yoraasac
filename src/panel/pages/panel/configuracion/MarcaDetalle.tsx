@@ -59,7 +59,12 @@ export const MarcaDetalle = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormControls page="productos" funcNew={()=>{
                     window.location.href = `/configuracion/marcas/new`;
-                }}/>
+                }}
+                onNavigateBack = {()=>{
+                    window.location.href = '/configuracion/marcas'
+                }}
+                routeBackLabel={'Volver al listado'}
+                />
   
                 <hr className='border border-1 opacity-50'/>
     

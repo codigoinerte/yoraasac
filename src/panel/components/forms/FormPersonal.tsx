@@ -187,9 +187,14 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
 
-                <FormControls category={category} page={page} funcNew={()=>{
+                <FormControls category={category} page={page} 
+                funcNew={()=>{
                     window.location.href = `/${category}/${page}/new`;
-                }}/>
+                }}
+                onNavigateBack={()=>{
+                    window.location.href = `/${category}/${page}`;
+                }}
+                />
 
                 <hr className='border border-1 opacity-50'/>
 

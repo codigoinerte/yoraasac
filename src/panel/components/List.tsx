@@ -5,7 +5,7 @@ import { TablalList } from '../interfaces'
 import { FormControls } from './FormControls';
 import Swal from 'sweetalert2';
 
-export const List = ({page, cabecera, detalle, eliminar = function(){}, next, prev, children, category, options = true, actions = true, NewComponent = undefined }:TablalList) => {
+export const List = ({page, cabecera, detalle, eliminar = function(){}, next, prev, children, category, options = true, actions = true, NewComponent = undefined, routeBack = undefined, routeBackLabel = undefined }:TablalList) => {
 
     
 
@@ -15,7 +15,9 @@ export const List = ({page, cabecera, detalle, eliminar = function(){}, next, pr
             options === true &&
             (
                 <>
-                    <FormControls category={category} page={page} save={()=>console.log(1)} tipo='list' NewComponent={NewComponent}/>
+                    <FormControls category={category} page={page} save={()=>console.log(1)} tipo='list' NewComponent={NewComponent} onNavigateBack={()=>{
+                        window.location.href = routeBack ? `${routeBack}` : `/${category}`;
+                    }} routeBackLabel={routeBackLabel} />
             
                     <hr className='border border-1 opacity-50'/>
                 </>

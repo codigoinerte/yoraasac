@@ -147,9 +147,9 @@ export const FacturacionDetalle = () => {
                 message: 'Porfavor ingrese almenos un producto',
                 success: true,
                 custom:{
-                    title : 'Alerta !',
+                    title : 'Alerta!',
                     icon : '',
-                    confirmButtonText: 'ok',
+                    confirmButtonText: 'Ok',
                 }
             });
             return false;
@@ -298,7 +298,9 @@ export const FacturacionDetalle = () => {
             <>  
             <form onSubmit={handleSubmit(onSubmit)}>
 
-                <FormControls save={()=>console.log(1)} page="facturacion"/>
+                <FormControls save={()=>console.log(1)} page="facturacion" onNavigateBack = {()=>{
+                    window.location.href = '/facturacion/';
+                }}/>
 
                 <hr className='border border-1 opacity-50'/>
 
@@ -388,7 +390,7 @@ export const FacturacionDetalle = () => {
                                         style={{ width: 224 }}                        
                                         onSearch={updateDataUser}
                                         onChange={buscarUsuarioReserva}
-                                        placeholder='Buscar Producto'
+                                        placeholder='Buscar producto'
                                         className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
                                     />
                             </div>
@@ -455,7 +457,7 @@ export const FacturacionDetalle = () => {
                                 onChange={(e)=>{
                                     setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
                                 }}
-                                placeholder='Buscar Producto'
+                                placeholder='Buscar producto'
                                 className="form-control p-0 w-auto no-width"
                             />
                             <button onClick={loadProducto} className="btn btn-primary" type="button"><i className="bi bi-plus"></i> Agregar</button>

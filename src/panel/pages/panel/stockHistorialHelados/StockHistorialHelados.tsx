@@ -17,7 +17,7 @@ type FormValues = {
 
 const breadcrumb:bread[] = [
     { id:1, titulo: 'Reportes', enlace: '/reportes' },
-    { id:2, titulo: 'Stock Historial de movimientos', enlace: '' },
+    { id:2, titulo: 'Stock historial de movimientos', enlace: '' },
 ];
 const { Column, HeaderCell, Cell } = Table;
 const rowKey = 'id';
@@ -183,17 +183,17 @@ const exportToExcel = async() => {
                 </Column>
 
                 <Column fixed>
-                  <HeaderCell>codigo</HeaderCell>
+                  <HeaderCell>Codigo</HeaderCell>
                   <Cell dataKey="codigo_movimiento" />
                 </Column>
 
                 <Column flexGrow={1}>
-                  <HeaderCell>documento</HeaderCell>
+                  <HeaderCell>Documento</HeaderCell>
                   <NameDocumentCell dataKey="documento"/>
                 </Column>
 
                 <Column flexGrow={1}>
-                  <HeaderCell>num. doc</HeaderCell>
+                  <HeaderCell>Num. doc</HeaderCell>
                   <Cell dataKey="numero_documento" />
                 </Column>
                 <Column width={200}>

@@ -68,6 +68,9 @@ export const Marca = () => {
                 eliminar={eliminar}
                 next={()=>{}}
                 prev={()=>{}}
+
+                routeBack={'/configuracion'}
+                routeBackLabel={'Volver a las categorias'}
             >
             <>
             </>

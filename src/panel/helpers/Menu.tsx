@@ -65,22 +65,22 @@ export const MenuPersonas:MenuInterface[] = [
  
 export const MenuStock:MenuInterface[] = [   
     {
-       "nombre":"Movimiento de Helados",
+       "nombre":"Movimiento de helados",
        "alias":"/movimiento/helados",
        "icono":"bi bi-app"
     },
     {
-       "nombre":"Movimiento de Barquillos",
+       "nombre":"Movimiento de barquillos",
        "alias":"/movimiento/barquillos",
        "icono":"bi bi-app"
     },
     {
-       "nombre":"Movimiento de Baterias",
+       "nombre":"Movimiento de baterias",
        "alias":"/movimiento/baterias",
        "icono":"bi bi-app"
     },
     {
-      "nombre":"Movimiento de Reajuste",
+      "nombre":"Movimiento de reajuste",
       "alias":"/movimiento/reajuste",
       "icono":"bi bi-app"
     }  
@@ -88,12 +88,12 @@ export const MenuStock:MenuInterface[] = [
 
  export const MenuReportes:MenuInterface[] = [
    {
-      "nombre":"Notas heladeros",
+      "nombre":"Historial de notas",
       "alias":"/reportes/nota-heladeros",
       "icono":"bi bi-app"
    },    
    {
-      "nombre":"Reporte Heladero asistencia",
+      "nombre":"Reporte heladero asistencia",
       "alias":"/reportes/heladeros-asistencia",
       "icono":"bi bi-app"
    },
@@ -103,7 +103,7 @@ export const MenuStock:MenuInterface[] = [
       "icono":"bi bi-app"
    },
    {
-      "nombre":"Historial Movimientos (Helados)",
+      "nombre":"Historial movimientos (helados)",
       "alias":"/reportes/historial-helados",
       "icono":"bi bi-app"
    },

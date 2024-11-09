@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ControlsInterface } from '../interfaces'
 
-export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isPrint = false, isFactura = false, isNew = false, funcNew = undefined, NewComponent = undefined, onNavigateBack= ()=>{ history.go(-1); }   }:ControlsInterface) => {
+export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isPrint = false, isFactura = false, isNew = false, funcNew = undefined, NewComponent = undefined, onNavigateBack= ()=>{ history.go(-1); } , routeBackLabel   }:ControlsInterface) => {
 
     const { id = 0 } = useParams();
 
@@ -57,7 +57,7 @@ export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isP
                 {
                     NewComponent ? NewComponent : ''
                 }
-                <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg flex-fill">Volver al listado</button>
+                <button type='button' onClick={onNavigateBack} className="btn btn-danger btn-lg flex-fill">{ routeBackLabel ? routeBackLabel: 'Volver al listado'}</button>
             </div>
         </>
     )

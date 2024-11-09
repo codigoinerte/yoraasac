@@ -275,7 +275,7 @@ export const ProductosDetalle = () => {
                                 onSearch={updateData}
                                 //renderMenu={updateData}                          
                                 //onChange={handleChangeTipo} 
-                                placeholder='Buscar UNSPSC de Sunat'                             
+                                placeholder='Buscar UNSPSC de SUNAT'                             
                                 className={getValues("unspsc_id")?.toString() == "" || errors.unspsc_id ? "form-control is-invalid p-0" : "form-control p-0"}
                             />
                             { (getValues("unspsc_id")?.toString() == "" || errors.unspsc_id) && <RequiredField/>}

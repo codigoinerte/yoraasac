@@ -18,7 +18,7 @@ const buttonPrev = useRef<any>();
 const buttonNext = useRef<any>();
 
 const cabecera = [
-    "codigo movimiento",
+    "Codigo movimiento",
     "Tipo movimiento",
     "Fecha de movimiento"
 ];
@@ -158,7 +158,8 @@ return (
             detalle={detalle}            
             eliminar={eliminar}
             next={next}
-            prev={prev}>
+            prev={prev}
+            >
         <>
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">

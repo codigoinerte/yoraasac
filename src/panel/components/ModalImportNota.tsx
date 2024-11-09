@@ -54,7 +54,7 @@ export const ModalImportNota = ({ open, setOpen, setBuscar }:Props) => {
         <Modal backdrop="static" keyboard={false} open={open} onClose={handleClose}>
             <form onSubmit={handleSubmit(onSubmit)} ref={componentRef}>
             <Modal.Header>
-                <Modal.Title>Importar Nota Heladero</Modal.Title>
+                <Modal.Title>Importar nota heladero</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>

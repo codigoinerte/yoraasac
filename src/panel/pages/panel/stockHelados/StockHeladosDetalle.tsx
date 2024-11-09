@@ -30,7 +30,7 @@ export const StockHeladosDetalle = () => {
     const [cabecera, setCabecera] = useState<cabecera[]>([
         {
             key: "col-1",
-            titulo: "codigo",
+            titulo: "Codigo",
             order: "asc",
             keyDetail: "codigo",
             active: false,
@@ -44,7 +44,7 @@ export const StockHeladosDetalle = () => {
         },
         {
             key: "col-3",
-            keyDetail: "cantidad",
+            keyDetail: "Cantidad",
             titulo: "cantidad",
             order: "asc",
             active: false,
@@ -225,7 +225,13 @@ export const StockHeladosDetalle = () => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
           
-            <FormControls category="stock" save={()=>handleSubmit(onSubmit)} page="helados"/>
+            <FormControls 
+                category="stock" 
+                save={()=>handleSubmit(onSubmit)} 
+                onNavigateBack={()=>{
+                    window.location.href = `/movimiento/helados`;
+                }}
+                page="helados"/>
 
             <hr className='border border-1 opacity-50'/>
 
@@ -278,7 +284,7 @@ export const StockHeladosDetalle = () => {
                 </div>
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <div className="mb-3">
-                        <label htmlFor="tipo_documento" className="form-label">Tipo de Documento</label>
+                        <label htmlFor="tipo_documento" className="form-label">Tipo de documento</label>
                         <select className='form-control'
                                     {...register('tipo_documento_id', {
                                         onChange: (e) => {
@@ -316,7 +322,7 @@ export const StockHeladosDetalle = () => {
                 </div>
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <div className="mb-3">
-                        <label htmlFor="num_documento" className="form-label">N&uacute;m de documento</label>
+                        <label htmlFor="num_documento" className="form-label">N&uacute;m. de documento</label>
                         {
                             getValues("tipo_documento_id") == 5 ?
 
@@ -404,7 +410,7 @@ export const StockHeladosDetalle = () => {
                                     onChange={(e)=>{
                                         setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
                                     }}
-                                    placeholder='Buscar Producto'
+                                    placeholder='Buscar producto'
                                     className="form-control p-0 w-auto no-width"
                                 />
                                 <button onClick={loadProducto} className="btn btn-primary" type="button"><i className="bi bi-plus"></i> Agregar</button>

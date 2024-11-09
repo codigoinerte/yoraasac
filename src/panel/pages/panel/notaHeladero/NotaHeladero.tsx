@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import { formatDate } from '../../../../helpers';
 
 const breadcrumb:bread[] = [    
-    { id:1, titulo: 'Nota heladero', enlace: '' },
+    { id:1, titulo: 'Historial de notas', enlace: '' },
   ];
 
 
@@ -33,10 +33,10 @@ export const NotaHeladero = () => {
         "Documento",
         "Nombre",
         "Estado",
-        "Fecha de Creación",
-        "Fecha de Apertura",
-        "Fecha de Guardado",
-        "Fecha de Cierre"
+        "Fecha creación",
+        "Fecha apertura",
+        "Fecha guardado",
+        "Fecha cierre"
     ];
 
     const { warningDelete } = useAlert();
@@ -94,7 +94,7 @@ export const NotaHeladero = () => {
           }else{
               Swal.fire(
                   'Error',
-                  'Hubo un error al momento de ejecutar el proceso vuelva a intentarlo mas tarde',
+                  'Hubo un error al momento de ejecutar el proceso vuelva a intentarlo mas tarde.',
                   'question'
                 )
           }
@@ -181,12 +181,14 @@ export const NotaHeladero = () => {
             <List 
                     page="nota-heladero"                
                     cabecera={cabecera} 
-                    
+                    routeBack='/'
+                    routeBackLabel='Volver a la home'
                     detalle={detalle}               
                     eliminar={eliminar}
                     next={next}
                     prev={prev}
-                    NewComponent={<button className='btn btn-warning flex-fill' onClick={()=> setOpen(e=>!e)}>Importar nota heladero</button>}>
+                    NewComponent={<button className='btn btn-warning flex-fill' onClick={()=> setOpen(e=>!e)}>Importar nota heladero</button>}
+                    >
                 <>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">

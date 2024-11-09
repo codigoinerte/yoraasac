@@ -42,7 +42,7 @@ export const Reajuste = () => {
   const navigate = useNavigate();
 
   const onNavigateBack = () => {
-      navigate(-1);
+      window.location.href = `/movimiento`;
   }
 
   const handleChangeLimit = (dataKey:any) => {
@@ -156,19 +156,19 @@ export const Reajuste = () => {
                   <Cell dataKey="rowKey" />
                 </Column>
                 <Column fixed flexGrow={1}>
-                  <HeaderCell>codigo</HeaderCell>
+                  <HeaderCell>Codigo</HeaderCell>
                   <Cell dataKey="codigo" />
                 </Column>
                 <Column width={200}>
-                  <HeaderCell>codigo ingreso</HeaderCell>
+                  <HeaderCell>Codigo ingreso</HeaderCell>
                   <Cell dataKey="codigo_ingreso" />
                 </Column>
                 <Column width={200}>
-                  <HeaderCell>codigo salida</HeaderCell>
+                  <HeaderCell>Codigo salida</HeaderCell>
                   <Cell dataKey="codigo_ingreso" />
                 </Column>
                 <Column width={200}>
-                  <HeaderCell>fecha reajuste</HeaderCell>
+                  <HeaderCell>Fecha reajuste</HeaderCell>
                   <Cell dataKey="fecha_reajuste" />
                 </Column>
                 <Column width={200} >

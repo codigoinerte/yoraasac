@@ -19,7 +19,7 @@ export const ReporteNotaHeladero = () => {
         "Documento",
         "Nombre",
         "Vendido",
-        "Deuda Pagada",
+        "Deuda pagada",
         "Totales",
         "Pago",
         "Debe",
@@ -119,7 +119,10 @@ export const ReporteNotaHeladero = () => {
                     detalle={detalle}               
                     descargar={function(){}}
                     next={next}
-                    prev={prev}>
+                    prev={prev}
+                    routeBack={'reportes'}
+                    routeBackLabel={'Volver a las categorias'}
+                    >
                 
                 <form onSubmit={handleSubmit(onSubmit)}>                    
                     <div className="row">

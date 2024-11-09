@@ -160,8 +160,8 @@ export const Productos = () => {
                     }} className="btn btn-primary btn-lg flex-fill">Nuevo</button>
 
                     <button type='button' onClick={()=> {
-                        navigate(-1);
-                    }} className="btn btn-danger btn-lg flex-fill">Atr&aacute;s</button>
+                        window.location.href = '/';
+                    }} className="btn btn-danger btn-lg flex-fill">Ir a la home</button>
                 </div>
                 <hr className='border border-1 opacity-50'/>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -190,7 +190,7 @@ export const Productos = () => {
                                             className="form-control" 
                                             id="producto" 
                                             aria-describedby="Buscador" 
-                                            placeholder='Productos'
+                                            placeholder='Producto'
                                             {...register('producto')}/>
                                 </div>
                             </div>
@@ -240,7 +240,7 @@ export const Productos = () => {
                                 <Cell dataKey="moneda"/>
                             </Column>
                             <Column width={120} sortable>
-                                <HeaderCell>Prec. Venta</HeaderCell>
+                                <HeaderCell>Prec. venta</HeaderCell>
                                 <Cell dataKey="precio_venta" />
                             </Column>
                             <Column width={120} sortable>

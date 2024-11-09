@@ -99,7 +99,7 @@ export const Moneda = () => {
                 cabecera={cabecera}                 
                 detalle={detalle}               
                 eliminar={eliminar}                
-                editar={editar}                
+                editar={editar}
             >
             <>
                 <form onSubmit={handleSubmit(onSubmit)}>

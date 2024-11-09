@@ -26,7 +26,7 @@ export const toastMessage = ({data, message, success, icon = 'success', title = 
             title: titleCustom,
             text: message,
             icon: iconCustom,
-            confirmButtonText: confirmButtonText ?? 'ok'
+            confirmButtonText: confirmButtonText ?? 'Ok'
           })
 
     }else{

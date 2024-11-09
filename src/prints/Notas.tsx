@@ -114,22 +114,22 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                             </tr>
                             <tr>
                                 <td align='left'>
-                                    <b>Cargo por baterias:</b> {getValues('cargo_baterias') ? getValues('cargo_baterias').toFixed(2) : 0.00}
+                                    <b>Cargo por baterias:</b> {!!getValues('cargo_baterias') ? parseFloat(getValues('cargo_baterias').toString()).toFixed(2) : 0.00}
                                 </td>
                             </tr>
                             <tr>
                                 <td align='left'>
-                                    <b>Vendido:</b> {getValues('monto') ? getValues('monto').toFixed(2) : 0.00 }
+                                    <b>Vendido:</b> {!!getValues('monto') ? parseFloat(getValues('monto').toString()).toFixed(2) : 0.00 }
                                 </td>
                             </tr>
                             <tr>
                                 <td align='left'>
-                                    <b>Deuda anterior:</b> {getValues('deuda_anterior') ? getValues('deuda_anterior').toFixed(2): 0.00}
+                                    <b>Deuda anterior:</b> {!!getValues('deuda_anterior') ? parseFloat(getValues('deuda_anterior').toString()).toFixed(2): 0.00}
                                 </td>
                             </tr>
                             <tr>
                                 <td align='left'>
-                                    <b>Monto(subtotal):</b> {getValues('subtotal') ? getValues('subtotal').toFixed(2) : 0.00}
+                                    <b>Monto(subtotal):</b> {!!getValues('subtotal') ? parseFloat(getValues('subtotal').toString()).toFixed(2) : 0.00}
                                 </td>
                             </tr>
                             {
@@ -141,7 +141,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                             (
                                                 <tr>
                                                     <td align='left'>
-                                                        <b>Pago:</b> {getValues('pago')}
+                                                        <b>Pago:</b> {parseFloat(getValues('pago').toString()).toFixed(2)}
                                                     </td>
                                                 </tr>
                                             ) : ''
@@ -151,7 +151,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                             (
                                                 <tr>
                                                     <td align='left'>
-                                                        <b>Ahorro:</b> {getValues('ahorro')}
+                                                        <b>Ahorro:</b> {parseFloat(getValues('ahorro').toString()).toFixed(2)}
                                                     </td>
                                                 </tr>
                                             ) : ''
@@ -161,7 +161,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                             (
                                                 <tr>
                                                     <td align='left'>
-                                                        <b>Debe:</b> {getValues('debe')}
+                                                        <b>Debe:</b> {parseFloat(getValues('debe').toString()).toFixed(2)}
                                                     </td>
                                                 </tr>
                                             ) : ''
@@ -192,7 +192,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                             <td width={10}>{ detalle.devolucion??0 }</td>
                                             <td width={10}>{ detalle.pedido??0 }</td>
                                             <td width={10}>{ detalle.vendido??0 }</td>
-                                            <td width={10}>{ detalle.importe??0 }</td>
+                                            <td width={10}>{ parseFloat((detalle.importe??"0").toString()).toFixed(2) }</td>
 
                                         </tr>
                                     ))

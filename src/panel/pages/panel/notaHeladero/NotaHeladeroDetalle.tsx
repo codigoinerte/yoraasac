@@ -38,7 +38,7 @@ const cabecera = [
 ];
 
 const breadcrumb:bread[] = [    
-    { id:1, titulo: 'Nota heladero', enlace: '/nota-heladero' },
+    { id:1, titulo: 'Historial de notas', enlace: '/nota-heladero' },
     { id:2, titulo: 'Nota heladero detalle', enlace: '' },
 ];
 
@@ -69,7 +69,7 @@ export const NotaHeladeroDetalle = () => {
 
     const [orderDirection, setOrderDirection] = useState<order>("asc");
 
-    const [estadoTitulo, setEstadoTitulo] = useState('Apertura de cuenta nueva');
+    const [estadoTitulo, setEstadoTitulo] = useState('apertura de cuenta nueva');
 
     const [codigoTitulo, setCodigoTitulo] = useState('');
 
@@ -186,15 +186,15 @@ export const NotaHeladeroDetalle = () => {
 
                 if(heladero.estado == 2){ // si el estado es de apertura (paso 2)
                     setValue('estado', 2); //el estado pasa a cierre (se busca primero cerrar la cuenta del heladero)
-                    setEstadoTitulo('Reapertura');
+                    setEstadoTitulo('reapertura');
                 }                             
                
                 if(heladero.estado == 1){
-                    setEstadoTitulo('Apertura de cuenta nueva');
+                    setEstadoTitulo('apertura de cuenta nueva');
                 }
 
                 if(heladero.estado == 3){
-                    setEstadoTitulo('Cuenta guardada');
+                    setEstadoTitulo('cuenta guardada');
                 }
 
                setState(heladero.estado);
@@ -348,14 +348,14 @@ export const NotaHeladeroDetalle = () => {
                 let estado = (heladero.estado == 3) ? 2 : heladero.estado;
                 
                 if(estado == 3){
-                    setEstadoTitulo('Guardado');
+                    setEstadoTitulo('guardado');
                 }else if(estado == 2){
-                    setEstadoTitulo('Reapertura');
+                    setEstadoTitulo('reapertura');
                 }else if(estado == 1){
-                    setEstadoTitulo('Cierre');
+                    setEstadoTitulo('cierre');
                 }
                 else{
-                    setEstadoTitulo('Apertura');
+                    setEstadoTitulo('apertura');
                 }
 
                 setValue('estado', estado);
@@ -427,14 +427,14 @@ export const NotaHeladeroDetalle = () => {
             setState(active.estado);
 
             if(active.estado == 3){
-                setEstadoTitulo('Guardado');
+                setEstadoTitulo('guardado');
             }else if(active.estado == 2){
-                setEstadoTitulo('Reapertura');
+                setEstadoTitulo('reapertura');
             }else if(active.estado == 1){
-                setEstadoTitulo('Cierre');
+                setEstadoTitulo('cierre');
             }
             else{
-                setEstadoTitulo('Apertura');
+                setEstadoTitulo('apertura');
             }
 
             setCodigoTitulo(` - codigo: ${active.codigo}`);
@@ -711,7 +711,7 @@ export const NotaHeladeroDetalle = () => {
                                                         setValue("estado", parseInt(e.currentTarget.value));
 
                                                         let dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm").toString();                
-                                                        setValue('fecha_operacion', dateNow.replace(" ","T"));
+                                                        setValue('fecha_operacion', dateNow.replace(" ","T"));                                                        
                                                     }}
                                                     >
                                                         {
@@ -1043,7 +1043,7 @@ export const NotaHeladeroDetalle = () => {
                 </form>
 
                 {
-                    ((state==3 && getValues('fecha_guardado') != undefined) || openModalGuardado) &&
+                    ((state==3 && !getValues('fecha_guardado')) || openModalGuardado) &&
                     (<ModalNotaHeladeroRegister
                             openModal={openModal}
                             handlerOpenModal={setOpenModal}

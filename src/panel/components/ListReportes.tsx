@@ -22,7 +22,7 @@ const CustomCell = ({ rowData, dataKey, ...props }:any) => {
     );
 };
 
-export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children }:ReportList) => {
+export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children, routeBack, routeBackLabel }:ReportList) => {
 
     const [sortColumn, setSortColumn] = useState();
     const [sortType, setSortType] = useState();
@@ -31,7 +31,11 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
     const navigate = useNavigate();
 
     const onNavigateBack = () => {
-        navigate(-1);
+        if(routeBack){
+            window.location.href = `${routeBack}`;
+        }else{
+            navigate(-1);
+        }
     }
 
     const { Column, HeaderCell } = Table;
@@ -89,7 +93,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
     return (
         <>            
             <div className="d-flex gap-2 mb-4">           
-                <button onClick={onNavigateBack} className="btn btn-danger btn-lg">Atr&aacute;s</button>
+                <button onClick={onNavigateBack} className="btn btn-danger btn-lg">{routeBackLabel ? routeBackLabel : 'Atr&aacute;s'}</button>
             </div>
 
             <hr className='border border-1 opacity-50'/>

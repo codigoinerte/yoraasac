@@ -44,6 +44,8 @@ export interface TablalList{
     options?: Boolean,
     actions?: Boolean
     NewComponent?: ReactNode,
+    routeBack?: String,
+    routeBackLabel?: String
 }
 export interface ReportList{
     children: React.ReactElement,
@@ -51,7 +53,9 @@ export interface ReportList{
     detalle:listaDetalle[],    
     descargar: Function,
     next?: Function,
-    prev?: Function
+    prev?: Function,
+    routeBack?: String,
+    routeBackLabel?: String
 }
 
 export interface SaveList{
@@ -87,6 +91,7 @@ export interface ControlsInterface{
     onNavigateBack?: React.MouseEventHandler<HTMLButtonElement> | undefined;
     funcNew?: Function ;
     NewComponent?:ReactNode;
+    routeBackLabel?:String;
 }
 export interface ListDetail{
     cabecera: string[],

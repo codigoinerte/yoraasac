@@ -232,7 +232,10 @@ export const Facturacion = () => {
                     detalle={detalle}               
                     eliminar={eliminar}
                     next={next}
-                    prev={prev}>
+                    prev={prev}
+                    
+                    routeBack={'/'}
+                    routeBackLabel={'Volver a la home'}>
                 <>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">

@@ -14,10 +14,10 @@ const breadcrumb:bread[] = [
 export const ReporteNotaHeladeroAsistencia = () => {
 
     const cabecera = [
-        "DOCUMENTO",
-        "NOMBRE",
-        "APERTURA",
-        "CIERRE"
+        "Documento",
+        "Nombre",
+        "Apertura",
+        "Cierre"
     ];
 
     const [detalle, setDetalle] = useState<listaDetalle[]>([]);
@@ -65,7 +65,9 @@ export const ReporteNotaHeladeroAsistencia = () => {
             <ListReportes                                   
                     cabecera={cabecera}                     
                     detalle={detalle}               
-                    descargar={()=>{}}>
+                    descargar={()=>{}}
+                    routeBack={'/reportes'}
+                    routeBackLabel={'Volver a las categorias'}>
                 
                     <div className="row">
                         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">

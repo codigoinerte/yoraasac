@@ -29,7 +29,7 @@ export const StockBarquillosDetalle = () => {
     const [cabecera, setCabecera] = useState<cabecera[]>([
         {
             key: "col-1",
-            titulo: "codigo",
+            titulo: "Codigo",
             order: "asc",
             keyDetail: "codigo",
             active: false,
@@ -44,7 +44,7 @@ export const StockBarquillosDetalle = () => {
         {
             key: "col-3",
             keyDetail: "cantidad",
-            titulo: "cantidad",
+            titulo: "Cantidad",
             order: "asc",
             active: false,
         },
@@ -209,7 +209,9 @@ export const StockBarquillosDetalle = () => {
           
             <form onSubmit={handleSubmit(onSubmit)}>
 
-            <FormControls category="movimiento" save={()=>console.log(1)} page="barquillos"/>
+            <FormControls category="movimiento" save={()=>console.log(1)} page="barquillos" onNavigateBack={()=>{
+                    window.location.href = `/movimiento/barquillos`;
+            }}/>
 
             <hr className='border border-1 opacity-50'/>
 
@@ -262,7 +264,7 @@ export const StockBarquillosDetalle = () => {
                 </div>
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <div className="mb-3">
-                        <label htmlFor="tipo_documento" className="form-label">Tipo de Documento</label>
+                        <label htmlFor="tipo_documento" className="form-label">Tipo de documento</label>
                         <select className='form-control'
                                     {...register('tipo_documento_id', {
                                         onChange: (e) => {
@@ -300,7 +302,7 @@ export const StockBarquillosDetalle = () => {
                 </div>
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <div className="mb-3">
-                        <label htmlFor="num_documento" className="form-label">N&uacute;m de documento</label>
+                        <label htmlFor="num_documento" className="form-label">N&uacute;m. de documento</label>
                         {
                             <input  type="text" 
                                     className="form-control" 
@@ -348,7 +350,7 @@ export const StockBarquillosDetalle = () => {
                             onChange={(e)=>{
                                 setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
                             }}
-                            placeholder='Buscar Producto'
+                            placeholder='Buscar producto'
                             className="form-control p-0 w-auto no-width"
                         />
                         <button onClick={loadProducto} className="btn btn-primary" type="button"><i className="bi bi-plus"></i> Agregar</button>

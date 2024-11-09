@@ -138,16 +138,16 @@ export const StockRestante = () => {
                 </Column>
 
                 <Column width={110} resizable sortable>
-                  <HeaderCell>codigo</HeaderCell>
+                  <HeaderCell>Codigo</HeaderCell>
                   <Cell dataKey="codigo" />
                 </Column>
 
                 <Column width={220} flexGrow={1} resizable sortable>
-                  <HeaderCell>nombre</HeaderCell>
+                  <HeaderCell>Nombre</HeaderCell>
                   <Cell dataKey="nombre" />
                 </Column>
                 <Column width={90} resizable sortable>
-                  <HeaderCell align="center">cant. alerta<br/>(Unid.)</HeaderCell>
+                  <HeaderCell align="center">cant. alerta<br/>(unid.)</HeaderCell>
                   <Cell dataKey="stock_alerta" />
                 </Column>
                 <Column width={90} resizable sortable>
@@ -155,15 +155,15 @@ export const StockRestante = () => {
                   <Cell dataKey="cantidad_caja" />
                 </Column>                
                 <Column width={85} resizable sortable>
-                  <HeaderCell align="center">Entradas<br/>(Unid.)</HeaderCell>
+                  <HeaderCell align="center">Entradas<br/>(unid.)</HeaderCell>
                   <Cell dataKey="entrantes" />
                 </Column>
                 <Column width={85} resizable sortable>
-                  <HeaderCell align="center">Salidas<br/>(Unid.)</HeaderCell>
+                  <HeaderCell align="center">Salidas<br/>(unid.)</HeaderCell>
                   <Cell dataKey="salientes" />
                 </Column>
                  <Column width={110} resizable sortable>
-                  <HeaderCell align="center">Cajas restantes<br/>(Cajas)</HeaderCell>
+                  <HeaderCell align="center">Cajas restantes<br/>(cajas)</HeaderCell>
                   <Cell dataKey="cajas_restantes" />
                 </Column>
                 <Column width={110} resizable sortable>

@@ -89,7 +89,14 @@ export const ConfiguracionPrincipal = () => {
 
             <form onSubmit={handleSubmit(onSubmit)}>
 
-                <FormControls page="configuracion" save={()=>console.log(1) } tipo='edit' />
+                <FormControls 
+                    page="configuracion" 
+                    save={()=>console.log(1) } 
+                    tipo='edit'
+                    onNavigateBack={()=>{
+                        window.location.href = '/configuracion'
+                    }}
+                    routeBackLabel={'Volver a las categorias'} />
 
                 <hr className='border border-1 opacity-50'/>
 
