@@ -172,7 +172,7 @@ export const NotaHeladeroDetalle = () => {
 
         const heladero = await loadBuscarNotaHeladeroGuardada(parseInt(user.toString()));
         
-            /* si heladero(toda la info de la nota del headero) existe previamente se completa la data*/
+        /* si heladero(toda la info de la nota del headero) existe previamente se completa la data*/
         if(heladero && heladero.hasOwnProperty("id") && heladero.id){
             setisNewRegister(false);
             //setPrincipalId(heladero.id);
@@ -229,6 +229,8 @@ export const NotaHeladeroDetalle = () => {
     
             dispatch(onStatus(false));
 
+            window.history.pushState(null, '', `/nota-heladero/edit/${heladero.id}`);
+
             toast.success('Se importo la nota guardada del heladero correctamente');
         }else{
             /* si heladero(toda la info de la nota del headero) no existe previamente se define estado en reapertura, el cual funciona como un nuevo dia */
@@ -266,6 +268,13 @@ export const NotaHeladeroDetalle = () => {
         reset();
 
         setNullNotaHeladero();
+
+        setValue("codigo", undefined);
+        setValue("heladero_nombre", undefined);
+        setValue("estado_nombre", undefined);
+        setValue("moneda", undefined);
+        setValue("id_children", 0);
+        setValue("fecha_guardado", undefined);
 
         const productos = await loadProductosDisponibles();
         
@@ -329,7 +338,7 @@ export const NotaHeladeroDetalle = () => {
             setValue("estado_nombre", heladero.estado_nombre);
             setValue("moneda", heladero.moneda);
             setValue("id_children", heladero.id_children);
-            
+            setValue("fecha_guardado", heladero.fecha_guardado);
             dispatch(onSetNotaHeladeroActive(heladero));
 
             let detalle = heladero.detalle??[];
@@ -614,7 +623,7 @@ export const NotaHeladeroDetalle = () => {
             <>     
                 {
                     state == 1 &&
-                    <NotasComponent ref={componentRef} currentNota={ getValues() } />
+                    <NotasComponent ref={componentRef} currentNota={ getValues() } getValues={getValues}/>
                 }
                      
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -626,6 +635,9 @@ export const NotaHeladeroDetalle = () => {
                         isPrint={isPrint()} 
                         isFactura={isFactura()} 
                         isNew={true} 
+                        onNavigateBack = {()=>{
+                            window.location.href = '/nota-heladero/';
+                        }}
                         funcNew={()=>{
                          window.location.href = '/nota-heladero/new';
                         }}
@@ -956,7 +968,7 @@ export const NotaHeladeroDetalle = () => {
 
                                                                 onChangePago();
                                                             }
-                                                        })} className='form-control' step={0.01}/></td>
+                                                        })} className='form-control' step={0.01} readOnly={active.estado == 1 ? true : false}/></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3} style={{background: '#dedede'}}>&nbsp;</td>
@@ -1031,7 +1043,7 @@ export const NotaHeladeroDetalle = () => {
                 </form>
 
                 {
-                    ((state==3 && !(active?.fecha_guardado)) || openModalGuardado) &&
+                    ((state==3 && getValues('fecha_guardado') != undefined) || openModalGuardado) &&
                     (<ModalNotaHeladeroRegister
                             openModal={openModal}
                             handlerOpenModal={setOpenModal}
