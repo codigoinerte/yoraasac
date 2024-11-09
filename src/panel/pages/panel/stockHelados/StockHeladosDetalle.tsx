@@ -8,6 +8,7 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { SelectPicker } from 'rsuite';
 import toast , { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const breadcrumb:bread[] = [
   { id:1, titulo: 'Movimientos', enlace: '/movimiento' },
@@ -103,6 +104,15 @@ export const StockHeladosDetalle = () => {
         setValue('detalle', stock?.detalle);
         setTipo(stock?.movimientos_id);
         setTipoDocumentoItem(stock?.tipo_documento_id);
+
+        const { message = '', type = '' } = JSON.parse(localStorage.getItem("notification") ?? '{}');
+        
+        if(message){
+            if(type == "success"){
+                Swal.fire("Exito!", message, "success");
+            }
+            localStorage.removeItem("notification");
+        }
     }
 
     useEffect(() => {
@@ -119,22 +129,16 @@ export const StockHeladosDetalle = () => {
                         
 
     const onSubmit: SubmitHandler<FormStockHeladoValues> = async (data) => {
-        if(id == 0){
-            const response = await saveStockHelado({...data});
-            if(response.id){
-                window.history.pushState(null, '', `/movimiento/helados/${response.id}`);
-                setId(response.id);
+        const response = (id == 0) ? await saveStockHelado({...data}) : await updateStockHelado({...data});
+        
+        if(!response.id) return;
 
-                if(response.detalle){
-                    setValue("detalle", response.detalle);
-                }
-            }
-        }else{
-            const response = await updateStockHelado({...data});
-            if(response.detalle){
-                setValue("detalle", response.detalle);
-            }
-        }
+        localStorage.setItem("notification", JSON.stringify({
+            message : "Las cantidades guardadas fueron actualizadas correctamente",
+            type : "success"
+        }));
+
+        location.replace(`/movimiento/helados/edit/${response.id}`);        
     }
     
     const updateData = (buscar:string) => {
