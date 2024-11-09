@@ -6,12 +6,14 @@ import { FormNotaHeladeroValues } from '../panel/interfaces'
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useConfiguration } from '../hooks';
+import { UseFormGetValues } from 'react-hook-form';
 
 
 
 interface MyComponentProps {
     // Añade aquí las propiedades del componente si las tiene.
-    currentNota: FormNotaHeladeroValues
+    currentNota: FormNotaHeladeroValues,
+    getValues: UseFormGetValues<FormNotaHeladeroValues>
 }
 const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> = (props, ref) => {
 
@@ -26,6 +28,8 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
     const active = infoSaved?.estado == 1 ? infoSaved : props.currentNota;
 
     const detalle = infoSaved?.estado == 1 ? (infoSaved?.detalle ?? []) :  props.currentNota.productos ?? [];
+
+    const getValues = props.getValues;
 
     useEffect(() => {
       
@@ -104,29 +108,64 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                 <td align='left'><b>Moneda</b>: { active?.moneda }</td>
                             </tr>
                             <tr>
+                                <td>
+                                    <div className="line"></div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td align='left'>
-                                    <b>Monto(subtotal):</b> {active?.monto}
+                                    <b>Cargo por baterias:</b> {getValues('cargo_baterias') ? getValues('cargo_baterias').toFixed(2) : 0.00}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='left'>
+                                    <b>Vendido:</b> {getValues('monto') ? getValues('monto').toFixed(2) : 0.00 }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='left'>
+                                    <b>Deuda anterior:</b> {getValues('deuda_anterior') ? getValues('deuda_anterior').toFixed(2): 0.00}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='left'>
+                                    <b>Monto(subtotal):</b> {getValues('subtotal') ? getValues('subtotal').toFixed(2) : 0.00}
                                 </td>
                             </tr>
                             {
                                 infoSaved?.estado == 1 ?
                                 (
                                     <>
-                                        <tr>
-                                            <td align='left'>
-                                                <b>Pago:</b> {active?.pago}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align='left'>
-                                                <b>ahorro:</b> {active?.ahorro}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align='left'>
-                                                <b>Debe:</b> {active?.debe}
-                                            </td>
-                                        </tr>
+                                        {
+                                            (getValues('pago') != 0) ?
+                                            (
+                                                <tr>
+                                                    <td align='left'>
+                                                        <b>Pago:</b> {getValues('pago')}
+                                                    </td>
+                                                </tr>
+                                            ) : ''
+                                        }
+                                        {
+                                            (getValues('ahorro') != 0) ?
+                                            (
+                                                <tr>
+                                                    <td align='left'>
+                                                        <b>Ahorro:</b> {getValues('ahorro')}
+                                                    </td>
+                                                </tr>
+                                            ) : ''
+                                        }
+                                        {
+                                            (getValues('debe') !=0) ?
+                                            (
+                                                <tr>
+                                                    <td align='left'>
+                                                        <b>Debe:</b> {getValues('debe')}
+                                                    </td>
+                                                </tr>
+                                            ) : ''
+                                        }
                                     </>
                                 ) : ''
                             }
@@ -137,10 +176,10 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                         <tbody>
                             <tr>
                                 <td className='sizeTitle text-left'><strong>Prod.</strong></td>
+                                <td className='sizeTitle'><strong>Gua.</strong></td>
                                 <td className='sizeTitle'><strong>Dev.</strong></td>
                                 <td className='sizeTitle'><strong>Ped.</strong></td>
                                 <td className='sizeTitle'><strong>Ven.</strong></td>
-                                <td className='sizeTitle'><strong>Gua.</strong></td>
                                 <td className='sizeTitle'><strong>Imp.</strong></td>
                             </tr>
                             {
@@ -149,10 +188,10 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
 
                                         <tr key={detalle.id}>
                                             <td className='text-left'>{ detalle.producto }</td>
+                                            <td width={10}>{ detalle.devolucion_today??0 }</td>
                                             <td width={10}>{ detalle.devolucion??0 }</td>
                                             <td width={10}>{ detalle.pedido??0 }</td>
                                             <td width={10}>{ detalle.vendido??0 }</td>
-                                            <td width={10}>{ detalle.devolucion_today??0 }</td>
                                             <td width={10}>{ detalle.importe??0 }</td>
 
                                         </tr>
