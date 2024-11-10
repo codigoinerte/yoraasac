@@ -56,6 +56,7 @@ export interface ReportList{
     prev?: Function,
     routeBack?: String,
     routeBackLabel?: String
+    popupKey?:Number;
 }
 
 export interface SaveList{
@@ -445,7 +446,9 @@ export interface listaDetalle  {
     id: string,
     avaibleDelete?: boolean;
     avaibleDeleteMessage?: string;
-    campos?: string[] | undefined   
+    campos?: string[] | undefined;
+    popupContent?: string;
+    popupKey?: number;
 };
 
 // ! CRERA EL TIPADO PARA EL DETALLE DE LA NOTA DE HELADERO
@@ -822,6 +825,7 @@ export interface ReporteItemNota {
     deuda_total?:           number;
     dias_asistidos:         number;
     porcentaje_asistencia:  string;
+    observaciones:      string;
 }
 
 /* REPORTE FACTURACOIN */

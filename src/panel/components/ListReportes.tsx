@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { ReportList } from '../interfaces'
-import { Table } from 'rsuite';
+import { Popover, Table, Tooltip, Whisper } from 'rsuite';
 import { useEffect, useState } from 'react';
-
 const { Cell } = Table;
 
-const CustomCell = ({ rowData, dataKey, ...props }:any) => {
+const CustomCell = ({ index = 0, rowData, dataKey, showTooltip = false, ...props }:any) => {
     
     let value = '';
     
@@ -15,14 +14,39 @@ const CustomCell = ({ rowData, dataKey, ...props }:any) => {
         }
     }
 
+    const popupContent = rowData["popupContent"] ?? '';
+    
+    const tooltip = (
+        <Popover title="Observaciones de notas">
+        <p><b>Heladero:</b> {rowData["Nombre"] ?? ''}</p>
+        {
+            popupContent.split(',').map((item:any) => <p>{item}</p>)
+        }
+      </Popover>        
+    )
+
     return (
         <Cell {...props}>
-            <div dangerouslySetInnerHTML={{ __html:value  }} />
+            
+            {
+                showTooltip && !!popupContent ? 
+                (
+                    <div className='d-flex flex-row gap-2'>
+                        { showTooltip && !!popupContent ? <i className="bi bi-exclamation-circle-fill"></i> : '' }
+                        <Whisper placement="top" controlId={`control-id-hover-${dataKey}-${index}`} trigger="hover" speaker={tooltip}>                
+                            <div dangerouslySetInnerHTML={{ __html:value  }} />
+                        </Whisper>
+                    </div>
+                ) : (
+                    <div dangerouslySetInnerHTML={{ __html:value  }} />
+                )
+            }
+            
         </Cell>
     );
 };
 
-export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children, routeBack, routeBackLabel }:ReportList) => {
+export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children, routeBack, routeBackLabel, popupKey = 0 }:ReportList) => {
 
     const [sortColumn, setSortColumn] = useState();
     const [sortType, setSortType] = useState();
@@ -76,6 +100,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
         const newArray = detalle.map((item) => {
 
             const campos = item.campos ?? [];
+            const popupContent = item.popupContent ?? '';
             let obj:any = {};
     
             campos.forEach((item_campos, i) => {
@@ -83,6 +108,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                     obj[`${cabecera[i]}`] = item_campos ?? '';                                
             });
     
+            obj['popupContent'] = popupContent ?? '';
     
             return obj;
         });
@@ -120,7 +146,10 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                                     cabecera.map((data_key, i) => (
                                     <Column key={i} flexGrow={1} sortable resizable>
                                         <HeaderCell>{data_key}</HeaderCell>
-                                        <CustomCell dataKey={data_key} />
+                                        <CustomCell 
+                                            dataKey={data_key}
+                                            showTooltip={popupKey == i}
+                                            index={i} />
                                     </Column>
                                     ))
                                 }                                
@@ -139,9 +168,9 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                             <tbody>
                                 
                                 {
-                                    detalle.map(({ id, campos })=>{
+                                    detalle.map(({ id, popupContent, popupKey = 0, campos })=>{
                                         
-                                        const keyrow = `fila${id}`;                                        
+                                        const keyrow = `fila${id}`;
                                     return (                                    
                                         
                                             <tr key={keyrow}>
@@ -149,11 +178,33 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                                                     campos?.map(( texto, index )=> {
                                                         
                                                         const cabeceraChildren = cabecera[index];
-                                                        const childrenRowKey = `children_${cabeceraChildren}_${id}`
-                                                        
+                                                        const childrenRowKey = `children_${cabeceraChildren}_${id}`                                                        
                                                         return (
-                                                        <td key={childrenRowKey} scope="row" data-label={cabeceraChildren}>
+                                                        <td key={childrenRowKey} 
+                                                            scope="row" 
+                                                            data-label={cabeceraChildren}
+                                                            data-tooltip-id={(popupKey == index) ? `tooltip-html-${index}` : ''}
+                                                            data-tooltip-html={ (popupKey == index) ? `
+                                                                <div style="text-align:left">
+                                                                    ${
+                                                                        popupContent 
+                                                                            ? popupContent.split(',').forEach((item) => <p>{item}</p>)
+                                                                            : ''
+                                                                    }
+                                                                </div>
+                                                            ` : ''}
+                                                            >
+                                                            {
+                                                                popupKey == index ? 
+                                                                <i className="bi bi-exclamation-circle-fill"></i>
+                                                                : ''
+                                                            }
                                                             {texto}
+                                                            {
+                                                                popupKey == index ? 
+                                                                <Tooltip id={`tooltip-html-${index}`} />
+                                                                : ''
+                                                            }
                                                         </td>  
                                                     )})
                                                 }
