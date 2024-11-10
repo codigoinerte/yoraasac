@@ -47,6 +47,8 @@ export const ReporteNotaHeladero = () => {
       
         const nuevoDetalle:listaDetalle[] = reporte.map((item)=> ({
             id: (item.id).toString(),
+            popupContent: item.observaciones ?? '',
+            popupKey: 1,
             campos: [
                 (item.heladero_documento??'').toString(),
                 (item.heladero_nombre??'').toString(),
@@ -122,6 +124,7 @@ export const ReporteNotaHeladero = () => {
                     prev={prev}
                     routeBack={'reportes'}
                     routeBackLabel={'Volver a las categorias'}
+                    popupKey={1}
                     >
                 
                 <form onSubmit={handleSubmit(onSubmit)}>                    
