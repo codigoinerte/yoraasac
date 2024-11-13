@@ -28,6 +28,7 @@ export const ReporteNotaHeladero = () => {
         "% Asistencia",
     ];
 
+    const [firstload, setFirstFoad] = useState(false);
     const [detalle, setDetalle] = useState<listaDetalle[]>([]);
     const [imprimible, setImprimible] = useState<any[]>([]);
 
@@ -42,6 +43,17 @@ export const ReporteNotaHeladero = () => {
     const { listNotaHeladeroEstado, listUsuario, loadBuscarUsuario} = useHelpers();
 
     const { reporteHeladero, reporte } = useNotaHeladeroStore();
+
+    const getFirstDataQuery = async () => {
+        if(firstload) return;
+
+        await reporteHeladero({
+            fecha_inicio: moment(new Date().getTime()).format("YYYY-MM-DD"),
+            fecha_fin: moment(new Date().getTime()).format("YYYY-MM-DD"),
+        });
+
+        setFirstFoad(true);
+    }
 
     useEffect(() => {
       
@@ -88,6 +100,13 @@ export const ReporteNotaHeladero = () => {
         listNotaHeladeroEstado();
 
     }, []);
+
+    useEffect(() => {
+      
+        getFirstDataQuery();
+        
+    }, [])
+    
     
     const onChangeUser = (user_id:number) =>  setValue("user_id", user_id);
     const dateNow = moment(new Date()).format("yyyy-MM-DD").toString();
