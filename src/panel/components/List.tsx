@@ -46,8 +46,7 @@ export const List = ({page, cabecera, detalle, eliminar = function(){}, next, pr
                         <tbody>
                             
                             {
-                                detalle.map(({ id, avaibleDelete, campos, avaibleDeleteMessage = "Este item no se puede eliminar" })=>{
-                                    
+                                detalle.map(({ id, avaibleDelete = true, campos, avaibleDeleteMessage = "Este item no se puede eliminar" })=>{
                                     const keyrow = `fila${id}`;
                                     const enlaceDetalle = Enlace(category, page, id);
 
