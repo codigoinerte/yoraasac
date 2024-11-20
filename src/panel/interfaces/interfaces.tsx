@@ -93,6 +93,7 @@ export interface ControlsInterface{
     funcNew?: Function ;
     NewComponent?:ReactNode;
     routeBackLabel?:String;
+    classContainer?:string;
 }
 export interface ListDetail{
     cabecera: string[],
@@ -673,6 +674,8 @@ export interface ProductosPublicados {
     updated_at:   string;
     is_litro:     boolean;
     stock_alert_input: number;
+    vendido: number,
+    importe: number,
     stock?: number;
     heladero_precio_venta: string;
     heladero_descuento:    string;

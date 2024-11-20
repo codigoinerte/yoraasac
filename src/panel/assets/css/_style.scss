@@ -333,3 +333,90 @@ input[type=number] { -moz-appearance:textfield; }
 .rs-table-row .rs-table-row-expanded{
     overflow-y: scroll !important;
 }
+
+.nota-grid-buttons-1{
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+/* si la nota fue cerrada */
+.nota-grid-buttons-1 .button-print{
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+.nota-grid-buttons-1 .button-save{
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+.nota-grid-buttons-1 .button-new{
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+}
+@media(max-width:500px){
+    /* si la nota fue cerrada */
+    .nota-grid-buttons-1 .button-print{
+        grid-row: 1 / 2;
+        grid-column: 1 / 2;
+    }
+    .nota-grid-buttons-1 .button-save{
+        grid-row: 2 / 3;
+        grid-column: 1 / 2;
+    }
+    .nota-grid-buttons-1 .button-new{
+        grid-row: 3 / 4;
+        grid-column: 1 / 2;
+    }   
+}
+
+/* si la nota aun no ha sido cerrada */
+.nota-grid-buttons-1:not(:has(.button-factura)) .button-edit{
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+.nota-grid-buttons-1:not(:has(.button-factura)) .button-print{
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+.nota-grid-buttons-1:not(:has(.button-factura)) .button-save{
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+}
+.nota-grid-buttons-1:not(:has(.button-factura)) .button-factura{
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+}
+.nota-grid-buttons-1:not(:has(.button-factura)) .button-new{
+    grid-column: 4 / 5;
+    grid-row: 1 / 2;
+}
+.nota-grid-buttons-1:not(:has(.button-factura)) .button-back{
+    grid-column: 5 / 6;
+    grid-row: 1 / 2;
+}
+@media(max-width:1000px){
+    /* si la nota aun no ha sido cerrada */
+    .nota-grid-buttons-1:not(:has(.button-factura)) .button-edit{
+        grid-row: 1 / 2;
+        grid-column: 1 / 2;
+    }
+    .nota-grid-buttons-1:not(:has(.button-factura)) .button-print{
+        grid-row: 2 / 3;
+        grid-column: 1 / 2;
+    }
+    .nota-grid-buttons-1:not(:has(.button-factura)) .button-save{
+        grid-row: 3 / 4;
+        grid-column: 1 / 2;
+    }
+    .nota-grid-buttons-1:not(:has(.button-factura)) .button-factura{
+        grid-row: 3 / 4;
+        grid-column: 1 / 2;
+    }
+    .nota-grid-buttons-1:not(:has(.button-factura)) .button-new{
+        grid-row: 4 / 5;
+        grid-column: 1 / 2;
+    }
+    .nota-grid-buttons-1:not(:has(.button-factura)) .button-back{
+        grid-row: 5 / 6;
+        grid-column: 1 / 2;
+    } 
+}
