@@ -174,7 +174,7 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                     <div className="line"></div>
                     <table className='cuerpo' >                        
                         <tbody>
-                            <tr>
+                            <tr key={"title-header"}>
                                 <td className='sizeTitle text-left'><strong>Prod.</strong></td>
                                 <td className='sizeTitle'><strong>Gua.</strong></td>
                                 <td className='sizeTitle'><strong>Dev.</strong></td>
@@ -186,13 +186,13 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                 (detalle) &&
                                     detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
 
-                                        <tr key={detalle.id}>
+                                        <tr key={detalle.codigo}>
                                             <td className='text-left'>{ detalle.producto }</td>
                                             <td width={10}>{ detalle.devolucion_today??0 }</td>
                                             <td width={10}>{ detalle.devolucion??0 }</td>
                                             <td width={10}>{ detalle.pedido??0 }</td>
                                             <td width={10}>{ detalle.vendido??0 }</td>
-                                            <td width={10}>{ parseFloat((detalle.importe??"0").toString()).toFixed(2) }</td>
+                                            <td width={10}>{ parseFloat((detalle.importe??0).toString()).toFixed(2) }</td>
 
                                         </tr>
                                     ))

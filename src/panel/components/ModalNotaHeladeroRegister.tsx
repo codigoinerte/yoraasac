@@ -55,7 +55,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                 const infoSavedItem = active?.detalle.find((i) => i.codigo == codigo);
 
                 const pedido = infoSavedItem?.pedido??0;
-                const devolucion = infoSavedItem?.devolucion??0;
+                const devolucion = parseFloat((infoSavedItem?.devolucion??0).toString());
                 const precio_operacion = infoSavedItem?.precio_operacion??0;
                 const pedido_result = infoSavedItem?.is_litro == false ? (pedido+devolucion) : ((pedido*precio_operacion)+devolucion);
                 const response =  {
@@ -72,13 +72,13 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
             setValue('fecha_operacion', (moment(new Date()).format("YYYY-MM-DD HH:mm").toString()).replace('T', ' '));
             setValue('productos', (active?.detalle ?? []).map((item) => {
                 const pedido = item.pedido??0;
-                const devolucion = item.devolucion??0;
+                const devolucion = parseFloat((item.devolucion??0).toString());
                 const precio_operacion = item.precio_operacion??0;
                 const pedido_result = item.is_litro == false ? (pedido+devolucion) : ((pedido*precio_operacion)+devolucion);
                 const response =  {
                 ...item,
                 pedido: pedido_result,
-                devolucion: 0
+                devolucion: item.is_litro == false ? 0 : '0.00',
                 };            
                 return response;
             }));

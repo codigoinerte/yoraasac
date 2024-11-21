@@ -155,12 +155,12 @@ export const NotaHeladeroDetalle = () => {
     }
 
     const setCargoBaterias = async () => {
+        let cargo_baterias:any = configuration?.cargo_baterias ?? '0.00';
         if(!configuration){
             const data = await loadConfiguration();           
-            setValue('cargo_baterias', data.cargo_baterias)
-        }else{
-            setValue('cargo_baterias', configuration.cargo_baterias)
+            cargo_baterias = data.cargo_baterias;
         }
+        setValue('cargo_baterias', cargo_baterias.toFixed(2))
     }
 
     // region Buscar Nota por Heladero
@@ -213,6 +213,7 @@ export const NotaHeladeroDetalle = () => {
             setValue("estado_nombre", heladero.estado_nombre);
             setValue("moneda", heladero.moneda);
             setValue("id_children", heladero.id_children);
+            setValue("observaciones", heladero.observaciones);
             
             let fecha_operacion:any = null;
             if(heladero.estado == 1 && heladero.fecha_cierre) fecha_operacion = heladero.fecha_cierre
@@ -275,6 +276,7 @@ export const NotaHeladeroDetalle = () => {
         setValue("moneda", undefined);
         setValue("id_children", 0);
         setValue("fecha_guardado", undefined);
+        setValue("observaciones", '');
 
         const productos = await loadProductosDisponibles();
         
@@ -286,10 +288,10 @@ export const NotaHeladeroDetalle = () => {
                 codigo: item.codigo,
 
                 id : item.id,
-                devolucion : 0,
+                devolucion : item.devolucion,
                 pedido : 0,
-                vendido : 0,
-                importe : 0,
+                vendido : item.vendido,
+                importe : item.importe,
                 nota_heladeros_id : 0,
                 created_at : item.created_at,
                 updated_at : item.updated_at,
@@ -386,11 +388,12 @@ export const NotaHeladeroDetalle = () => {
                 setValue('user_id', heladero_id);
             }
 
+            let cargo_baterias = ((heladero.cargo_baterias && heladero.cargo_baterias!=0) ? heladero.cargo_baterias : configuration!.cargo_baterias);
             let monto = parseFloat((heladero.monto??0).toString());
             let deuda_anterior = parseFloat((heladero.deuda_anterior??0).toString());
-            let subtotal = monto+deuda_anterior;
+            let subtotal = monto+deuda_anterior+ cargo_baterias;
 
-            setValue('cargo_baterias', ((heladero.cargo_baterias && heladero.cargo_baterias!=0) ? heladero.cargo_baterias : configuration!.cargo_baterias))
+            setValue('cargo_baterias', cargo_baterias);
             setValue(`monto`, monto);
             setValue(`deuda_anterior`, deuda_anterior);
             setValue(`subtotal`, subtotal);
@@ -534,8 +537,8 @@ export const NotaHeladeroDetalle = () => {
                     importe = parseFloat((vendido * precio_operacion).toFixed(2));
                 }
 
-                setValue(`productos.${index}.vendido`, vendido);
-                setValue(`productos.${index}.importe`, importe);
+                setValue(`productos.${index}.vendido`, vendido.toFixed(2));
+                setValue(`productos.${index}.importe`, importe.toFixed(2));
                 subtotal+=parseFloat(importe.toString());
             })
 
@@ -547,10 +550,10 @@ export const NotaHeladeroDetalle = () => {
                 setValue(`ahorro`, 0);
                 setValue(`debe`, 0);
             }
-            
+            const subtotal_sumas = parseFloat((subtotal+deuda_anterior+cargo_baterias).toFixed(2));
             setValue(`monto`, parseFloat(subtotal.toFixed(2)));
             setValue(`deuda_anterior`, deuda_anterior);
-            setValue(`subtotal`, parseFloat((subtotal+deuda_anterior+cargo_baterias).toFixed(2)));
+            setValue(`subtotal`, subtotal_sumas);
             setValue(`pago`, pago);
             setValue(`ahorro`, ahorro);
             setValue(`debe`, parseFloat(((subtotal+deuda_anterior+cargo_baterias)-pago).toFixed(2)));
@@ -588,7 +591,7 @@ export const NotaHeladeroDetalle = () => {
         const cargo_baterias =getValues("cargo_baterias");
         const monto = parseFloat((getValues('monto') ?? 0).toString());
         const deuda_anterior = parseFloat((getValues('deuda_anterior') ?? 0).toString());
-        const subtotal = monto+deuda_anterior+cargo_baterias;
+        const subtotal = parseFloat(monto.toString())+parseFloat(deuda_anterior.toString())+parseFloat(cargo_baterias.toString());
 
         const ahorro = 0;
         let pago:any = getValues('pago')??0;
@@ -603,7 +606,6 @@ export const NotaHeladeroDetalle = () => {
             pago = subtotal;
             setValue('pago', subtotal);
         }
-        
         const debe = (subtotal-(pago+ahorro)).toFixed(2);
         setValue('debe', parseFloat(debe));
     }
@@ -629,6 +631,7 @@ export const NotaHeladeroDetalle = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     
                     <FormControls 
+                        classContainer={`nota-grid-buttons-${getValues('estado')}`}
                         save={redirectToFactura} 
                         page="nota-heladero" 
                         imprimir={imprimir} 
@@ -645,7 +648,7 @@ export const NotaHeladeroDetalle = () => {
                             <>
                                 {
                                     getValues("estado") == 1 && active?.estado !=1 && 
-                                    <button className="btn btn-warning flex-fill" type="button" onClick={()=>{
+                                    <button type="button" className="button-edit btn btn-warning flex-fill" onClick={()=>{
                                         setOpenModalGuardado(true);
                                         setOpenModal(true);
                                     }}>Editar guardado</button>
@@ -829,7 +832,8 @@ export const NotaHeladeroDetalle = () => {
                                                             <span className="input-group-text" id="basic-addon1">
                                                                 <small>{textUnid}</small>
                                                             </span>
-                                                            <input type="number" 
+                                                            <input type="number"
+                                                                    min={0}
                                                                     className={`form-control ${getValues(`productos.${index}.stock_alert_input`) == 2 ? 'bg-warning' : ''}`}
                                                                     readOnly={isReadOnlyInputs.isReadOnlyPedido || getValues(`productos.${index}.stock_alert_input`) == 1}
                                                                     {...register(`productos.${index}.pedido`,{
@@ -847,7 +851,9 @@ export const NotaHeladeroDetalle = () => {
                                                                             if(quantity < 0) e.target.value = 0;
                                                                             setValue(`productos.${index}.pedido`, quantity);
                                                                         },
+                                                                        min:0,
                                                                     })}
+
                                                                     tabIndex={isReadOnlyInputs.isReadOnlyPedido ? 0 : 1}
                                                                     onClick={async (e) => {
                                                                         const heladero = getValues("user_id") ?? null;
@@ -911,11 +917,14 @@ export const NotaHeladeroDetalle = () => {
                                                             <span className="input-group-text" id="basic-addon1">
                                                                 <small>S/</small>
                                                             </span>
-                                                            <input type="text" className='form-control' 
+                                                            <input type="number" 
+                                                                    className='form-control' 
                                                                     {...register(`productos.${index}.vendido`,{
                                                                         onChange: () => calcImporte(index)
                                                                     })}  
                                                                     readOnly={isReadOnlyInputs.isReadOnlyVendido}
+                                                                    min={0.00}
+                                                                    step={0.01}
                                                                     />
                                                         </div>
                                                     </td> 
@@ -924,7 +933,17 @@ export const NotaHeladeroDetalle = () => {
                                                             <span className="input-group-text" id="basic-addon1">
                                                                 <small>S/</small>
                                                             </span>
-                                                            <input type="text" className='form-control'  {...register(`productos.${index}.importe`)} readOnly={isReadOnlyInputs.isReadOnlyImporte}/>
+                                                            <input type="number" 
+                                                                    className='form-control'  
+                                                                    {...register(`productos.${index}.importe`,{
+                                                                        min: 0.00,
+                                                                        value: 0.00,
+
+                                                                        pattern: /^\d+(\.\d{1,2})?$/
+                                                                    })} 
+                                                                    readOnly={isReadOnlyInputs.isReadOnlyImporte} 
+                                                                    step={0.01} 
+                                                                    min={0.00}/>
                                                             <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
                                                         </div>
                                                     </td>
@@ -941,7 +960,7 @@ export const NotaHeladeroDetalle = () => {
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>
                                                         <td align='center'>Cargo por baterias</td>
-                                                        <td><input type="number" {...register('cargo_baterias')} className='form-control' readOnly /></td>
+                                                        <td><input type="number" {...register('cargo_baterias')} className='form-control' step={0.01} readOnly /></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3}>&nbsp;</td>

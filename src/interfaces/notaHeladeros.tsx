@@ -49,11 +49,11 @@ export interface NotaHeladero{
 
 export interface FormNotaHeladeroDetalleValues {
     id?:                number;
-    devolucion?:        number;
+    devolucion?:        number | string;
     devolucion_today?:  number;
     pedido?:            number;
-    vendido?:           number;
-    importe?:           number;
+    vendido?:           number | string;
+    importe?:           number | string;
     nota_heladeros_id?: number;
     created_at?:        string;
     updated_at?:        string;
