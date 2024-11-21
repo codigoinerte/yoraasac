@@ -1,10 +1,49 @@
 import { useNavigate } from 'react-router-dom';
 import { ReportList } from '../interfaces'
-import { Popover, Table, Tooltip, Whisper } from 'rsuite';
+import { IconButton, Popover, Table, Tooltip, Whisper } from 'rsuite';
 import { useEffect, useState } from 'react';
+import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
+import ExpandOutlineIcon from '@rsuite/icons/ExpandOutline';
 const { Cell } = Table;
+const rowKey = 'Documento';
+const ExpandCell = ({ rowData, dataKey, expandedRowKeys, onChange, ...props }:any) => {
+    return (
+        <Cell {...props} style={{ padding: 5 }}>
+            <IconButton
+                appearance="subtle"
+                onClick={() => {
+                    onChange(rowData);
+                }}
+                icon={
+                    expandedRowKeys.some((key:any) => key == rowData[rowKey]) ? (
+                    <CollaspedOutlineIcon />
+                    ) : (
+                    <ExpandOutlineIcon />
+                    )
+                }
+            />
+            {rowData[dataKey] ?? ''}
+        </Cell>
+    );
+}
 
-const CustomCell = ({ index = 0, rowData, dataKey, showTooltip = false, ...props }:any) => {
+const renderRowExpanded = (rowData:any) => {
+    let key = '';
+    let n = 0;
+    for(let i in rowData){
+        key = (n == 0) ? i : '';
+       break;
+    }
+    return (
+      <div>
+        
+        <p>Documento: {rowData[key] ?? ''}</p>
+        { rowData['popupContent'].split(',').map((item:any, i:number) => <p key={i}>{item}</p>) }
+      </div>
+    );
+  };
+
+const CustomCell = ({ index = 0, rowData, dataKey, showTooltip = false, expandedRowKeys, handleExpanded, ...props }:any) => {
     
     let value = '';
     
@@ -16,43 +55,64 @@ const CustomCell = ({ index = 0, rowData, dataKey, showTooltip = false, ...props
 
     const popupContent = rowData["popupContent"] ?? '';
     
-    const tooltip = (
-        <Popover title="Observaciones de notas">
-        <p><b>Heladero:</b> {rowData["Nombre"] ?? ''}</p>
-        {
-            popupContent.split(',').map((item:any) => <p>{item}</p>)
-        }
-      </Popover>        
-    )
+    // const tooltip = (
+    //     <Popover title="Observaciones de notas">
+    //     <p><b>Heladero:</b> {rowData["Nombre"] ?? ''}</p>
+    //     {
+    //         popupContent.split(',').map((item:any) => <p>{item}</p>)
+    //     }
+    //   </Popover>        
+    // )
 
     return (
-        <Cell {...props}>
-            
+        <>
             {
                 showTooltip && !!popupContent ? 
                 (
-                    <div className='d-flex flex-row gap-2'>
-                        { showTooltip && !!popupContent ? <i className="bi bi-exclamation-circle-fill"></i> : '' }
-                        <Whisper placement="top" controlId={`control-id-hover-${dataKey}-${index}`} trigger="hover" speaker={tooltip}>                
-                            <div dangerouslySetInnerHTML={{ __html:value  }} />
-                        </Whisper>
-                    </div>
+                    <ExpandCell 
+                        rowData={rowData}
+                        dataKey={dataKey} 
+                        expandedRowKeys={expandedRowKeys} 
+                        onChange={handleExpanded} 
+                        {...props}/>
                 ) : (
-                    <div dangerouslySetInnerHTML={{ __html:value  }} />
+                    <Cell {...props}>                                                       
+                        <div dangerouslySetInnerHTML={{ __html:value  }} />                        
+                    </Cell>
                 )
             }
-            
-        </Cell>
+        
+        </>
     );
 };
 
 export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children, routeBack, routeBackLabel, popupKey = 0 }:ReportList) => {
 
+    const [expandedRowKeys, setExpandedRowKeys] = useState<any[]>([]);
     const [sortColumn, setSortColumn] = useState();
     const [sortType, setSortType] = useState();
     const [loading, setLoading] = useState(false);
     const [camposReseteados, setCamposReseteados] = useState<any[]>([]);
     const navigate = useNavigate();
+
+    const handleExpanded = (rowData:any, dataKey:any) => {
+        let open = false;
+        const nextExpandedRowKeys = [];
+    
+        expandedRowKeys.forEach(key => {
+          if (key === rowData[rowKey]) {
+            open = true;
+          } else {
+            nextExpandedRowKeys.push(key);
+          }
+        });
+    
+        if (!open) {
+          nextExpandedRowKeys.push(rowData[rowKey]);
+        }
+    
+        setExpandedRowKeys(nextExpandedRowKeys);
+    };
 
     const onNavigateBack = () => {
         if(routeBack){
@@ -141,15 +201,24 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                             sortType={sortType}
                             onSortColumn={handleSortColumn}
                             loading={loading}
+
+                            rowKey={rowKey}
+                            expandedRowKeys={expandedRowKeys}
+                            renderRowExpanded={renderRowExpanded}
                             >
                                 {
-                                    cabecera.map((data_key, i) => (
+                                    cabecera.map((data_key, i) => ( 
                                     <Column key={i} flexGrow={1} sortable resizable>
                                         <HeaderCell>{data_key}</HeaderCell>
-                                        <CustomCell 
-                                            dataKey={data_key}
-                                            showTooltip={popupKey == i}
-                                            index={i} />
+                                        {                                            
+                                            <CustomCell 
+                                                        expandedRowKeys={expandedRowKeys}
+                                                        handleExpanded={handleExpanded}
+                                                        key={`${data_key}-${i}`}
+                                                        dataKey={data_key}
+                                                        showTooltip={popupKey == i}
+                                                        index={i} />                                            
+                                        }
                                     </Column>
                                     ))
                                 }                                

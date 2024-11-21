@@ -57,7 +57,7 @@ export const ReporteNotaHeladero = () => {
 
     useEffect(() => {
       
-        const nuevoDetalle:listaDetalle[] = reporte.map((item)=> ({
+        const nuevoDetalle:listaDetalle[] = reporte.map((item, i)=> ({
             id: (item.id).toString(),
             popupContent: item.observaciones ?? '',
             popupKey: 1,
@@ -143,7 +143,7 @@ export const ReporteNotaHeladero = () => {
                     prev={prev}
                     routeBack={'reportes'}
                     routeBackLabel={'Volver a las categorias'}
-                    popupKey={1}
+                    popupKey={0}
                     >
                 
                 <form onSubmit={handleSubmit(onSubmit)}>                    
