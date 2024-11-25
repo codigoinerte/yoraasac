@@ -274,8 +274,8 @@ export const FacturacionDetalle = () => {
         {
             detalle = nota_heladero_info!.detalle.map((item)=>{
 
-                const vendido = item.vendido??1;
-                const importe = item.importe??0;
+                const vendido = item.vendido? parseFloat((item.vendido).toString()) :1;
+                const importe = item.importe? parseFloat((item.importe).toString()) : 0;
 
                 return {
                     id:item.id??0,
@@ -289,7 +289,12 @@ export const FacturacionDetalle = () => {
                 }
             })
         
-            setValue('productos', detalle);
+            setValue('productos', detalle.map((item) => {
+                return {
+                    ...item,
+                    cantidad: item.cantidad ? parseInt((item.cantidad).toString()) : 0
+                }
+            }));
         }
     }
 
