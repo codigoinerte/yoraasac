@@ -105,6 +105,17 @@ export const StockHeladosDetalle = () => {
         setTipo(stock?.movimientos_id);
         setTipoDocumentoItem(stock?.tipo_documento_id);
 
+        const element = document.getElementById("tipo_documento_id") as HTMLInputElement;
+        let nIntervId:any;
+        nIntervId = setInterval(() => {
+            const idDocumento = stock?.tipo_documento_id;
+            if(id !=0 && element.value == ''){               
+                element.value = idDocumento.toString();
+                clearInterval(nIntervId);            
+                nIntervId = null;
+            }
+        }, 1000)
+
         const { message = '', type = '' } = JSON.parse(localStorage.getItem("notification") ?? '{}');
         
         if(message){
@@ -226,7 +237,7 @@ export const StockHeladosDetalle = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
           
             <FormControls 
-                category="stock" 
+                category="movimiento" 
                 save={()=>handleSubmit(onSubmit)} 
                 onNavigateBack={()=>{
                     window.location.href = `/movimiento/helados`;
@@ -286,6 +297,7 @@ export const StockHeladosDetalle = () => {
                     <div className="mb-3">
                         <label htmlFor="tipo_documento" className="form-label">Tipo de documento</label>
                         <select className='form-control'
+                                    id="tipo_documento_id"
                                     {...register('tipo_documento_id', {
                                         onChange: (e) => {
                                             setTipoDocumentoItem(e.target.value);
@@ -300,9 +312,9 @@ export const StockHeladosDetalle = () => {
                             {
                                 listTipoDocumento
                                 .filter((item)=> (item.tipo == getValues("movimientos_id") || item.tipo == 0))
-                                .map(({id, documento})=>(
-                                    <option value={id} key={id}>{documento}</option>
-                                ))
+                                .map(({id, documento})=>{
+                                    return (<option value={id} key={id}>{documento}</option>);
+                                })
                             }
                         </select>
                     </div>
