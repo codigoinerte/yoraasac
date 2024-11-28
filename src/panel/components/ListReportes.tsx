@@ -38,7 +38,7 @@ const renderRowExpanded = (rowData:any) => {
       <div>
         
         <p>Documento: {rowData[key] ?? ''}</p>
-        { rowData['popupContent'].split(',').map((item:any, i:number) => <p key={i}>{item}</p>) }
+        { rowData['popupContent'].split('----').map((item:any, i:number) => <p key={i}>{item}</p>) }
       </div>
     );
   };
