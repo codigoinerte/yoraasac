@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../interfaces';
 import { SelectPicker } from 'rsuite';
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const breadcrumb:bread[] = [
   { id:1, titulo: 'Movimientos', enlace: '/movimiento' },
@@ -101,7 +102,26 @@ export const StockBarquillosDetalle = () => {
         setTipo(stock?.movimientos_id);
         setTipoDocumentoItem(stock?.tipo_documento_id);
 
-        console.log(active?.movimientos_id);
+        const element = document.getElementById("tipo_documento_id") as HTMLInputElement;        
+        let nIntervId:any;
+        nIntervId = setInterval(() => {
+            const idDocumento = stock?.tipo_documento_id ?? 0;
+            if(id !=0 && element && element.value == ''){               
+                element.value = idDocumento.toString();
+                clearInterval(nIntervId);            
+                nIntervId = null;
+            }
+        }, 1000);
+        
+
+        const { message = '', type = '' } = JSON.parse(localStorage.getItem("notification") ?? '{}');
+        
+        if(message){
+            if(type == "success"){
+                Swal.fire("Exito!", message, "success");
+            }
+            localStorage.removeItem("notification");
+        }
     }
 
     useEffect(() => {
@@ -266,6 +286,7 @@ export const StockBarquillosDetalle = () => {
                     <div className="mb-3">
                         <label htmlFor="tipo_documento" className="form-label">Tipo de documento</label>
                         <select className='form-control'
+                                id='tipo_documento_id'
                                     {...register('tipo_documento_id', {
                                         onChange: (e) => {
                                             setTipoDocumentoItem(e.target.value);
