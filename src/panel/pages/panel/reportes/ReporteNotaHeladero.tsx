@@ -18,7 +18,7 @@ export const ReporteNotaHeladero = () => {
     const cabecera = [
         "Documento",
         "Nombre",
-        "Vendido",
+        "Cuenta",
         "Deuda pagada",
         "Totales",
         "Pago",
@@ -81,7 +81,7 @@ export const ReporteNotaHeladero = () => {
             "documento": (item.heladero_documento??'').toString(),
             "nombre": (item.heladero_nombre??'').toString(),
             
-            "vendido": (CurrencyConvert(item.vendido??'', true)).toString(),
+            "cuenta": (CurrencyConvert(item.vendido??'', true)).toString(),
             "deuda pagada": (CurrencyConvert(item.deuda_pagada??'', true)).toString(),
             "totales": (CurrencyConvert(item.total_pagar??'', true)).toString(),
 
