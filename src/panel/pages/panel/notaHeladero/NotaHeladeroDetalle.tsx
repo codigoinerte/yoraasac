@@ -973,13 +973,14 @@ export const NotaHeladeroDetalle = () => {
                                                         <td><input type="number" {...register('deuda_anterior', {
                                                             min:0,
                                                             onChange: (event) => {  
-                                                                let cargo_baterias = getValues('cargo_baterias');
+                                                                let cargo_baterias = parseFloat((getValues("cargo_baterias") ?? 0).toString()); //getValues('cargo_baterias');
                                                                 let deuda_anterior = parseFloat((getValues("deuda_anterior") ?? 0).toString());
                                                                 let value = isNaN(deuda_anterior) ? 0 : deuda_anterior;
                                                                     //value = value == '' ? 0 : value;
                                                                     value = parseFloat((value).toString());              
                                                                     
                                                                 const monto = parseFloat((getValues('monto') ?? 0).toString());
+                                                                
                                                                 const subtotal = monto+value+cargo_baterias;
                                                                 
                                                                 setValue("deuda_anterior", value);
