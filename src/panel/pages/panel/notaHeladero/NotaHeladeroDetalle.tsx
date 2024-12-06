@@ -147,7 +147,10 @@ export const NotaHeladeroDetalle = () => {
                 window.history.pushState(null, '', `/nota-heladero/edit/${response?.id}`);
             }
         }else{
-            const response = await updateNotaHeladero({...data});
+            const response = await updateNotaHeladero({...data, productos: data.productos.map((item) => ({
+                ...item,
+                vendido : item.vendido && isNaN(parseFloat((item.vendido??'0').toString())) ? 0 : item.vendido
+            }))});
             setState(response?.estado);            
             if(response?.id_children)
                 setValue("id_children", response.id_children);
@@ -225,7 +228,10 @@ export const NotaHeladeroDetalle = () => {
             setValue('fecha_operacion', fecha_operacion);
 
             if(detalle.length > 0){
-                setValue('productos', heladero.detalle);
+                setValue('productos', heladero.detalle.map((item) => ({
+                    ...item,
+                    vendido : item.is_litro ? parseInt((item.vendido??'').toString()).toFixed(2) : parseInt((item.vendido??'0').toString()).toFixed(0)
+                })));
             }
     
             dispatch(onStatus(false));
@@ -376,7 +382,10 @@ export const NotaHeladeroDetalle = () => {
             setValue('fecha_operacion', dateNow);
 
             if(detalle.length > 0)
-            setValue('productos', heladero.detalle);
+            setValue('productos', heladero.detalle.map((item) => ({
+                ...item,
+                vendido : item.is_litro ? parseInt((item.vendido??'').toString()).toFixed(2) : parseInt((item.vendido??'0').toString()).toFixed(0)
+            })));
 
             //cargar lista de heladeros
 
@@ -537,7 +546,7 @@ export const NotaHeladeroDetalle = () => {
                     importe = parseFloat((vendido * precio_operacion).toFixed(2));
                 }
 
-                setValue(`productos.${index}.vendido`, vendido.toFixed(2));
+                setValue(`productos.${index}.vendido`, item.is_litro ? vendido.toFixed(2) : vendido);
                 setValue(`productos.${index}.importe`, importe.toFixed(2));
                 subtotal+=parseFloat(importe.toString());
             })
@@ -915,7 +924,7 @@ export const NotaHeladeroDetalle = () => {
                                                     <td  className={item.is_litro ? 'bg-info': ''}>
                                                         <div className="input-group">
                                                             <span className="input-group-text" id="basic-addon1">
-                                                                <small>S/</small>
+                                                                <small>{item.is_litro ? 'S/': 'Unid'}</small>
                                                             </span>
                                                             <input type="number" 
                                                                     className='form-control' 
