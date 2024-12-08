@@ -20,7 +20,7 @@ export const ReporteNotaHeladero = () => {
         "Nombre",
         "Cuenta",
         "Deuda pagada",
-        "Totales",
+        "SubTotal",
         "Pago",
         "Debe",
         "Ahorro",
@@ -48,6 +48,7 @@ export const ReporteNotaHeladero = () => {
         if(firstload) return;
 
         await reporteHeladero({
+            estado: 1,
             fecha_inicio: moment(new Date().getTime()).format("YYYY-MM-DD"),
             fecha_fin: moment(new Date().getTime()).format("YYYY-MM-DD"),
         });
