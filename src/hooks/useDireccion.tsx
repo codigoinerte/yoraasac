@@ -87,5 +87,9 @@ export const useDireccion = () => {
         loadDireccion,
         loadProvincias,
         loadDistritos,
+
+        setDepartamentos,
+        setProvincias,
+        setDistritos,
     }
 }
