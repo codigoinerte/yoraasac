@@ -186,6 +186,10 @@ export type FormPersonasValues = {
     foto_frontal?:  string;
     foto_posterior?:string;
     usuario_tipo?:  number;
+
+    departamentos? : Departamento[];
+    provincias? : provincia[];
+    distritos? : Distrito[];
 };
 // foto_frontal?:FileList;
 // foto_posterior?:FileList;
