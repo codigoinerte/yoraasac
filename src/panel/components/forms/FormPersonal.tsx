@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { FormPersonasValues, PersonalForm, deleImagenPersona } from '../../interfaces'
+import { Departamento, Distrito, FormPersonasValues, PersonalForm, baseArray, deleImagenPersona, provincia } from '../../interfaces'
 import { FormControls } from '../FormControls';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -38,7 +38,7 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
 
     const { errors } = formState;
     
-    const { loadDireccion, loadProvincias, loadDistritos,departamentos, provincias, distritos } = useDireccion();
+    const { setDepartamentos, setProvincias, setDistritos, loadDireccion, loadProvincias, loadDistritos, departamentos, provincias, distritos } = useDireccion();
 
     const { savePersona, updatePersona, getPersona, deleteImagenPersona } = usePersonasStore();
 
@@ -75,11 +75,26 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                     setValue('usuario_tipo', usuario_activo);
                 }
 
-                const callback1  = loadDireccion();
-                const callback2 = loadProvincias(user?.iddepartamento);
-                const callback3  = loadDistritos(user?.idprovincia);
+                setDepartamentos((user.departamentos ?? []).map(({ id, departamento }:Departamento)=>({
+                    
+                    id,
+                    nombre: departamento
+                    
+                })));
 
-                await Promise.all([callback1, callback2, callback3]);
+                setProvincias((user.provincias ?? []).map(({ id, provincia }:provincia)=>({
+                    
+                    id,
+                    nombre: provincia
+                    
+                })));
+
+                setDistritos((user.distritos??[]).map(({ id, distrito }:Distrito)=>({
+                    
+                    id,
+                    nombre: distrito
+                    
+                })));
 
                 setAddress({
                     iddepartamento : user?.iddepartamento,
