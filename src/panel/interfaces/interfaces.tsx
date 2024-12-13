@@ -333,12 +333,12 @@ export interface FormNotaHeladeroValues {
     moneda_id:          number;
     id_sucursal:        number;
     monto:              number;
-    pago:               number;
-    debe:               number;
-    deuda_anterior:     number;
-    cargo_baterias:     number;
-    subtotal:           number;
-    ahorro:             number;
+    pago:               number | string;
+    debe:               number | string;
+    deuda_anterior:     number | string;
+    cargo_baterias:     number | string;
+    subtotal:           number | string;
+    ahorro:             number | string;
     estado:             number;
     estado_original:    number;
     cucharas:           number;
@@ -948,7 +948,7 @@ export interface formConfiguracion {
     email_empresa   : string;
     celular         : string;
     igv             : number;
-    cargo_baterias  : number;
+    cargo_baterias  : number | string;
     logo            : string;
     logo_field?     : FileList;
     contactos       : ContactoConfig[];

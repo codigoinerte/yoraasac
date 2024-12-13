@@ -14,11 +14,11 @@ export interface NotaHeladero{
     moneda_id:               number;
     id_sucursal:             number;
     monto:                   number;
-    pago:                    number;
-    debe:                    number;
-    deuda_anterior?:         number;
-    cargo_baterias:          number;
-    ahorro:                  number;
+    pago:                    number | string;
+    debe:                    number | string;
+    deuda_anterior?:         number | string;
+    cargo_baterias:          number | string;
+    ahorro:                  number | string;
     estado?:                 any;
     estado_original?:        any;
     idestado?:               number;
