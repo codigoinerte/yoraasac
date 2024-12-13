@@ -397,15 +397,14 @@ export const NotaHeladeroDetalle = () => {
                 setValue('user_id', heladero_id);
             }
 
-            let cargo_baterias = ((heladero.cargo_baterias && heladero.cargo_baterias!=0) ? heladero.cargo_baterias : configuration!.cargo_baterias);
+            let cargo_baterias = parseFloat(((heladero.cargo_baterias && heladero.cargo_baterias!=0) ? heladero.cargo_baterias : configuration!.cargo_baterias).toString());
             let monto = parseFloat((heladero.monto??0).toString());
             let deuda_anterior = parseFloat((heladero.deuda_anterior??0).toString());
             let subtotal = monto+deuda_anterior+ cargo_baterias;
-
-            setValue('cargo_baterias', cargo_baterias);
+            setValue('cargo_baterias', parseFloat(`${cargo_baterias}`).toFixed(2));
             setValue(`monto`, monto);
-            setValue(`deuda_anterior`, deuda_anterior);
-            setValue(`subtotal`, subtotal);
+            setValue(`deuda_anterior`, parseFloat(`${deuda_anterior}`).toFixed(2));
+            setValue(`subtotal`, subtotal.toFixed(2));
             setValue(`pago`, (heladero.pago??0));
             setValue(`ahorro`, (heladero.ahorro??0));
             setValue(`debe`, (heladero.debe??0));
@@ -511,8 +510,8 @@ export const NotaHeladeroDetalle = () => {
                 isReadOnlyImporte : true,
             }));
 
-            const pago = parseFloat((getValues('pago') && !isNaN(getValues('pago'))?getValues('pago'):0).toString());
-            const deuda_anterior = parseFloat((getValues('deuda_anterior') && !isNaN(getValues('deuda_anterior'))? getValues('deuda_anterior') : 0).toString());
+            const pago = parseFloat((getValues('pago') && !isNaN(parseFloat((getValues('pago')??'0').toString()))?getValues('pago'):0).toString());
+            const deuda_anterior = parseFloat((getValues('deuda_anterior') && !isNaN(parseFloat((getValues('deuda_anterior')??'0').toString()))? parseFloat(getValues('deuda_anterior').toString()) : 0).toString());
             const ahorro = parseFloat((getValues('ahorro')??0).toString());
             const cargo_baterias = configuration!.cargo_baterias ?? 0;
             let subtotal = 0;
@@ -561,10 +560,10 @@ export const NotaHeladeroDetalle = () => {
             }
             const subtotal_sumas = parseFloat((subtotal+deuda_anterior+cargo_baterias).toFixed(2));
             setValue(`monto`, parseFloat(subtotal.toFixed(2)));
-            setValue(`deuda_anterior`, deuda_anterior);
-            setValue(`subtotal`, subtotal_sumas);
-            setValue(`pago`, pago);
-            setValue(`ahorro`, ahorro);
+            setValue(`deuda_anterior`, deuda_anterior.toFixed(2));
+            setValue(`subtotal`, subtotal_sumas.toFixed(2));
+            setValue(`pago`, pago.toFixed(2));
+            setValue(`ahorro`, ahorro.toFixed(2));
             setValue(`debe`, parseFloat(((subtotal+deuda_anterior+cargo_baterias)-pago).toFixed(2)));
             return;
         }
@@ -609,14 +608,14 @@ export const NotaHeladeroDetalle = () => {
         pago = parseFloat(pago.toString());
         if(pago < 0){
             pago = 0;
-            setValue('pago', 0);
+            setValue('pago', "0.00");
         }
         if(pago > subtotal){
             pago = subtotal;
-            setValue('pago', subtotal);
+            setValue('pago', subtotal.toFixed(2));
         }
         const debe = (subtotal-(pago+ahorro)).toFixed(2);
-        setValue('debe', parseFloat(debe));
+        setValue('debe', debe);
     }
 
     const editApertura = () => {
