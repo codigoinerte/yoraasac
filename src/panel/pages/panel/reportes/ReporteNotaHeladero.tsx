@@ -22,6 +22,7 @@ export const ReporteNotaHeladero = () => {
         "Deuda pagada",
         "SubTotal",
         "Pago",
+        "Efectivo",
         "Debe",
         "Ahorro",
         "Días asistidos",
@@ -69,6 +70,7 @@ export const ReporteNotaHeladero = () => {
                 (CurrencyConvert(item.deuda_pagada??'', true)).toString(),
                 (CurrencyConvert(item.total_pagar??'', true)).toString(),
                 (CurrencyConvert(item.pago??'', true)).toString(),
+                (CurrencyConvert(item.efectivo??'', true)).toString(),
                 (CurrencyConvert(item.debe??'', true)).toString(),
                 (CurrencyConvert(item.ahorro??'', true)).toString(),
                 (item.dias_asistidos??'').toString(),
@@ -87,6 +89,7 @@ export const ReporteNotaHeladero = () => {
             "totales": (CurrencyConvert(item.total_pagar??'', true)).toString(),
 
             "pago": (CurrencyConvert(item.pago??'', true)).toString(),
+            "efectivo": (CurrencyConvert(item.efectivo??'', true)).toString(),
             "debe": (CurrencyConvert(item.debe??'', true)).toString(),
             "ahorro": (CurrencyConvert(item.ahorro??'', true)).toString(),
 

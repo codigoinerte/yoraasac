@@ -815,6 +815,7 @@ export interface ReporteItemNota {
     deuda_pagada:       number;
     total_pagar:        number;
     pago:               number;
+    efectivo:           number;
     debe:               number;
     ahorro:             number;
     cucharas:           number;
