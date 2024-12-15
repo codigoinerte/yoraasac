@@ -19,6 +19,8 @@ export interface NotaHeladero{
     deuda_anterior?:         number | string;
     cargo_baterias:          number | string;
     ahorro:                  number | string;
+    yape:                    number | string;
+    efectivo:                number | string;
     estado?:                 any;
     estado_original?:        any;
     idestado?:               number;

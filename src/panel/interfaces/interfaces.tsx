@@ -339,6 +339,8 @@ export interface FormNotaHeladeroValues {
     cargo_baterias:     number | string;
     subtotal:           number | string;
     ahorro:             number | string;
+    yape:               number | string;
+    efectivo:           number | string;
     estado:             number;
     estado_original:    number;
     cucharas:           number;

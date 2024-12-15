@@ -980,7 +980,7 @@ export const NotaHeladeroDetalle = () => {
                                                         <td align='center'>Deuda anterior</td>
                                                         <td><input type="number" {...register('deuda_anterior', {
                                                             min:0,
-                                                            onChange: (event) => {  
+                                                            onChange: (e) => {  
                                                                 let cargo_baterias = parseFloat((getValues("cargo_baterias") ?? 0).toString()); //getValues('cargo_baterias');
                                                                 let deuda_anterior = parseFloat((getValues("deuda_anterior") ?? 0).toString());
                                                                 let value = isNaN(deuda_anterior) ? 0 : deuda_anterior;
@@ -1012,8 +1012,70 @@ export const NotaHeladeroDetalle = () => {
                                                                     <td align='center'>Pago</td>
                                                                     <td><input type="number" {...register('pago')} 
                                                                         className='form-control'
-                                                                        onKeyUp={onChangePago}
+                                                                        id='pago'
+                                                                        onKeyUp={(e) => {
+                                                                            
+                                                                            if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode == 8 || e.keyCode == 110 || e.keyCode == 46) { 
+
+                                                                                const yape = parseFloat((getValues("yape") ? getValues("yape") : '0.00').toString());
+                                                                                const subtotal = parseFloat((getValues("subtotal") ? getValues("subtotal") : '0.00').toString());
+                                                                                const storePago = parseFloat((getValues("pago") ? getValues("pago") : '0.00').toString());
+                                                                                const pago:number = parseFloat(((e.target as HTMLInputElement).value ? (e.target as HTMLInputElement).value : "0.00").toString());
+                                                                                
+                                                                                if(pago < yape || pago == 0){
+                                                                                    setValue('yape', "0.00");
+                                                                                    setValue('efectivo', "0.00");
+                                                                                }
+                                                                                if(yape > 0 && pago > 0){
+                                                                                    let efectivo = pago - yape;
+                                                                                        efectivo = efectivo < 0 ? 0 : efectivo;
+                                                                                    setValue('efectivo', efectivo.toFixed(2));
+                                                                                }
+
+                                                                                onChangePago();
+                                                                            }
+                                                                        }}
                                                                     step={0.01} /></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colSpan={3}>&nbsp;</td>
+                                                                    <td align='center'>Yape</td>
+                                                                    <td><input type="number" {...register('yape')} 
+                                                                        onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                                                            e.stopPropagation();
+                                                                            e.preventDefault();
+
+                                                                            let yape: string | number = (e.target as HTMLInputElement).value ?? "0";
+                                                                                yape = parseFloat(yape);
+                                                                            
+                                                                            const subtotal = parseFloat((getValues('subtotal') ? getValues('subtotal') : '0').toString());
+                                                                            const pago = parseFloat((getValues('pago') ? getValues('pago'): '0').toString()) ;
+                                                                           
+                                                                            if(pago == 0 && yape > 0){
+                                                                                setValue("pago", yape);
+                                                                                onChangePago();                                                                                    
+                                                                            }else if(yape > 0 && yape < pago){
+                                                                                let efectivo = pago - yape;
+                                                                                setValue("efectivo", efectivo.toFixed(2));
+                                                                            }else if(yape > subtotal || yape > pago){
+                                                                                setValue("yape", pago.toFixed(2));
+                                                                                setValue("efectivo", "0.00");
+                                                                                
+                                                                            }else if(yape == 0 && subtotal > 0){
+                                                                                setValue("efectivo", "0.00");
+                                                                                setValue("yape", "0.00");
+                                                                            }                                                                            
+                                                                        }}
+                                                                        className='form-control'
+                                                                        id='yape'
+                                                                        step={0.01} /></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colSpan={3}>&nbsp;</td>
+                                                                    <td align='center'>Efectivo</td>
+                                                                    <td><input type="number" {...register('efectivo')} 
+                                                                        className='form-control'
+                                                                    step={0.01} readOnly={true} /></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colSpan={3}>&nbsp;</td>
