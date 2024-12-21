@@ -407,6 +407,8 @@ export const NotaHeladeroDetalle = () => {
             setValue(`subtotal`, subtotal.toFixed(2));
             setValue(`pago`, (heladero.pago??0));
             setValue(`ahorro`, (heladero.ahorro??0));
+            setValue(`yape`, (heladero.yape??"0.00"));
+            setValue(`efectivo`, (heladero.efectivo??"0.00"));
             setValue(`debe`, (heladero.debe??0));
             setValue(`observaciones`, (heladero.observaciones??''));
 
@@ -1014,8 +1016,7 @@ export const NotaHeladeroDetalle = () => {
                                                                         className='form-control'
                                                                         id='pago'
                                                                         onKeyUp={(e) => {
-                                                                            
-                                                                            if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode == 8 || e.keyCode == 110 || e.keyCode == 46) { 
+                                                                            if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode == 8 || e.keyCode == 110 || e.keyCode == 46 || (e.ctrlKey && e.key === 'v')) { 
 
                                                                                 const yape = parseFloat((getValues("yape") ? getValues("yape") : '0.00').toString());
                                                                                 const subtotal = parseFloat((getValues("subtotal") ? getValues("subtotal") : '0.00').toString());
@@ -1040,32 +1041,47 @@ export const NotaHeladeroDetalle = () => {
                                                                 <tr>
                                                                     <td colSpan={3}>&nbsp;</td>
                                                                     <td align='center'>Yape</td>
-                                                                    <td><input type="number" {...register('yape')} 
-                                                                        onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                                                            e.stopPropagation();
-                                                                            e.preventDefault();
-
-                                                                            let yape: string | number = (e.target as HTMLInputElement).value ?? "0";
-                                                                                yape = parseFloat(yape);
+                                                                    <td><input type="number" {...register('yape',{
+                                                                            onChange: (e: React.KeyboardEvent<HTMLInputElement>) => {
                                                                             
-                                                                            const subtotal = parseFloat((getValues('subtotal') ? getValues('subtotal') : '0').toString());
-                                                                            const pago = parseFloat((getValues('pago') ? getValues('pago'): '0').toString()) ;
-                                                                           
-                                                                            if(pago == 0 && yape > 0){
-                                                                                setValue("pago", yape);
-                                                                                onChangePago();                                                                                    
-                                                                            }else if(yape > 0 && yape < pago){
-                                                                                let efectivo = pago - yape;
-                                                                                setValue("efectivo", efectivo.toFixed(2));
-                                                                            }else if(yape > subtotal || yape > pago){
-                                                                                setValue("yape", pago.toFixed(2));
-                                                                                setValue("efectivo", "0.00");
-                                                                                
-                                                                            }else if(yape == 0 && subtotal > 0){
-                                                                                setValue("efectivo", "0.00");
-                                                                                setValue("yape", "0.00");
-                                                                            }                                                                            
-                                                                        }}
+                                                                                let yape: string | number = (e.target as HTMLInputElement).value ?? "0";
+                                                                                    yape = parseFloat(yape);
+                                                                                    yape = isNaN(yape) ? 0 : yape;
+                                                                                    
+                                                                                const subtotal = parseFloat((getValues('subtotal') ? getValues('subtotal') : '0').toString());
+                                                                                const pago = parseFloat((getValues('pago') ? getValues('pago'): '0').toString()) ;
+    
+                                                                                if(yape > 0 && pago == 0){
+                                                                                    e.stopPropagation();
+                                                                                    e.preventDefault();
+                                                                                    setValue("pago", "0.00");
+                                                                                    setValue("efectivo", "0.00");
+                                                                                    setValue("yape", "0.00");
+                                                                                    return;
+                                                                                }
+                                                                               
+                                                                                if(pago == 0 && yape > 0){
+                                                                                    setValue("pago", yape);
+                                                                                    onChangePago();                                                                                    
+                                                                                }else if(yape > 0 && yape < pago){
+                                                                                    let efectivo = 0;
+                                                                                    if(pago != yape){
+                                                                                        efectivo = pago - yape;
+                                                                                    }
+                                                                                    setValue("efectivo", efectivo.toFixed(2));
+                                                                                }else if(yape > subtotal || yape > pago){
+                                                                                    setValue("yape", pago.toFixed(2));
+                                                                                    setValue("efectivo", "0.00");
+                                                                                    
+                                                                                }else if(yape == 0 && subtotal > 0){
+                                                                                    setValue("efectivo", "0.00");
+                                                                                    setValue("yape", "0.00");
+                                                                                }else if(yape > 0 && yape == pago){
+                                                                                    let efectivo = 0;
+                                                                                    setValue("efectivo", efectivo.toFixed(2));
+                                                                                }
+                                                                            }
+                                                                        })} 
                                                                         className='form-control'
                                                                         id='yape'
                                                                         step={0.01} /></td>
