@@ -285,7 +285,7 @@ export const NotaHeladeroDetalle = () => {
         setValue("observaciones", '');
 
         const productos = await loadProductosDisponibles();
-        
+
         if(productos)
         setValue("productos", [
             ...productos.map((item:ProductosPublicados)=>({
@@ -407,8 +407,8 @@ export const NotaHeladeroDetalle = () => {
             setValue(`subtotal`, subtotal.toFixed(2));
             setValue(`pago`, (heladero.pago??0));
             setValue(`ahorro`, (heladero.ahorro??0));
-            setValue(`yape`, (heladero.yape??"0.00"));
-            setValue(`efectivo`, (heladero.efectivo??"0.00"));
+            setValue(`yape`, parseFloat((heladero.yape??"0.00").toString()).toFixed(2));
+            setValue(`efectivo`, parseFloat((heladero.efectivo??"0.00").toString()).toFixed(2));
             setValue(`debe`, (heladero.debe??0));
             setValue(`observaciones`, (heladero.observaciones??''));
 
@@ -512,6 +512,9 @@ export const NotaHeladeroDetalle = () => {
                 isReadOnlyImporte : true,
             }));
 
+            const yape = parseFloat((getValues('yape') && !isNaN(parseFloat((getValues('yape')??'0').toString()))?getValues('yape'):0).toString());
+            const efectivo = parseFloat((getValues('efectivo') && !isNaN(parseFloat((getValues('efectivo')??'0').toString()))?getValues('efectivo'):0).toString());
+
             const pago = parseFloat((getValues('pago') && !isNaN(parseFloat((getValues('pago')??'0').toString()))?getValues('pago'):0).toString());
             const deuda_anterior = parseFloat((getValues('deuda_anterior') && !isNaN(parseFloat((getValues('deuda_anterior')??'0').toString()))? parseFloat(getValues('deuda_anterior').toString()) : 0).toString());
             const ahorro = parseFloat((getValues('ahorro')??0).toString());
@@ -546,8 +549,12 @@ export const NotaHeladeroDetalle = () => {
                     vendido = ((devolucion+pedido)-devolucion_today);
                     importe = parseFloat((vendido * precio_operacion).toFixed(2));
                 }
-
-                setValue(`productos.${index}.vendido`, item.is_litro ? vendido.toFixed(2) : vendido);
+                if(item.is_litro){
+                    let vendidoFixed = parseFloat(vendido.toString()).toFixed(2);                    
+                    setValue(`productos.${index}.vendido`,  `${vendidoFixed}`);
+                }else{
+                    setValue(`productos.${index}.vendido`, vendido);
+                }
                 setValue(`productos.${index}.importe`, importe.toFixed(2));
                 subtotal+=parseFloat(importe.toString());
             })
@@ -559,6 +566,8 @@ export const NotaHeladeroDetalle = () => {
                 setValue(`pago`, 0);
                 setValue(`ahorro`, 0);
                 setValue(`debe`, 0);
+                setValue(`yape`, 0);
+                setValue(`efectivo`, 0);
             }
             const subtotal_sumas = parseFloat((subtotal+deuda_anterior+cargo_baterias).toFixed(2));
             setValue(`monto`, parseFloat(subtotal.toFixed(2)));
@@ -566,6 +575,8 @@ export const NotaHeladeroDetalle = () => {
             setValue(`subtotal`, subtotal_sumas.toFixed(2));
             setValue(`pago`, pago.toFixed(2));
             setValue(`ahorro`, ahorro.toFixed(2));
+            setValue(`yape`, yape.toFixed(2));
+            setValue(`efectivo`, efectivo.toFixed(2));
             setValue(`debe`, parseFloat(((subtotal+deuda_anterior+cargo_baterias)-pago).toFixed(2)));
             return;
         }
