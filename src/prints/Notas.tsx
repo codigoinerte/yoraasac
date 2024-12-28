@@ -124,14 +124,20 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                             </tr>
                             <tr>
                                 <td align='left'>
+                                    <b>Cuenta(hoy):</b> {!!getValues('subtotal') ? parseFloat(getValues('subtotal').toString()).toFixed(2) : 0.00}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='left'>
                                     <b>Deuda anterior:</b> {!!getValues('deuda_anterior') ? parseFloat(getValues('deuda_anterior').toString()).toFixed(2): 0.00}
                                 </td>
                             </tr>
                             <tr>
                                 <td align='left'>
-                                    <b>Monto(subtotal):</b> {!!getValues('subtotal') ? parseFloat(getValues('subtotal').toString()).toFixed(2) : 0.00}
+                                    <b>Suma:</b> {!!getValues('suma') ? parseFloat(getValues('suma').toString()).toFixed(2): 0.00}
                                 </td>
                             </tr>
+                            
                             {
                                 infoSaved?.estado == 1 ?
                                 (
