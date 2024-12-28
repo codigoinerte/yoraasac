@@ -217,6 +217,8 @@ export const NotaHeladeroDetalle = () => {
             setValue("moneda", heladero.moneda);
             setValue("id_children", heladero.id_children);
             setValue("observaciones", heladero.observaciones);
+            setValue("yape", heladero.yape);
+            setValue("efectivo", heladero.efectivo);
             
             let fecha_operacion:any = null;
             if(heladero.estado == 1 && heladero.fecha_cierre) fecha_operacion = heladero.fecha_cierre
@@ -283,6 +285,11 @@ export const NotaHeladeroDetalle = () => {
         setValue("id_children", 0);
         setValue("fecha_guardado", undefined);
         setValue("observaciones", '');
+
+        setValue("deuda_anterior", "0.00");
+        setValue("pago", "0.00");
+        setValue("yape", "0.00");
+        setValue("efectivo", "0.00");
 
         const productos = await loadProductosDisponibles();
 
@@ -400,7 +407,9 @@ export const NotaHeladeroDetalle = () => {
             let cargo_baterias = parseFloat(((heladero.cargo_baterias && heladero.cargo_baterias!=0) ? heladero.cargo_baterias : configuration!.cargo_baterias).toString());
             let monto = parseFloat((heladero.monto??0).toString());
             let deuda_anterior = parseFloat((heladero.deuda_anterior??0).toString());
-            let subtotal = monto+deuda_anterior+ cargo_baterias;
+            let subtotal = monto+cargo_baterias;
+            let suma = subtotal+deuda_anterior;
+
             setValue('cargo_baterias', parseFloat(`${cargo_baterias}`).toFixed(2));
             setValue(`monto`, monto);
             setValue(`deuda_anterior`, parseFloat(`${deuda_anterior}`).toFixed(2));
@@ -410,6 +419,7 @@ export const NotaHeladeroDetalle = () => {
             setValue(`yape`, parseFloat((heladero.yape??"0.00").toString()).toFixed(2));
             setValue(`efectivo`, parseFloat((heladero.efectivo??"0.00").toString()).toFixed(2));
             setValue(`debe`, (heladero.debe??0));
+            setValue(`suma`, suma.toFixed(2));
             setValue(`observaciones`, (heladero.observaciones??''));
 
         }
@@ -569,7 +579,9 @@ export const NotaHeladeroDetalle = () => {
                 setValue(`yape`, 0);
                 setValue(`efectivo`, 0);
             }
-            const subtotal_sumas = parseFloat((subtotal+deuda_anterior+cargo_baterias).toFixed(2));
+            const subtotal_sumas = parseFloat((subtotal+cargo_baterias).toFixed(2));
+            let suma = subtotal_sumas+deuda_anterior;
+
             setValue(`monto`, parseFloat(subtotal.toFixed(2)));
             setValue(`deuda_anterior`, deuda_anterior.toFixed(2));
             setValue(`subtotal`, subtotal_sumas.toFixed(2));
@@ -577,6 +589,7 @@ export const NotaHeladeroDetalle = () => {
             setValue(`ahorro`, ahorro.toFixed(2));
             setValue(`yape`, yape.toFixed(2));
             setValue(`efectivo`, efectivo.toFixed(2));
+            setValue(`suma`, suma.toFixed(2));
             setValue(`debe`, parseFloat(((subtotal+deuda_anterior+cargo_baterias)-pago).toFixed(2)));
             return;
         }
@@ -989,6 +1002,11 @@ export const NotaHeladeroDetalle = () => {
                                                         <td><input type="text" {...register('monto')} className='form-control' readOnly /></td>
                                                     </tr>
                                                     <tr>
+                                                        <td colSpan={3} style={{background: '#dedede'}}>&nbsp;</td>
+                                                        <td align='center' style={{background: '#dedede'}}>Cuenta (hoy)</td>
+                                                        <td style={{background: '#dedede'}}><input type="text" {...register('subtotal')} className='form-control' readOnly /></td>
+                                                    </tr>
+                                                    <tr>
                                                         <td colSpan={3}>&nbsp;</td>
                                                         <td align='center'>Deuda anterior</td>
                                                         <td><input type="number" {...register('deuda_anterior', {
@@ -1002,19 +1020,22 @@ export const NotaHeladeroDetalle = () => {
                                                                     
                                                                 const monto = parseFloat((getValues('monto') ?? 0).toString());
                                                                 
-                                                                const subtotal = monto+value+cargo_baterias;
+                                                                const subtotal = monto+cargo_baterias;
                                                                 
                                                                 setValue("deuda_anterior", value);
                                                                 setValue("subtotal", subtotal);
 
                                                                 onChangePago();
+
+                                                                const suma = subtotal + value;
+                                                                setValue("suma", suma.toFixed(2));
                                                             }
                                                         })} className='form-control' step={0.01} readOnly={active.estado == 1 ? true : false}/></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3} style={{background: '#dedede'}}>&nbsp;</td>
-                                                        <td align='center' style={{background: '#dedede'}}>Subtotal</td>
-                                                        <td style={{background: '#dedede'}}><input type="text" {...register('subtotal')} className='form-control' readOnly /></td>
+                                                        <td align='center' style={{background: '#dedede'}}><b>Suma</b></td>
+                                                        <td style={{background: '#dedede'}}><input type="text" {...register('suma')} className='form-control' readOnly /></td>
                                                     </tr>
                                                     {
                                                         active.estado == 1  ?
