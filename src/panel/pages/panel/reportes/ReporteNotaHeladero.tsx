@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ContainerInner, ListReportes, SearchUser } from '../../../components';
-import { ReporteNotaForm, breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
+import { ReporteNotaForm, breadcrumb as bread, listaDetalle, optionsList, paginationInterface } from '../../../interfaces';
 import { useForm } from 'react-hook-form';
 import { useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { CSVLink } from "react-csv";
@@ -18,17 +18,33 @@ export const ReporteNotaHeladero = () => {
     const cabecera = [
         "Documento",
         "Nombre",
-        "Cuenta",
+        "'Cuenta' acumulada",
         "Deuda pagada",
-        "SubTotal",
-        "Pago",
-        "Efectivo",
-        "Debe",
-        "Ahorro",
+        "'Suma' acumulada",
+        "'Pago' acumulado",
+        "'Efectivo' acumulado",
+        "'Debe' acumulado",
+        "'Ahorro' acumulado",
         "Días asistidos",
         "% Asistencia",
+        "Resumen a la fecha fin",
     ];
-
+    
+    const [hiddenColumns, setHiddenColumns] = useState(true);
+    const [opcionesTable, setOpcionesTable] = useState<optionsList[]>([
+        { width: 99, hidden: false },
+        { width: undefined },
+        { width: 99, hidden: false },
+        { width: 99, hidden: true },
+        { width: 99, hidden: true },
+        { width: 99, hidden: false },
+        { width: 99, hidden: false },
+        { width: 99, hidden: true },
+        { width: 99, hidden: true },
+        { width: 99, hidden: false },
+        { width: 99, hidden: false },
+        { width: 99, hidden: false },
+    ]);
     const [firstload, setFirstFoad] = useState(false);
     const [detalle, setDetalle] = useState<listaDetalle[]>([]);
     const [imprimible, setImprimible] = useState<any[]>([]);
@@ -137,10 +153,31 @@ export const ReporteNotaHeladero = () => {
         setDetalle([]);
     }
 
+    const onShowColumns = () => {
+        const hidden = !hiddenColumns;
+        
+        setOpcionesTable([
+            { width: 99, hidden: false },
+            { width: undefined },
+            { width: 99, hidden: false },
+            { width: 99, hidden },
+            { width: 99, hidden },
+            { width: 99, hidden: false },
+            { width: 99, hidden: false },
+            { width: 99, hidden },
+            { width: 99, hidden },
+            { width: 99, hidden: false },
+            { width: 99, hidden: false },
+            { width: 99, hidden: false },
+        ]);
+        setHiddenColumns(!hiddenColumns);
+    }
+
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo="Generar reporte de notas de heladeros">        
             <ListReportes                                   
-                    cabecera={cabecera}                     
+                    cabecera={cabecera}   
+                    opciones={opcionesTable}                  
                     detalle={detalle}               
                     descargar={function(){}}
                     next={next}
@@ -188,6 +225,13 @@ export const ReporteNotaHeladero = () => {
                                         </>
                                     )
                                 }
+                            </div>
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div className="mb-3 w-100 gap-2 d-flex flex-column flex-md-row">
+                                <button className="btn btn-primary text-center w-100" type="button" onClick={onShowColumns}> 
+                                    {hiddenColumns == true ? 'Mostrar columnas' : 'Ocultar columnas'}
+                                </button>
                             </div>
                         </div>
 

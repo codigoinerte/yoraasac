@@ -47,6 +47,12 @@ export interface TablalList{
     routeBack?: String,
     routeBackLabel?: String
 }
+type widthSize = number | undefined;
+export interface optionsList {
+    width?: widthSize,
+    flex?: boolean,
+    hidden?: boolean
+}
 export interface ReportList{
     children: React.ReactElement,
     cabecera: string[],
@@ -57,6 +63,7 @@ export interface ReportList{
     routeBack?: String,
     routeBackLabel?: String
     popupKey?:Number;
+    opciones: optionsList[]
 }
 
 export interface SaveList{

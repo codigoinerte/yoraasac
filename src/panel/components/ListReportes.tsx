@@ -86,7 +86,7 @@ const CustomCell = ({ index = 0, rowData, dataKey, showTooltip = false, expanded
     );
 };
 
-export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children, routeBack, routeBackLabel, popupKey = 0 }:ReportList) => {
+export const ListReportes = ({cabecera, detalle, descargar, next = function(){}, prev = function(){}, children, routeBack, routeBackLabel, popupKey = 0, opciones = [] }:ReportList) => {
 
     const [expandedRowKeys, setExpandedRowKeys] = useState<any[]>([]);
     const [sortColumn, setSortColumn] = useState();
@@ -205,11 +205,33 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                             rowKey={rowKey}
                             expandedRowKeys={expandedRowKeys}
                             renderRowExpanded={renderRowExpanded}
+
+                            headerHeight={60}
+                            rowHeight={35}
                             >
                                 {
-                                    cabecera.map((data_key, i) => ( 
-                                    <Column key={i} flexGrow={1} sortable resizable>
-                                        <HeaderCell>{data_key}</HeaderCell>
+                                    cabecera.map((data_key, i) => {
+                                      
+                                    const hidden = opciones[i]?.hidden || false;
+                                    if(hidden) return;
+                                        
+                                    return ( 
+                                    <Column 
+                                        key={i} 
+                                        sortable 
+                                        resizable 
+                                        fullText 
+                                        width={opciones[i]?.width??undefined} 
+                                        flexGrow={opciones[i]?.width ? 0 : 1}
+                                        >
+                                        <HeaderCell                                            
+                                            style={{ 
+                                                whiteSpace: "normal", 
+                                                wordWrap: "break-word", 
+                                                textAlign: 'center', 
+                                                justifyContent:'center', 
+                                                alignItems:'center' }}
+                                            >{data_key}</HeaderCell>
                                         {                                            
                                             <CustomCell 
                                                         expandedRowKeys={expandedRowKeys}
@@ -217,10 +239,10 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                                                         key={`${data_key}-${i}`}
                                                         dataKey={data_key}
                                                         showTooltip={popupKey == i}
-                                                        index={i} />                                            
+                                                        index={i}/>
                                         }
                                     </Column>
-                                    ))
+                                    )})
                                 }                                
                         </Table>
 
