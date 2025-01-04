@@ -52,7 +52,7 @@ const CustomCell = ({ index = 0, rowData, dataKey, showTooltip = false, expanded
             value = rowData[e];
         }
     }
-
+    const color = rowData["color"] ?? '';
     const popupContent = rowData["popupContent"] ?? '';
     
     // const tooltip = (
@@ -76,7 +76,7 @@ const CustomCell = ({ index = 0, rowData, dataKey, showTooltip = false, expanded
                         onChange={handleExpanded} 
                         {...props}/>
                 ) : (
-                    <Cell {...props}>                                                       
+                    <Cell {...props} style={{color: (dataKey == "Resumen a la fecha fin") ? color : "inherit" }}>
                         <div dangerouslySetInnerHTML={{ __html:value  }} />                        
                     </Cell>
                 )
@@ -161,6 +161,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
 
             const campos = item.campos ?? [];
             const popupContent = item.popupContent ?? '';
+            const color = item.resumenColor ?? '';
             let obj:any = {};
     
             campos.forEach((item_campos, i) => {
@@ -169,6 +170,7 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
             });
     
             obj['popupContent'] = popupContent ?? '';
+            obj['color'] = color ?? '';
     
             return obj;
         });

@@ -464,6 +464,7 @@ export interface listaDetalle  {
     campos?: string[] | undefined;
     popupContent?: string;
     popupKey?: number;
+    resumenColor?: string;
 };
 
 // ! CRERA EL TIPADO PARA EL DETALLE DE LA NOTA DE HELADERO
@@ -844,6 +845,7 @@ export interface ReporteItemNota {
     deuda_total?:           number;
     dias_asistidos:         number;
     porcentaje_asistencia:  string;
+    resumen:                string;
     observaciones:      string;
 }
 

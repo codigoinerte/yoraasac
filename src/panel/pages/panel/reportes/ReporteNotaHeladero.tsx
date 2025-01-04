@@ -79,6 +79,7 @@ export const ReporteNotaHeladero = () => {
             id: (item.id).toString(),
             popupContent: item.observaciones ?? '',
             popupKey: 1,
+            resumenColor: !isNaN(parseFloat(item.resumen)) ? (parseFloat(item.resumen) > 0 ? "#198754": "#dc3545") : "inherit" ,
             campos: [
                 (item.heladero_documento??'').toString(),
                 (item.heladero_nombre??'').toString(),
@@ -90,10 +91,11 @@ export const ReporteNotaHeladero = () => {
                 (CurrencyConvert(item.debe??'', true)).toString(),
                 (CurrencyConvert(item.ahorro??'', true)).toString(),
                 (item.dias_asistidos??'').toString(),
-                (item.porcentaje_asistencia??'').toString()
+                (item.porcentaje_asistencia??'').toString(),
+                item.resumen
             ]
         }));
-        
+
         setDetalle(nuevoDetalle);
 
         setImprimible(reporte.map((item)=>({
@@ -110,7 +112,8 @@ export const ReporteNotaHeladero = () => {
             "ahorro": (CurrencyConvert(item.ahorro??'', true)).toString(),
 
             'dias asistidos': (item.dias_asistidos??'').toString(),
-            'porcentaje de asistencia': (item.porcentaje_asistencia??'').toString()
+            'porcentaje de asistencia': (item.porcentaje_asistencia??'').toString(),
+            'resumen': (item.resumen ?? '')
         })))
         
     }, [reporte]);
