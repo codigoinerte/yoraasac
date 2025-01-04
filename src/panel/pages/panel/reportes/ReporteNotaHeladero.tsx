@@ -92,7 +92,7 @@ export const ReporteNotaHeladero = () => {
                 (CurrencyConvert(item.ahorro??'', true)).toString(),
                 (item.dias_asistidos??'').toString(),
                 (item.porcentaje_asistencia??'').toString(),
-                item.resumen
+                !isNaN(parseFloat(item.resumen)) ? parseFloat(item.resumen).toFixed(2) : item.resumen
             ]
         }));
 
