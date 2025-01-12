@@ -212,14 +212,9 @@ export const useNotaHeladeroStore = () => {
         dispatch(onSetNotaHeladeroActiveClear());
     }
 
-    const resetStateNota = async (id:number, state:number) =>{
-        
+    const resetStateNota = async (id:number, state:number) =>{        
         dispatch(onStatus(true));
-        try {
-            return await backendApi.post(`/reset-nota-heladero/${id}`, {state});
-        } catch (error) {
-            console.log(error);
-        }
+        return await backendApi.post(`/reset-nota-heladero/${id}`, {state});        
     }
   
     return {
