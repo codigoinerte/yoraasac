@@ -63,7 +63,7 @@ export interface ReportList{
     routeBack?: String,
     routeBackLabel?: String
     popupKey?:Number;
-    opciones: optionsList[]
+    opciones?: optionsList[]
 }
 
 export interface SaveList{
