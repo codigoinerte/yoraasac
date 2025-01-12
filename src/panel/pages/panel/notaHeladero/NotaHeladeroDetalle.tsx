@@ -685,8 +685,8 @@ export const NotaHeladeroDetalle = () => {
                         }));
                         location.replace(location.pathname);
                     }
-                } catch (error) {
-                    
+                } catch (error:any) {
+                    Swal.fire("Error!", error.response.data.message, "warning");
                 }
             }
           });
