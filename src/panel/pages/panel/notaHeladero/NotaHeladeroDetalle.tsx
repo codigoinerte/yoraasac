@@ -90,7 +90,7 @@ export const NotaHeladeroDetalle = () => {
 
     const { configuration, loadConfiguration } = useConfiguration();
 
-    const { saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, active  } = useNotaHeladeroStore();
+    const { saveNotaHeladero, updateNotaHeladero, getNotaHeladero, setNullNotaHeladero, resetStateNota, active  } = useNotaHeladeroStore();
 
     const { listEstadoHeladero, listUsuario, listNotaHeladeroEstado, loadProductosDisponibles, loadBuscarUsuario, loadBuscarNotaHeladeroGuardada} = useHelpers();
 
@@ -654,6 +654,44 @@ export const NotaHeladeroDetalle = () => {
         }));
     }
 
+    const showAlertBack = () => {
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-success ms-2",
+              cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+          });
+
+          swalWithBootstrapButtons.fire({
+            title: "Usted esta seguro?",
+            text: "Si regresa a estado 'guardado', se eliminara todo el progreso guardado.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Si, regresar",
+            cancelButtonText: "Cancelar",
+            reverseButtons: true
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+                //llamar al endpoint y recargar la pagina cuando resultado sea success
+                try {
+                    const response = await resetStateNota( refId.current, 1);
+                    
+                    if(response?.status == 200){
+                        localStorage.setItem("notification", JSON.stringify({
+                            message : response.data.message ?? '',
+                            type : "success"
+                        }));
+                        location.replace(location.pathname);
+                    }
+                } catch (error) {
+                    
+                }
+            }
+          });
+    }
+
     return (
         <ContainerInner breadcrumb={breadcrumb} titulo={`Nota heladero - ${estadoTitulo} ${codigoTitulo}`} classContainer='nota-heladero'>
             <>     
@@ -686,6 +724,10 @@ export const NotaHeladeroDetalle = () => {
                                         setOpenModalGuardado(true);
                                         setOpenModal(true);
                                     }}>Editar guardado</button>
+                                }
+                                {
+                                    getValues("estado") == 1 && active?.estado == 1 &&
+                                    <button type="button" className="button-edit btn btn-warning flex-fill" onClick={showAlertBack}>resetear a apertura</button>
                                 }
                             </>
                         } />
