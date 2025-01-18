@@ -1099,15 +1099,15 @@ export const NotaHeladeroDetalle = () => {
                                                                                 const storePago = parseFloat((getValues("pago") ? getValues("pago") : '0.00').toString());
                                                                                 const pago:number = parseFloat(((e.target as HTMLInputElement).value ? (e.target as HTMLInputElement).value : "0.00").toString());
                                                                                 
-                                                                                if(pago < yape || pago == 0){
-                                                                                    setValue('yape', "0.00");
-                                                                                    setValue('efectivo', "0.00");
-                                                                                }
-                                                                                if(yape > 0 && pago > 0){
-                                                                                    let efectivo = pago - yape;
-                                                                                        efectivo = efectivo < 0 ? 0 : efectivo;
-                                                                                    setValue('efectivo', efectivo.toFixed(2));
-                                                                                }
+                                                                                // if(pago < yape || pago == 0){
+                                                                                // }
+                                                                                setValue('yape', "0.00");
+                                                                                setValue('efectivo', "0.00");
+                                                                                // if(yape > 0 && pago > 0){
+                                                                                //     let efectivo = pago - yape;
+                                                                                //         efectivo = efectivo < 0 ? 0 : efectivo;
+                                                                                //     setValue('efectivo', efectivo.toFixed(2));
+                                                                                // }
 
                                                                                 onChangePago();
                                                                             }
@@ -1150,7 +1150,7 @@ export const NotaHeladeroDetalle = () => {
                                                                                     setValue("efectivo", "0.00");
                                                                                     
                                                                                 }else if(yape == 0 && subtotal > 0){
-                                                                                    setValue("efectivo", "0.00");
+                                                                                    setValue("efectivo", pago.toFixed(2));
                                                                                     setValue("yape", "0.00");
                                                                                 }else if(yape > 0 && yape == pago){
                                                                                     let efectivo = 0;
