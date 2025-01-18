@@ -209,7 +209,7 @@ export const NotaHeladeroDetalle = () => {
             setValue("deuda_anterior", heladero.deuda_anterior ?? 0);
             setValue("ahorro", heladero.ahorro);
             setValue("pago", heladero.pago);
-            setValue("debe", heladero.debe);
+            setValue("debe", parseFloat((heladero.debe).toString()).toFixed(2));
 
             setValue("codigo", heladero.codigo);
             setValue("heladero_nombre", heladero.heladero_nombre);
@@ -409,6 +409,7 @@ export const NotaHeladeroDetalle = () => {
             let deuda_anterior = parseFloat((heladero.deuda_anterior??0).toString());
             let subtotal = monto+cargo_baterias;
             let suma = subtotal+deuda_anterior;
+            let debe = parseFloat((heladero.debe??"0.00").toString()).toFixed(2);
 
             setValue('cargo_baterias', parseFloat(`${cargo_baterias}`).toFixed(2));
             setValue(`monto`, monto.toFixed(2));
@@ -418,7 +419,7 @@ export const NotaHeladeroDetalle = () => {
             setValue(`ahorro`, (heladero.ahorro??0));
             setValue(`yape`, parseFloat((heladero.yape??"0.00").toString()).toFixed(2));
             setValue(`efectivo`, parseFloat((heladero.efectivo??"0.00").toString()).toFixed(2));
-            setValue(`debe`, (heladero.debe??0));
+            setValue(`debe`, debe);
             setValue(`suma`, suma.toFixed(2));
             setValue(`observaciones`, (heladero.observaciones??''));
 
@@ -581,6 +582,7 @@ export const NotaHeladeroDetalle = () => {
             }
             const subtotal_sumas = parseFloat((subtotal+cargo_baterias).toFixed(2));
             let suma = subtotal_sumas+deuda_anterior;
+            let debe = ((subtotal+deuda_anterior+cargo_baterias)-pago).toFixed(2);
 
             setValue(`monto`, subtotal.toFixed(2));
             setValue(`deuda_anterior`, deuda_anterior.toFixed(2));
@@ -590,7 +592,7 @@ export const NotaHeladeroDetalle = () => {
             setValue(`yape`, yape.toFixed(2));
             setValue(`efectivo`, efectivo.toFixed(2));
             setValue(`suma`, suma.toFixed(2));
-            setValue(`debe`, parseFloat(((subtotal+deuda_anterior+cargo_baterias)-pago).toFixed(2)));
+            setValue(`debe`, debe);
             return;
         }
 
