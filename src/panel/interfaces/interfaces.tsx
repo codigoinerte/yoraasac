@@ -339,7 +339,7 @@ export interface FormNotaHeladeroValues {
     user_id:            number;
     moneda_id:          number;
     id_sucursal:        number;
-    monto:              number;
+    monto:              number | string;
     pago:               number | string;
     debe:               number | string;
     deuda_anterior:     number | string;

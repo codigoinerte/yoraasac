@@ -328,7 +328,7 @@ export const NotaHeladeroDetalle = () => {
 
         navigate("/nota-heladero/new");
     }
-
+    /* funcion inicial de carga de nota */
     const onLoadNotaHeladero = async () => {
 
         refId.current = id;
@@ -405,13 +405,13 @@ export const NotaHeladeroDetalle = () => {
             }
 
             let cargo_baterias = parseFloat(((heladero.cargo_baterias && heladero.cargo_baterias!=0) ? heladero.cargo_baterias : configuration!.cargo_baterias).toString());
-            let monto = parseFloat((heladero.monto??0).toString());
+            let monto = parseFloat(((heladero.monto??0)).toString());
             let deuda_anterior = parseFloat((heladero.deuda_anterior??0).toString());
             let subtotal = monto+cargo_baterias;
             let suma = subtotal+deuda_anterior;
 
             setValue('cargo_baterias', parseFloat(`${cargo_baterias}`).toFixed(2));
-            setValue(`monto`, monto);
+            setValue(`monto`, monto.toFixed(2));
             setValue(`deuda_anterior`, parseFloat(`${deuda_anterior}`).toFixed(2));
             setValue(`subtotal`, subtotal.toFixed(2));
             setValue(`pago`, (heladero.pago??0));
@@ -582,7 +582,7 @@ export const NotaHeladeroDetalle = () => {
             const subtotal_sumas = parseFloat((subtotal+cargo_baterias).toFixed(2));
             let suma = subtotal_sumas+deuda_anterior;
 
-            setValue(`monto`, parseFloat(subtotal.toFixed(2)));
+            setValue(`monto`, subtotal.toFixed(2));
             setValue(`deuda_anterior`, deuda_anterior.toFixed(2));
             setValue(`subtotal`, subtotal_sumas.toFixed(2));
             setValue(`pago`, pago.toFixed(2));
@@ -1065,7 +1065,7 @@ export const NotaHeladeroDetalle = () => {
                                                                 const subtotal = monto+cargo_baterias;
                                                                 
                                                                 setValue("deuda_anterior", value);
-                                                                setValue("subtotal", subtotal);
+                                                                setValue("subtotal", subtotal.toFixed(2));
 
                                                                 onChangePago();
 
