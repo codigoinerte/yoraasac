@@ -656,7 +656,7 @@ export const NotaHeladeroDetalle = () => {
         }));
     }
 
-    const showAlertBack = () => {
+    const showAlertBack = (state_destino:number) => {
 
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
@@ -678,7 +678,7 @@ export const NotaHeladeroDetalle = () => {
             if (result.isConfirmed) {
                 //llamar al endpoint y recargar la pagina cuando resultado sea success
                 try {
-                    const response = await resetStateNota( refId.current, 1);
+                    const response = await resetStateNota( refId.current, state_destino);
                     
                     if(response?.status == 200){
                         localStorage.setItem("notification", JSON.stringify({
@@ -729,7 +729,17 @@ export const NotaHeladeroDetalle = () => {
                                 }
                                 {
                                     getValues("estado") == 1 && active?.estado == 1 &&
-                                    <button type="button" className="button-edit btn btn-warning flex-fill" onClick={showAlertBack}>resetear a apertura</button>
+                                    (
+                                        <div className="dropdown flex-fill">
+                                            <button className="btn btn-warning dropdown-toggle flex-fill w-100 h-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Resetear
+                                            </button>
+                                            <ul className="dropdown-menu">
+                                                <li><button className="dropdown-item" type="button" onClick={()=> showAlertBack(2)}>resetear a apertura</button></li>
+                                                <li><button className="dropdown-item" type="button" onClick={()=> showAlertBack(3)}>resetear a guardado</button></li>
+                                            </ul>
+                                        </div>
+                                    )                                    
                                 }
                             </>
                         } />
