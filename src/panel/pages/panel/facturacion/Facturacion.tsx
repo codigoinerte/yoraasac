@@ -86,7 +86,7 @@ export const Facturacion = () => {
     const { warningDelete } = useAlert();
 
 
-    const { listEstadoHeladero, listNotaHeladeroEstado} = useHelpers();
+    const { listNotaHeladeroEstado} = useHelpers();
 
     const { status, facturas, nextPage, prevPage, loadFacturacion, deleteFacturacion } = useFacturastore();
 

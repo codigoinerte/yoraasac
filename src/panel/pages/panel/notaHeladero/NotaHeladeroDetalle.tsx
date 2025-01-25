@@ -791,7 +791,9 @@ export const NotaHeladeroDetalle = () => {
                                 <label htmlFor="estado" className="form-label">Estado</label>
                                 <div className="btn-group d-block" role="group">
                                     {
-                                        listEstadoHeladero.map(({ id, nombre })=>(
+                                        listEstadoHeladero
+                                        .filter((item) => item.id != 4)
+                                        .map(({ id, nombre })=>(
                                             <button className="btn btn-primary"
                                                     type="button"
                                                     key={id} 

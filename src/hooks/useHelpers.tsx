@@ -182,8 +182,9 @@ export const useHelpers = () => {
         try {
                                     
             const { data } = await backendApi.get<NotaHeladeroEstados>('/notas-estado');
-            const response = data.data.filter(i=>i.id != 4);
+            const response = data.data;
             setListEstadoHeladero([
+                response[3],
                 response[1],
                 response[2],
                 response[0],
