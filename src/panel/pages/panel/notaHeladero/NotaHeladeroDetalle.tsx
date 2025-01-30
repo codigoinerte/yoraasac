@@ -63,8 +63,6 @@ export const NotaHeladeroDetalle = () => {
 
     const refId = useRef<any>('0');
 
-    const { search } = useLocation();
-
     const [openModalGuardado, setOpenModalGuardado] = useState<boolean>(false);
 
     const [orderDirection, setOrderDirection] = useState<order>("asc");
@@ -128,6 +126,7 @@ export const NotaHeladeroDetalle = () => {
         let precio_final = precio_operacion * parseInt(vendido.toString());        
         setValue(`productos.${index}.importe`, precio_final);
     }
+
     const calculo_precio_final = (precio_venta:string, descuento:string) => {
         let p = precio_venta==""?0: parseFloat(precio_venta);
         let d = descuento==""?0: parseFloat(descuento);
@@ -247,8 +246,6 @@ export const NotaHeladeroDetalle = () => {
         }
 
     }
-
-    
 
     const getDisableDate = (id:number) => {
         if(
@@ -468,7 +465,7 @@ export const NotaHeladeroDetalle = () => {
     
 
     useEffect(() => {
-        
+
         if(active?.fecha_apertura && (state == 2)){
             setisReadOnlyInputs((s) => ({
                 ...s,
@@ -1237,6 +1234,7 @@ export const NotaHeladeroDetalle = () => {
                 </form>
 
                 {
+                    
                     ((state==3 && !getValues('fecha_guardado')) || openModalGuardado) &&
                     (<ModalNotaHeladeroRegister
                             openModal={openModal}
