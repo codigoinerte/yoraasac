@@ -173,7 +173,7 @@ export const NotaHeladeroDetalle = () => {
         setValue('user_id', user);
 
         const heladero = await loadBuscarNotaHeladeroGuardada(parseInt(user.toString()));
-        
+        //console.dir(heladero);
         /* si heladero(toda la info de la nota del headero) existe previamente se completa la data*/
         if(heladero && heladero.hasOwnProperty("id") && heladero.id){
             setisNewRegister(false);
@@ -193,10 +193,12 @@ export const NotaHeladeroDetalle = () => {
                
                 if(heladero.estado == 1){
                     setEstadoTitulo('apertura de cuenta nueva');
+                    setValue('estado', heladero.estado);
                 }
 
                 if(heladero.estado == 3){
                     setEstadoTitulo('cuenta guardada');
+                    setValue('estado', heladero.estado);
                 }
 
                setState(heladero.estado);
@@ -223,7 +225,7 @@ export const NotaHeladeroDetalle = () => {
             if(heladero.estado == 1 && heladero.fecha_cierre) fecha_operacion = heladero.fecha_cierre
             else if(heladero.estado == 2 && heladero.fecha_apertura) fecha_operacion = heladero.fecha_apertura
             else if(heladero.estado == 3 && heladero.fecha_guardado) fecha_operacion = heladero.fecha_guardado
-            else if(heladero.estado == 2 && !heladero.fecha_apertura && heladero.created_at) fecha_operacion = formatDateForInput(heladero.created_at)
+            else if(heladero.estado == 2 && !heladero.fecha_apertura && heladero.created_at) fecha_operacion = formatDateForInput(new Date().toString())
             else fecha_operacion = new Date();
             
             setValue('fecha_operacion', fecha_operacion);
