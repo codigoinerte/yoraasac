@@ -363,7 +363,8 @@ export const NotaHeladeroDetalle = () => {
             
             if(heladero?.estado != undefined) {
 
-                let estado = (heladero.estado == 3) ? 2 : heladero.estado;
+                //let estado = (heladero.estado == 3) ? 2 : heladero.estado;
+                let estado = heladero.estado;
                 
                 if(estado == 3){
                     setEstadoTitulo('guardado');
@@ -671,7 +672,7 @@ export const NotaHeladeroDetalle = () => {
 
           swalWithBootstrapButtons.fire({
             title: "Usted esta seguro?",
-            text: "Si regresa a estado 'guardado', se eliminara todo el progreso guardado.",
+            text: `Si regresa a estado '${state_destino == 2 ? 'apertura' : 'guardado'}', se eliminara todo el progreso guardado.`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Si, regresar",
