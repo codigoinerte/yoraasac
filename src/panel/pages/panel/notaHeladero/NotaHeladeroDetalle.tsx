@@ -119,6 +119,10 @@ export const NotaHeladeroDetalle = () => {
 
     const redirectToFactura = () => navigate(`/facturacion/new?gf=nota&id=${refId.current}`); 
 
+    const queryParameters = new URLSearchParams(window.location.search)
+    const getEdit:boolean = Boolean(queryParameters.get("edit")??0);
+    const getState:number | null = parseInt(queryParameters.get("state")??"null");
+
     const calcImporte = (index:number)=> {
 
         let vendido = (!getValues(`productos.${index}.vendido`)) ? 0 : parseFloat(getValues(`productos.${index}.vendido`)!.toString());
@@ -684,7 +688,7 @@ export const NotaHeladeroDetalle = () => {
                             message : response.data.message ?? '',
                             type : "success"
                         }));
-                        location.replace(location.pathname);
+                        location.replace(location.pathname + "?edit=true&state=3");
                     }
                 } catch (error:any) {
                     Swal.fire("Error!", error.response.data.message, "warning");
@@ -719,8 +723,8 @@ export const NotaHeladeroDetalle = () => {
                         }}
                         NewComponent={
                             <>
-                                {
-                                    getValues("estado") == 1 && active?.estado !=1 && 
+                                {   
+                                    (getValues("estado") == 1 || (getEdit == true && getState == 3)) && active?.estado !=1 && 
                                     <button type="button" className="button-edit btn btn-warning flex-fill" onClick={()=>{
                                         setOpenModalGuardado(true);
                                         setOpenModal(true);
