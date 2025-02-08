@@ -150,6 +150,13 @@ export const NotaHeladeroDetalle = () => {
                 window.history.pushState(null, '', `/nota-heladero/edit/${response?.id}`);
             }
         }else{
+            
+            if(getEdit && getState){
+                const url = new URL(window.location.href);
+                url.searchParams.delete("edit");
+                url.searchParams.delete("state");
+                window.history.pushState({}, '', url.toString());
+            }
             const response = await updateNotaHeladero({...data, productos: data.productos.map((item) => ({
                 ...item,
                 vendido : item.vendido && isNaN(parseFloat((item.vendido??'0').toString())) ? 0 : item.vendido
