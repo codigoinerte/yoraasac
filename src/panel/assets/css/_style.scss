@@ -341,7 +341,8 @@ input[type=number] { -moz-appearance:textfield; }
     overflow-y: scroll !important;
 }
 
-.nota-grid-buttons-1{
+.nota-grid-buttons-1,
+.nota-grid-buttons-3{
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
@@ -426,4 +427,12 @@ input[type=number] { -moz-appearance:textfield; }
         grid-row: 5 / 6;
         grid-column: 1 / 2;
     } 
+}
+
+.nota-grid-buttons-3{
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.nota-grid-buttons-3 button:nth-child(3){
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
 }

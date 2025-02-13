@@ -732,7 +732,7 @@ export const NotaHeladeroDetalle = () => {
                         NewComponent={
                             <>
                                 {   
-                                    (getValues("estado") == 1 || (getEdit == true && getState == 3)) && active?.estado !=1 && 
+                                    (getValues("estado") == 1 || (getEdit == true && getState == 3) || (active?.estado == 3 && active?.fecha_guardado)) && active?.estado !=1 && 
                                     <button type="button" className="button-edit btn btn-warning flex-fill" onClick={()=>{
                                         setOpenModalGuardado(true);
                                         setOpenModal(true);
