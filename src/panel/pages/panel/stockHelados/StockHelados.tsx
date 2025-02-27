@@ -6,6 +6,7 @@ import { BuscarStockHelado, FormBuscarStockHeladoValues, breadcrumb as bread, li
 import { useAlert, useStockHeladosStore } from '../../../../hooks';
 import Swal from 'sweetalert2';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useHelpers } from '../../../../hooks/useHelpers';
 
 const breadcrumb:bread[] = [
   { id:1, titulo: 'Movimientos', enlace: '/movimiento' },    
@@ -34,7 +35,12 @@ const [buscar, setBuscar] = useState<BuscarStockHelado>({
     buscar:false
 });
 
+const { loadMovimientos, listMovimiento } = useHelpers();
 const { status, StockHelado, nextPage, prevPage, loadStockHelado, deleteStockHelado } = useStockHeladosStore();
+
+useEffect(()=>{
+    loadMovimientos();
+},[]);
 
 useEffect(() => {
     
@@ -183,12 +189,18 @@ return (
                 <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div className="mb-3">
                         <label htmlFor="movimiento" className="form-label">Movimiento</label>
-                        <input type="text" 
-                                className="form-control" 
+                        <select className="form-control" 
                                 id="movimiento" 
                                 aria-describedby="Buscador" 
-                                placeholder='Movimiento'
-                                {...register('movimiento')}/>
+                                placeholder='Movimiento'                        
+                                {...register('movimiento')}>
+                                    <option value="">Seleccione una opción</option>
+                            {
+                                listMovimiento.map(({ id, movimiento }) => (
+                                    <option key={id} value={movimiento.toLowerCase()}>{movimiento}</option>
+                                ))
+                            }
+                        </select>
                     </div>
                 </div>
                 <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">

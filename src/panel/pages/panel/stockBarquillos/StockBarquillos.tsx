@@ -5,6 +5,7 @@ import { ContainerInner, List, } from '../../../components';
 import { BuscarStockBarquillo, FormBuscarStockBarquilloValues, Breadcrumb as bread, listaDetalle, paginationInterface } from '../../../interfaces';
 import { useAlert, useStockBarquillosStore } from '../../../../hooks';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useHelpers } from '../../../../hooks/useHelpers';
 import Swal from 'sweetalert2';
 
 const breadcrumb:bread[] = [
@@ -34,7 +35,12 @@ export const StockBarquillos = () => {
       buscar:false
   });
 
+  const { loadMovimientos, listMovimiento } = useHelpers();
   const { status, StockBarquillo, nextPage, prevPage, loadStockBarquillo, deleteStockBarquillo } = useStockBarquillosStore();
+
+  useEffect(()=>{
+      loadMovimientos();
+  },[]);
 
   useEffect(() => {
       
@@ -181,12 +187,18 @@ export const StockBarquillos = () => {
                   <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                       <div className="mb-3">
                           <label htmlFor="movimiento" className="form-label">Movimiento</label>
-                          <input type="text" 
-                                  className="form-control" 
-                                  id="movimiento" 
-                                  aria-describedby="Movimiento" 
-                                  placeholder='Movimiento'
-                                  {...register('movimiento')}/>
+                            <select className="form-control" 
+                                    id="movimiento" 
+                                    aria-describedby="Buscador" 
+                                    placeholder='Movimiento'                        
+                                    {...register('movimiento')}>
+                                    <option value="">Seleccione una opción</option>
+                                    {
+                                        listMovimiento.map(({ id, movimiento }) => (
+                                            <option key={id} value={movimiento.toLowerCase()}>{movimiento}</option>
+                                        ))
+                                    }
+                            </select>
                       </div>
                   </div>
                   <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">

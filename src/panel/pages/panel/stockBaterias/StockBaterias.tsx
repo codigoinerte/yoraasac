@@ -6,6 +6,7 @@ import { BuscarStockBaterias, breadcrumb as bread, listaDetalle, paginationInter
 import { useAlert, useStockBateriasStore } from '../../../../hooks';
 import Swal from 'sweetalert2';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useHelpers } from '../../../../hooks/useHelpers';
 import { FormBuscarStockBateriaValues } from '../../../interfaces/interfaces';
 
 const breadcrumb:bread[] = [
@@ -35,7 +36,12 @@ export const StockBaterias = () => {
       buscar:false
   });
 
+  const { loadMovimientos, listMovimiento } = useHelpers();
   const { status, StockBateria, nextPage, prevPage, loadStockBateria, deleteStockBateria } = useStockBateriasStore();
+
+  useEffect(()=>{
+    loadMovimientos();
+  },[]);
 
   useEffect(() => {
       
@@ -187,12 +193,18 @@ return (
                 <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div className="mb-3">
                         <label htmlFor="movimiento" className="form-label">Movimiento</label>
-                        <input  type="text" 
-                                className="form-control" 
-                                id="movimiento" 
-                                aria-describedby="movimiento" 
-                                placeholder='Movimiento'
-                                {...register('movimiento')}/>
+                        <select className="form-control" 
+                                    id="movimiento" 
+                                    aria-describedby="Buscador" 
+                                    placeholder='Movimiento'                        
+                                    {...register('movimiento')}>
+                                    <option value="">Seleccione una opción</option>
+                                    {
+                                        listMovimiento.map(({ id, movimiento }) => (
+                                            <option key={id} value={movimiento.toLowerCase()}>{movimiento}</option>
+                                        ))
+                                    }
+                        </select>
                     </div>
                 </div>
                 <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
