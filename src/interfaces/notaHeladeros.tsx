@@ -121,6 +121,7 @@ export interface Detalle {
     heladero_precio_venta: string;
     heladero_descuento:    string;
     is_litro:              number;
+    is_barquillo:          boolean;
     devolucion_today:      null;
     stock_alert_input:     string;
     cantidad_caja:         number;

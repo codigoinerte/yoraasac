@@ -319,7 +319,8 @@ export const NotaHeladeroDetalle = () => {
                 created_at : item.created_at,
                 updated_at : item.updated_at,
                 is_litro: item.is_litro,
-                stock_alert_input: item.stock_alert_input
+                stock_alert_input: item.stock_alert_input,
+                is_barquillo: item.is_barquillo
                 }))
         ]);            
           
@@ -544,6 +545,8 @@ export const NotaHeladeroDetalle = () => {
             let subtotal = 0;
             
             fields.forEach((item, index) => {
+                
+                if(item.is_barquillo == true) return;
 
                 const devolucion_today_saved = (active) ? ( active.detalle.find((item) => item.codigo == getValues(`productos.${index}.codigo`))!.devolucion_today ?? 0) : 0;
                 
@@ -895,40 +898,42 @@ export const NotaHeladeroDetalle = () => {
                                             fields.map((item, index) => {
                                                 return (
                                                 <tr key={item.id}>                                                    
-                                                    <td className={item.is_litro ? 'bg-info': ''}>
+                                                    <td className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}>
                                                         {
-                                                            item.is_litro ?
-                                                            (
-                                                                <div className="input-group">
-                                                                    <span className="input-group-text" id="basic-addon1">
-                                                                        <small>S/</small>
-                                                                    </span>
-                                                                    <input type="text" 
-                                                                            className='form-control' 
-                                                                            readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
-                                                                            {...register(`productos.${index}.devolucion`)} 
-                                                                            tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
-                                                                        />
-                                                                </div>
-                                                            )
-                                                            :
-                                                            (
-                                                                <div className="input-group">
-                                                                    <span className="input-group-text" id="basic-addon1">
-                                                                        <small>{textUnid}</small>
-                                                                    </span>
-                                                                    <input type="text" 
-                                                                            className='form-control' 
-                                                                            readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
-                                                                            {...register(`productos.${index}.devolucion`)} 
-                                                                            tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
-                                                                        />
-                                                                </div>
-                                                            )
+                                                            item.is_barquillo == false ? (
+                                                                item.is_litro ?
+                                                                (
+                                                                    <div className="input-group">
+                                                                        <span className="input-group-text" id="basic-addon1">
+                                                                            <small>S/</small>
+                                                                        </span>
+                                                                        <input type="text" 
+                                                                                className='form-control' 
+                                                                                readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
+                                                                                {...register(`productos.${index}.devolucion`)} 
+                                                                                tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
+                                                                            />
+                                                                    </div>
+                                                                )
+                                                                :
+                                                                (
+                                                                    <div className="input-group">
+                                                                        <span className="input-group-text" id="basic-addon1">
+                                                                            <small>{textUnid}</small>
+                                                                        </span>
+                                                                        <input type="text" 
+                                                                                className='form-control' 
+                                                                                readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
+                                                                                {...register(`productos.${index}.devolucion`)} 
+                                                                                tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
+                                                                            />
+                                                                    </div>
+                                                                )
+                                                            ) : ''
                                                         }
                                                         
                                                     </td>                                                     
-                                                    <td className={item.is_litro ? 'bg-info': ''}>
+                                                    <td className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}>
                                                         <div className="input-group">
                                                             <span className="input-group-text" id="basic-addon1">
                                                                 <small>{textUnid}</small>
@@ -998,10 +1003,10 @@ export const NotaHeladeroDetalle = () => {
                                                             <b>Precio</b>: S/ ${getValues(`productos.${index}.precio_operacion`)??0}
                                                         </div>
                                                         `}
-                                                        className={item.is_litro ? 'bg-info': ''}
+                                                        className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}
                                                        >
                                                         <Tooltip id={`tooltip-html-${index}`} />
-                                                        { item.producto }
+                                                        { item.is_barquillo ? (<><b>{item.producto}</b></>) : item.producto}
                                                         {
                                                             item.is_litro ? (<>
                                                                 <br/>
@@ -1013,40 +1018,48 @@ export const NotaHeladeroDetalle = () => {
                                                                 {...register(`productos.${index}.codigo`)} 
                                                                 />
                                                     </td>
-                                                    <td  className={item.is_litro ? 'bg-info': ''}>
-                                                        <div className="input-group">
-                                                            <span className="input-group-text" id="basic-addon1">
-                                                                <small>{item.is_litro ? 'S/': 'Unid'}</small>
-                                                            </span>
-                                                            <input type="number" 
-                                                                    className='form-control' 
-                                                                    {...register(`productos.${index}.vendido`,{
-                                                                        onChange: () => calcImporte(index)
-                                                                    })}  
-                                                                    readOnly={isReadOnlyInputs.isReadOnlyVendido}
-                                                                    min={0.00}
-                                                                    step={0.01}
-                                                                    />
-                                                        </div>
+                                                    <td  className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}>
+                                                        {
+                                                            item.is_barquillo == false ? (
+                                                                <div className="input-group">
+                                                                    <span className="input-group-text" id="basic-addon1">
+                                                                        <small>{item.is_litro ? 'S/': 'Unid'}</small>
+                                                                    </span>
+                                                                    <input type="number" 
+                                                                            className='form-control' 
+                                                                            {...register(`productos.${index}.vendido`,{
+                                                                                onChange: () => calcImporte(index)
+                                                                            })}  
+                                                                            readOnly={isReadOnlyInputs.isReadOnlyVendido}
+                                                                            min={0.00}
+                                                                            step={0.01}
+                                                                            />
+                                                                </div>
+                                                            ) : ''
+                                                        }
                                                     </td> 
-                                                    <td  className={item.is_litro ? 'bg-info': ''}> 
-                                                        <div className="input-group">
-                                                            <span className="input-group-text" id="basic-addon1">
-                                                                <small>S/</small>
-                                                            </span>
-                                                            <input type="number" 
-                                                                    className='form-control'  
-                                                                    {...register(`productos.${index}.importe`,{
-                                                                        min: 0.00,
-                                                                        value: 0.00,
+                                                    <td  className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}> 
+                                                        {
+                                                            item.is_barquillo == false ? (
+                                                                <div className="input-group">
+                                                                    <span className="input-group-text" id="basic-addon1">
+                                                                        <small>S/</small>
+                                                                    </span>
+                                                                    <input type="number" 
+                                                                            className='form-control'  
+                                                                            {...register(`productos.${index}.importe`,{
+                                                                                min: 0.00,
+                                                                                value: 0.00,
 
-                                                                        pattern: /^\d+(\.\d{1,2})?$/
-                                                                    })} 
-                                                                    readOnly={isReadOnlyInputs.isReadOnlyImporte} 
-                                                                    step={0.01} 
-                                                                    min={0.00}/>
-                                                            <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
-                                                        </div>
+                                                                                pattern: /^\d+(\.\d{1,2})?$/
+                                                                            })} 
+                                                                            readOnly={isReadOnlyInputs.isReadOnlyImporte} 
+                                                                            step={0.01} 
+                                                                            min={0.00}/>
+                                                                    <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
+                                                                </div>
+                                                            ) : ''
+                                                        }
                                                     </td>
                                                 </tr>
                                                 )

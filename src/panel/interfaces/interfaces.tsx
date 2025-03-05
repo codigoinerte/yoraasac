@@ -391,6 +391,7 @@ export interface FormNotaHeladeroDetalleValues {
     producto?:          string;
     precio_operacion?:  number;
     is_litro?:          boolean;
+    is_barquillo?:      boolean;
     stock_alert_input?:  number;
 }
 
@@ -688,6 +689,7 @@ export interface ProductosPublicados {
     created_at:   string;
     updated_at:   string;
     is_litro:     boolean;
+    is_barquillo: boolean;
     stock_alert_input: number;
     vendido: number,
     importe: number,

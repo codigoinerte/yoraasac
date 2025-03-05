@@ -240,7 +240,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
                 </Row>
                 {
                     fields.map((item, index) => {
-                        
+                        if(item.is_barquillo == true) return '';
                         return (
                         <Row className="show-grid mb-3" key={item.id}>
                             <Col xs={12} sm={12} md={12} className={ getValues(`productos.${index}.pedido`) ? ( (item.is_litro) ? "bg-info p-2" : "bg-warning p-2"):""}>
