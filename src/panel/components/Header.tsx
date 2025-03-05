@@ -1,13 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import profile from '../assets/images/profile.png';
 // import logo  from '../assets/images/logo.png';
 import { Link } from 'react-router-dom';
-import { Menu } from '../helpers';
-import { useAuthStore } from '../../hooks';
+// import { Menu } from '../helpers';
+import { useAuthStore, useDestacados } from '../../hooks';
+import { Menu } from '../interfaces';
 
 export const Header = () => {
 
   const { startLogout } = useAuthStore();
+
+  const [nodes, setNodes] = useState<Menu[]>([]);
+  
+      const { loadDestacados } = useDestacados();
+  
+      const { user } = useAuthStore();
+  
+      useEffect(() => {
+        
+          loadDestacados()
+          .then((response)=>{
+              const menuSaved = response.destacado ?? [];
+  
+              setNodes(menuSaved);
+          })
+          
+      }, [])
 
   return (
     <>
@@ -26,16 +44,25 @@ export const Header = () => {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">              
 
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                {
-                  Menu.map(({nombre, icono, alias}, index)=>(
-                    <li key={alias} className="nav-item dropdown">
-                      <Link className="dropdown-item" to={alias}>
-                        <i className={icono}></i> 
-                        <span>{nombre}</span>
-                      </Link>
-                    </li>
+                <li key={"home"} className="nav-item dropdown">
+                    <Link className="dropdown-item" to={'/'}>
+                      <i className={"bi bi-house"}></i> 
+                      <span>{"Home"}</span>
+                    </Link>
+                </li>
+              {
+                  nodes.map(({ alias, id, icono, nombre })=>(
+                      <>
+                        <li key={alias} className="nav-item dropdown">
+                            <Link className="dropdown-item" to={alias}>
+                              <i className={icono}></i> 
+                              <span>{nombre}</span>
+                            </Link>
+                        </li>                        
+                      </>
+
                   ))
-                }
+              } 
               </ul>              
 
               <div className="d-none d-sm-none d-md-none d-lg-flex d-flex display-desktop">
