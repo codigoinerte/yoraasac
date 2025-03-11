@@ -9,18 +9,25 @@ import { Toaster, toast } from 'react-hot-toast';
 import { DateNow } from '../../../helpers';
 import { NotaHeladero } from '../../../../interfaces';
 import { toastMessage } from '../../../../helpers';
+import { useReactToPrint } from 'react-to-print';
+import FacturasComponent from '../../../../prints/Facturas';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Facturación', enlace: '/facturacion' },
     { id:2, titulo: 'Facturación detalle', enlace: '' },
 ];
 
+type strnum = string | number;
 
 export const FacturacionDetalle = () => {
 
     const [selectProducto, setSelectProducto] = useState<BuscarProducto>();
 
-    const refId = useRef<any>('0')
+    const [typeOperation, setTypeOperation] = useState(1);
+
+    const componentRef = useRef(null);
+
+    const refId = useRef<any>('0');
 
     const {  saveFacturacion, updateFacturacion, getFacturacion, active  } = useFacturastore();
 
@@ -65,11 +72,11 @@ export const FacturacionDetalle = () => {
     useEffect(() => {
         
         refId.current = id;
-
+        console.log(refId.current);
         loadFacturaEstados();
             
         if(from == '' && parseInt(from_id.toString()) == 0)
-        {    //console.log('cargando guardado');
+        {
             if(refId.current == 0)
             {
                 const dateNow = DateNow();
@@ -78,22 +85,42 @@ export const FacturacionDetalle = () => {
                 setValue('fecha_emision', dateNow);
                 setValue('fecha_pago', dateNow);
                 setValue('id_estado', 1);
+                setTypeOperation(1);
             }
             else
-            {            
+            {   
                 getFacturacion(refId.current)
                 .then((factura)=>{
+                    
+                    setValue('fecha_emision', factura?.fecha_emision ?? '');
+                    setValue('fecha_pago', factura?.fecha_pago ?? '');
+                    setValue('tipo', factura?.tipo ?? 1);
+                    setValue('serie', factura?.serie ?? '');
+                    setValue('correlativo', factura?.correlativo ?? 0);
+                    setValue('user_id', factura?.user_id ?? 0);
+                    setValue('tipo_transaccion', factura?.tipo_transaccion ?? 0);
+                    setValue('id_estado', factura?.id_estado ?? 0);
+                    setValue('estado', factura?.id_estado ?? 0);
 
-                    setValue('fecha_emision', active?.fecha_emision ?? '');
-                    setValue('fecha_pago', active?.fecha_pago ?? '');
-                    setValue('tipo', active?.tipo ?? 0);
-                    setValue('serie', active?.serie ?? '');
-                    setValue('correlativo', active?.correlativo ?? 0);
-                    setValue('user_id', active?.user_id ?? 0);
-                    setValue('tipo_transaccion', active?.tipo_transaccion ?? 0);
-                    setValue('id_estado', active?.id_estado ?? 0);
-                    setValue('estado', active?.id_estado ?? 0);
+                    setValue('documento_tipo', factura?.documento_tipo??'');
+                    setValue('usuario_documento', factura?.usuario_documento??'');
+                    setValue('creador', factura?.creador??'');
+                    setValue('sucursal', factura?.sucursal??'');
+                    setValue('moneda', factura?.moneda??'');
+                    setValue('transaccion', factura?.transaccion??'');
+                    setValue('usuario_nombre', factura?.usuario_nombre??'');
+                    setValue('documento', factura?.documento??'');
+                    setValue('total_monto', factura?.total_monto??0);
+                    setValue('total_descuento', factura?.total_descuento??0);
 
+
+                    setValue('subtotal', factura?.subtotal??0);
+                    setValue('descuento', factura?.descuento??0);
+                    setValue('igv', factura?.igv??0);
+                    setValue('total', factura?.total??0);
+
+                    setTypeOperation(factura?.tipo ?? 1)
+                    
                     let detalle = [];
 
                     if(factura!.detalle != undefined)
@@ -106,12 +133,11 @@ export const FacturacionDetalle = () => {
                         setValue('productos', detalle);
                     }
 
-                    let usuario_id = active?.user_id??0;
+                    let usuario_id = factura?.user_id??0;
 
                     if(usuario_id != 0){
-                        
                         loadBuscarUsuario(usuario_id, "codigo");
-                        setValue('user_id', active!.user_id);
+                        setValue('user_id', factura!.user_id);
                     }
 
                 });
@@ -140,6 +166,11 @@ export const FacturacionDetalle = () => {
       
     }, [from_id])
 
+    useEffect(() => {
+        onChangeTotal();
+    }, [getValues('productos')])
+    
+
     const onSubmit: SubmitHandler<FormFacturacionValues> = (data) => {
         if(fields.length == 0){
             toastMessage({
@@ -161,13 +192,10 @@ export const FacturacionDetalle = () => {
                 'estado': data.id_estado,
                 productos: data.productos.length > 0 ? data.productos : [],
             })
-            .then((e)=>{
-                
+            .then((e)=>{                
                 refId.current = e!.id;
-
-            })
-
-            
+                window.history.pushState(null, '', `/facturacion/edit/${e!.id}`);
+            });
             
         }else{            
             updateFacturacion({
@@ -190,16 +218,18 @@ export const FacturacionDetalle = () => {
         let item = fields.filter((detail)=>detail.codigo == selectProducto?.codigo);
 
         if(item.length == 0){
-
+            let total: strnum = parseFloat(selectProducto!.precio_venta??0);
+                total = total.toFixed(2);
+                
             append({ 
                 codigo: selectProducto?.codigo,
                 producto: selectProducto?.nombre,
-                precio: parseFloat(selectProducto!.precio_venta??0),
+                precio: parseFloat(total),
                 descuento: 0,
                 cantidad: 1,
-                total: parseFloat(selectProducto!.precio_venta??0),
+                total,
                 id: 0
-             });
+            });
 
         }else{
             
@@ -208,16 +238,69 @@ export const FacturacionDetalle = () => {
 
     }
 
-    const onChangeTotal = (index:number)=>{
+    const onChangeSubTotal = (index:number)=>{
 
         const cantidad =  getValues(`productos.${index}.cantidad`)??1;
         const precio =  getValues(`productos.${index}.precio`)??0;
         const descuento =  getValues(`productos.${index}.descuento`)??0;
 
         let subtotal = (cantidad * precio * ( 1 - (descuento / 100))).toFixed(2);
-        
-        setValue(`productos.${index}.total`, parseFloat(subtotal.toString()));
+       
+        setValue(`productos.${index}.total`, subtotal);
     }
+    /*
+    igv = parseFloat((subtotal * 0.18).toFixed(2));
+    total = parseFloat((subtotal + igv).toFixed(2));
+    idTipo : 1, 2
+        1 : boleta
+        2 : factura
+    if idTipo == 1 igv discount subtotal, meanwhile if idTipo == 2 igv add more to subttoal
+    */
+    const onChangeTotal = () =>{
+        
+        let subtotal = 0;
+        let descuento = 0;
+        let igv = 0;
+        let total = 0;
+        let idTipo = getValues("tipo") ?? 1;
+        
+        fields.forEach((item, index)=>{
+
+            let _cantidad = getValues(`productos.${index}.cantidad`)??1;
+            let _precio = getValues(`productos.${index}.precio`)??0;
+            let _descuento = getValues(`productos.${index}.descuento`)??0;
+            
+            
+            subtotal += parseFloat((_cantidad * _precio * ( 1 - (_descuento / 100))).toFixed(2));
+            descuento += parseFloat((_cantidad * _precio * (_descuento / 100)).toFixed(2));        
+        });
+
+        
+        if(idTipo == 1){
+            subtotal = parseFloat((subtotal).toFixed(2));
+            igv = parseFloat((subtotal * 0.18).toFixed(2));
+            total = parseFloat((subtotal).toFixed(2));
+        }else{
+            igv = parseFloat((subtotal * 0.18).toFixed(2));
+            total = parseFloat((subtotal + igv).toFixed(2));
+        }
+
+        subtotal = subtotal+descuento;
+
+        let _subtotal = ((subtotal).toFixed(2));
+        let _descuento = ((descuento).toFixed(2));
+        let _igv = ((igv).toFixed(2));
+        let _total = ((total).toFixed(2));
+        
+        setValue('subtotal', _subtotal);
+        setValue('descuento', _descuento);
+        setValue('igv', _igv);
+        setValue('total', _total);
+    }
+
+    const imprimir =  useReactToPrint({
+        content: () => componentRef.current,
+    });
 
     const cabecera = [
         "Producto",
@@ -245,6 +328,10 @@ export const FacturacionDetalle = () => {
         let tipoDoc = parseInt((e.target.value).toString());
 
         loadDocumento(tipoDoc);
+
+        setTypeOperation(tipoDoc);
+
+        onChangeTotal();
     }
     
     type Nota = NotaHeladero | undefined;
@@ -301,11 +388,22 @@ export const FacturacionDetalle = () => {
     return (
         <ContainerInner breadcrumb={breadcrumb}>
             <>  
+            {
+                refId.current > 0 &&
+                <FacturasComponent ref={componentRef} currentNota={ getValues() } getValues={getValues}/>
+            }
+
             <form onSubmit={handleSubmit(onSubmit)}>
 
-                <FormControls save={()=>console.log(1)} page="facturacion" onNavigateBack = {()=>{
-                    window.location.href = '/facturacion/';
-                }}/>
+                <FormControls 
+                    isPrint={refId.current == 0 ? false : true}
+                    save={()=>console.log(1)} 
+                    page="facturacion" 
+                    onNavigateBack = {()=>{
+                        window.location.href = '/facturacion/';
+                    }}
+                    imprimir={imprimir} 
+                />
 
                 <hr className='border border-1 opacity-50'/>
 
@@ -333,8 +431,8 @@ export const FacturacionDetalle = () => {
                                                 updateSerie(e);
                                             } 
                                         })}>
-                                    <option value="1">Boleta</option>
-                                    <option value="2">Factura</option>
+                                    <option value="1" key={"Boleta"}>Boleta</option>
+                                    <option value="2" key={"Factura"}>Factura</option>
                                 </select>  
                             </div>
                         </div>                       
@@ -417,8 +515,8 @@ export const FacturacionDetalle = () => {
                             <select 
                                     className={ errors.tipo_transaccion ? "form-control is-invalid" : "form-control"}
                                     {...register('tipo_transaccion', { required:true })}>
-                                <option value="1">Contado</option>
-                                <option value="2">Credito</option>
+                                <option value="1" key={"Contado"}>Contado</option>
+                                <option value="2" key={"Credito"}>Credito</option>
                             </select>                                                
                         </div>
 
@@ -432,7 +530,7 @@ export const FacturacionDetalle = () => {
                                     {...register('id_estado', { required:true })}>
                                         {
                                             listEstadosFactura.map(({ id, estado })=>(
-                                                <option key={id} value={id}>{estado}</option>
+                                                <option key={id+estado} value={id}>{estado}</option>
                                             ))
                                         }
                                 
@@ -493,7 +591,7 @@ export const FacturacionDetalle = () => {
                                             fields.map((item, index)=>{
                                             return (                                    
                                                 
-                                                    <tr key={item.id}>                                                                
+                                                    <tr key={`facturacion-detalle-list-${item.id}-${index}`}>
                                                             <td className='text-left'>
                                                                 <p>{item.codigo} <br/> {item.producto}</p>
                                                                 <input type="hidden" {...register(`productos.${index}.codigo`)}/>
@@ -502,17 +600,29 @@ export const FacturacionDetalle = () => {
                                                             </td>
                                                             <td>
                                                                 <input type="number" className='form-control' {...register(`productos.${index}.cantidad`, {
-                                                                    onChange: ()=> onChangeTotal(index)
-                                                                })} />
+                                                                    onChange: (i)=> {
+                                                                        let value = i.target.value ?? 0;
+                                                                        if(value == 0) setValue(`productos.${index}.cantidad`, 1);
+
+                                                                        onChangeSubTotal(index);
+                                                                        onChangeTotal();
+                                                                    }
+                                                                })} min={1} />
                                                             </td>
                                                             <td>
                                                                 <input type="text" className='form-control' {...register(`productos.${index}.precio`, {
-                                                                    onChange: ()=> onChangeTotal(index)
+                                                                    onChange: ()=> {
+                                                                        onChangeSubTotal(index);
+                                                                        onChangeTotal();
+                                                                    }
                                                                 })}/>
                                                             </td> 
                                                             <td>
                                                                 <input type="number" className='form-control' {...register(`productos.${index}.descuento`,{
-                                                                    onChange: ()=> onChangeTotal(index)
+                                                                    onChange: ()=> {
+                                                                        onChangeSubTotal(index);
+                                                                        onChangeTotal();
+                                                                    }
                                                                 })}/>
                                                             </td>                                                            
                                                             <td>
@@ -528,7 +638,26 @@ export const FacturacionDetalle = () => {
                                                 
                                             )})
                                         }
-                                        
+                                        <tr>
+                                            <td colSpan={4} align='left' className='text-end bg-secondary'><b>Subtotal</b></td>
+                                            <td className="bg-secondary"><input type="text" className='form-control' {...register('subtotal')} disabled/></td>
+                                            <td className="bg-secondary">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={4} align='left' className='text-end bg-secondary'><b>Descuento</b></td>
+                                            <td className='bg-secondary'><input type="text" className='form-control' {...register('descuento')} disabled/></td>
+                                            <td className='bg-secondary'>&nbsp;</td>
+                                        </tr>
+                                        <tr className={`${typeOperation == 1 ? 'd-none' : ''}`}>
+                                            <td colSpan={4} align='left' className={`text-end bg-secondary`}><b>IGV</b></td>
+                                            <td className='bg-secondary'><input type="text" className='form-control' {...register('igv')} disabled/></td>
+                                            <td className='bg-secondary'>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={4} align='left' className='text-end bg-info'><b>Total</b></td>
+                                            <td className='bg-info'><input type="text" className='form-control' {...register('total')} disabled/></td>
+                                            <td className='bg-info'>&nbsp;</td>
+                                        </tr>
                                     </tbody>
                                 </table>   
                                 
