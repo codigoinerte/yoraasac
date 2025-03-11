@@ -166,7 +166,8 @@ export const useHelpers = () => {
             const { data } = await backendApi.get<BuscarUsuarioList>(`/buscar-usuario`,{
                 params:{
                     buscar,
-                    type
+                    type,
+                    tipo : 4
                 }
             });
             
