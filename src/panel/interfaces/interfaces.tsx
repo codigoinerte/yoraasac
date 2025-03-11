@@ -421,30 +421,25 @@ export interface FormFacturacionValues {
     id_estado:        number;
     estado?:          number;
     id_moneda:        number;
+
+    documento_tipo?:    string;
+    usuario_documento?: string;
+    creador?:           string;
+    sucursal?:          string;
+    moneda?:            string;
+    transaccion?:       string;
+    usuario_nombre?:    string;
+    documento?:         string;
+    total_monto:        number;
+    total_descuento:    number;
+    
+    subtotal:           number | string;
+    descuento:          number | string;
+    igv:                number | string;
+    total:              number | string;
+
     productos:          FormFacturacionDetalleValues[];
 }
-/*
-export interface BuscarProducto {
-    id:           number;
-    codigo:       string;
-    nombre:       string;
-    orden:        number;
-    stock_alerta: number;
-    precio_venta: string;
-    descuento:    string;
-    destacado:    number;
-    estados_id:   number;
-    unspsc_id:    number;
-    marcas_id:    number;
-    unidad_id:    number;
-    moneda_id:    number;
-    igv_id:       number;
-    estado:       string;
-    moneda:       string;
-    created_at:   string;
-    updated_at:   string;
-}
-*/
 export interface FormFacturacionDetalleValues {
     id:          number;
     codigo?:      string;
@@ -453,7 +448,7 @@ export interface FormFacturacionDetalleValues {
     cantidad?:    number;
     facturas_id?: number;
     producto?:    string;
-    total?:      number;
+    total?:      number | string;
 }
 
 

@@ -7,28 +7,38 @@ export interface Facturaciones {
 }
 
 export interface Facturas {
-    id:                 number;
-    codigo:             null;
-    serie:              string;
-    correlativo:        number;
-    user_id:            number;
-    tipo:               number;
-    fecha_pago:         string;
-    id_usuario:         number;
-    created_at:         string;
-    updated_at:         string;
-    sucursals_id:       number;
-    fecha_emision:      string;
-    tipo_transaccion:   number;
-    id_estado:          number;
-    id_moneda:          number;
-    usuario_documento:  string;
-    usuario_nombre:     string;
-    estado:             string;
-    documento:          string;
-    moneda:             string;
-    monto:              string;
-    total:              string;
+    id:                number;
+    codigo:            null;
+    serie:             string;
+    correlativo:       number;
+    user_id:           number;
+    tipo:              number;
+    fecha_pago:        string;
+    id_usuario:        number;
+    created_at:        string;
+    updated_at:        string;
+    sucursals_id:      number;
+    fecha_emision:     string;
+    tipo_transaccion:  number;
+    id_estado:         number;
+    id_moneda:         number;
+    estado:            string;
+
+    documento_tipo?:    string;
+    usuario_documento?: string;
+    creador?:           string;
+    sucursal?:          string;
+    moneda?:            string;
+    transaccion?:       string;
+    usuario_nombre?:    string;
+    documento?:         string;
+    total_monto:        number;
+    total_descuento:    number;
+
+    subtotal:           number | string;
+    descuento:          number | string;
+    igv:                number | string;
+    total:              number | string;
     detalle?:          FormFacturacionDetalleValues[];
 }
 
@@ -40,7 +50,7 @@ export interface FormFacturacionDetalleValues {
     cantidad?:    number;
     facturas_id?: number;
     producto?:    string;
-    total?:      number;
+    total?:      number | string;
 }
 
 export interface intialStateFacturas {
