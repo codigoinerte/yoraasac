@@ -599,35 +599,48 @@ export const FacturacionDetalle = () => {
                                                                 <input type="hidden" {...register(`productos.${index}.facturas_id`)}/>
                                                             </td>
                                                             <td>
-                                                                <input type="number" className='form-control' {...register(`productos.${index}.cantidad`, {
-                                                                    onChange: (i)=> {
-                                                                        let value = i.target.value ?? 0;
-                                                                        if(value == 0) setValue(`productos.${index}.cantidad`, 1);
+                                                                <div className="input-group">
+                                                                    <span className="input-group-text">Unit.</span>
+                                                                    <input type="number" className='form-control' {...register(`productos.${index}.cantidad`, {
+                                                                        onChange: (i)=> {
+                                                                            let value = i.target.value ?? 0;
+                                                                            if(value == 0) setValue(`productos.${index}.cantidad`, 1);
 
-                                                                        onChangeSubTotal(index);
-                                                                        onChangeTotal();
-                                                                    }
-                                                                })} min={1} />
+                                                                            onChangeSubTotal(index);
+                                                                            onChangeTotal();
+                                                                        }
+                                                                    })} min={1} />
+                                                                </div>
                                                             </td>
                                                             <td>
-                                                                <input type="text" className='form-control' {...register(`productos.${index}.precio`, {
-                                                                    onChange: ()=> {
-                                                                        onChangeSubTotal(index);
-                                                                        onChangeTotal();
-                                                                    }
-                                                                })}/>
+                                                                <div className="input-group">
+                                                                    <span className="input-group-text">S/</span>
+                                                                    <input type="text" className='form-control' {...register(`productos.${index}.precio`, {
+                                                                        onChange: ()=> {
+                                                                            onChangeSubTotal(index);
+                                                                            onChangeTotal();
+                                                                        }
+                                                                    })}/>
+                                                                </div>
                                                             </td> 
                                                             <td>
-                                                                <input type="number" className='form-control' {...register(`productos.${index}.descuento`,{
-                                                                    onChange: ()=> {
-                                                                        onChangeSubTotal(index);
-                                                                        onChangeTotal();
-                                                                    }
-                                                                })}/>
+                                                                <div className="input-group">
+                                                                    <span className="input-group-text">%</span>
+                                                                    <input type="number" className='form-control' {...register(`productos.${index}.descuento`,{
+                                                                        onChange: ()=> {
+                                                                            onChangeSubTotal(index);
+                                                                            onChangeTotal();
+                                                                        }
+                                                                    })}/>
+                                                                </div>
+                                                                    
                                                             </td>                                                            
                                                             <td>
                                                                 {/* {item.total} */}
-                                                                <input type="text" className='form-control' {...register(`productos.${index}.total`)} readOnly/>
+                                                                <div className="input-group">
+                                                                    <span className="input-group-text">S/</span>
+                                                                    <input type="text" className='form-control' {...register(`productos.${index}.total`)} readOnly/>
+                                                                </div>
                                                             </td>                                                            
                                                             <td>
                                                                 <button type="button" className='btn btn-danger' onClick={() => remove(index)}>
@@ -640,22 +653,42 @@ export const FacturacionDetalle = () => {
                                         }
                                         <tr>
                                             <td colSpan={4} align='left' className='text-end bg-secondary'><b>Subtotal</b></td>
-                                            <td className="bg-secondary"><input type="text" className='form-control' {...register('subtotal')} disabled/></td>
+                                            <td className="bg-secondary">
+                                                <div className="input-group">
+                                                    <span className="input-group-text">S/</span>
+                                                    <input type="text" className='form-control' {...register('subtotal')} disabled/>
+                                                </div>
+                                            </td>
                                             <td className="bg-secondary">&nbsp;</td>
                                         </tr>
                                         <tr>
                                             <td colSpan={4} align='left' className='text-end bg-secondary'><b>Descuento</b></td>
-                                            <td className='bg-secondary'><input type="text" className='form-control' {...register('descuento')} disabled/></td>
+                                            <td className='bg-secondary'>
+                                                <div className="input-group">
+                                                    <span className="input-group-text">S/</span>
+                                                    <input type="text" className='form-control' {...register('descuento')} disabled/>
+                                                </div>
+                                            </td>
                                             <td className='bg-secondary'>&nbsp;</td>
                                         </tr>
                                         <tr className={`${typeOperation == 1 ? 'd-none' : ''}`}>
                                             <td colSpan={4} align='left' className={`text-end bg-secondary`}><b>IGV</b></td>
-                                            <td className='bg-secondary'><input type="text" className='form-control' {...register('igv')} disabled/></td>
+                                            <td className='bg-secondary'>
+                                                <div className="input-group">
+                                                    <span className="input-group-text">S/</span>
+                                                    <input type="text" className='form-control' {...register('igv')} disabled/>
+                                                </div>
+                                            </td>
                                             <td className='bg-secondary'>&nbsp;</td>
                                         </tr>
                                         <tr>
                                             <td colSpan={4} align='left' className='text-end bg-info'><b>Total</b></td>
-                                            <td className='bg-info'><input type="text" className='form-control' {...register('total')} disabled/></td>
+                                            <td className='bg-info'>
+                                                <div className="input-group">
+                                                    <span className="input-group-text">S/</span>
+                                                    <input type="text" className='form-control' {...register('total')} disabled/>
+                                                </div>
+                                            </td>
                                             <td className='bg-info'>&nbsp;</td>
                                         </tr>
                                     </tbody>
