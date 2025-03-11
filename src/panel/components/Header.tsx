@@ -44,7 +44,7 @@ export const Header = () => {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">              
 
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li key={"home"} className="nav-item dropdown">
+                <li key={"home-header"} className="nav-item dropdown">
                     <Link className="dropdown-item" to={'/'}>
                       <i className={"bi bi-house"}></i> 
                       <span>{"Home"}</span>
@@ -52,14 +52,13 @@ export const Header = () => {
                 </li>
               {
                   nodes.map(({ alias, id, icono, nombre })=>(
-                      <>
-                        <li key={alias} className="nav-item dropdown">
+                      
+                        <li key={`${id}-${nombre}`} className="nav-item dropdown">
                             <Link className="dropdown-item" to={alias}>
                               <i className={icono}></i> 
                               <span>{nombre}</span>
                             </Link>
-                        </li>                        
-                      </>
+                        </li>
 
                   ))
               } 
