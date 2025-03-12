@@ -72,7 +72,6 @@ export const FacturacionDetalle = () => {
     useEffect(() => {
         
         refId.current = id;
-        console.log(refId.current);
         loadFacturaEstados();
             
         if(from == '' && parseInt(from_id.toString()) == 0)
