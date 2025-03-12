@@ -78,7 +78,7 @@ export const Facturacion = () => {
         "Documento",        
         "Cliente",
         "Moneda",
-        "Monto",
+        "Total",
         "Estado",
         "Fecha de creación"
     ];
