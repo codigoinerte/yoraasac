@@ -104,21 +104,21 @@ export const Facturacion = () => {
     const detalle:listaDetalle[] = facturas.map(({ id,serie, correlativo, usuario_nombre, created_at, estado, documento, moneda, total}) => {
 
         let monto = '';
-        if(!isNaN(parseFloat(total)))
+        if(!isNaN(parseFloat(total.toString())))
         {
             monto = new Intl.NumberFormat('es-PE', 
             {
                 style: 'currency',
                 currency: 'PEN'
             })
-            .format(parseFloat(total));
+            .format(parseFloat(total.toString()));
         }
 
         return {
             id: id.toString(),
             campos: [    
                 `${serie}-${correlativo}`,
-                documento,
+                documento ?? '',
                 usuario_nombre??''.toString(),
                 moneda??''.toString(),
                 monto??''.toString(),
