@@ -119,6 +119,16 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                                             ) : ''
                                         }
                                         {
+                                            (getValues('igv') && getValues('igv') != 0) ?
+                                            (
+                                                <tr>
+                                                    <td align='left'>
+                                                        <b>Total igv:</b> {parseFloat(getValues('igv').toString()).toFixed(2)}
+                                                    </td>
+                                                </tr>
+                                            ) : ''
+                                        }
+                                        {
                                             (getValues('total') && getValues('total') !=0) ?
                                             (
                                                 <tr>
