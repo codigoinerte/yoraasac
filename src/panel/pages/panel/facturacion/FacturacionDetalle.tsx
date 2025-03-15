@@ -21,6 +21,8 @@ type strnum = string | number;
 
 export const FacturacionDetalle = () => {
 
+    const { id = 0 } = useParams(); 
+
     const [selectProducto, setSelectProducto] = useState<BuscarProducto>();
 
     const [typeOperation, setTypeOperation] = useState(1);
@@ -28,6 +30,8 @@ export const FacturacionDetalle = () => {
     const componentRef = useRef(null);
 
     const refId = useRef<any>('0');
+
+    const [isPrint, setIsPrint] = useState(false);
 
     const {  saveFacturacion, updateFacturacion, getFacturacion, active  } = useFacturastore();
 
@@ -50,8 +54,6 @@ export const FacturacionDetalle = () => {
 
     const { errors } = formState;
 
-    const { id = 0 } = useParams(); 
-
     const queryParameters = new URLSearchParams(window.location.search)
     const from = queryParameters.get("gf")??'';
     const from_id = queryParameters.get("id")??0;
@@ -68,10 +70,16 @@ export const FacturacionDetalle = () => {
             setValue('correlativo', correlativo);
         });
     }
-    
+
     useEffect(() => {
+
+        const idNum = parseInt(refId.current);
+        if( idNum > 0){
+            refId.current = idNum; 
+            console.log(idNum);
+            setIsPrint(idNum ? true : false);
+        }
         
-        refId.current = id;
         loadFacturaEstados();
             
         if(from == '' && parseInt(from_id.toString()) == 0)
@@ -135,7 +143,7 @@ export const FacturacionDetalle = () => {
                     let usuario_id = factura?.user_id??0;
 
                     if(usuario_id != 0){
-                        loadBuscarUsuario(usuario_id, "codigo");
+                        loadBuscarUsuario(usuario_id, "codigo", 4);
                         setValue('user_id', factura!.user_id);
                     }
 
@@ -192,8 +200,22 @@ export const FacturacionDetalle = () => {
                 productos: data.productos.length > 0 ? data.productos : [],
             })
             .then((e)=>{                
-                refId.current = e!.id;
                 window.history.pushState(null, '', `/facturacion/edit/${e!.id}`);
+
+                refId.current = e!.id;
+                setIsPrint(true);
+                
+                let total_monto = e!.total_monto;
+                let total_descuento = e!.total_descuento;
+                let igv = e!.igv;
+                let total = e!.total;
+
+                setValue('total_monto', total_monto);
+                setValue('total_descuento', total_descuento);
+                setValue('igv', igv);
+                setValue('total', total);
+
+                
             });
             
         }else{            
@@ -319,7 +341,7 @@ export const FacturacionDetalle = () => {
         
         if(typeof buscar == "undefined") return false;
         
-        loadBuscarUsuario(buscar);        
+        loadBuscarUsuario(buscar, '', 4);        
     }
 
     const updateSerie = (e:any) =>{
@@ -350,7 +372,7 @@ export const FacturacionDetalle = () => {
 
         if(usuario_id != 0){
             
-            loadBuscarUsuario(usuario_id, "codigo");
+            loadBuscarUsuario(usuario_id, "codigo", 4);
             setValue('user_id', nota_heladero_info!.user_id);
         }
 
@@ -395,7 +417,7 @@ export const FacturacionDetalle = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
 
                 <FormControls 
-                    isPrint={refId.current == 0 ? false : true}
+                    isPrint={isPrint}
                     save={()=>console.log(1)} 
                     page="facturacion" 
                     onNavigateBack = {()=>{
