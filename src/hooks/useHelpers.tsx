@@ -158,7 +158,7 @@ export const useHelpers = () => {
             console.log(error);
         }
     }
-    const loadBuscarUsuario = async(buscar:any = '', type="") =>{
+    const loadBuscarUsuario = async(buscar:any = '', type="", tipo = 7) =>{
         if(buscar.length < 3) return false;
 
         try {
@@ -167,7 +167,7 @@ export const useHelpers = () => {
                 params:{
                     buscar,
                     type,
-                    tipo : 4
+                    tipo
                 }
             });
             
