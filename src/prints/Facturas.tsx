@@ -119,7 +119,7 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                                             ) : ''
                                         }
                                         {
-                                            (getValues('igv') && getValues('igv') != 0) ?
+                                            (getValues('igv') && getValues('igv') != 0 && getValues("tipo") == 2) ?
                                             (
                                                 <tr>
                                                     <td align='left'>
@@ -144,7 +144,7 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                         </tbody>
                     </table>
                     <div className="line"></div>
-                    <table className='cuerpo' >                        
+                    <table className='cuerpo' >
                         <tbody>
                             <tr key={"title-header"}>
                                 <td className='sizeTitle text-left'><strong>Producto</strong></td>
@@ -159,15 +159,8 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                                         <tr key={`print-detalle-${detalle.id}`}>
                                             <td className='text-left'>{ detalle.producto }</td>
                                             <td width={10}>{ detalle.cantidad }</td>
-                                            {
-                                                (detalle.descuento && detalle.descuento > 0) ?
-                                                (
-                                                    <td width={10}>{ detalle.descuento }</td>
-                                                ) : ''
-                                            }                                            
-
+                                            <td width={10}>{ (detalle.descuento && detalle.descuento > 0) ? detalle.descuento : '' }</td>
                                             <td width={10}>{ parseFloat((detalle.total??0).toString()).toFixed(2) }</td>
-
                                         </tr>
                                     ))
                             }
