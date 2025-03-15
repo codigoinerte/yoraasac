@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import profile from '../assets/images/profile.png';
 // import logo  from '../assets/images/logo.png';
 import { Link } from 'react-router-dom';
@@ -8,24 +8,30 @@ import { Menu } from '../interfaces';
 
 export const Header = () => {
 
-  const { startLogout } = useAuthStore();
-
-  const [nodes, setNodes] = useState<Menu[]>([]);
-  
+      const { startLogout } = useAuthStore();
+      const [nodes, setNodes] = useState<Menu[]>([]);
       const { loadDestacados } = useDestacados();
-  
-      const { user } = useAuthStore();
-  
+      const isLoaded = useRef(false);
+
+      const version = import.meta.env.VERSION ?? '';
+
       useEffect(() => {
-        
-          loadDestacados()
-          .then((response)=>{
-              const menuSaved = response.destacado ?? [];
-  
-              setNodes(menuSaved);
-          })
-          
-      }, [])
+        if (isLoaded.current) return;
+    
+        const menuHeader = localStorage.getItem(`menuHeader${version}`);
+    
+        if (menuHeader) {
+          setNodes(JSON.parse(menuHeader));
+        } else {
+          loadDestacados().then((response) => {
+            const menuSaved = response.destacado ?? [];
+            localStorage.setItem('menuHeader', JSON.stringify(menuSaved));
+            setNodes(menuSaved);
+          });
+        }
+    
+        isLoaded.current = true;
+      }, []);
 
   return (
     <>
