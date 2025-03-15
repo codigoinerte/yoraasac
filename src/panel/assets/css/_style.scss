@@ -24,7 +24,7 @@ a{
             width: 100%;
             display: flex;
             justify-content: center;   
-            align-items: center;         
+            align-items: flex-start;         
             gap: 25px;
 
             li{
@@ -40,9 +40,8 @@ a{
                         font-size: 35px;
                     }
                     span{
-                        font-size: 14px;
-                        
-
+                        font-size: 14px;                        
+                        max-width: 90px;
                         white-space: pre-line !important;
                     }
                 }            
