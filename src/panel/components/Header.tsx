@@ -47,7 +47,7 @@ export const Header = () => {
                 <li key={"home-header"} className="nav-item dropdown">
                     <Link className="dropdown-item" to={'/'}>
                       <i className={"bi bi-house"}></i> 
-                      <span>{"Home"}</span>
+                      <span>{"Principal"}</span>
                     </Link>
                 </li>
               {
