@@ -90,7 +90,7 @@ export interface ControlsInterface{
     category?:string;
     imprimir?:Function;
     page:string;
-    isPrint:boolean;
+    isPrint?:boolean;
     isFactura?:boolean;
     isNew?:boolean;
     isEdit?:boolean;
