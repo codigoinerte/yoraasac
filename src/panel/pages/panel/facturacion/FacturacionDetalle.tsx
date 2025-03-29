@@ -73,15 +73,15 @@ export const FacturacionDetalle = () => {
 
     useEffect(() => {
 
+        refId.current = (id != undefined && id != null && id != 0) ? id : 0;
         const idNum = parseInt(refId.current);
         if( idNum > 0){
-            refId.current = idNum; 
-            console.log(idNum);
+            refId.current = idNum;
             setIsPrint(idNum ? true : false);
         }
         
         loadFacturaEstados();
-            
+
         if(from == '' && parseInt(from_id.toString()) == 0)
         {
             if(refId.current == 0)
@@ -119,6 +119,7 @@ export const FacturacionDetalle = () => {
                     setValue('documento', factura?.documento??'');
                     setValue('total_monto', factura?.total_monto??0);
                     setValue('total_descuento', factura?.total_descuento??0);
+
 
 
                     setValue('subtotal', factura?.subtotal??0);
@@ -422,6 +423,9 @@ export const FacturacionDetalle = () => {
                     page="facturacion" 
                     onNavigateBack = {()=>{
                         window.location.href = '/facturacion/';
+                    }}
+                    funcNew={()=>{
+                        window.location.href = '/facturacion/new';
                     }}
                     imprimir={imprimir} 
                 />
