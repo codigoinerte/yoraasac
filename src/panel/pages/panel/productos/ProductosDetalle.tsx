@@ -53,6 +53,15 @@ export const ProductosDetalle = () => {
     setValue('precio_final', precio_final);
 
   }
+
+  const calcularPrecioFinalMayor = ()=>{
+    let p = getValues('precio_venta_mayor')??0;
+    let d = getValues('descuento_venta_mayor')??0;
+
+    let precio_final = p - (p*(d/100));
+    precio_final = precio_final < 0 ?  0 : precio_final;
+    setValue('total_venta_mayor', precio_final);
+  }
   
   const calcularPrecioFinalHeladero = ()=>{
     let p = getValues('heladero_precio_venta')??0;
@@ -111,6 +120,8 @@ export const ProductosDetalle = () => {
         setValue('destacado', prod?.destacado);
         setValue('heladero_descuento', prod?.heladero_descuento);
         setValue('heladero_precio_venta', prod?.heladero_precio_venta);
+        setValue('precio_venta_mayor', prod?.precio_venta_mayor);
+        setValue('descuento_venta_mayor', prod?.descuento_venta_mayor);
         setValue('cantidad_caja', prod?.cantidad_caja);
         setValue('proveedor_precio', prod?.proveedor_precio);
         setValue('is_litro', prod?.is_litro);
@@ -118,6 +129,7 @@ export const ProductosDetalle = () => {
 
         calcularPrecioFinal();
         calcularPrecioFinalHeladero();
+        calcularPrecioFinalMayor();
     }
 
   }
@@ -141,6 +153,9 @@ export const ProductosDetalle = () => {
     destacado,
     heladero_precio_venta,
     heladero_descuento,
+    precio_venta_mayor,
+    descuento_venta_mayor,
+    total_venta_mayor,
     cantidad_caja,
     proveedor_precio,
     is_barquillo,
@@ -169,7 +184,11 @@ export const ProductosDetalle = () => {
         cantidad_caja,
         proveedor_precio,
         is_litro,
-        is_barquillo
+        is_barquillo,
+
+        precio_venta_mayor,
+        descuento_venta_mayor,
+        total_venta_mayor,
         
       });
     }else{
@@ -194,7 +213,11 @@ export const ProductosDetalle = () => {
         cantidad_caja,
         proveedor_precio,
         is_litro,
-        is_barquillo
+        is_barquillo,
+
+        precio_venta_mayor,
+        descuento_venta_mayor,
+        total_venta_mayor,
         
       });
     }
@@ -394,7 +417,7 @@ export const ProductosDetalle = () => {
                 </div>
                 
                 <div className="card p-3 mb-3">
-                  <h5>Precio de venta a público general</h5>
+                  <h5>Precio de venta (por menor) a público general</h5>
                   <div className="mb-3">
                       <label htmlFor="precioventa" className="form-label">Precio de venta</label>
                       <input  type="text" 
@@ -436,6 +459,52 @@ export const ProductosDetalle = () => {
                               //disabled={true}
                               defaultValue={0}
                               {...register('precio_final')} />
+                  </div>
+                </div>
+
+                <div className="card p-3 mb-3">
+                  <h5>Precio de venta (por mayor) a público general</h5>
+                  <div className="mb-3">
+                      <label htmlFor="precioventa" className="form-label">Precio de venta</label>
+                      <input  type="text" 
+                              id="precioventa" 
+                              aria-describedby="precioventa" 
+                              defaultValue={0}
+                              className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
+                              onKeyUp={(e)=> setValue('precio_venta_mayor', validateNoNegative(e))}
+                              {...register('precio_venta_mayor',{
+                                onChange: calcularPrecioFinalMayor,
+                                required:true
+                              })}/>
+                  </div>
+                  
+                  <div className="mb-3">
+                      <label htmlFor="descuento" className="form-label">Descuento</label>
+                      <div className="input-group mb-3">
+                        <input  type="number" 
+                                className="form-control" 
+                                aria-describedby="precio-descuento" 
+                                min={0} 
+                                step={1} 
+                                max={100}
+                                onKeyUp={(e)=>{ setValue('descuento_venta_mayor', validateNoNegative(e)); } }
+                                defaultValue={0}
+                                {...register('descuento_venta_mayor', {
+                                  onChange: calcularPrecioFinalMayor
+                                })}/>
+                        <span className="input-group-text" id="precio-descuento">%</span>
+                      </div>
+                  </div>
+                  
+                  <div className="mb-3">
+                      <label htmlFor="preciofinal" className="form-label">Precio final</label>
+                      <input  type="text" 
+                              className="form-control" 
+                              id="preciofinal" 
+                              aria-describedby="preciofinal"
+                              //disabled={true}
+                              defaultValue={0}
+                              {...register('total_venta_mayor')} />
                   </div>
                 </div>
 
@@ -496,7 +565,6 @@ export const ProductosDetalle = () => {
                               className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
                               onKeyUp={(e)=> setValue('proveedor_precio', validateNoNegative(e))}
                               {...register('proveedor_precio',{
-                                onChange: calcularPrecioFinalHeladero,
                                 required:true
                               })}/>
                   </div>                                    
