@@ -668,7 +668,7 @@ export const FacturacionDetalle = () => {
                                                                             onChangeSubTotal(index);
                                                                             onChangeTotal();
                                                                         }
-                                                                    })} min={1} />
+                                                                    })} min={getValues('precio_tipo') == 2 ? 0 : 1} />
                                                                 </div>
                                                             </td>
                                                             <td>
