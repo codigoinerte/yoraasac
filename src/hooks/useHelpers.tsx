@@ -139,7 +139,7 @@ export const useHelpers = () => {
             
         }
     }
-    const loadBuscarProducto = async (producto:string = '')=>{
+    const loadBuscarProducto = async (producto:string = '', type = 0)=>{
 
         if(producto.length < 3) return false;
 
@@ -147,7 +147,8 @@ export const useHelpers = () => {
             
             const { data } = await backendApi.get<BuscarProductosList>(`/buscar-producto`,{
                 params:{
-                    producto
+                    producto,
+                    type
                 }
             });
     
