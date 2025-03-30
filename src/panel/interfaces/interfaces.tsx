@@ -436,6 +436,8 @@ export interface FormFacturacionValues {
     documento?:         string;
     total_monto:        number;
     total_descuento:    number;
+
+    precio_tipo:        number;
     
     subtotal:           number | string;
     descuento:          number | string;
