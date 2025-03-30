@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { MutableRefObject, Ref, useEffect, useRef, useState } from 'react'
 import { ContainerInner, FormControls } from '../../../components';
 import { BuscarProducto, FormFacturacionValues, breadcrumb as bread } from '../../../interfaces';
 import { useFacturastore, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { SelectPicker } from 'rsuite';
+import { PickerHandle, SelectPicker } from 'rsuite';
 import { Toaster, toast } from 'react-hot-toast';
 import { DateNow } from '../../../helpers';
 import { NotaHeladero } from '../../../../interfaces';
 import { toastMessage } from '../../../../helpers';
 import { useReactToPrint } from 'react-to-print';
 import FacturasComponent from '../../../../prints/Facturas';
+import { set } from 'date-fns';
+import { SelectPickerComponent } from 'rsuite/esm/SelectPicker/SelectPicker';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Facturación', enlace: '/facturacion' },
@@ -30,6 +32,8 @@ export const FacturacionDetalle = () => {
     const componentRef = useRef(null);
 
     const refId = useRef<any>('0');
+
+    const [disablePriceType, setDisablePriceType] = useState(false);
 
     const [isPrint, setIsPrint] = useState(false);
 
@@ -98,7 +102,7 @@ export const FacturacionDetalle = () => {
             {   
                 getFacturacion(refId.current)
                 .then((factura)=>{
-                    
+                    setDisablePriceType(true);
                     setValue('fecha_emision', factura?.fecha_emision ?? '');
                     setValue('fecha_pago', factura?.fecha_pago ?? '');
                     setValue('tipo', factura?.tipo ?? 1);
@@ -120,7 +124,7 @@ export const FacturacionDetalle = () => {
                     setValue('total_monto', factura?.total_monto??0);
                     setValue('total_descuento', factura?.total_descuento??0);
 
-
+                    setValue('precio_tipo', factura?.precio_tipo??0);
 
                     setValue('subtotal', factura?.subtotal??0);
                     setValue('descuento', factura?.descuento??0);
@@ -176,6 +180,16 @@ export const FacturacionDetalle = () => {
 
     useEffect(() => {
         onChangeTotal();
+        const productos = getValues('productos');
+        if(productos.length == 0){
+            setValue('subtotal', 0);
+            setValue('descuento', 0);
+            setValue('igv', 0);
+            setValue('total', 0);
+            setDisablePriceType(false);
+        }else{
+            setDisablePriceType(true);
+        }
     }, [getValues('productos')])
     
 
@@ -231,21 +245,21 @@ export const FacturacionDetalle = () => {
     const updateData = (buscar:string) => {
         
         if(typeof buscar == "undefined") return false;
-        
-        loadBuscarProducto(buscar);
+        const type = getValues("precio_tipo") ?? 0;
+        loadBuscarProducto(buscar, type);
     }
 
     const loadProducto = ()=>{
         
         let item = fields.filter((detail)=>detail.codigo == selectProducto?.codigo);
 
-        if(item.length == 0){
+        if(item.length == 0 && !!selectProducto){
             let total: strnum = parseFloat(selectProducto!.precio_venta??0);
                 total = total.toFixed(2);
                 
             append({ 
-                codigo: selectProducto?.codigo,
-                producto: selectProducto?.nombre,
+                codigo: selectProducto!.codigo,
+                producto: selectProducto!.nombre,
                 precio: parseFloat(total),
                 descuento: 0,
                 cantidad: 1,
@@ -253,11 +267,14 @@ export const FacturacionDetalle = () => {
                 id: 0
             });
 
-        }else{
-            
+            // Limpiar el valor seleccionado
+            setSelectProducto(undefined);
+
+        }else if(selectProducto == undefined){
+            toast.error('Seleccione un producto');
+        }else{            
             toast.error('El producto ya fue añadido');
         }
-
     }
 
     const onChangeSubTotal = (index:number)=>{
@@ -366,7 +383,7 @@ export const FacturacionDetalle = () => {
         setValue('fecha_emision', dateNow);
         setValue('fecha_pago', dateNow);
         setValue('id_estado', 1);
-
+        setValue('precio_tipo', 2);
         setValue('user_id', nota_heladero_info?.user_id ?? 0);
 
         let usuario_id = nota_heladero_info?.user_id??0;
@@ -533,7 +550,7 @@ export const FacturacionDetalle = () => {
 
                 <div className="row">
 
-                    <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
 
                         <div className="mb-3">
                             <label htmlFor="tipo_transaccion" className="form-label">Tipo de transacción</label>
@@ -547,7 +564,7 @@ export const FacturacionDetalle = () => {
 
                     </div>
                     
-                    <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
 
                         <div className="mb-3">
                             <label htmlFor="estado" className="form-label">Estado</label>
@@ -559,6 +576,21 @@ export const FacturacionDetalle = () => {
                                             ))
                                         }
                                 
+                            </select>                                              
+                        </div>
+
+                    </div>
+
+                    <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+
+                        <div className="mb-3">
+                            <label htmlFor="precio_tipo" className="form-label">Precio tipo</label>
+                            <select className={ errors.precio_tipo ? "form-control is-invalid" : "form-control"}
+                                    disabled={disablePriceType}
+                                    {...register('precio_tipo', { required:true })}>
+                                <option value="0" key={"Precio 0"}>Precio publico</option>
+                                <option value="1" key={"Precio 1"}>Precio por mayor</option>
+                                <option value="2" key={"Precio 2"}>Precio heladero</option>
                             </select>                                              
                         </div>
 
@@ -585,6 +617,8 @@ export const FacturacionDetalle = () => {
                                 onChange={(e)=>{
                                     setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
                                 }}
+                                value={selectProducto?.id ?? null} // Controla el valor del SelectPicker
+                                cleanable={true}
                                 placeholder='Buscar producto'
                                 className="form-control p-0 w-auto no-width"
                             />
