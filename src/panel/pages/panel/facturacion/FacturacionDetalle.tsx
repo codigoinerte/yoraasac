@@ -674,7 +674,9 @@ export const FacturacionDetalle = () => {
                                                             <td>
                                                                 <div className="input-group">
                                                                     <span className="input-group-text">S/</span>
-                                                                    <input type="text" className='form-control' {...register(`productos.${index}.precio`, {
+                                                                    <input type="text"
+                                                                     disabled={true}
+                                                                     className='form-control' {...register(`productos.${index}.precio`, {
                                                                         onChange: ()=> {
                                                                             onChangeSubTotal(index);
                                                                             onChangeTotal();
