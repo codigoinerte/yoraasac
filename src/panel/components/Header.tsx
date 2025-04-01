@@ -13,19 +13,24 @@ export const Header = () => {
       const { loadDestacados } = useDestacados();
       const isLoaded = useRef(false);
 
-      const version = import.meta.env.VERSION ?? '';
+      const version = import.meta.env.VITE_VERSION ?? '';
 
       useEffect(() => {
         if (isLoaded.current) return;
     
+        const itemStorage = `menuHeader${version}`;
         const menuHeader = localStorage.getItem(`menuHeader${version}`);
-    
         if (menuHeader) {
           setNodes(JSON.parse(menuHeader));
         } else {
+            Object.keys(localStorage).forEach((key) => {
+            if (key.startsWith('menuHeader')) {
+              localStorage.removeItem(key);
+            }
+            });
           loadDestacados().then((response) => {
             const menuSaved = response.destacado ?? [];
-            localStorage.setItem('menuHeader', JSON.stringify(menuSaved));
+            localStorage.setItem(itemStorage, JSON.stringify(menuSaved));
             setNodes(menuSaved);
           });
         }
