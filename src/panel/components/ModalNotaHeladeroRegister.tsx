@@ -6,6 +6,7 @@ import { FormNotaHeladeroValues } from '../interfaces';
 import moment from 'moment';
 import { alert } from '../../helpers';
 import { InputNotaGuardada } from './InputNotaGuardada';
+import { NotaHeladero } from '../../interfaces';
 
 interface ModalNotaHeladeroRegisterProps {
     openModal: boolean;
@@ -15,9 +16,10 @@ interface ModalNotaHeladeroRegisterProps {
     updateStateHeladero: Dispatch<SetStateAction<number | null>>;
     setOpenModalGuardado: Dispatch<SetStateAction<boolean>>;
     idChildren: number;
+    setDetalleProducto : (heladero: NotaHeladero) => void,
 }
 
-export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin, getValuesOrigin, updateStateHeladero, setOpenModalGuardado, idChildren }: ModalNotaHeladeroRegisterProps) => {
+export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValueOrigin, getValuesOrigin, updateStateHeladero, setOpenModalGuardado, idChildren, setDetalleProducto }: ModalNotaHeladeroRegisterProps) => {
 
     let closeNota = false;
 
@@ -158,6 +160,13 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
         updateStateHeladero(3);
         setValueOrigin("estado", 3);
         //("fecha_guardado", data.fecha_operacion);
+
+        if(active?.id){
+            const response = await getNotaHeladero(active.id, true);
+            if(response)
+            setDetalleProducto(response);
+        }
+
         handlerOpenModal(false);
         removePaddingOnBody();
 

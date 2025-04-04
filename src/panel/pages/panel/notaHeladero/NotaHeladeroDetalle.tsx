@@ -13,6 +13,7 @@ import NotasComponent from '../../../../prints/Notas';
 import toast, { Toaster } from 'react-hot-toast';
 import { formatDateForInput } from '../../../../helpers';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
+import { NotaHeladero } from '../../../../interfaces';
 
 const cabecera = [
     {
@@ -339,6 +340,17 @@ export const NotaHeladeroDetalle = () => {
 
         navigate("/nota-heladero/new");
     }
+
+    const setDetalleProducto = (heladero: NotaHeladero) => {
+        let detalle = heladero.detalle??[];
+        if(detalle.length == 0) return;
+        const productos = heladero.detalle.map((item) => ({
+            ...item,
+            vendido : item.is_litro ? parseInt((item.vendido??'').toString()).toFixed(2) : parseInt((item.vendido??'0').toString()).toFixed(0)
+        }));
+        setValue('productos', productos);
+    }
+
     /* funcion inicial de carga de nota */
     const onLoadNotaHeladero = async () => {
 
@@ -400,11 +412,7 @@ export const NotaHeladeroDetalle = () => {
             let dateNow = moment(fecha_operacion).format("YYYY-MM-DD HH:mm").toString();                        
             setValue('fecha_operacion', dateNow);
 
-            if(detalle.length > 0)
-            setValue('productos', heladero.detalle.map((item) => ({
-                ...item,
-                vendido : item.is_litro ? parseInt((item.vendido??'').toString()).toFixed(2) : parseInt((item.vendido??'0').toString()).toFixed(0)
-            })));
+            setDetalleProducto(heladero);
 
             //cargar lista de heladeros
 
@@ -1271,6 +1279,7 @@ export const NotaHeladeroDetalle = () => {
                             updateStateHeladero={setState}
                             setOpenModalGuardado={setOpenModalGuardado}
                             idChildren={getValues("id_children")??0}
+                            setDetalleProducto={setDetalleProducto}
                         />)
                 }
                 <Toaster position="top-center" reverseOrder={true} />
