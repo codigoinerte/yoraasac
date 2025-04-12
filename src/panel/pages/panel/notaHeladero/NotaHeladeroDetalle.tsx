@@ -554,7 +554,7 @@ export const NotaHeladeroDetalle = () => {
             
             fields.forEach((item, index) => {
                 
-                if(item.is_barquillo == true) return;
+                //if(item.is_barquillo == true) return;
 
                 const devolucion_today_saved = (active) ? ( active.detalle.find((item) => item.codigo == getValues(`productos.${index}.codigo`))!.devolucion_today ?? 0) : 0;
                 
@@ -580,7 +580,7 @@ export const NotaHeladeroDetalle = () => {
                     const devolucion = parseInt((getValues(`productos.${index}.devolucion`)??0).toString()); 
                     const devolucion_today = parseInt((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
                     vendido = ((devolucion+pedido)-devolucion_today);
-                    importe = parseFloat((vendido * precio_operacion).toFixed(2));
+                    importe = parseFloat((vendido * precio_operacion).toFixed(item.is_barquillo ? 3 : 2));                    
                 }
                 if(item.is_litro){
                     let vendidoFixed = parseFloat(vendido.toString()).toFixed(2);                    
@@ -588,7 +588,7 @@ export const NotaHeladeroDetalle = () => {
                 }else{
                     setValue(`productos.${index}.vendido`, vendido);
                 }
-                setValue(`productos.${index}.importe`, importe.toFixed(2));
+                setValue(`productos.${index}.importe`, importe.toFixed(item.is_barquillo ? 3 : 2));
                 subtotal+=parseFloat(importe.toString());
             })
 
@@ -639,6 +639,10 @@ export const NotaHeladeroDetalle = () => {
             setValue('productos', active.detalle);
       
     }, [active?.detalle])
+    
+    useEffect(() => {
+      //console.log(errors);
+    }, [errors])
     
     
     const isPrint = (): boolean => active?.fecha_cierre || getValues("estado") == 1 ? true : false;
@@ -908,7 +912,7 @@ export const NotaHeladeroDetalle = () => {
                                                 <tr key={item.id}>                                                    
                                                     <td className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}>
                                                         {
-                                                            item.is_barquillo == false ? (
+                                                            
                                                                 item.is_litro ?
                                                                 (
                                                                     <div className="input-group">
@@ -937,7 +941,7 @@ export const NotaHeladeroDetalle = () => {
                                                                             />
                                                                     </div>
                                                                 )
-                                                            ) : ''
+                                                             
                                                         }
                                                         
                                                     </td>                                                     
@@ -1028,7 +1032,7 @@ export const NotaHeladeroDetalle = () => {
                                                     </td>
                                                     <td  className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}>
                                                         {
-                                                            item.is_barquillo == false ? (
+                                                            
                                                                 <div className="input-group">
                                                                     <span className="input-group-text" id="basic-addon1">
                                                                         <small>{item.is_litro ? 'S/': 'Unid'}</small>
@@ -1043,12 +1047,12 @@ export const NotaHeladeroDetalle = () => {
                                                                             step={0.01}
                                                                             />
                                                                 </div>
-                                                            ) : ''
+                                                            
                                                         }
                                                     </td> 
                                                     <td  className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}> 
                                                         {
-                                                            item.is_barquillo == false ? (
+                                                            
                                                                 <div className="input-group">
                                                                     <span className="input-group-text" id="basic-addon1">
                                                                         <small>S/</small>
@@ -1059,14 +1063,14 @@ export const NotaHeladeroDetalle = () => {
                                                                                 min: 0.00,
                                                                                 value: 0.00,
 
-                                                                                pattern: /^\d+(\.\d{1,2})?$/
+                                                                                pattern: /^\d+(\.\d{1,3})?$/
                                                                             })} 
                                                                             readOnly={isReadOnlyInputs.isReadOnlyImporte} 
                                                                             step={0.01} 
                                                                             min={0.00}/>
                                                                     <input type="hidden" className='form-control'  {...register(`productos.${index}.precio_operacion`)}/>
                                                                 </div>
-                                                            ) : ''
+                                                            
                                                         }
                                                     </td>
                                                 </tr>
