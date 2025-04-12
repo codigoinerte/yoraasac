@@ -255,15 +255,14 @@ export const FacturacionDetalle = () => {
 
         if(item.length == 0 && !!selectProducto){
             let total: strnum = parseFloat(selectProducto!.precio_venta??0);
-                total = total.toFixed(2);
-                
+
             append({ 
                 codigo: selectProducto!.codigo,
                 producto: selectProducto!.nombre,
-                precio: parseFloat(total),
+                precio: parseFloat(total.toFixed(3)),
                 descuento: 0,
                 cantidad: 1,
-                total,
+                total : total.toFixed(2),
                 id: 0
             });
 
