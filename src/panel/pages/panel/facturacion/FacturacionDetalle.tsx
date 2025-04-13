@@ -175,6 +175,9 @@ export const FacturacionDetalle = () => {
 
             });            
         }
+
+        setValue('from', from);
+        setValue('from_id', from_id.toString());
       
     }, [from_id])
 
@@ -410,7 +413,8 @@ export const FacturacionDetalle = () => {
                     descuento: 0,
                     precio: parseFloat(importe.toString()),
                     total: parseFloat((importe*vendido).toString()),
-    
+                    is_litro :item.is_litro ?? false,
+                    is_barquillo:item.is_barquillo ?? false,    
                 }
             })
         

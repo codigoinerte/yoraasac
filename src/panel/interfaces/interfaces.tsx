@@ -444,6 +444,9 @@ export interface FormFacturacionValues {
     igv:                number | string;
     total:              number | string;
 
+    from?:              string;
+    from_id?:           string;
+
     productos:          FormFacturacionDetalleValues[];
 }
 export interface FormFacturacionDetalleValues {
@@ -454,6 +457,8 @@ export interface FormFacturacionDetalleValues {
     cantidad?:    number;
     facturas_id?: number;
     producto?:    string;
+    is_litro?:    boolean;
+    is_barquillo?:boolean;
     total?:      number | string;
 }
 
