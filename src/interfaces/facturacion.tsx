@@ -35,6 +35,11 @@ export interface Facturas {
     total_monto:        number;
     total_descuento:    number;
 
+    cargo_baterias:     number | string;
+    deuda_anterior:     number | string;
+    from?:              string;
+    from_id?:           string;
+
     precio_tipo: number;
 
     subtotal:           number | string;
