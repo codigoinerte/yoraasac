@@ -406,23 +406,31 @@ export const FacturacionDetalle = () => {
         }
 
         let detalle = [];
+
+        const isImportFromNota = getValues('from') == 'nota' || getValues('from') == "1";
         
         if(nota_heladero_info?.detalle != undefined)
         {
             detalle = nota_heladero_info!.detalle.map((item)=>{
 
                 const isLitro = item.is_litro? parseFloat((item.is_litro).toString()) : 0;
-                const vendido =item.vendido? parseFloat((item.vendido).toString()) :1;
-                const importe = item.precio_operacion? parseFloat((item.precio_operacion).toString()) : 0;
+                const isBarquillo = item.is_barquillo? parseFloat((item.is_barquillo).toString()) : 0;
 
+                const vendido =item.vendido? parseFloat((item.vendido).toString()) :1;
+                const precio_operacion = item.precio_operacion? parseFloat((item.precio_operacion).toString()) : 0;
+                const importe = item.importe? parseFloat((item.importe).toString()) : 0;
+                const cantidad = parseFloat((item.vendido??0).toString());
+
+                const monto_operacion = isLitro && isImportFromNota && (cantidad > 0)  ? importe : precio_operacion;
+                
                 return {
                     id:item.id??0,
                     codigo:item.codigo??'',
                     producto:item.producto,
-                    cantidad: item.vendido??0,
+                    cantidad:(cantidad>0 && isLitro && isImportFromNota) ? 1 : cantidad,
                     descuento: 0,
-                    precio: parseFloat(importe.toString()),
-                    total: parseFloat((importe*vendido).toString()),
+                    precio: parseFloat(monto_operacion.toString()),
+                    total: parseFloat(((monto_operacion*vendido).toString())).toFixed(isLitro || isBarquillo ? 3 : 2),
                     is_litro :item.is_litro ?? false,
                     is_barquillo:item.is_barquillo ?? false,    
                 }
