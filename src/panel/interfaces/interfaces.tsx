@@ -447,15 +447,15 @@ export interface FormFacturacionValues {
     igv:                number | string;
     total:              number | string;
 
-    from?:              string;
-    from_id?:           string;
+    importado_tipo?:              string;
+    importado_codigo?:            string;
 
     productos:          FormFacturacionDetalleValues[];
 }
 export interface FormFacturacionDetalleValues {
     id:          number;
     codigo?:      string;
-    precio?:      number;
+    precio?:      number | string;
     descuento?:   number;
     cantidad?:    number;
     facturas_id?: number;
