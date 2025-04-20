@@ -23,6 +23,8 @@ type strnum = string | number;
 
 export const FacturacionDetalle = () => {
 
+    const [disableFromImport, setdisableFromImport] = useState(false);
+
     const { id = 0 } = useParams(); 
 
     const [selectProducto, setSelectProducto] = useState<BuscarProducto>();
@@ -158,26 +160,30 @@ export const FacturacionDetalle = () => {
     }, []);
 
     useEffect(() => {
+        
+        setdisableFromImport(true);
 
-        if(from =='nota' && from_id!=0 && nota_heladero_info !=null){
+        if(from=='nota' && from_id!=0 && nota_heladero_info !=null){
             //console.log(`cargando importado desde ${from} y id ${from_id}`);
             if(nota_heladero_info.id == parseInt(from_id.toString())){
-                
+                const from_codigo = nota_heladero_info.codigo ?? '';
+                setValue('from_id', from_codigo);
                 printNotaHeladero(nota_heladero_info);
             }
-        }else if(from == 'nota' && from_id!=0 && nota_heladero_info == null){
+        }else if(from=='nota' && from_id!=0 && nota_heladero_info == null){
             //console.log(`cargando importado desde ${from} y id ${from_id} y sin previa carga`);
             const current_id_nota = parseInt(from_id.toString());
             getNotaHeladero(current_id_nota)
             .then((nota_heladero_info)=>{
-
+                const from_codigo = nota_heladero_info?.codigo ?? '';
+                setValue('from_id', from_codigo);
                 printNotaHeladero(nota_heladero_info);
 
             });            
         }
 
         setValue('from', from);
-        setValue('from_id', from_id.toString());
+        
       
     }, [from_id])
 
@@ -305,6 +311,9 @@ export const FacturacionDetalle = () => {
         let total = 0;
         let idTipo = getValues("tipo") ?? 1;
         
+        let deuda_anterior = parseFloat(getValues('cargo_baterias').toString()) ?? 0;
+        let cargo_baterias = parseFloat(getValues('deuda_anterior').toString()) ?? 0;
+
         fields.forEach((item, index)=>{
 
             let _cantidad = getValues(`productos.${index}.cantidad`)??1;
@@ -320,10 +329,10 @@ export const FacturacionDetalle = () => {
         if(idTipo == 1){
             subtotal = parseFloat((subtotal).toFixed(2));
             igv = parseFloat((subtotal * 0.18).toFixed(2));
-            total = parseFloat((subtotal).toFixed(2));
+            total = parseFloat((subtotal + deuda_anterior + cargo_baterias).toFixed(2));
         }else{
             igv = parseFloat((subtotal * 0.18).toFixed(2));
-            total = parseFloat((subtotal + igv).toFixed(2));
+            total = parseFloat((subtotal + igv + deuda_anterior + cargo_baterias).toFixed(2));
         }
 
         subtotal = subtotal+descuento;
@@ -402,13 +411,14 @@ export const FacturacionDetalle = () => {
         {
             detalle = nota_heladero_info!.detalle.map((item)=>{
 
-                const vendido = item.vendido? parseFloat((item.vendido).toString()) :1;
-                const importe = item.importe? parseFloat((item.importe).toString()) : 0;
+                const isLitro = item.is_litro? parseFloat((item.is_litro).toString()) : 0;
+                const vendido =item.vendido? parseFloat((item.vendido).toString()) :1;
+                const importe = item.precio_operacion? parseFloat((item.precio_operacion).toString()) : 0;
 
                 return {
                     id:item.id??0,
                     codigo:item.codigo??'',
-                    Producto:item.producto,
+                    producto:item.producto,
                     cantidad: item.vendido??0,
                     descuento: 0,
                     precio: parseFloat(importe.toString()),
@@ -424,6 +434,11 @@ export const FacturacionDetalle = () => {
                     cantidad: item.cantidad ? parseInt((item.cantidad).toString()) : 0
                 }
             }));
+
+            setValue('cargo_baterias', nota_heladero_info?.cargo_baterias ?? 0);
+            setValue('deuda_anterior', nota_heladero_info?.deuda_anterior ?? 0);
+            
+            onChangeTotal();
         }
     }
 
@@ -540,6 +555,7 @@ export const FacturacionDetalle = () => {
                                         onChange={buscarUsuarioReserva}
                                         placeholder='Buscar producto'
                                         className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
+                                        disabled={disableFromImport}
                                     />
                             </div>
                             
@@ -605,31 +621,36 @@ export const FacturacionDetalle = () => {
                 <h4>Productos o items del movimiento</h4>
 
                 <div className="row">
-                    
-                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div className="input-group mb-3">
-                            <SelectPicker                        
-                                data={
-                                    listBuscarProducto.map((producto)=>({
-                                        label: `${producto.codigo??''} - ${producto.nombre??''}`,
-                                        value: producto.id??''
-                                    }))
-                                }
-                                style={{ width: 224 }}
-                                onSearch={updateData}
-                                onChange={(e)=>{
-                                    setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
-                                }}
-                                value={selectProducto?.id ?? null} // Controla el valor del SelectPicker
-                                cleanable={true}
-                                placeholder='Buscar producto'
-                                className="form-control p-0 w-auto no-width"
-                            />
-                            <button onClick={loadProducto} className="btn btn-primary" type="button"><i className="bi bi-plus"></i> Agregar</button>
-                            <Toaster />
-                        </div>
+                    {
+                        disableFromImport == false && (
+                            <>
+                                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div className="input-group mb-3">
+                                        <SelectPicker                        
+                                            data={
+                                                listBuscarProducto.map((producto)=>({
+                                                    label: `${producto.codigo??''} - ${producto.nombre??''}`,
+                                                    value: producto.id??''
+                                                }))
+                                            }
+                                            style={{ width: 224 }}
+                                            onSearch={updateData}
+                                            onChange={(e)=>{
+                                                setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
+                                            }}
+                                            value={selectProducto?.id ?? null} // Controla el valor del SelectPicker
+                                            cleanable={true}
+                                            placeholder='Buscar producto'
+                                            className="form-control p-0 w-auto no-width"
+                                        />
+                                        <button onClick={loadProducto} className="btn btn-primary" type="button"><i className="bi bi-plus"></i> Agregar</button>
+                                        <Toaster />
+                                    </div>
 
-                    </div>
+                                </div>                            
+                            </>
+                        )
+                    }
 
                     <div className='px-3'>
                     {
@@ -671,7 +692,7 @@ export const FacturacionDetalle = () => {
                                                                             onChangeSubTotal(index);
                                                                             onChangeTotal();
                                                                         }
-                                                                    })} min={getValues('precio_tipo') == 2 ? 0 : 1} />
+                                                                    })} min={getValues('precio_tipo') == 2 ? 0 : 1} readOnly={disableFromImport} />
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -695,7 +716,7 @@ export const FacturacionDetalle = () => {
                                                                             onChangeSubTotal(index);
                                                                             onChangeTotal();
                                                                         }
-                                                                    })}/>
+                                                                    })} readOnly={disableFromImport}/>
                                                                 </div>
                                                                     
                                                             </td>                                                            
@@ -707,13 +728,43 @@ export const FacturacionDetalle = () => {
                                                                 </div>
                                                             </td>                                                            
                                                             <td>
-                                                                <button type="button" className='btn btn-danger' onClick={() => remove(index)}>
-                                                                    Delete
-                                                                </button>
+                                                                {
+                                                                    disableFromImport == false && (
+                                                                        <button type="button" className='btn btn-danger' onClick={() => remove(index)}>
+                                                                            Delete
+                                                                        </button>
+                                                                    )
+                                                                }
                                                             </td>                                                            
                                                     </tr>
                                                 
                                             )})
+                                        }
+                                        {
+                                           (getValues('from') == 'nota' || getValues('from') == "1") && getValues('from_id') && (
+                                                <>
+                                                    <tr>
+                                                        <td colSpan={4} align='left' className={`text-end bg-secondary`}><b>Cargo baterias</b></td>
+                                                        <td className='bg-secondary'>
+                                                            <div className="input-group">
+                                                                <span className="input-group-text">S/</span>
+                                                                <input type="text" className='form-control' {...register('cargo_baterias')} disabled/>
+                                                            </div>
+                                                        </td>
+                                                        <td className='bg-secondary'>&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colSpan={4} align='left' className={`text-end bg-secondary`}><b>Deuda anterior</b></td>
+                                                        <td className='bg-secondary'>
+                                                            <div className="input-group">
+                                                                <span className="input-group-text">S/</span>
+                                                                <input type="text" className='form-control' {...register('deuda_anterior')} disabled/>
+                                                            </div>
+                                                        </td>
+                                                        <td className='bg-secondary'>&nbsp;</td>
+                                                    </tr>
+                                                </>
+                                            )
                                         }
                                         <tr>
                                             <td colSpan={4} align='left' className='text-end bg-secondary'><b>Subtotal</b></td>
@@ -745,6 +796,7 @@ export const FacturacionDetalle = () => {
                                             </td>
                                             <td className='bg-secondary'>&nbsp;</td>
                                         </tr>
+                                        
                                         <tr>
                                             <td colSpan={4} align='left' className='text-end bg-info'><b>Total</b></td>
                                             <td className='bg-info'>
@@ -757,6 +809,8 @@ export const FacturacionDetalle = () => {
                                         </tr>
                                     </tbody>
                                 </table>   
+
+
                                 
                             </>
                         )
