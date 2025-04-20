@@ -439,6 +439,9 @@ export interface FormFacturacionValues {
 
     precio_tipo:        number;
     
+    cargo_baterias:     number | string;
+    deuda_anterior:     number | string;
+
     subtotal:           number | string;
     descuento:          number | string;
     igv:                number | string;
