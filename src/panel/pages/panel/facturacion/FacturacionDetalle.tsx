@@ -105,7 +105,12 @@ export const FacturacionDetalle = () => {
                 getFacturacion(refId.current)
                 .then((factura)=>{
                     setDisablePriceType(true);
-                    setValue('fecha_emision', factura?.fecha_emision ?? '');
+                    
+                    setValue('cargo_baterias', factura?.cargo_baterias ?? '');
+                    setValue('deuda_anterior', factura?.deuda_anterior ?? '');
+                    setValue('from', factura?.from ?? '');
+                    setValue('from_id', factura?.from_id ?? '');
+
                     setValue('fecha_pago', factura?.fecha_pago ?? '');
                     setValue('tipo', factura?.tipo ?? 1);
                     setValue('serie', factura?.serie ?? '');
@@ -311,8 +316,8 @@ export const FacturacionDetalle = () => {
         let total = 0;
         let idTipo = getValues("tipo") ?? 1;
         
-        let deuda_anterior = parseFloat(getValues('cargo_baterias').toString()) ?? 0;
-        let cargo_baterias = parseFloat(getValues('deuda_anterior').toString()) ?? 0;
+        let deuda_anterior = parseFloat((getValues('cargo_baterias')??'0').toString()) ?? 0;
+        let cargo_baterias = parseFloat((getValues('deuda_anterior')??'0').toString()) ?? 0;
 
         fields.forEach((item, index)=>{
 
