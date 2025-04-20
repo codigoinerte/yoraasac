@@ -37,8 +37,9 @@ export interface Facturas {
 
     cargo_baterias:     number | string;
     deuda_anterior:     number | string;
-    from?:              string;
-    from_id?:           string;
+
+    importado_tipo?:    string;
+    importado_codigo?:  string;
 
     precio_tipo: number;
 
@@ -57,6 +58,8 @@ export interface FormFacturacionDetalleValues {
     cantidad?:    number;
     facturas_id?: number;
     producto?:    string;
+    is_litro?:    boolean;
+    is_barquillo?:boolean;
     total?:      number | string;
 }
 
