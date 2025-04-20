@@ -105,7 +105,7 @@ export const FacturacionDetalle = () => {
                 getFacturacion(refId.current)
                 .then((factura)=>{
                     setDisablePriceType(true);
-                    
+                    setValue('fecha_emision', factura?.fecha_emision ?? '');                    
                     setValue('cargo_baterias', factura?.cargo_baterias ?? '');
                     setValue('deuda_anterior', factura?.deuda_anterior ?? '');
                     setValue('from', factura?.from ?? '');
@@ -319,6 +319,7 @@ export const FacturacionDetalle = () => {
         let deuda_anterior = parseFloat((getValues('cargo_baterias')??'0').toString()) ?? 0;
         let cargo_baterias = parseFloat((getValues('deuda_anterior')??'0').toString()) ?? 0;
 
+        console.log(fields);
         fields.forEach((item, index)=>{
 
             let _cantidad = getValues(`productos.${index}.cantidad`)??1;
@@ -450,8 +451,10 @@ export const FacturacionDetalle = () => {
 
             setValue('cargo_baterias', nota_heladero_info?.cargo_baterias ?? 0);
             setValue('deuda_anterior', nota_heladero_info?.deuda_anterior ?? 0);
-            
-            onChangeTotal();
+                        
+            setTimeout(() => {
+                onChangeTotal();
+            }, 550);
         }
     }
 
