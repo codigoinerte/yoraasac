@@ -77,20 +77,76 @@ export const FacturacionDetalle = () => {
         });
     }
 
-    useEffect(() => {
+    const loadDataSavedById = (ID: any) => {
+        getFacturacion(ID)
+        .then((factura)=>{
+            setDisablePriceType(true);
 
-        refId.current = (id != undefined && id != null && id != 0) ? id : 0;
-        const idNum = parseInt(refId.current);
-        if( idNum > 0){
-            refId.current = idNum;
-            setIsPrint(idNum ? true : false);
-        }
+            setValue('fecha_emision', factura?.fecha_emision ?? '');                    
+            setValue('cargo_baterias', factura?.cargo_baterias ?? '');
+            setValue('deuda_anterior', factura?.deuda_anterior ?? '');
+
+            setValue('importado_tipo', factura?.importado_tipo ?? '');
+            setValue('importado_codigo', factura?.importado_codigo ?? '');
+
+            setValue('fecha_pago', factura?.fecha_pago ?? '');
+            setValue('tipo', factura?.tipo ?? 1);
+            setValue('serie', factura?.serie ?? '');
+            setValue('correlativo', factura?.correlativo ?? 0);
+            setValue('user_id', factura?.user_id ?? 0);
+            setValue('tipo_transaccion', factura?.tipo_transaccion ?? 0);
+            setValue('id_estado', factura?.id_estado ?? 0);
+            setValue('estado', factura?.id_estado ?? 0);
+
+            setValue('documento_tipo', factura?.documento_tipo??'');
+            setValue('usuario_documento', factura?.usuario_documento??'');
+            setValue('creador', factura?.creador??'');
+            setValue('sucursal', factura?.sucursal??'');
+            setValue('moneda', factura?.moneda??'');
+            setValue('transaccion', factura?.transaccion??'');
+            setValue('usuario_nombre', factura?.usuario_nombre??'');
+            setValue('documento', factura?.documento??'');
+            setValue('total_monto', factura?.total_monto??0);
+            setValue('total_descuento', factura?.total_descuento??0);
+
+            setValue('precio_tipo', factura?.precio_tipo??0);
+
+            setValue('subtotal', factura?.subtotal??0);
+            setValue('descuento', factura?.descuento??0);
+            setValue('igv', factura?.igv??0);
+            setValue('total', factura?.total??0);
+
+            setTypeOperation(factura?.tipo ?? 1)
+            
+            let detalle = [];
+
+            if(factura!.detalle != undefined)
+            {
+                detalle = factura!.detalle.map((item)=>({
+                    ...item,
+                    precio: parseFloat(((item.precio??0).toString())).toFixed(item.is_litro || item.is_barquillo ? 3 : 2),
+                    total: parseFloat((  ((item.cantidad??1) * (item.precio??0) * ( 1 - ((item.descuento??0) / 100))).toFixed(2) ).toString())
+                }))
+            
+                setValue('productos', detalle);
+            }
+
+            let usuario_id = factura?.user_id??0;
+
+            if(usuario_id != 0){
+                loadBuscarUsuario(usuario_id, "codigo", 4);
+                setValue('user_id', factura!.user_id);
+            }
+
+        });
+    }
+    
+    const loadData = (ID: any) => {
         
-        loadFacturaEstados();
-
         if(from == '' && parseInt(from_id.toString()) == 0)
         {
-            if(refId.current == 0)
+
+            if(ID == 0)
             {
                 const dateNow = DateNow();
                 
@@ -102,94 +158,50 @@ export const FacturacionDetalle = () => {
             }
             else
             {   
-                getFacturacion(refId.current)
-                .then((factura)=>{
-                    setDisablePriceType(true);
-                    setValue('fecha_emision', factura?.fecha_emision ?? '');                    
-                    setValue('cargo_baterias', factura?.cargo_baterias ?? '');
-                    setValue('deuda_anterior', factura?.deuda_anterior ?? '');
-                    setValue('from', factura?.from ?? '');
-                    setValue('from_id', factura?.from_id ?? '');
-
-                    setValue('fecha_pago', factura?.fecha_pago ?? '');
-                    setValue('tipo', factura?.tipo ?? 1);
-                    setValue('serie', factura?.serie ?? '');
-                    setValue('correlativo', factura?.correlativo ?? 0);
-                    setValue('user_id', factura?.user_id ?? 0);
-                    setValue('tipo_transaccion', factura?.tipo_transaccion ?? 0);
-                    setValue('id_estado', factura?.id_estado ?? 0);
-                    setValue('estado', factura?.id_estado ?? 0);
-
-                    setValue('documento_tipo', factura?.documento_tipo??'');
-                    setValue('usuario_documento', factura?.usuario_documento??'');
-                    setValue('creador', factura?.creador??'');
-                    setValue('sucursal', factura?.sucursal??'');
-                    setValue('moneda', factura?.moneda??'');
-                    setValue('transaccion', factura?.transaccion??'');
-                    setValue('usuario_nombre', factura?.usuario_nombre??'');
-                    setValue('documento', factura?.documento??'');
-                    setValue('total_monto', factura?.total_monto??0);
-                    setValue('total_descuento', factura?.total_descuento??0);
-
-                    setValue('precio_tipo', factura?.precio_tipo??0);
-
-                    setValue('subtotal', factura?.subtotal??0);
-                    setValue('descuento', factura?.descuento??0);
-                    setValue('igv', factura?.igv??0);
-                    setValue('total', factura?.total??0);
-
-                    setTypeOperation(factura?.tipo ?? 1)
-                    
-                    let detalle = [];
-
-                    if(factura!.detalle != undefined)
-                    {
-                        detalle = factura!.detalle.map((item)=>({
-                            ...item,
-                            total: parseFloat((  ((item.cantidad??1) * (item.precio??0) * ( 1 - ((item.descuento??0) / 100))).toFixed(2) ).toString())
-                        }))
-                    
-                        setValue('productos', detalle);
-                    }
-
-                    let usuario_id = factura?.user_id??0;
-
-                    if(usuario_id != 0){
-                        loadBuscarUsuario(usuario_id, "codigo", 4);
-                        setValue('user_id', factura!.user_id);
-                    }
-
-                });
+                loadDataSavedById(ID);
             }
         }
+    }
+
+    useEffect(() => {
+        refId.current = (id != undefined && id != null && id != 0) ? id : 0;
+        const idNum = parseInt(refId.current);
+        if( idNum > 0){
+            refId.current = idNum;
+            setIsPrint(idNum ? true : false);
+        }
+        
+        loadFacturaEstados();
+
+        loadData(refId.current);
     }, []);
 
     useEffect(() => {
         
-        setdisableFromImport(true);
-
+        
         if(from=='nota' && from_id!=0 && nota_heladero_info !=null){
+            setdisableFromImport(true);
             //console.log(`cargando importado desde ${from} y id ${from_id}`);
             if(nota_heladero_info.id == parseInt(from_id.toString())){
                 const from_codigo = nota_heladero_info.codigo ?? '';
-                setValue('from_id', from_codigo);
+                setValue('importado_codigo', from_codigo);
                 printNotaHeladero(nota_heladero_info);
             }
+            setValue('importado_tipo', from);
         }else if(from=='nota' && from_id!=0 && nota_heladero_info == null){
+            setdisableFromImport(true);
             //console.log(`cargando importado desde ${from} y id ${from_id} y sin previa carga`);
             const current_id_nota = parseInt(from_id.toString());
             getNotaHeladero(current_id_nota)
             .then((nota_heladero_info)=>{
                 const from_codigo = nota_heladero_info?.codigo ?? '';
-                setValue('from_id', from_codigo);
+                setValue('importado_codigo', from_codigo);
                 printNotaHeladero(nota_heladero_info);
 
             });            
+            setValue('importado_tipo', from);              
         }
 
-        setValue('from', from);
-        
-      
     }, [from_id])
 
     useEffect(() => {
@@ -239,10 +251,19 @@ export const FacturacionDetalle = () => {
                 let igv = e!.igv;
                 let total = e!.total;
 
+                let importado_tipo = e!.importado_tipo;
+                let importado_codigo = e!.importado_codigo;
+
+                
+                setValue('importado_tipo', importado_tipo);
+                setValue('importado_codigo', importado_codigo);
+
                 setValue('total_monto', total_monto);
                 setValue('total_descuento', total_descuento);
                 setValue('igv', igv);
                 setValue('total', total);
+
+                loadDataSavedById(e!.id);
 
                 
             });
@@ -293,7 +314,7 @@ export const FacturacionDetalle = () => {
     const onChangeSubTotal = (index:number)=>{
 
         const cantidad =  getValues(`productos.${index}.cantidad`)??1;
-        const precio =  getValues(`productos.${index}.precio`)??0;
+        const precio =  parseFloat((getValues(`productos.${index}.precio`)??0).toString());
         const descuento =  getValues(`productos.${index}.descuento`)??0;
 
         let subtotal = (cantidad * precio * ( 1 - (descuento / 100))).toFixed(2);
@@ -319,11 +340,11 @@ export const FacturacionDetalle = () => {
         let deuda_anterior = parseFloat((getValues('cargo_baterias')??'0').toString()) ?? 0;
         let cargo_baterias = parseFloat((getValues('deuda_anterior')??'0').toString()) ?? 0;
 
-        console.log(fields);
+        const fields = getValues('productos');
         fields.forEach((item, index)=>{
 
             let _cantidad = getValues(`productos.${index}.cantidad`)??1;
-            let _precio = getValues(`productos.${index}.precio`)??0;
+            let _precio = parseFloat((getValues(`productos.${index}.precio`)??0).toString());
             let _descuento = getValues(`productos.${index}.descuento`)??0;
             
             
@@ -413,7 +434,7 @@ export const FacturacionDetalle = () => {
 
         let detalle = [];
 
-        const isImportFromNota = getValues('from') == 'nota' || getValues('from') == "1";
+        const isImportFromNota = getValues('importado_tipo') == 'nota' || getValues('importado_tipo') == "1";
         
         if(nota_heladero_info?.detalle != undefined)
         {
@@ -452,9 +473,8 @@ export const FacturacionDetalle = () => {
             setValue('cargo_baterias', nota_heladero_info?.cargo_baterias ?? 0);
             setValue('deuda_anterior', nota_heladero_info?.deuda_anterior ?? 0);
                         
-            setTimeout(() => {
-                onChangeTotal();
-            }, 550);
+            
+            onChangeTotal();
         }
     }
 
@@ -756,8 +776,9 @@ export const FacturacionDetalle = () => {
                                                 
                                             )})
                                         }
+
                                         {
-                                           (getValues('from') == 'nota' || getValues('from') == "1") && getValues('from_id') && (
+                                           (getValues('importado_tipo') == 'nota' || getValues('importado_tipo') == "1") && getValues('importado_codigo') && (
                                                 <>
                                                     <tr>
                                                         <td colSpan={4} align='left' className={`text-end bg-secondary`}><b>Cargo baterias</b></td>
