@@ -664,10 +664,21 @@ export const FacturacionDetalle = () => {
                                     <div className="input-group mb-3">
                                         <SelectPicker                        
                                             data={
-                                                listBuscarProducto.map((producto)=>({
-                                                    label: `${producto.codigo??''} - ${producto.nombre??''}`,
-                                                    value: producto.id??''
-                                                }))
+                                                listBuscarProducto.map((producto)=>{
+                                                    
+                                                    const precio_tipo = parseInt((getValues('precio_tipo') ?? 0).toString());
+                                                    const isBarquillo = producto.is_barquillo ?? 0;
+                                                    const isLitro = producto.is_litro ?? 0;
+                                                    const validacion = (precio_tipo == 0 || precio_tipo == 1) && (isBarquillo || isLitro);
+                                                    
+                                                    if(validacion) return;
+
+                                                    return {
+                                                        label: `${producto.codigo??''} - ${producto.nombre??''}`,
+                                                        value: producto.id??''
+                                                    };
+                                                })
+                                                .filter(value => value !== undefined)
                                             }
                                             style={{ width: 224 }}
                                             onSearch={updateData}
