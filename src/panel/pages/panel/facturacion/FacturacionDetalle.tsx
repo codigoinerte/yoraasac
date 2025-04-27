@@ -19,6 +19,13 @@ const breadcrumb:bread[] = [
     { id:2, titulo: 'Facturación detalle', enlace: '' },
 ];
 
+interface productItem 
+{
+    label: string;
+    value: number;
+}
+type productList = productItem[];
+
 type strnum = string | number;
 
 export const FacturacionDetalle = () => {
@@ -478,6 +485,27 @@ export const FacturacionDetalle = () => {
         }
     }
 
+    const getDataFromListProducts = (): productItem[] => {
+        const productList =  (listBuscarProducto || []);
+        let responseProductList : productItem[] = [];
+        
+        for(let producto of productList){
+            const precio_tipo = parseInt((getValues('precio_tipo') ?? 0).toString());
+            const isBarquillo = producto.is_barquillo ?? 0;
+            const isLitro = producto.is_litro ?? 0;
+            const validacion = (precio_tipo == 0 || precio_tipo == 1) && (isBarquillo || isLitro);
+            
+            if(validacion) continue;
+    
+            responseProductList.push({
+                label: `${producto.codigo??''} - ${producto.nombre??''}`,
+                value: producto.id??''
+            });
+        }
+                                                    
+        return responseProductList;
+    }
+
     return (
         <ContainerInner breadcrumb={breadcrumb}>
             <>  
@@ -663,27 +691,13 @@ export const FacturacionDetalle = () => {
                                 <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div className="input-group mb-3">
                                         <SelectPicker                        
-                                            data={
-                                                listBuscarProducto.map((producto)=>{
-                                                    
-                                                    const precio_tipo = parseInt((getValues('precio_tipo') ?? 0).toString());
-                                                    const isBarquillo = producto.is_barquillo ?? 0;
-                                                    const isLitro = producto.is_litro ?? 0;
-                                                    const validacion = (precio_tipo == 0 || precio_tipo == 1) && (isBarquillo || isLitro);
-                                                    
-                                                    if(validacion) return;
-
-                                                    return {
-                                                        label: `${producto.codigo??''} - ${producto.nombre??''}`,
-                                                        value: producto.id??''
-                                                    };
-                                                })
-                                                .filter(value => value !== undefined)
-                                            }
+                                            data={ getDataFromListProducts() }
                                             style={{ width: 224 }}
                                             onSearch={updateData}
                                             onChange={(e)=>{
-                                                setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
+                                                if (listBuscarProducto && listBuscarProducto.length > 0) {
+                                                    setSelectProducto(listBuscarProducto.filter((producto)=>producto.id == e)[0]);
+                                                }
                                             }}
                                             value={selectProducto?.id ?? null} // Controla el valor del SelectPicker
                                             cleanable={true}
