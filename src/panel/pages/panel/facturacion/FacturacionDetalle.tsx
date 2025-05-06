@@ -747,13 +747,14 @@ export const FacturacionDetalle = () => {
                                                                     <span className="input-group-text">Unit.</span>
                                                                     <input type="number" className='form-control' {...register(`productos.${index}.cantidad`, {
                                                                         onChange: (i)=> {
+                                                                            console.log(i);
                                                                             let value = i.target.value ?? 0;
                                                                             if(value == 0) setValue(`productos.${index}.cantidad`, 1);
 
                                                                             onChangeSubTotal(index);
                                                                             onChangeTotal();
                                                                         }
-                                                                    })} min={getValues('precio_tipo') == 2 ? 0 : 1} readOnly={disableFromImport} />
+                                                                    })} min={getValues('precio_tipo') == 2 ? 0 : 1} readOnly={disableFromImport} onWheel={(e) => e.currentTarget.blur()}/>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -777,7 +778,7 @@ export const FacturacionDetalle = () => {
                                                                             onChangeSubTotal(index);
                                                                             onChangeTotal();
                                                                         }
-                                                                    })} readOnly={disableFromImport}/>
+                                                                    })} readOnly={disableFromImport} onWheel={(e) => e.currentTarget.blur()}/>
                                                                 </div>
                                                                     
                                                             </td>                                                            

@@ -1022,6 +1022,8 @@ export const NotaHeladeroDetalle = () => {
                                                                         //     e.preventDefault();
                                                                         // }
                                                                     }}
+
+                                                                    onWheel={(e) => e.currentTarget.blur()}
                                                                     />
                                                         </div>
                                                     </td>                                                     
@@ -1139,7 +1141,7 @@ export const NotaHeladeroDetalle = () => {
                                                                 const suma = subtotal + value;
                                                                 setValue("suma", redondeoMonto(suma));
                                                             }
-                                                        })} className='form-control' step={0.01} readOnly={active.estado == 1 ? true : false}/></td>
+                                                        })} className='form-control' step={0.01} readOnly={active.estado == 1 ? true : false}  onWheel={(e) => e.currentTarget.blur()}/></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={3} style={{background: '#dedede'}}>&nbsp;</td>
@@ -1177,7 +1179,7 @@ export const NotaHeladeroDetalle = () => {
                                                                                 onChangePago();
                                                                             }
                                                                         }}
-                                                                    step={0.01} /></td>
+                                                                    step={0.01} onWheel={(e) => e.currentTarget.blur()}/></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colSpan={3}>&nbsp;</td>
@@ -1225,7 +1227,7 @@ export const NotaHeladeroDetalle = () => {
                                                                         })} 
                                                                         className='form-control'
                                                                         id='yape'
-                                                                        step={0.01} /></td>
+                                                                        step={0.01}  onWheel={(e) => e.currentTarget.blur()}/></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colSpan={3}>&nbsp;</td>
@@ -1246,7 +1248,7 @@ export const NotaHeladeroDetalle = () => {
                                                                         },                                                            
                                                                     })} 
                                                                     step={0.01}
-                                                                    className='form-control'/></td>
+                                                                    className='form-control'  onWheel={(e) => e.currentTarget.blur()}/></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colSpan={3}>&nbsp;</td>
