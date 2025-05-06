@@ -124,6 +124,23 @@ export const NotaHeladeroDetalle = () => {
     const getEdit:boolean = Boolean(queryParameters.get("edit")??0);
     const getState:number | null = parseInt(queryParameters.get("state")??"null");
 
+    const redondeoMonto = (mount:any) => {
+        let formatMount = typeof mount == 'string' ? parseInt(mount) : mount;
+
+        const decimalPart = formatMount % 1;
+        const integerPart = Math.floor(formatMount);
+
+        if (decimalPart < 0.05) {
+            formatMount = integerPart;
+        } else if (decimalPart < 0.10) {
+            formatMount = integerPart + 0.10;
+        } else {
+            formatMount = integerPart + Math.round(decimalPart * 10) / 10;
+        }
+
+        return formatMount.toFixed(2);
+    }
+
     const calcImporte = (index:number)=> {
 
         let vendido = (!getValues(`productos.${index}.vendido`)) ? 0 : parseFloat(getValues(`productos.${index}.vendido`)!.toString());
@@ -608,12 +625,12 @@ export const NotaHeladeroDetalle = () => {
 
             setValue(`monto`, subtotal.toFixed(2));
             setValue(`deuda_anterior`, deuda_anterior.toFixed(2));
-            setValue(`subtotal`, subtotal_sumas.toFixed(2));
+            setValue(`subtotal`, redondeoMonto(subtotal_sumas));
             setValue(`pago`, pago.toFixed(2));
             setValue(`ahorro`, ahorro.toFixed(2));
             setValue(`yape`, yape.toFixed(2));
             setValue(`efectivo`, efectivo.toFixed(2));
-            setValue(`suma`, suma.toFixed(2));
+            setValue(`suma`, redondeoMonto(suma));
             setValue(`debe`, debe);
             return;
         }
@@ -1115,12 +1132,12 @@ export const NotaHeladeroDetalle = () => {
                                                                 const subtotal = monto+cargo_baterias;
                                                                 
                                                                 setValue("deuda_anterior", value);
-                                                                setValue("subtotal", subtotal.toFixed(2));
+                                                                setValue("subtotal", redondeoMonto(subtotal));
 
                                                                 onChangePago();
 
                                                                 const suma = subtotal + value;
-                                                                setValue("suma", suma.toFixed(2));
+                                                                setValue("suma", redondeoMonto(suma));
                                                             }
                                                         })} className='form-control' step={0.01} readOnly={active.estado == 1 ? true : false}/></td>
                                                     </tr>
