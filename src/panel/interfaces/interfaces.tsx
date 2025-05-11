@@ -235,6 +235,10 @@ export type FormProductosValues = {
     descuento_venta_mayor: number | null;
     total_venta_mayor: number | null;
 
+    precio_venta_mayor_cajas:number | null;
+    descuento_venta_mayor_cajas:number | null;
+    total_venta_mayor_cajas:number | null;
+
     proveedor_precio: number | null;
 
     cantidad_caja: number | null;

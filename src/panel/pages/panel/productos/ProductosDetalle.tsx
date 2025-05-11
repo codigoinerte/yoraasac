@@ -54,6 +54,15 @@ export const ProductosDetalle = () => {
 
   }
 
+  const calcularPrecioFinalMayorCajas = ()=>{
+    let p = getValues('precio_venta_mayor_cajas')??0;
+    let d = getValues('descuento_venta_mayor_cajas')??0;
+
+    let precio_final = p - (p*(d/100));
+    precio_final = precio_final < 0 ?  0 : precio_final;
+    setValue('total_venta_mayor_cajas', precio_final);
+  }
+
   const calcularPrecioFinalMayor = ()=>{
     let p = getValues('precio_venta_mayor')??0;
     let d = getValues('descuento_venta_mayor')??0;
@@ -122,6 +131,8 @@ export const ProductosDetalle = () => {
         setValue('heladero_precio_venta', prod?.heladero_precio_venta);
         setValue('precio_venta_mayor', prod?.precio_venta_mayor);
         setValue('descuento_venta_mayor', prod?.descuento_venta_mayor);
+        setValue('precio_venta_mayor_cajas', prod?.precio_venta_mayor_cajas);
+        setValue('descuento_venta_mayor_cajas', prod?.descuento_venta_mayor_cajas);
         setValue('cantidad_caja', prod?.cantidad_caja);
         setValue('proveedor_precio', prod?.proveedor_precio);
         setValue('is_litro', prod?.is_litro);
@@ -130,6 +141,7 @@ export const ProductosDetalle = () => {
         calcularPrecioFinal();
         calcularPrecioFinalHeladero();
         calcularPrecioFinalMayor();
+        calcularPrecioFinalMayorCajas();
     }
 
   }
@@ -159,7 +171,10 @@ export const ProductosDetalle = () => {
     cantidad_caja,
     proveedor_precio,
     is_barquillo,
-    is_litro }) => {
+    is_litro,
+    precio_venta_mayor_cajas,
+    descuento_venta_mayor_cajas,
+    total_venta_mayor_cajas }) => {
             
     if(id == 0){
       // nuevo
@@ -189,6 +204,10 @@ export const ProductosDetalle = () => {
         precio_venta_mayor,
         descuento_venta_mayor,
         total_venta_mayor,
+
+        precio_venta_mayor_cajas,
+        descuento_venta_mayor_cajas,
+        total_venta_mayor_cajas,
         
       });
     }else{
@@ -218,6 +237,10 @@ export const ProductosDetalle = () => {
         precio_venta_mayor,
         descuento_venta_mayor,
         total_venta_mayor,
+
+        precio_venta_mayor_cajas,
+        descuento_venta_mayor_cajas,
+        total_venta_mayor_cajas,
         
       });
     }
@@ -392,6 +415,100 @@ export const ProductosDetalle = () => {
                     </select>                    
                 </div>
 
+
+                <div className="row mt-3 mb-3">
+                  <h5>Precio de venta (por mayor) a público general</h5>
+                  <div className='col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mt-3 '>
+                    <h6>Venta por unidad</h6>
+                    <div className="mb-3">
+                        <label htmlFor="precioventa" className="form-label">Precio de venta</label>
+                        <input  type="text" 
+                                id="precioventa" 
+                                aria-describedby="precioventa" 
+                                defaultValue={0}
+                                className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
+                                onKeyUp={(e)=> setValue('precio_venta_mayor', validateNoNegative(e))}
+                                {...register('precio_venta_mayor',{
+                                  onChange: calcularPrecioFinalMayor,
+                                  required:true
+                                })}/>
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="descuento" className="form-label">Descuento</label>
+                        <div className="input-group mb-3">
+                          <input  type="number" 
+                                  className="form-control" 
+                                  aria-describedby="precio-descuento" 
+                                  min={0} 
+                                  step={1} 
+                                  max={100}
+                                  onKeyUp={(e)=>{ setValue('descuento_venta_mayor', validateNoNegative(e)); } }
+                                  defaultValue={0}
+                                  {...register('descuento_venta_mayor', {
+                                    onChange: calcularPrecioFinalMayor
+                                  })}/>
+                          <span className="input-group-text" id="precio-descuento">%</span>
+                        </div>
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="preciofinal" className="form-label">Precio final</label>
+                        <input  type="text" 
+                                className="form-control" 
+                                id="preciofinal" 
+                                aria-describedby="preciofinal"
+                                //disabled={true}
+                                defaultValue={0}
+                                {...register('total_venta_mayor')} />
+                    </div>
+                  </div>
+                  <div className='col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mt-3 '>
+                    <h6>Venta por cajas</h6>
+                    <div className="mb-3">
+                        <label htmlFor="precio_cajas_mayor" className="form-label">Precio de venta</label>
+                        <input  type="text" 
+                                id="precio_cajas_mayor" 
+                                aria-describedby="precio_cajas_mayor" 
+                                defaultValue={0}
+                                className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
+                                onKeyUp={(e)=> setValue('precio_venta_mayor_cajas', validateNoNegative(e))}
+                                {...register('precio_venta_mayor_cajas',{
+                                  onChange: calcularPrecioFinalMayorCajas,
+                                  required:true
+                                })}/>
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="descuento" className="form-label">Descuento</label>
+                        <div className="input-group mb-3">
+                          <input  type="number" 
+                                  className="form-control" 
+                                  aria-describedby="precio-descuento" 
+                                  min={0} 
+                                  step={1} 
+                                  max={100}
+                                  onKeyUp={(e)=>{ setValue('descuento_venta_mayor_cajas', validateNoNegative(e)); } }
+                                  defaultValue={0}
+                                  {...register('descuento_venta_mayor_cajas', {
+                                    onChange: calcularPrecioFinalMayorCajas
+                                  })}/>
+                          <span className="input-group-text" id="precio-descuento">%</span>
+                        </div>
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="preciofinal" className="form-label">Precio final</label>
+                        <input  type="text" 
+                                className="form-control" 
+                                id="preciofinal" 
+                                aria-describedby="preciofinal"
+                                //disabled={true}
+                                defaultValue={0}
+                                {...register('total_venta_mayor_cajas')} />
+                    </div>
+                  </div>
+                </div>
                   
               </div>
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -459,52 +576,6 @@ export const ProductosDetalle = () => {
                               //disabled={true}
                               defaultValue={0}
                               {...register('precio_final')} />
-                  </div>
-                </div>
-
-                <div className="card p-3 mb-3">
-                  <h5>Precio de venta (por mayor) a público general</h5>
-                  <div className="mb-3">
-                      <label htmlFor="precioventa" className="form-label">Precio de venta</label>
-                      <input  type="text" 
-                              id="precioventa" 
-                              aria-describedby="precioventa" 
-                              defaultValue={0}
-                              className={errors.precio_venta ? "form-control is-invalid" : "form-control"}
-                              onKeyUp={(e)=> setValue('precio_venta_mayor', validateNoNegative(e))}
-                              {...register('precio_venta_mayor',{
-                                onChange: calcularPrecioFinalMayor,
-                                required:true
-                              })}/>
-                  </div>
-                  
-                  <div className="mb-3">
-                      <label htmlFor="descuento" className="form-label">Descuento</label>
-                      <div className="input-group mb-3">
-                        <input  type="number" 
-                                className="form-control" 
-                                aria-describedby="precio-descuento" 
-                                min={0} 
-                                step={1} 
-                                max={100}
-                                onKeyUp={(e)=>{ setValue('descuento_venta_mayor', validateNoNegative(e)); } }
-                                defaultValue={0}
-                                {...register('descuento_venta_mayor', {
-                                  onChange: calcularPrecioFinalMayor
-                                })}/>
-                        <span className="input-group-text" id="precio-descuento">%</span>
-                      </div>
-                  </div>
-                  
-                  <div className="mb-3">
-                      <label htmlFor="preciofinal" className="form-label">Precio final</label>
-                      <input  type="text" 
-                              className="form-control" 
-                              id="preciofinal" 
-                              aria-describedby="preciofinal"
-                              //disabled={true}
-                              defaultValue={0}
-                              {...register('total_venta_mayor')} />
                   </div>
                 </div>
 
