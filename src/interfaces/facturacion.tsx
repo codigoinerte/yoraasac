@@ -60,6 +60,11 @@ export interface FormFacturacionDetalleValues {
     producto?:    string;
     is_litro?:    boolean;
     is_barquillo?:boolean;
+    is_box?:     boolean;
+    original_precio_venta:          number;
+    original_descuento:             number;
+    original_precio_venta_mayor:    number;
+    original_descuento_mayor:       number;
     total?:      number | string;
 }
 

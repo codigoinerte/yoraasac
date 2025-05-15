@@ -54,7 +54,7 @@ export const FacturacionDetalle = () => {
 
     
 
-    const { register, handleSubmit, formState, setValue, getValues, control } = useForm<FormFacturacionValues>({
+    const { register, handleSubmit, formState, setValue, getValues, control, watch } = useForm<FormFacturacionValues>({
         defaultValues:{       
             productos: []
         }
@@ -241,6 +241,9 @@ export const FacturacionDetalle = () => {
             return false;
         }
         
+        // console.log(data);
+        // return;
+
         if(refId.current == 0){            
             saveFacturacion({
                 ...data,
@@ -296,7 +299,14 @@ export const FacturacionDetalle = () => {
         let item = fields.filter((detail)=>detail.codigo == selectProducto?.codigo);
 
         if(item.length == 0 && !!selectProducto){
-            let total: strnum = parseFloat(selectProducto!.precio_venta??0);
+            
+            let is_box = selectProducto.is_box??false;
+            let original_precio_venta = parseFloat(selectProducto.precio_venta ?? 0);
+            let original_descuento = parseFloat(selectProducto.descuento ?? 0);
+            let original_precio_venta_mayor = parseFloat(selectProducto.precio_venta_cajas ?? 0);
+            let original_descuento_mayor = parseFloat(selectProducto.descuento_cajas ?? 0);
+
+            let total: strnum = is_box ? original_precio_venta_mayor : original_precio_venta;
 
             append({ 
                 codigo: selectProducto!.codigo,
@@ -305,7 +315,12 @@ export const FacturacionDetalle = () => {
                 descuento: 0,
                 cantidad: 1,
                 total : total.toFixed(2),
-                id: 0
+                id: 0,
+                original_precio_venta,
+                original_descuento,
+                original_precio_venta_mayor,
+                original_descuento_mayor,
+                is_box
             });
 
             // Limpiar el valor seleccionado
@@ -466,7 +481,11 @@ export const FacturacionDetalle = () => {
                     precio: parseFloat(monto_operacion.toString()),
                     total: parseFloat(((monto_operacion*vendido).toString())).toFixed(isLitro || isBarquillo ? 3 : 2),
                     is_litro :item.is_litro ?? false,
-                    is_barquillo:item.is_barquillo ?? false,    
+                    is_barquillo:item.is_barquillo ?? false,
+                    original_precio_venta: 0,
+                    original_descuento: 0,
+                    original_precio_venta_mayor: 0,
+                    original_descuento_mayor: 0,
                 }
             })
         
@@ -504,6 +523,31 @@ export const FacturacionDetalle = () => {
         }
                                                     
         return responseProductList;
+    }
+
+    // Observa los cambios en el valor de `is_unit` para cada producto
+    const isBox = (index: number) => watch(`productos.${index}.is_box`);
+
+    const setPriceByType = (index:number) => {
+        const is_box = getValues(`productos.${index}.is_box`) ?? false;
+        const precio_venta = getValues(`productos.${index}.original_precio_venta`) ?? 0;
+        const precio_venta_cajas = getValues(`productos.${index}.original_precio_venta_mayor`) ?? 0;
+        
+        setValue(`productos.${index}.is_box`, !is_box ,{
+            shouldTouch: true,
+            shouldDirty: true
+        });
+
+        let original_precio_venta = parseFloat((precio_venta ?? '0').toString());
+        let original_precio_venta_mayor = parseFloat((precio_venta_cajas ?? '0').toString());
+
+        let total: strnum = !is_box ? original_precio_venta_mayor : original_precio_venta;
+
+        setValue(`productos.${index}.precio`, parseFloat(total.toFixed(3)))
+        setValue(`productos.${index}.total`, total.toFixed(2))
+
+        onChangeSubTotal(index);
+        onChangeTotal();
     }
 
     return (
@@ -744,10 +788,21 @@ export const FacturacionDetalle = () => {
                                                             </td>
                                                             <td>
                                                                 <div className="input-group">
-                                                                    <span className="input-group-text">Unit.</span>
+                                                                    {
+                                                                        getValues("precio_tipo") == 1 ? 
+                                                                        (
+                                                                            <>
+                                                                                <button className="btn btn-primary" type="button" onClick={()=> setPriceByType(index) }>{ isBox(index) ? `Cajas` : `Unit.` }</button> 
+                                                                                
+                                                                            </>
+                                                                            
+                                                                        )
+                                                                        :
+                                                                        ( <span className="input-group-text">Unit.</span> )
+                                                                    }
                                                                     <input type="number" className='form-control' {...register(`productos.${index}.cantidad`, {
                                                                         onChange: (i)=> {
-                                                                            console.log(i);
+                                                                            
                                                                             let value = i.target.value ?? 0;
                                                                             if(value == 0) setValue(`productos.${index}.cantidad`, 1);
 

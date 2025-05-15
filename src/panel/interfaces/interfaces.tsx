@@ -466,6 +466,11 @@ export interface FormFacturacionDetalleValues {
     producto?:    string;
     is_litro?:    boolean;
     is_barquillo?:boolean;
+    is_box?:     boolean;
+    original_precio_venta:  number;
+    original_descuento:     number;
+    original_precio_venta_mayor:    number;
+    original_descuento_mayor:       number;
     total?:      number | string;
 }
 
@@ -769,6 +774,10 @@ export interface BuscarProducto {
     is_barquillo: boolean;
     created_at:   string;
     updated_at:   string;
+
+    precio_venta_cajas: string;
+    descuento_cajas:    string;
+    is_box:            boolean;
 }
 
 // Buscar Nota guardada
