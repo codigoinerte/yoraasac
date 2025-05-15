@@ -792,7 +792,12 @@ export const FacturacionDetalle = () => {
                                                                         getValues("precio_tipo") == 1 ? 
                                                                         (
                                                                             <>
-                                                                                <button className="btn btn-primary" type="button" onClick={()=> setPriceByType(index) }>{ isBox(index) ? `Cajas` : `Unit.` }</button> 
+                                                                                <button 
+                                                                                    className="btn btn-primary" 
+                                                                                    type="button" 
+                                                                                    onClick={()=> setPriceByType(index) }
+                                                                                    disabled={!!id}
+                                                                                    >{ isBox(index) ? `Cajas` : `Unit.` }</button> 
                                                                                 
                                                                             </>
                                                                             
