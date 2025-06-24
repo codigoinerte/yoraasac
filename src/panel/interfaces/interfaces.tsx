@@ -467,6 +467,7 @@ export interface FormFacturacionDetalleValues {
     is_litro?:    boolean;
     is_barquillo?:boolean;
     is_box?:     boolean;
+    is_unit?:   boolean;
     original_precio_venta:  number;
     original_descuento:     number;
     original_precio_venta_mayor:    number;
@@ -778,6 +779,7 @@ export interface BuscarProducto {
     precio_venta_cajas: string;
     descuento_cajas:    string;
     is_box:            boolean;
+    is_unit:            boolean;
 }
 
 // Buscar Nota guardada

@@ -320,7 +320,10 @@ export const FacturacionDetalle = () => {
                 original_descuento,
                 original_precio_venta_mayor,
                 original_descuento_mayor,
-                is_box
+                is_box,
+                is_barquillo: selectProducto.is_barquillo,
+                is_litro: selectProducto.is_litro,
+                is_unit: selectProducto.is_unit,
             });
 
             // Limpiar el valor seleccionado
@@ -509,13 +512,6 @@ export const FacturacionDetalle = () => {
         let responseProductList : productItem[] = [];
         
         for(let producto of productList){
-            const precio_tipo = parseInt((getValues('precio_tipo') ?? 0).toString());
-            const isBarquillo = producto.is_barquillo ?? 0;
-            const isLitro = producto.is_litro ?? 0;
-            const validacion = (precio_tipo == 0 || precio_tipo == 1) && (isBarquillo || isLitro);
-            
-            if(validacion) continue;
-    
             responseProductList.push({
                 label: `${producto.codigo??''} - ${producto.nombre??''}`,
                 value: producto.id??''
