@@ -785,21 +785,12 @@ export const FacturacionDetalle = () => {
                                                             <td>
                                                                 <div className="input-group">
                                                                     {
-                                                                        getValues("precio_tipo") == 1 ? 
-                                                                        (
-                                                                            <>
-                                                                                <button 
-                                                                                    className="btn btn-primary" 
-                                                                                    type="button" 
-                                                                                    onClick={()=> setPriceByType(index) }
-                                                                                    disabled={!!id}
-                                                                                    >{ isBox(index) ? `Cajas` : `Unit.` }</button> 
-                                                                                
-                                                                            </>
-                                                                            
-                                                                        )
-                                                                        :
-                                                                        ( <span className="input-group-text">Unit.</span> )
+                                                                        <button 
+                                                                            className="btn btn-primary" 
+                                                                            type="button" 
+                                                                            onClick={()=> setPriceByType(index) }
+                                                                            disabled={!!id}
+                                                                            >{ isBox(index) ? `Cajas` : `Unit.` }</button>                                                                        
                                                                     }
                                                                     <input type="number" className='form-control' {...register(`productos.${index}.cantidad`, {
                                                                         onChange: (i)=> {
