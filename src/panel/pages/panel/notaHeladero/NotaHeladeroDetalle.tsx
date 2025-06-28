@@ -572,7 +572,6 @@ export const NotaHeladeroDetalle = () => {
             fields.forEach((item, index) => {
                 
                 //if(item.is_barquillo == true) return;
-
                 const devolucion_today_saved = (active) ? ( active.detalle.find((item) => item.codigo == getValues(`productos.${index}.codigo`))!.devolucion_today ?? 0) : 0;
                 
                 setValue(`productos.${index}.devolucion_today`, devolucion_today_saved);
@@ -584,8 +583,21 @@ export const NotaHeladeroDetalle = () => {
                 let vendido = 0;
                 let importe = 0;
 
-                if(item.is_litro){
-                    
+                if(item.is_barquillo){
+                    const devolucion = parseInt((getValues(`productos.${index}.devolucion`)??0).toString()); 
+                    const devolucion_today = parseInt((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
+                    vendido = ((devolucion+pedido)-devolucion_today);
+                    importe = parseFloat((vendido * precio_operacion).toFixed(2)); 
+                    importe = Math.round(importe * 10) / 10;
+                    if (importe % 0.10 !== 0) {
+                        const decimal = importe - Math.floor(importe);
+                        if (decimal < 0.05) {
+                            importe = Math.floor(importe * 10) / 10;
+                        } else {
+                            importe = Math.ceil(importe * 100) / 100;
+                        }
+                    }                    
+                }else if(item.is_litro){
                     const devolucion = parseFloat((getValues(`productos.${index}.devolucion`)??0).toString()); 
                     const devolucion_today = parseFloat((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
                     
@@ -597,7 +609,7 @@ export const NotaHeladeroDetalle = () => {
                     const devolucion = parseInt((getValues(`productos.${index}.devolucion`)??0).toString()); 
                     const devolucion_today = parseInt((getValues(`productos.${index}.devolucion_today`) ?? devolucion_today_saved).toString());
                     vendido = ((devolucion+pedido)-devolucion_today);
-                    importe = parseFloat((vendido * precio_operacion).toFixed(item.is_barquillo ? 3 : 2));                    
+                    importe = parseFloat((vendido * precio_operacion).toFixed(2));                    
                 }
                 if(item.is_litro){
                     let vendidoFixed = parseFloat(vendido.toString()).toFixed(2);                    
@@ -605,7 +617,7 @@ export const NotaHeladeroDetalle = () => {
                 }else{
                     setValue(`productos.${index}.vendido`, vendido);
                 }
-                setValue(`productos.${index}.importe`, importe.toFixed(item.is_barquillo ? 3 : 2));
+                setValue(`productos.${index}.importe`, importe.toFixed(2));
                 subtotal+=parseFloat(importe.toString());
             })
 
