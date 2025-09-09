@@ -1,18 +1,16 @@
-import React, { MutableRefObject, Ref, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ContainerInner, FormControls } from '../../../components';
 import { BuscarProducto, FormFacturacionValues, breadcrumb as bread } from '../../../interfaces';
 import { useFacturastore, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { PickerHandle, SelectPicker } from 'rsuite';
+import { SelectPicker } from 'rsuite';
 import { Toaster, toast } from 'react-hot-toast';
-import { DateNow } from '../../../helpers';
+import { DateNow, Round } from '../../../helpers';
 import { NotaHeladero } from '../../../../interfaces';
 import { toastMessage } from '../../../../helpers';
 import { useReactToPrint } from 'react-to-print';
 import FacturasComponent from '../../../../prints/Facturas';
-import { set } from 'date-fns';
-import { SelectPickerComponent } from 'rsuite/esm/SelectPicker/SelectPicker';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Facturación', enlace: '/facturacion' },
@@ -807,14 +805,10 @@ export const FacturacionDetalle = () => {
                                                             <td>
                                                                 <div className="input-group">
                                                                     <span className="input-group-text">S/</span>
-                                                                    <input type="text"
-                                                                     disabled={true}
-                                                                     className='form-control' {...register(`productos.${index}.precio`, {
-                                                                        onChange: ()=> {
-                                                                            onChangeSubTotal(index);
-                                                                            onChangeTotal();
-                                                                        }
-                                                                    })}/>
+                                                                    <input className='form-control' 
+                                                                        type="number" 
+                                                                        disabled={true}
+                                                                        value={Round(watch(`productos.${index}.precio`), 2)}/>
                                                                 </div>
                                                             </td> 
                                                             <td>
