@@ -20,6 +20,7 @@ jobs:
         port: ${{ secrets.VPS_PORT }}
         script: |
           cd /var/www/yorasaac
+          git config --global --add safe.directory /var/www/yorasaac
           git pull origin main
           # Aquí van tus comandos específicos según tu stack
           git pull origin main
