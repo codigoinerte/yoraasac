@@ -32,7 +32,7 @@ export const Auth = () => {
   };
   
   return (
-      <Container title='Iniciar sesi&oacute;n'>
+      <Container title='Iniciar sesi&oacute;n*'>
           <>
            
             <form method='POST' onSubmit={handleSubmit(onSubmit)} >
