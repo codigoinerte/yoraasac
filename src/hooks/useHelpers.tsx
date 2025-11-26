@@ -301,6 +301,7 @@ export const useHelpers = () => {
         loadBuscarProducto,
         loadBuscarUsuario,
         loadBuscarNotaHeladeroGuardada,
-        loadFacturaEstados
+        loadFacturaEstados,
+        setListBuscarProducto
     }
 }
