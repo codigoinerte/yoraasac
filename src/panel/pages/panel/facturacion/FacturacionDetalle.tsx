@@ -11,6 +11,7 @@ import { NotaHeladero } from '../../../../interfaces';
 import { toastMessage } from '../../../../helpers';
 import { useReactToPrint } from 'react-to-print';
 import FacturasComponent from '../../../../prints/Facturas';
+import { PickerHandle, SelectedElement } from 'rsuite/esm/Picker';
 
 const breadcrumb:bread[] = [    
     { id:1, titulo: 'Facturación', enlace: '/facturacion' },
@@ -27,6 +28,8 @@ type productList = productItem[];
 type strnum = string | number;
 
 export const FacturacionDetalle = () => {
+
+    const refSelectPicker = useRef<PickerHandle>(null);
 
     const [disableFromImport, setdisableFromImport] = useState(false);
 
@@ -48,7 +51,7 @@ export const FacturacionDetalle = () => {
 
     const {  active:nota_heladero_info, getNotaHeladero  } = useNotaHeladeroStore();
 
-    const { listEstadosFactura ,listBuscarProducto, listUsuario, loadBuscarUsuario, loadBuscarProducto, loadFacturaEstados, loadDocumentoSerie } = useHelpers();
+    const { listEstadosFactura ,listBuscarProducto, listUsuario, loadBuscarUsuario, loadBuscarProducto, loadFacturaEstados, loadDocumentoSerie, setListBuscarProducto } = useHelpers();
 
     
 
@@ -297,7 +300,7 @@ export const FacturacionDetalle = () => {
         let item = fields.filter((detail)=>detail.codigo == selectProducto?.codigo);
 
         if(item.length == 0 && !!selectProducto){
-            
+            // console.log({selectProducto});
             let is_box = selectProducto.is_box??false;
             let original_precio_venta = parseFloat(selectProducto.precio_venta ?? 0);
             let original_descuento = parseFloat(selectProducto.descuento ?? 0);
@@ -305,7 +308,7 @@ export const FacturacionDetalle = () => {
             let original_descuento_mayor = parseFloat(selectProducto.descuento_cajas ?? 0);
 
             let total: strnum = is_box ? original_precio_venta_mayor : original_precio_venta;
-
+            let cantidad_caja = selectProducto.cantidad_caja || 1;
             append({ 
                 codigo: selectProducto!.codigo,
                 producto: selectProducto!.nombre,
@@ -322,6 +325,7 @@ export const FacturacionDetalle = () => {
                 is_barquillo: selectProducto.is_barquillo,
                 is_litro: selectProducto.is_litro,
                 is_unit: selectProducto.is_unit,
+                cantidad_caja,
             });
 
             // Limpiar el valor seleccionado
@@ -523,9 +527,10 @@ export const FacturacionDetalle = () => {
     const isBox = (index: number) => watch(`productos.${index}.is_box`);
 
     const setPriceByType = (index:number) => {
-        const is_box = getValues(`productos.${index}.is_box`) ?? false;
-        const precio_venta = getValues(`productos.${index}.original_precio_venta`) ?? 0;
-        const precio_venta_cajas = getValues(`productos.${index}.original_precio_venta_mayor`) ?? 0;
+        const is_box = watch(`productos.${index}.is_box`) ?? false;
+        const precio_venta = Number(getValues(`productos.${index}.original_precio_venta`) ?? 0);
+        const cantidad_caja = Number(getValues(`productos.${index}.cantidad_caja`) || 0);
+        const precio_venta_cajas = precio_venta * cantidad_caja;
         
         setValue(`productos.${index}.is_box`, !is_box ,{
             shouldTouch: true,
@@ -536,7 +541,7 @@ export const FacturacionDetalle = () => {
         let original_precio_venta_mayor = parseFloat((precio_venta_cajas ?? '0').toString());
 
         let total: strnum = !is_box ? original_precio_venta_mayor : original_precio_venta;
-
+        
         setValue(`productos.${index}.precio`, parseFloat(total.toFixed(3)))
         setValue(`productos.${index}.total`, total.toFixed(2))
 
@@ -708,9 +713,12 @@ export const FacturacionDetalle = () => {
                             <label htmlFor="precio_tipo" className="form-label">Precio tipo</label>
                             <select className={ errors.precio_tipo ? "form-control is-invalid" : "form-control"}
                                     disabled={disablePriceType}
-                                    {...register('precio_tipo', { required:true })}>
+                                    {...register('precio_tipo', 
+                                        { required:true, onChange:() => {
+                                            setListBuscarProducto([]);
+                                        }})
+                                    }>
                                 <option value="0" key={"Precio 0"}>Precio publico</option>
-                                <option value="1" key={"Precio 1"}>Precio por mayor</option>
                                 <option value="2" key={"Precio 2"}>Precio heladero</option>
                             </select>                                              
                         </div>
@@ -741,6 +749,7 @@ export const FacturacionDetalle = () => {
                                             cleanable={true}
                                             placeholder='Buscar producto'
                                             className="form-control p-0 w-auto no-width"
+                                            ref={refSelectPicker}
                                         />
                                         <button onClick={loadProducto} className="btn btn-primary" type="button"><i className="bi bi-plus"></i> Agregar</button>
                                         <Toaster />

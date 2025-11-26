@@ -473,6 +473,7 @@ export interface FormFacturacionDetalleValues {
     original_precio_venta_mayor:    number;
     original_descuento_mayor:       number;
     total?:      number | string;
+    cantidad_caja?: number;
 }
 
 
