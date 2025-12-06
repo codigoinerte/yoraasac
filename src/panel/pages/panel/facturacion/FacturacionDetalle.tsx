@@ -711,25 +711,6 @@ export const FacturacionDetalle = () => {
 
                     </div>
 
-                    <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-
-                        <div className="mb-3">
-                            <label htmlFor="precio_tipo" className="form-label">Precio tipo</label>
-                            <select className={ errors.precio_tipo ? "form-control is-invalid" : "form-control"}
-                                    disabled={disablePriceType}
-                                    {...register('precio_tipo', 
-                                        { required:true, onChange:() => {
-                                            setListBuscarProducto([]);
-                                        }})
-                                    }>
-                                <option value="0" key={"Precio 0"}>Precio publico</option>
-                                <option value="2" key={"Precio 2"}>Precio heladero</option>
-                            </select>                                              
-                        </div>
-
-                    </div>
-
-
                 </div>
 
                 <h4>Productos o items del movimiento</h4>
@@ -800,7 +781,7 @@ export const FacturacionDetalle = () => {
                                                                             className="btn btn-primary" 
                                                                             type="button" 
                                                                             onClick={()=> setPriceByType(index) }
-                                                                            disabled={!!id}
+                                                                            disabled={refId.current || disableFromImport}
                                                                             >{ isBox(index) ? `Cajas` : `Unit.` }</button>                                                                        
                                                                     }
                                                                     <input type="number" className='form-control' {...register(`productos.${index}.cantidad`, {
