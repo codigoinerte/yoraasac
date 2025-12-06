@@ -85,6 +85,7 @@ export interface AccessInterface{
     Menu: MenuInterface[]
 }
 export interface ControlsInterface{
+    originId?: number;
     tipo?: 'new' | 'edit' | 'delete' | 'list'; 
     save?: Function ;
     category?:string;

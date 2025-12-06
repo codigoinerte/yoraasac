@@ -1,16 +1,27 @@
-import React from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect, useRef } from 'react'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ControlsInterface } from '../interfaces'
 
-export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isPrint = false, isFactura = false, isNew = false, funcNew = undefined, NewComponent = undefined, onNavigateBack= ()=>{ history.go(-1); } , routeBackLabel, classContainer = ''   }:ControlsInterface) => {
+export const FormControls = ({
+    originId = 0,
+    save,
+    page,
+    category,
+    tipo = 'new',
+    imprimir,
+    isPrint = false,
+    isFactura = false,
+    isNew = false,
+    funcNew = undefined,
+    NewComponent = undefined,
+    onNavigateBack= ()=>{ history.go(-1); } ,
+    routeBackLabel, classContainer = ''   }:ControlsInterface) => {
 
+    const IdRef = useRef<number>(0);
     const { id = 0 } = useParams();
-
-    const navigate = useNavigate();
-
+    IdRef.current = id ? Number(id) : originId;
     
-    const cat = typeof category != 'undefined' ? `/${category}`:'';
-
+    const cat = typeof category != 'undefined' ? `/${category}`:'';   
 
     return (
         <>
@@ -20,7 +31,7 @@ export const FormControls = ({ save, page, category, tipo = 'new', imprimir, isP
                     <button type="submit" className="button-save btn btn-primary btn-lg flex-fill">Guardar</button>
                 }
                 {
-                    (parseInt(id.toString()) > 0 || tipo == 'list' || isNew) &&
+                    ((IdRef.current && IdRef.current > 0) || tipo == 'list' || isNew) &&
                     (
                         funcNew ?
                         

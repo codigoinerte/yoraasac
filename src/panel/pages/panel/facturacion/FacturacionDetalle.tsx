@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ContainerInner, FormControls } from '../../../components';
 import { BuscarProducto, FormFacturacionValues, breadcrumb as bread } from '../../../interfaces';
 import { useFacturastore, useHelpers, useNotaHeladeroStore } from '../../../../hooks';
@@ -45,7 +45,11 @@ export const FacturacionDetalle = () => {
 
     const [disablePriceType, setDisablePriceType] = useState(false);
 
-    const [isPrint, setIsPrint] = useState(false);
+    // const [isPrint, setIsPrint] = useState(false);
+    const isPrint = useMemo(()=> {
+        const Id = Number(refId.current);
+        return Id > 0 ? true : false;
+    },[refId.current])
 
     const {  saveFacturacion, updateFacturacion, getFacturacion, active  } = useFacturastore();
 
@@ -176,7 +180,7 @@ export const FacturacionDetalle = () => {
         const idNum = parseInt(refId.current);
         if( idNum > 0){
             refId.current = idNum;
-            setIsPrint(idNum ? true : false);
+            // setIsPrint(idNum ? true : false);
         }
         
         loadFacturaEstados();
@@ -255,7 +259,6 @@ export const FacturacionDetalle = () => {
                 window.history.pushState(null, '', `/facturacion/edit/${e!.id}`);
 
                 refId.current = e!.id;
-                setIsPrint(true);
                 
                 let total_monto = e!.total_monto;
                 let total_descuento = e!.total_descuento;
@@ -559,7 +562,8 @@ export const FacturacionDetalle = () => {
 
             <form onSubmit={handleSubmit(onSubmit)}>
 
-                <FormControls 
+                <FormControls
+                    originId={refId.current}
                     isPrint={isPrint}
                     save={()=>console.log(1)} 
                     page="facturacion" 
