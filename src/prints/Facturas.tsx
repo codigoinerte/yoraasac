@@ -45,7 +45,9 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
         <div style={{display:"none"}} key={`print-${active.id}`}>
             <div className='ticket print-container' ref={ref}>
                 <div className="contenedor">
-                <div className="line"></div>
+
+                    <div className="line"></div>
+
                     <div className="text-center">
                         {
                             (configuration?.logo) &&
@@ -69,7 +71,9 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                         }
                         
                     </div>
-                <div className="line"></div>
+
+                    <div className="line"></div>
+
                     <table className='cabecera'>
                         <tbody>
                             <tr>
@@ -143,14 +147,17 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                             }
                         </tbody>
                     </table>
+
                     <div className="line"></div>
-                    <table className='cuerpo' >
+                    
+                    <table className='cuerpo auto'>
                         <tbody>
                             <tr key={"title-header"}>
-                                <td className='sizeTitle text-left'><strong>Producto</strong></td>
-                                <td className='sizeTitle'><strong>cant</strong></td>
-                                <td className='sizeTitle'><strong>desc.</strong></td>
-                                <td className='sizeTitle'><strong>Subtotal</strong></td>
+                                <td style={{width: "100%"}} className='text-left'><strong>Producto</strong></td>
+                                <td style={{width: "25px"}}><strong>cant</strong></td>
+                                <td style={{width: "25px"}}><strong>desc.</strong></td>
+                                <td style={{width: "45px"}}><strong>Unit.</strong></td>
+                                <td style={{width: "45px"}}><strong>Subtotal</strong></td>
                             </tr>
                             {
                                 (detalle) &&
@@ -158,9 +165,10 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
 
                                         <tr key={`print-detalle-${detalle.id}`}>
                                             <td className='text-left'>{ detalle.producto }</td>
-                                            <td width={10}>{ detalle.cantidad }</td>
-                                            <td width={10}>{ (detalle.descuento && detalle.descuento > 0) ? detalle.descuento : '' }</td>
-                                            <td width={10}>{ parseFloat((detalle.total??0).toString()).toFixed(2) }</td>
+                                            <td>{ detalle.cantidad }</td>
+                                            <td>{ (detalle.descuento && detalle.descuento > 0) ? detalle.descuento : '0%' }</td>
+                                            <td>{ (detalle.precio && Number(detalle.precio) > 0) ? detalle.precio : '0.00' }</td>
+                                            <td>{ parseFloat((detalle.total??0).toString()).toFixed(2) }</td>
                                         </tr>
                                     ))
                             }
@@ -168,6 +176,7 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                     </table>
 
                     <div className="separate"></div>
+
                     <div className="line"></div>
                 </div>
             </div>

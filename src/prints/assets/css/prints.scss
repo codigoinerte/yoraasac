@@ -56,7 +56,7 @@
 @media print {
     @page {
       /*size: 50mm;*/
-      margin: 0mm 0mm 0mm 0mm;
+      margin: 0mm 2mm 0mm 2mm;
       height: auto;
       
     }
@@ -131,9 +131,6 @@
       text-align: left;
       color: #000 !important;
     }
-    .cuerpo{
-      max-width: 96%;
-    }
     .cuerpo *{
       font-size: 0.65rem;
     }
@@ -172,13 +169,19 @@
     }
 
     .ticket .cuerpo tr{
-      border-bottom: 2px dotted #ebebeb;
-      margin-bottom: 0.5rem;
+      border-bottom: 2px dashed #ebebeb;      
     }
-    .ticket table td:nth-child(2),
-    .ticket table td:nth-child(3),
-    .ticket table td:nth-child(4),
-    .ticket table td:nth-child(5)
+    .ticket table{
+      width: 100%;
+    }
+    .ticket table tr > td{
+      padding-top: 5px;
+      padding-bottom: 5px;    
+    }
+    .ticket table:not(.auto) td:nth-child(2),
+    .ticket table:not(.auto) td:nth-child(3),
+    .ticket table:not(.auto) td:nth-child(4),
+    .ticket table:not(.auto) td:nth-child(5)
     {
       width: 25px !important;
       text-align: left !important;
@@ -188,7 +191,7 @@
       border-left: 1px dashed #000 !important;
       border-right: 1px dashed #000 !important;
     }
-    .ticket table td:nth-child(6){
+    .ticket table:not(.auto) td:nth-child(6){
       padding-left: 2px !important;
       width: 29px !important;
       text-align: left !important;
