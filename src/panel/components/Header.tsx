@@ -8,7 +8,7 @@ import { Menu } from '../interfaces';
 
 export const Header = () => {
 
-      const { startLogout } = useAuthStore();
+      const { user, startLogout } = useAuthStore();
       const [nodes, setNodes] = useState<Menu[]>([]);
       const { loadDestacados } = useDestacados();
       const isLoaded = useRef(false);
@@ -37,6 +37,8 @@ export const Header = () => {
     
         isLoaded.current = true;
       }, []);
+
+      const initials = (user.name ?? 'Usuario').split(" ").map((name) => name[0]).join("");
 
   return (
     <>
@@ -77,8 +79,27 @@ export const Header = () => {
 
               <div className="d-none d-sm-none d-md-none d-lg-flex d-flex display-desktop">
                 <div className="dropdown">
-                  <button className="btn btn-profile dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src={profile} alt="Yorasaac" />
+                  <button 
+                    className="btn btn-profile dropdown-toggle" 
+                    type="button" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false"
+                    style={{ border: "none" }}>
+                    <div 
+                      className='d-flex rounded-pill'
+                      style={{ 
+                        width:"60px",
+                        height:"60px",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        backgroundColor:"#00466B",
+                        textTransform: "uppercase",
+                        color: "#fff",
+                        fontSize:"20px",
+                        fontWeight:"bold"
+                       }}>
+                        {initials}
+                    </div>
                   </button>
                   <ul className="dropdown-menu dropdown-menu-lg-end">
                     <li><Link className="dropdown-item" to="/mi-cuenta">Mi cuenta</Link></li>
