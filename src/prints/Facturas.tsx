@@ -51,7 +51,7 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                     <div className="text-center">
                         {
                             (configuration?.logo) &&
-                            <img src={`${URL_IMAGENES}${configuration.logo}`} className='brand-logo'  alt="..."/>
+                            <img src={`${URL_IMAGENES}${configuration.logo}`} className='brand-logo' width={180}  alt="..."/>
                         }
                         {
                             (configuration?.razon_comercial) &&
