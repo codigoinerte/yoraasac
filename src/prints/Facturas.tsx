@@ -93,6 +93,39 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                             <tr>
                                 <td align='left'><b>Moneda</b>: { active?.moneda }</td>
                             </tr>
+                            
+                        </tbody>
+                    </table>
+
+                    <div className="line"></div>
+                    
+                    <table className='cuerpo auto'>
+                        <tbody>
+                            <tr key={"title-header"}>
+                                <td style={{width: "100%"}} className='text-left'><strong>Producto</strong></td>
+                                <td style={{width: "25px"}}><strong>cant</strong></td>
+                                <td style={{width: "25px"}}><strong>desc.</strong></td>
+                                <td style={{width: "45px"}}><strong>Unit.</strong></td>
+                                <td style={{width: "45px"}}><strong>Subtotal</strong></td>
+                            </tr>
+                            {
+                                (detalle) &&
+                                    detalle.map((detalle:FormFacturacionDetalleValues)=>(
+
+                                        <tr key={`print-detalle-${detalle.id}`}>
+                                            <td className='text-left'>{ detalle.producto }</td>
+                                            <td>{ detalle.cantidad }</td>
+                                            <td>{ (detalle.descuento && detalle.descuento > 0) ? detalle.descuento : '0%' }</td>
+                                            <td>{ (detalle.precio && Number(detalle.precio) > 0) ? detalle.precio : '0.00' }</td>
+                                            <td>{ parseFloat((detalle.total??0).toString()).toFixed(2) }</td>
+                                        </tr>
+                                    ))
+                            }
+                        </tbody>
+                    </table>
+
+                    <table className='cabecera'>
+                        <tbody>
                             <tr>
                                 <td>
                                     <div className="line"></div>
@@ -144,33 +177,6 @@ const Facturas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProp
                                         }
                                     </>
                                 ) : ''
-                            }
-                        </tbody>
-                    </table>
-
-                    <div className="line"></div>
-                    
-                    <table className='cuerpo auto'>
-                        <tbody>
-                            <tr key={"title-header"}>
-                                <td style={{width: "100%"}} className='text-left'><strong>Producto</strong></td>
-                                <td style={{width: "25px"}}><strong>cant</strong></td>
-                                <td style={{width: "25px"}}><strong>desc.</strong></td>
-                                <td style={{width: "45px"}}><strong>Unit.</strong></td>
-                                <td style={{width: "45px"}}><strong>Subtotal</strong></td>
-                            </tr>
-                            {
-                                (detalle) &&
-                                    detalle.map((detalle:FormFacturacionDetalleValues)=>(
-
-                                        <tr key={`print-detalle-${detalle.id}`}>
-                                            <td className='text-left'>{ detalle.producto }</td>
-                                            <td>{ detalle.cantidad }</td>
-                                            <td>{ (detalle.descuento && detalle.descuento > 0) ? detalle.descuento : '0%' }</td>
-                                            <td>{ (detalle.precio && Number(detalle.precio) > 0) ? detalle.precio : '0.00' }</td>
-                                            <td>{ parseFloat((detalle.total??0).toString()).toFixed(2) }</td>
-                                        </tr>
-                                    ))
                             }
                         </tbody>
                     </table>

@@ -107,6 +107,40 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                             <tr>
                                 <td align='left'><b>Moneda</b>: { active?.moneda }</td>
                             </tr>
+                            
+                        </tbody>
+                    </table>
+                    <div className="line"></div>
+                    <table className='cuerpo' >                        
+                        <tbody>
+                            <tr key={"title-header"}>
+                                <td className='sizeTitle text-left'><strong>Prod.</strong></td>
+                                <td className='sizeTitle'><strong>Gua.</strong></td>
+                                <td className='sizeTitle'><strong>Dev.</strong></td>
+                                <td className='sizeTitle'><strong>Ped.</strong></td>
+                                <td className='sizeTitle'><strong>Ven.</strong></td>
+                                <td className='sizeTitle'><strong>Imp.</strong></td>
+                            </tr>
+                            {
+                                (detalle) &&
+                                    detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
+
+                                        <tr key={detalle.codigo}>
+                                            <td className='text-left'>{ detalle.producto }</td>
+                                            <td width={10}>{ detalle.devolucion_today??0 }</td>
+                                            <td width={10}>{ detalle.devolucion??0 }</td>
+                                            <td width={10}>{ detalle.pedido??0 }</td>
+                                            <td width={10}>{ detalle.vendido??0 }</td>
+                                            <td width={10}>{ parseFloat((detalle.importe??0).toString()).toFixed(2) }</td>
+
+                                        </tr>
+                                    ))
+                            }
+                        </tbody>
+                    </table>
+
+                    <table className='cabecera' style={{marginBottom: "0px !important"}}>
+                        <tbody>
                             <tr>
                                 <td>
                                     <div className="line"></div>
@@ -174,34 +208,6 @@ const Notas: React.ForwardRefRenderFunction<HTMLInputElement, MyComponentProps> 
                                         }
                                     </>
                                 ) : ''
-                            }
-                        </tbody>
-                    </table>
-                    <div className="line"></div>
-                    <table className='cuerpo' >                        
-                        <tbody>
-                            <tr key={"title-header"}>
-                                <td className='sizeTitle text-left'><strong>Prod.</strong></td>
-                                <td className='sizeTitle'><strong>Gua.</strong></td>
-                                <td className='sizeTitle'><strong>Dev.</strong></td>
-                                <td className='sizeTitle'><strong>Ped.</strong></td>
-                                <td className='sizeTitle'><strong>Ven.</strong></td>
-                                <td className='sizeTitle'><strong>Imp.</strong></td>
-                            </tr>
-                            {
-                                (detalle) &&
-                                    detalle.map((detalle:FormNotaHeladeroDetalleValues)=>(
-
-                                        <tr key={detalle.codigo}>
-                                            <td className='text-left'>{ detalle.producto }</td>
-                                            <td width={10}>{ detalle.devolucion_today??0 }</td>
-                                            <td width={10}>{ detalle.devolucion??0 }</td>
-                                            <td width={10}>{ detalle.pedido??0 }</td>
-                                            <td width={10}>{ detalle.vendido??0 }</td>
-                                            <td width={10}>{ parseFloat((detalle.importe??0).toString()).toFixed(2) }</td>
-
-                                        </tr>
-                                    ))
                             }
                         </tbody>
                     </table>
