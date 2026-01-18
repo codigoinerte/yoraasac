@@ -227,7 +227,7 @@ export const ModalNotaHeladeroRegister = ({ openModal, handlerOpenModal, setValu
     return (
         <>
 
-<Drawer backdrop={false} open={openModal} onClose={handleClose} size="xs" >
+<Drawer backdrop={false} open={openModal} onClose={handleClose} size="xs" placement='left' >
     <Drawer.Header closeButton={false} className='p-3'>
         <Drawer.Title>Guardar</Drawer.Title>
         <Drawer.Actions>
