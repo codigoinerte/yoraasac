@@ -576,8 +576,6 @@ export const FacturacionDetalle = () => {
                     imprimir={imprimir} 
                 />
 
-                <hr className='border border-1 opacity-50'/>
-
                 <h4>Informaci&oacute;n</h4>
                 
                 <div className="row">

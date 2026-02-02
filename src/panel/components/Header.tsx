@@ -42,10 +42,10 @@ export const Header = () => {
 
   return (
     <>
-        <div className="header bg-primary">
+        <div className="header hidden">
         <div className="container">
 
-        <nav className="navbar navbar-expand-lg">
+        <nav className="navbar navbar-expand-lg ">
           <div className="container-fluid">
             {/* <Link className="navbar-brand d-none d-sm-none d-md-none d-lg-flex d-flex" to="/">
               <img src={logo} alt="Yoraasac" loading='lazy' width={70}/>
@@ -57,19 +57,19 @@ export const Header = () => {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">              
 
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li key={"home-header"} className="nav-item dropdown">
-                    <Link className="dropdown-item" to={'/'}>
+                <li key={"home-header"} className="nav-item dropdown visible">
+                    <Link className="dropdown-item text-foreground" to={'/'}>
                       <i className={"bi bi-house"}></i> 
-                      <span>{"Principal"}</span>
+                      <span className='text-foreground'>{"Principal"}</span>
                     </Link>
                 </li>
               {
                   nodes.map(({ alias, id, icono, nombre })=>(
                       
-                        <li key={`${id}-${nombre}`} className="nav-item dropdown">
-                            <Link className="dropdown-item" to={alias}>
-                              <i className={icono}></i> 
-                              <span>{nombre}</span>
+                        <li key={`${id}-${nombre}`} className="nav-item dropdown visible">
+                            <Link className="dropdown-item text-foreground" to={alias}>
+                              <i className={`${icono} text-foreground`}></i> 
+                              <span className='text-foreground'>{nombre}</span>
                             </Link>
                         </li>
 

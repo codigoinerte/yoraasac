@@ -85,8 +85,6 @@ export const MiCuenta = () => {
             <>
                     <FormControls page="micuenta" save={()=>console.log(1)} tipo='edit' />
 
-                    <hr className='border border-1 opacity-50'/>
-
                     <div className="card">
                         <div className="card-header">
                             Mis datos de contacto

@@ -121,8 +121,6 @@ export const ReajusteDetalle = () => {
                     
                     <FormControls page="reajuste" funcNew={newRegister} isNew={true}/>
 
-                    <hr className='border border-1 opacity-50'/>
-
                     <h4>Informaci&oacute;n</h4>
 
                     <div className="row">

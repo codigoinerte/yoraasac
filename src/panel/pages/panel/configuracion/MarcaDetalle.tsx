@@ -65,8 +65,6 @@ export const MarcaDetalle = () => {
                 }}
                 routeBackLabel={'Volver al listado'}
                 />
-  
-                <hr className='border border-1 opacity-50'/>
     
                 <div className="row">
                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">

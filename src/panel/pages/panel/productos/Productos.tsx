@@ -163,7 +163,7 @@ export const Productos = () => {
                         window.location.href = '/';
                     }} className="btn btn-danger btn-lg flex-fill">Ir a la home</button>
                 </div>
-                <hr className='border border-1 opacity-50'/>
+                
                 <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="row">
                             <div className="col-xs-12">

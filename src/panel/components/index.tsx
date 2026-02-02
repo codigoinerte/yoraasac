@@ -19,3 +19,4 @@ export * from './SearchUser';
 export * from './InputNotaGuardada';
 export * from './ModalImportNota';
 export * from './SearchNota';
+export * from './Menu';

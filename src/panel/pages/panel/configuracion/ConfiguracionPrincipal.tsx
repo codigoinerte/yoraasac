@@ -98,8 +98,6 @@ export const ConfiguracionPrincipal = () => {
                     }}
                     routeBackLabel={'Volver a las categorias'} />
 
-                <hr className='border border-1 opacity-50'/>
-
                 <div className="card">
                     <div className="card-header">
                         Datos del emisor

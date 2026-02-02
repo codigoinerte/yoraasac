@@ -6,16 +6,22 @@ import { Footer } from './Footer'
 import { Header } from './Header'
 
 export const ContainerMain = ({ children, breadcrumb }: ContainerInterface) => {
+    
+    document.body.classList.add("bg-stone-200");
+
     return (
         <>
             {/* header */}
             <Header />
     
             {/* breadcrumb */}
-            <Breadcrumb breadcrumb={breadcrumb} />
+            <Breadcrumb 
+                breadcrumb={breadcrumb}
+                className='!bg-[#22252c] text-white' />
     
             {/* main */}
-            <Container>
+            <Container
+                className='flex items-center justify-center !bg-stone-200'>
     
                 { children }
             

@@ -17,8 +17,6 @@ export const ListSave = ({cabecera, detalle, editar, eliminar, children }:SaveLi
                 <button onClick={onNavigateBack} className="btn btn-danger btn-lg">Atr&aacute;s</button>
             </div>
 
-            <hr className='border border-1 opacity-50'/>
-
             <div className="buscador">
                 { children }
             </div>            

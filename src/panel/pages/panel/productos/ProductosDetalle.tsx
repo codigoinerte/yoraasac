@@ -255,8 +255,6 @@ export const ProductosDetalle = () => {
               window.location.href = '/productos/new';
             }}/>
 
-            <hr className='border border-1 opacity-50'/>
-
             <div className="row">
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                   

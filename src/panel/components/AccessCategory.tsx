@@ -9,7 +9,7 @@ export const AccessCategory = ({ Menu }:AccessInterface) => {
            {
                 Menu.map(({nombre, icono, alias}, index)=>(
                     <li key={alias} className='col-xs-6 col-sm-6 col-md-4 col-lg-3'>
-                        <Link to={alias}>
+                        <Link to={alias} className='btn-category'>
                         <i className={icono}></i>
                         <span>{nombre}</span>
                         </Link>

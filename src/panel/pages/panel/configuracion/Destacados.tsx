@@ -147,8 +147,6 @@ export const Destacados = () => {
             <form onSubmit={onSubmit}>
                 <FormControls page="destacado" save={()=>console.log(1)} tipo='edit' />
 
-                <hr className='border border-1 opacity-50'/>
-
                 <div className="row">
                     <div className="col-xs-12 col-sm-12 col-md-6">
 

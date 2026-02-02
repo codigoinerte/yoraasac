@@ -15,8 +15,6 @@ export const FormStock = ({category, page }:PersonalForm) => {
     <>
         <FormControls category={category} save={()=>console.log(1)} page={page}/>
 
-        <hr className='border border-1 opacity-50'/>
-
         <h4>Informaci&oacute;n</h4>
 
         <div className="row">

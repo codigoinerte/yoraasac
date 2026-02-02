@@ -187,7 +187,7 @@ export const NotaHeladero = () => {
                     eliminar={eliminar}
                     next={next}
                     prev={prev}
-                    NewComponent={<button className='btn btn-warning flex-fill' onClick={()=> setOpen(e=>!e)}>Importar nota heladero</button>}
+                    NewComponent={<button className='btn btn-warning flex-fill rounded-none' onClick={()=> setOpen(e=>!e)}>Importar nota heladero</button>}
                     >
                 <>
                 <form onSubmit={handleSubmit(onSubmit)}>

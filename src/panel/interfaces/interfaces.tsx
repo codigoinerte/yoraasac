@@ -5,11 +5,13 @@ import { UseFormRegister } from "react-hook-form";
 export interface ContainerInterface  {
     children:  React.ReactElement,
     classContainer?: string
+    className?:string;
 }
 export interface breadcrumbInterface {
     breadcrumb : breadcrumb[],
     titulo?: String,
     mensaje?: String
+    className?:string;
 }
 export interface Breadcrumb {
     id:number;

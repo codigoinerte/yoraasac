@@ -211,8 +211,6 @@ export const FormPersonal = ({category, page, tipo }:PersonalForm) => {
                 }}
                 />
 
-                <hr className='border border-1 opacity-50'/>
-
                 <div className="row">
                     <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         

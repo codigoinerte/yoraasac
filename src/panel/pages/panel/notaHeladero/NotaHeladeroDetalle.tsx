@@ -18,22 +18,27 @@ import { NotaHeladero } from '../../../../interfaces';
 const cabecera = [
     {
         desk: "Devolucion",
+        classes: "px-2 py-1.5 text-left font-bold text-muted-foreground text-xs w-16",
         print: "Dev."
     },
     {
         desk: "Pedido",
+        classes: "px-2 py-1.5 text-center font-bold text-muted-foreground text-xs w-16",
         print: "Ped."
     },
     {
         desk: "Producto",
+        classes: "px-2 py-1.5 text-center font-bold text-muted-foreground text-xs flex-1",
         print: "Prod."
     },
     {
         desk: "Vendido",
+        classes: "px-2 py-1.5 text-center font-bold text-muted-foreground text-xs w-16",
         print: "Vend"
     },
     {
         desk: "Importe",
+        classes: "px-2 py-1.5 text-right font-bold text-muted-foreground text-xs w-20",
         print: "Imp."
     },
 ];
@@ -786,7 +791,7 @@ export const NotaHeladeroDetalle = () => {
                                     getValues("estado") == 1 && active?.estado == 1 &&
                                     (
                                         <div className="dropdown flex-fill">
-                                            <button className="btn btn-warning dropdown-toggle flex-fill w-100 h-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button className="btn btn-warning dropdown-toggle flex-fill w-100 h-100 rounded-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Resetear
                                             </button>
                                             <ul className="dropdown-menu">
@@ -797,59 +802,19 @@ export const NotaHeladeroDetalle = () => {
                                     )                                    
                                 }
                             </>
-                        } />
-                    
-
-                    <hr className='border border-1 opacity-50'/>
-
-                    <h4>Informaci&oacute;n</h4>
+                        } />                    
 
                     <div className="row">
-                        <div className={`col-xs-12 col-sm-12 ${(state == 2 && active?.fecha_apertura) ? 'col-md-9 col-lg-9' : 'col-md-12 col-lg-12'}`}>
+                        <div className='col-xs-12 col-sm-12 col-md-12 col-lg-12 flex flex-row flex-wrap gap-y-0 gap-x-5'>
 
                             <div className="mb-3">
-                                <label htmlFor="tipo_movimiento" className="form-label">Heladero</label>
-                                
-                                 
-                                    <div className="d-block">
-                                    
-                                        <SearchUser 
-                                            control={control}
-                                            onChange={buscarUsuarioReserva}
-                                            className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
-                                            required={true}
-                                            listUsuario = {listUsuario}
-                                            loadBuscarUsuario = {loadBuscarUsuario}
-                                        />
-
-                                    </div>                                
-
-                            </div>
-                            
-                        </div>
-                        {
-                            (state == 2 && active?.fecha_apertura) ? (
-                                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-3 d-flex align-items-center justify-content-center">
-                                    <button type="button" className="btn btn-primary gap-2 d-flex " onClick={editApertura}> 
-                                        <i className={`bi ${isReadOnlyInputs.isReadOnlyPedido ? 'bi-pencil-square' : 'bi-x-octagon-fill'}`}></i>
-                                        { isReadOnlyInputs.isReadOnlyPedido ? 'Editar Apertura' : 'Cerrar edición'}                                
-                                    </button>
-                                </div>
-
-                            ) : ''
-                        }
-                    </div>
-                    <div className="row">
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            
-                            <div className="mb-3">
-                                <label htmlFor="estado" className="form-label">Estado</label>
-                                <div className="btn-group d-block" role="group">
+                                <label htmlFor="estado" className="uppercase font-bold text-foreground leading-1 text-xs">Estado</label>
+                                <div className="btn-group d-block rounded-none" role="group">
                                     {
                                         listEstadoHeladero
                                         .filter((item) => item.id != 4)
                                         .map(({ id, nombre })=>(
-                                            <button className="btn btn-primary"
+                                            <button className="px-3 py-1.5 bg-primary text-white disabled:text-white disabled:cursor-not-allowed disabled:bg-stone-300 rounded-none"
                                                     type="button"
                                                     key={id} 
                                                     value={id} 
@@ -872,24 +837,56 @@ export const NotaHeladeroDetalle = () => {
                                     }
                                 </div>
                             </div>
-                                                
-                        </div>
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+                            <div className={`flex-1 ${(state == 2 && active?.fecha_apertura) ? '' : ''}`}>
+
+                                <div className="mb-3">
+                                    <label htmlFor="tipo_movimiento" className="uppercase font-bold text-foreground leading-1 text-xs">Heladero</label>
+                                    
+                                    
+                                        <div className="d-block">
                                         
+                                            <SearchUser 
+                                                control={control}
+                                                onChange={buscarUsuarioReserva}
+                                                className={errors.user_id ? "form-control is-invalid p-0" : "form-control p-0"}
+                                                required={true}
+                                                listUsuario = {listUsuario}
+                                                loadBuscarUsuario = {loadBuscarUsuario}
+                                            />
+
+                                        </div>                                
+
+                                </div>
+                                
+                            </div>
+                            
+                            
+
+
                             <div className="mb-3">
-                                <label htmlFor="fecha_movimiento" className="form-label">Fecha del movimiento</label>
+                                <label htmlFor="fecha_movimiento" className="uppercase font-bold text-foreground leading-1 text-xs">Fecha del movimiento</label>
                                 <input type="datetime-local" 
                                     className={errors.fecha_operacion ? "form-control is-invalid" : "form-control"}
-                                    {...register('fecha_operacion', {required: true})}/>
-
-                               
+                                    {...register('fecha_operacion', {required: true})}/>                               
                             </div>
 
+
+                            {
+                                (state == 2 && active?.fecha_apertura) ? (
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <button type="button" className="flex bg-primary text-white px-4 py-[6.5px] mt-[8px]" onClick={editApertura}> 
+                                            <i className={`bi ${isReadOnlyInputs.isReadOnlyPedido ? 'bi-pencil-square' : 'bi-x-octagon-fill'}`}></i>
+                                            { isReadOnlyInputs.isReadOnlyPedido ? 'Editar Apertura' : 'Cerrar edición'}                                
+                                        </button>
+                                    </div>
+
+                                ) : ''
+                            }
                         </div>
+                    </div>
 
-                    </div>  
-
-                    <h4>Productos o items del movimiento</h4>
+                    <p className='uppercase font-bold text-foreground leading-1 text-xs'>Productos o items del movimiento</p>
 
                     <div className="row">
                         
@@ -897,18 +894,24 @@ export const NotaHeladeroDetalle = () => {
                         {
                             fields.length > 0 ?
                             (
-                                <>
-                                    <table className='table table-nota-heladero'>
+                                <div className='overflow-x-auto border border-border rounded-lg bg-card shadow-none'>
+                                
+                                    <table className='w-full text-xs uppercase font-medium'>
                                         <thead>
-                                            <tr>
+                                            <tr className='bg-muted border-b border-border'>
                                                 {
-                                                    cabecera.map((titulo)=>(
-                                                        <th key={titulo.desk} scope="col">
-                                                            <span className="desktop">
+                                                    cabecera.map((titulo, i)=>(
+                                                        <th key={titulo.desk} 
+                                                            scope="col" 
+                                                            className={`px-2 py-1.5 text-left font-bold text-xs w-16 ${titulo.classes}`}
+                                                            style={{
+                                                                borderTopLeftRadius: "15px"
+                                                            }}>
+                                                            <span className="desktop uppercase text-muted-foreground">
                                                                 {
                                                                     (titulo.desk == 'Producto') ?
                                                                     (
-                                                                        <button
+                                                                        <button className='uppercase'
                                                                         onClick={(e) => {
                                                                             e.preventDefault();
                                                                             e.stopPropagation();
@@ -944,12 +947,12 @@ export const NotaHeladeroDetalle = () => {
                                                             
                                                                 item.is_litro ?
                                                                 (
-                                                                    <div className="input-group">
-                                                                        <span className="input-group-text" id="basic-addon1">
+                                                                    <div className="input-group input-field-group">
+                                                                        <span className="input-group-text h-[22px] min-w-[44px] p-1 border-none font-mono" id="basic-addon1">
                                                                             <small>S/</small>
                                                                         </span>
                                                                         <input type="text" 
-                                                                                className='form-control' 
+                                                                                className='form-control input-field' 
                                                                                 readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
                                                                                 {...register(`productos.${index}.devolucion`)} 
                                                                                 tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
@@ -958,12 +961,12 @@ export const NotaHeladeroDetalle = () => {
                                                                 )
                                                                 :
                                                                 (
-                                                                    <div className="input-group">
-                                                                        <span className="input-group-text" id="basic-addon1">
+                                                                    <div className="input-group input-field-group">
+                                                                        <span className="input-group-text h-[22px] min-w-[44px] p-1 border-none font-mono" id="basic-addon1">
                                                                             <small>{textUnid}</small>
                                                                         </span>
                                                                         <input type="text" 
-                                                                                className='form-control' 
+                                                                                className='form-control input-field' 
                                                                                 readOnly={isReadOnlyInputs.isReadOnlyDevolucion}
                                                                                 {...register(`productos.${index}.devolucion`)} 
                                                                                 tabIndex={isReadOnlyInputs.isReadOnlyDevolucion ? 0 : 1}
@@ -975,13 +978,13 @@ export const NotaHeladeroDetalle = () => {
                                                         
                                                     </td>                                                     
                                                     <td className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}>
-                                                        <div className="input-group">
-                                                            <span className="input-group-text" id="basic-addon1">
+                                                        <div className="input-group input-field-group">
+                                                            <span className="input-group-text h-[22px] min-w-[44px] p-1 border-none font-mono" id="basic-addon1">
                                                                 <small>{textUnid}</small>
                                                             </span>
                                                             <input type="number"
                                                                     min={0}
-                                                                    className={`form-control ${getValues(`productos.${index}.stock_alert_input`) == 2 ? 'bg-warning' : ''}`}
+                                                                    className={`form-control input-field ${getValues(`productos.${index}.stock_alert_input`) == 2 ? 'bg-warning' : ''}`}
                                                                     readOnly={isReadOnlyInputs.isReadOnlyPedido || getValues(`productos.${index}.stock_alert_input`) == 1}
                                                                     {...register(`productos.${index}.pedido`,{
                                                                         pattern: /^\d+$/i,
@@ -1046,7 +1049,7 @@ export const NotaHeladeroDetalle = () => {
                                                             <b>Precio</b>: S/ ${getValues(`productos.${index}.precio_operacion`)??0}
                                                         </div>
                                                         `}
-                                                        className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}
+                                                        className={`text-foreground ${item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}`}
                                                        >
                                                         <Tooltip id={`tooltip-html-${index}`} />
                                                         { item.is_barquillo ? (<><b>{item.producto}</b></>) : item.producto}
@@ -1064,12 +1067,12 @@ export const NotaHeladeroDetalle = () => {
                                                     <td  className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}>
                                                         {
                                                             
-                                                                <div className="input-group">
-                                                                    <span className="input-group-text" id="basic-addon1">
+                                                                <div className="input-group input-field-group">
+                                                                    <span className="input-group-text h-[22px] min-w-[44px] p-1 border-none font-mono" id="basic-addon1">
                                                                         <small>{item.is_litro ? 'S/': 'Unid'}</small>
                                                                     </span>
                                                                     <input type="number" 
-                                                                            className='form-control' 
+                                                                            className='form-control input-field' 
                                                                             {...register(`productos.${index}.vendido`,{
                                                                                 onChange: () => calcImporte(index)
                                                                             })}  
@@ -1084,12 +1087,12 @@ export const NotaHeladeroDetalle = () => {
                                                     <td  className={item.is_litro ? 'bg-info': (item.is_barquillo ? 'bg-barquillo' : '')}> 
                                                         {
                                                             
-                                                                <div className="input-group">
-                                                                    <span className="input-group-text" id="basic-addon1">
+                                                                <div className="input-group input-field-group">
+                                                                    <span className="input-group-text h-[22px] min-w-[44px] p-1 border-none font-mono" id="basic-addon1">
                                                                         <small>S/</small>
                                                                     </span>
                                                                     <input type="number" 
-                                                                            className='form-control'  
+                                                                            className='form-control input-field rounded-tr-md rounded-br-md'  
                                                                             {...register(`productos.${index}.importe`,{
                                                                                 min: 0.00,
                                                                                 value: 0.00,
@@ -1283,7 +1286,7 @@ export const NotaHeladeroDetalle = () => {
                                         </tbody>
                                     </table>   
                                     
-                                </>
+                                </div>
                             )
                             :
                             (

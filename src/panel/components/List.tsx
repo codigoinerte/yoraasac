@@ -17,9 +17,7 @@ export const List = ({page, cabecera, detalle, eliminar = function(){}, next, pr
                 <>
                     <FormControls category={category} page={page} save={()=>console.log(1)} tipo='list' NewComponent={NewComponent} onNavigateBack={()=>{
                         window.location.href = routeBack ? `${routeBack}` : `/${category}`;
-                    }} routeBackLabel={routeBackLabel} />
-            
-                    <hr className='border border-1 opacity-50'/>
+                    }} routeBackLabel={routeBackLabel} />                    
                 </>
             )
         }

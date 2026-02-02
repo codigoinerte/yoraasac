@@ -7,7 +7,7 @@ import { Header } from './Header'
 
 export const ContainerInner = ({ children, breadcrumb, titulo, classContainer }: ContainerInterface) => {
   return (
-    <>
+    <div className='font-sans min-h-dvh flex flex-column'>
         {/* header */}
         <Header />
 
@@ -17,12 +17,12 @@ export const ContainerInner = ({ children, breadcrumb, titulo, classContainer }:
         {/* main */}
         <Container classContainer={classContainer}>
 
-        <div className="inner-page">{ children }</div>
+        <div className="inner-page bg-transparent">{ children }</div>
         
         </Container>
                 
         {/* footer */}
         <Footer/>
-    </>
+    </div>
   )
 }

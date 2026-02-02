@@ -23,7 +23,8 @@ export const useAuthStore = () => {
             dispatch( onLogin({ 
                 ...data,
                 name: data.name, 
-                uid: data.uid
+                uid: data.uid,
+                logo: data.logo
             }) );          
                     
         } catch (error) {

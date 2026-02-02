@@ -184,8 +184,6 @@ export const ListReportes = ({cabecera, detalle, descargar, next = function(){},
                 <button onClick={onNavigateBack} className="btn btn-danger btn-lg">{routeBackLabel ? routeBackLabel : 'Atr&aacute;s'}</button>
             </div>
 
-            <hr className='border border-1 opacity-50'/>
-
             <div className="buscador">
                 { children }
             </div>            
