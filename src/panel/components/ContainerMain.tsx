@@ -21,7 +21,7 @@ export const ContainerMain = ({ children, breadcrumb }: ContainerInterface) => {
     
             {/* main */}
             <Container
-                className='flex items-center justify-center !bg-stone-200'>
+                className='flex items-center justify-center !bg-stone-300/75 py-8'>
     
                 { children }
             
