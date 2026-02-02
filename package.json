@@ -31,7 +31,8 @@
     "react-to-print": "^2.14.13",
     "react-tooltip": "^5.26.4",
     "rsuite": "^5.30.0",
-    "sweetalert2": "^11.6.13"
+    "sweetalert2": "^11.6.13",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
