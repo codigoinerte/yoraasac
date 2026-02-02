@@ -21,7 +21,7 @@ export const Home = () => {
 
         {/* main */}
         <Container
-            className='flex items-center justify-center !bg-stone-300 py-8'>
+            className='flex items-center justify-center bg-stone-300 py-8'>
 
         <ul className='atajos-homes row'>
 
