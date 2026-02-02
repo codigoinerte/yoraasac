@@ -91,7 +91,7 @@
   }
 
   .btn-category{
-    @apply !no-underline hover:bg-[#00466B]/95 hover:text-white ease-in-out transition-all;
+    @apply !no-underline hover:bg-[#00466B] hover:text-white ease-in-out transition-all;
   }
   
 }
