@@ -14,6 +14,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { formatDateForInput } from '../../../../helpers';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
 import { NotaHeladero } from '../../../../interfaces';
+import "./style.css";
 
 const cabecera = [
     {
@@ -507,6 +508,30 @@ export const NotaHeladeroDetalle = () => {
         }
         
     }, [active?.id, active])
+    
+    useEffect(() => {
+        const allGroups = document.querySelectorAll(".input-group");
+        if(allGroups){
+            allGroups.forEach(group => {
+                if(group.classList.contains("group-read-only")){
+                    group.classList.remove("group-read-only");
+                }
+            })
+        }
+
+        const inputsGroup = document.querySelectorAll(".input-group:has(input:read-only)");
+        if(inputsGroup.length == 0 ) return;
+
+        inputsGroup.forEach(group => {
+           group.addEventListener("click", (e)=> {
+            group.classList.add("group-read-only");
+            setTimeout(() => {
+                 group.classList.remove("group-read-only");
+            }, 600);
+           });
+        })
+
+    }, [fields])
     
 
     useEffect(() => {
